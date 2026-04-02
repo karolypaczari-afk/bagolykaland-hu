@@ -135,71 +135,95 @@
     </section>
 
     <!-- =============================================
-         MOVING ANNOUNCEMENT
+         NEWS / HÍREK
          ============================================= -->
-    <section id="koltozas" class="section" style="background:linear-gradient(135deg,#fff9ee 0%,#fff3d6 100%);border-top:4px solid var(--clr-yellow);" aria-labelledby="koltozas-heading">
+    <section id="hirek" class="section section-white" aria-labelledby="hirek-heading">
       <div class="container">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3xl);align-items:center;" class="announcement-inner">
 
-          <!-- Text side -->
-          <div class="fade-up">
-            <div style="display:inline-flex;align-items:center;gap:8px;background:var(--clr-coral);color:#fff;padding:6px 16px;border-radius:var(--r-full);font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--sp-lg);">
-              🏡 Hamarosan költözünk!
-            </div>
-            <h2 id="koltozas-heading" style="font-family:'Nunito',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:900;color:var(--clr-navy);line-height:1.15;letter-spacing:-.02em;margin-bottom:var(--sp-lg);">
-              A BagolykaLand<br><span style="color:var(--clr-coral);">új otthonba költözik!</span>
-            </h2>
-            <p style="font-size:1rem;color:var(--clr-text-muted);line-height:1.8;margin-bottom:var(--sp-lg);">
-              Ahhoz, hogy a gyerekeknek a legjobbat nyújthassuk, egy tágasabb és önálló ingatlanba költöztetjük a BagolykaLandot! A márkát, a bevált programokat és a csodás közösségünket visszük magunkkal. ❤️
-            </p>
+        <div class="section-header fade-up">
+          <span class="section-eyebrow">Hírek</span>
+          <h2 id="hirek-heading">Friss hírek a BagolykaLandból</h2>
+          <p>Fontos bejelentések, új programok és izgalmas lehetőségek közösségünknek.</p>
+        </div>
 
-            <!-- Key benefits -->
-            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:var(--sp-xl);">
-              <div style="display:flex;align-items:center;gap:12px;font-size:.95rem;font-weight:600;color:var(--clr-text-mid);">
-                <span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:var(--clr-green-light);border-radius:50%;font-size:1rem;flex-shrink:0;">📐</span>
-                <span><strong>250 nm-es önálló ingatlan</strong> – 2.5× akkora terület, mint eddig</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:12px;font-size:.95rem;font-weight:600;color:var(--clr-text-mid);">
-                <span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:var(--clr-sky-light);border-radius:50%;font-size:1rem;flex-shrink:0;">🛋️</span>
-                <span><strong>Tágas szülői váró</strong> – kényelmes várakozás Önnek is</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:12px;font-size:.95rem;font-weight:600;color:var(--clr-text-mid);">
-                <span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:var(--clr-yellow-light);border-radius:50%;font-size:1rem;flex-shrink:0;">✨</span>
-                <span><strong>Még több lehetőség és fejlesztési forma</strong> az új helyszínen</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:12px;font-size:.95rem;font-weight:600;color:var(--clr-text-mid);">
-                <span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:var(--clr-teal-light);border-radius:50%;font-size:1rem;flex-shrink:0;">🦉</span>
-                <span><strong>Ugyanaz a csapat</strong>, ugyanazok a bevált foglalkozások</span>
-              </div>
-            </div>
+        <div class="news-grid">
 
-            <!-- Address callout -->
-            <div style="background:#fff;border-radius:var(--r-xl);padding:var(--sp-lg) var(--sp-xl);border:2px solid var(--clr-yellow);box-shadow:var(--sh-md);display:flex;align-items:center;gap:var(--sp-lg);flex-wrap:wrap;">
-              <div>
-                <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--clr-teal);margin-bottom:4px;">⏰ 2026. május 1-től</div>
-                <div style="font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:900;color:var(--clr-navy);">📍 Csokonai utca 32.</div>
-                <div style="font-size:.82rem;color:var(--clr-text-muted);margin-top:2px;">Debrecen · Az Eötvös utcai helyszín április végén bezár</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Photo side -->
-          <div class="fade-up stagger-2" style="position:relative;">
-            <div style="border-radius:var(--r-2xl);overflow:hidden;box-shadow:var(--sh-xl);">
+          <!-- NEWS CARD 1: Moving -->
+          <article class="news-card news-card--coral fade-up stagger-1" id="koltozas">
+            <div class="news-card-img">
               <img
                 src="img/bagolykaland-koltozik-csokonai-utca.jpg"
                 alt="BagolykaLand költözés – Csokonai utca 32, az új helyszín"
-                width="560"
-                height="600"
+                width="560" height="360"
                 loading="lazy"
-                style="width:100%;height:460px;object-fit:cover;object-position:center top;"
               />
+              <div class="news-card-badge" style="background:var(--clr-coral);">🏡 Bejelentés</div>
             </div>
-            <div style="position:absolute;bottom:-16px;right:-16px;background:var(--clr-coral);color:#fff;border-radius:var(--r-xl);padding:14px 20px;box-shadow:var(--sh-lg);text-align:center;">
-              <div style="font-family:'Nunito',sans-serif;font-size:1.5rem;font-weight:900;line-height:1;">250 nm</div>
-              <div style="font-size:.72rem;font-weight:700;opacity:.85;margin-top:2px;">Új terület</div>
+            <div class="news-card-body">
+              <div class="news-card-meta">
+                <span class="news-card-date">2026. május 1-től</span>
+              </div>
+              <h3 class="news-card-title">Költözik a BagolykaLand! Új cím, még több lehetőség!</h3>
+              <p class="news-card-text">Ahhoz, hogy a gyerekeknek a legjobbat nyújthassuk, egy tágasabb és önálló ingatlanba költözünk! A márkát, a bevált foglalkozásokat és a csodás közösségünket visszük magunkkal. ❤️</p>
+
+              <div class="news-card-highlights">
+                <div class="news-highlight">📐 <strong>250 nm</strong> – önálló ingatlan, 2.5× nagyobb</div>
+                <div class="news-highlight">🛋️ <strong>Tágas szülői váró</strong> – kényelmes várakozás</div>
+                <div class="news-highlight">✨ <strong>Még több fejlesztési forma</strong> az új helyszínen</div>
+                <div class="news-highlight">🦉 Ugyanaz a szeretett csapat és módszer</div>
+              </div>
+
+              <div class="news-address-box">
+                <div class="news-address-date">⏰ 2026. május 1-től érvényes</div>
+                <div class="news-address-main">📍 Csokonai utca 32., Debrecen</div>
+                <div class="news-address-note">Az Eötvös utcai helyszín <strong>április végén bezár</strong></div>
+              </div>
+
+              <a href="/pages/kapcsolat/" class="btn btn-coral" style="background:var(--clr-coral);color:#fff;margin-top:var(--sp-lg);">Érdeklődöm az új helyszínről</a>
             </div>
-          </div>
+          </article>
+
+          <!-- NEWS CARD 2: Summer Camp -->
+          <article class="news-card news-card--yellow fade-up stagger-2">
+            <div class="news-card-img">
+              <img
+                src="img/bagolykaland-elmenytabor-2026.jpg"
+                alt="BagolykaLand Kincskereső Élménytábor 2026"
+                width="560" height="360"
+                loading="lazy"
+              />
+              <div class="news-card-badge" style="background:var(--clr-yellow);color:var(--clr-navy);">🏴‍☠️ Nyári tábor</div>
+            </div>
+            <div class="news-card-body">
+              <div class="news-card-meta">
+                <span class="news-card-date">2026. nyár · Limitált helyek!</span>
+              </div>
+              <h3 class="news-card-title">Kincskereső Élménytábor 2026 – Visszatér a legizgalmasabb nyári kaland! 🦉✨</h3>
+              <p class="news-card-text">Idén is lesz Kincskereső Élménytábor a Bagolykában! Magas színvonalú szakmai tartalom, vidámság és valódi kalandok – maximum 12 gyermek per turnus, limitált helyek!</p>
+
+              <div class="news-card-highlights">
+                <div class="news-highlight">🗓️ <strong>1. turnus:</strong> 2026. július 13–17.</div>
+                <div class="news-highlight">🗓️ <strong>2. turnus:</strong> 2026. július 20–24.</div>
+                <div class="news-highlight">👦 <strong>Max. 12 fő/turnus</strong> – ne várj a döntéssel!</div>
+                <div class="news-highlight">🤩 <strong>40+ izgalmas tevékenység</strong> egy héten át</div>
+              </div>
+
+              <div class="news-camp-activities">
+                <span>🎨 Kézműves</span>
+                <span>🏃‍♀️ Akadálypálya</span>
+                <span>🔍 Nyomkövetés</span>
+                <span>🤝 Csapatjáték</span>
+                <span>🤸‍♂️ Mozgásfejlesztés</span>
+                <span>🧩 Feladatok</span>
+                <span>📖 Mese</span>
+                <span>🧘‍♀️ Relaxáció</span>
+              </div>
+
+              <p style="font-size:.85rem;color:var(--clr-text-muted);margin-top:var(--sp-md);">A táborhét végén minden kis Kincskereső a nyár legizgalmasabb élményeivel és egy <strong>valódi kinccsel (ajándékkal)</strong> távozik! 🎁</p>
+
+              <a href="/pages/kapcsolat/" class="btn btn-yellow" style="margin-top:var(--sp-lg);">Érdekel!</a>
+            </div>
+          </article>
 
         </div>
       </div>
