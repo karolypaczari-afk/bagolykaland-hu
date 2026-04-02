@@ -6,7 +6,11 @@
 
 ## 🔴 Must-do before launch
 
-- [ ] **Tracking codes** — Open `js/tracking.js`, paste real GTM / GA4 / FB Pixel IDs and uncomment the blocks. Also add `<script src="../../js/tracking.js" defer></script>` to every HTML file (or add it via `components.js` footer injection).
+- [ ] **Tracking codes** — IDs are stored in the WP database (not in the file backup). To recover them:
+  1. Go to Hostinger cPanel → phpMyAdmin → database `bagolyka_wp1`
+  2. Search `wp_options` table for: `googlesitekit_analytics-4_settings` (GA4 ID), `clarity_project_id` (Microsoft Clarity), `ihaf_insert_header` / `ihaf_insert_footer` (WPCode snippets — may have GTM/FB Pixel), `et_divi` → `divi_integration_head` (Divi custom code)
+  3. Once you have the IDs, paste them into `js/tracking.js` and uncomment the blocks
+  4. Add `<script src="../../js/tracking.js" defer></script>` to every HTML file (or inject via `components.js`)
 - [ ] **MailerLite connection** — In `js/popup.js`, replace `TODO_*_GROUP_ID` values in `ML_GROUPS` with real MailerLite group IDs. Set the API key by adding `window.BK_ML = { API_KEY: 'YOUR_KEY' }` before the popup loads (e.g., in a `js/mailerlite-config.js`).
 - [ ] **Social media URLs** — In `js/components.js`, update `SOCIAL_FB` and `SOCIAL_IG` variables with real Facebook and Instagram profile URLs.
 - [ ] **Favicon** — Add `img/favicon.ico` (and optionally `img/favicon.svg`, `img/apple-touch-icon.png`).
