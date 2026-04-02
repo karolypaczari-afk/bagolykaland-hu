@@ -27,18 +27,65 @@ npm run report         # Open Playwright HTML report
 
 Modeled after zsenibagoly.hu (sister site at `C:\claude_desktoprol\1. HTML Creation`).
 
+### File Structure
+
+```
+/                         ← project root
+├── index.html            ← homepage (depth 0)
+├── pages/                ← ALL subpages live here
+│   ├── rolunk/
+│   │   ├── index.html                   (depth 2)
+│   │   ├── kedves-anya-es-apa/
+│   │   │   └── index.html               (depth 3)
+│   │   └── kedves-gyermek/
+│   │       └── index.html               (depth 3)
+│   ├── foglalkozasaink/
+│   │   ├── index.html                   (depth 2)
+│   │   ├── logopedia/index.html         (depth 3)
+│   │   ├── mozgasfejlesztes/index.html  (depth 3)
+│   │   ├── egyeni-fejleszto-foglalkozasok/index.html
+│   │   ├── szorongasoldo-program/index.html
+│   │   └── iskola-elokeszito-foglalkozas/index.html
+│   ├── vizsgalatok/
+│   │   ├── index.html
+│   │   ├── logopediai-vizsgalat/index.html
+│   │   ├── iskolaerettsegi-vizsgalat/index.html
+│   │   └── komplex-reszkepesseg-vizsgalat/index.html
+│   ├── ernyo-alatt-program/index.html
+│   ├── kezen-fogva-online-finommotorika-fejlesztes/index.html
+│   ├── eves-hetirend/index.html
+│   ├── blog/index.html
+│   ├── galeria/index.html
+│   ├── arlista/index.html
+│   ├── kapcsolat/index.html
+│   └── adatkezelesi-tajekoztato/index.html
+├── css/
+│   └── style.css         ← global stylesheet (do NOT edit style.src.css manually if build is active)
+├── js/
+│   ├── components.js     ← header + footer injection (edit here for nav/contact/social changes)
+│   ├── main.js           ← scroll animations, counters, smooth scroll
+│   ├── popup.js          ← lead capture popup logic
+│   ├── lead-capture-loader.js  ← deferred popup loader
+│   └── tracking.js       ← GTM / GA4 / FB Pixel placeholders
+└── img/                  ← all images (SEO-friendly filenames)
+```
+
 ### Global Component Injection
 
 Header and footer are NOT copy-pasted into every page. Instead:
 
-- `js/components.js` injects them at runtime
-- Every page has: `<div id="site-header"></div>` and `<div id="site-footer"></div>`
-- `components.js` detects URL depth and adjusts asset paths:
-  - Depth 0 (root `/index.html`) → `basePath = ''`
-  - Depth 1 (`/rolunk/index.html`) → `basePath = '../'`
-  - Depth 2 (`/rolunk/kedves-anya-es-apa/index.html`) → `basePath = '../../'`
+- `js/components.js` injects them at runtime via `#site-header` / `#site-footer` divs
+- `components.js` detects URL depth and adjusts relative asset paths (`basePath`):
 
-### New Page Shell
+| URL depth | Example | basePath |
+|-----------|---------|----------|
+| 0 (root) | `/index.html` | `''` |
+| 2 | `/pages/rolunk/index.html` | `'../../'` |
+| 3 | `/pages/rolunk/kedves-anya-es-apa/index.html` | `'../../../'` |
+
+> Note: Depth 1 (`/pages/index.html`) doesn't exist — we always use a named subdir inside pages/.
+
+### New Page Shell (depth 2 — pages/[slug]/)
 
 ```html
 <!DOCTYPE html>
@@ -46,66 +93,82 @@ Header and footer are NOT copy-pasted into every page. Instead:
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Page Title – Bagolykaland</title>
+  <title>Oldal Cím – BagolykaLand Debrecen</title>
   <meta name="description" content="50-160 chars, unique per page" />
-  <link rel="canonical" href="https://bagolykaland.hu/page-slug/" />
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
-  <!-- TODO: tracking codes -->
-  <link rel="stylesheet" href="../css/style.css" />  <!-- adjust depth -->
+  <meta name="robots" content="index, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bagolykaland.hu/pages/[slug]/" />
+  <meta property="og:title" content="Oldal Cím – BagolykaLand Debrecen" />
+  <meta property="og:description" content="..." />
+  <meta property="og:image" content="https://bagolykaland.hu/img/bagolykaland-fejleszto-foglalkozas.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://bagolykaland.hu/pages/[slug]/" />
+  <link rel="icon" href="../../img/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="../../css/style.css" />
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Ugrás a tartalomhoz</a>
   <div id="site-header"></div>
   <main id="main-content">
     <!-- page content -->
   </main>
   <div id="site-footer"></div>
-  <script src="../js/components.js" defer></script>
-  <script src="../js/main.js" defer></script>
+  <script src="../../js/components.js" defer></script>
+  <script src="../../js/main.js" defer></script>
+  <script src="../../js/lead-capture-loader.js"
+          data-popup-css="../../css/popup.css"
+          data-popup-src="../../js/popup.js"
+          defer></script>
 </body>
 </html>
 ```
 
+For depth 3, use `../../../` instead of `../../`.
+
 ### Tracking Codes
 
-Placeholder tracking stubs are in `js/tracking.js`. To activate:
-1. Uncomment the relevant block in `js/tracking.js`
-2. Replace the TODO placeholder IDs with real ones
-3. Uncomment `<script src="js/tracking.js" defer></script>` in every HTML file
+Placeholder stubs are in `js/tracking.js`. To activate:
+1. Open `js/tracking.js`, paste real GTM / GA4 / FB Pixel IDs, uncomment blocks
+2. Uncomment `<script src="js/tracking.js" defer></script>` in every HTML file (or add to components.js footer)
 
-### Build Pipeline (future)
+### Build Pipeline (activate when CSS/JS grows complex)
 
-When CSS/JS becomes complex enough to minify:
+When ready to minify:
 - Rename `css/style.css` → `css/style.src.css`
 - Run `npm run build` → generates `css/style.css`
-- Update HTML references to use `css/style.css?v=YYYYMMDDHHII` for cache busting
-- **Never edit `.css` or `.js` directly once build is active — edit `.src.*` only**
+- Update HTML references with cache-busting: `css/style.css?v=YYYYMMDDHHII`
+- **Never edit `.css` / `.js` directly once build is active — edit `.src.*` only**
+
+---
+
+## Brand Colors
+
+```css
+:root {
+  --clr-navy:   #1D3557;  /* Hero bg, headings */
+  --clr-teal:   #5BB8AD;  /* Primary brand / owl eyes */
+  --clr-coral:  #E8734A;  /* CTA buttons */
+  --clr-yellow: #F5C640;  /* Accent */
+  --clr-green:  #7ABF65;  /* Service accent */
+  --clr-sky:    #6BA9D4;  /* Service accent */
+  --clr-purple: #9B7BC3;  /* Service accent */
+  --clr-pink:   #E87BA8;  /* Service accent */
+  --clr-royal:  #5B7DB0;  /* Service accent */
+}
+```
+
+Fonts: **Nunito** (headings, 700/800/900) + **Open Sans** (body, 400/600)
 
 ---
 
 ## CSS Architecture
 
-All styles are in `css/style.css` (global). Design tokens use CSS custom properties:
-
-```css
-:root {
-  --clr-primary:       #2d6a4f;  /* Forest green */
-  --clr-primary-light: #52b788;
-  --clr-primary-dark:  #1b4332;
-  --clr-secondary:     #f4a261;  /* Warm orange/peach */
-  --clr-accent:        #e9c46a;  /* Golden yellow */
-  --clr-bg:            #fef9f0;  /* Warm cream */
-  --clr-bg-alt:        #f0f7f2;  /* Light mint green */
-  --font-heading:      'Nunito', sans-serif;
-  --font-body:         'Open Sans', sans-serif;
-}
+All styles in `css/style.css`. Service cards use a per-card `--accent` CSS variable:
+```html
+<article class="service-card" style="--accent:#6BA9D4;">
 ```
 
-**Breakpoints:**
-- Mobile-first
-- Tablet: `max-width: 768px`
+Breakpoints:
 - Nav hamburger: `max-width: 900px`
 - Full mobile: `max-width: 640px`
 
@@ -113,7 +176,49 @@ All styles are in `css/style.css` (global). Design tokens use CSS custom propert
 
 ## Navigation
 
-To add/remove/rename nav items — **only edit `js/components.js`**. The `NAV` array at the top is the single source of truth. All dropdowns and the mobile menu are generated from it.
+**Only edit `js/components.js` to change nav.** The `NAV` array is the single source of truth. All dropdowns, mobile menu, and active-state highlighting are generated from it.
+
+Current URL pattern: all subpages are under `/pages/` (e.g., `/pages/rolunk/`, `/pages/arlista/`).
+
+---
+
+## Popup System
+
+Lead capture popup: `js/popup.js` + `css/popup.css`, loaded deferred by `js/lead-capture-loader.js`.
+
+- Triggers: exit-intent (desktop mouseleave), timed delay (10-15s), scroll 30-50%
+- Fields: keresztnév + email
+- Cookie key prefix: `bk_popup_dismissed_`
+- MailerLite group IDs: set in `js/popup.js` in the `ML_GROUPS` object (currently TODO placeholders)
+- MailerLite API key: set `window.BK_ML = { API_KEY: 'your-key' }` before popup.js loads
+
+---
+
+## Images
+
+All images live in `img/` with SEO-friendly Hungarian filenames:
+
+| File | Usage |
+|------|-------|
+| `logo.jpg` | Site logo (injected by components.js) |
+| `bagolykaland-fejleszto-foglalkozas.jpg` | Hero / OG image |
+| `bagolykaland-gyerekek-fejlesztes.jpg` | About section |
+| `bagolykaland-kiscsoportos-foglalkozas.jpg` | Services |
+| `bagolykaland-egyeni-fejlesztes.jpg` | Services |
+| `bagolykaland-mozgasfejlesztes.png` | Mozgásfejlesztés page |
+| `bagolykaland-iskola-elokeszito.png` | Iskola-előkészítő page |
+| `bagolykaland-jatekok-eszkozok.jpg` | General/gallery |
+| `bagolykaland-csapat-bolglarka.jpg` | Team section |
+| `bagolykaland-eves-hetirend-2023-2024.jpg` | Schedule page |
+| `bagolykaland-blog-*.jpg` | Blog thumbnails (5 files) |
+| `og-image.jpg` | TODO: create 1200×630 OG image |
+| `favicon.ico` | TODO: add favicon |
+
+Image rules:
+- All `<img>` must have descriptive Hungarian `alt` text
+- Hero images: `fetchpriority="high"`, no `loading="lazy"`
+- All other images: `loading="lazy"`, include `width` + `height`
+- Format: WebP preferred (run `npm run optimize:images`)
 
 ---
 
@@ -121,28 +226,17 @@ To add/remove/rename nav items — **only edit `js/components.js`**. The `NAV` a
 
 ```html
 <html lang="hu">
-<title>Descriptive Title — Bagolykaland</title>
+<title>Leíró Cím – BagolykaLand Debrecen</title>
 <meta name="description" content="50-160 chars, unique">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://bagolykaland.hu/path/">
+<link rel="canonical" href="https://bagolykaland.hu/pages/[slug]/">
 <meta property="og:title" content="...">
 <meta property="og:description" content="...">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://bagolykaland.hu/path/">
-<meta property="og:image" content="https://bagolykaland.hu/img/og-image.jpg">
-<meta property="og:locale" content="hu_HU">
+<meta property="og:url" content="https://bagolykaland.hu/pages/[slug]/">
+<meta property="og:image" content="https://bagolykaland.hu/img/bagolykaland-fejleszto-foglalkozas.jpg">
 <meta name="twitter:card" content="summary_large_image">
 ```
-
----
-
-## Image Guidelines
-
-- Format: **WebP** (use `_dev/scripts/optimize-images.js`)
-- Hero images: `width` + `height` attributes, **no** `loading="lazy"`, `fetchpriority="high"`
-- Below-fold images: `loading="lazy"` required, include `width` + `height` to prevent CLS
-- All `<img>` must have descriptive Hungarian `alt` text
-- OG image: `img/og-image.jpg` at 1200×630px
 
 ---
 
@@ -152,39 +246,41 @@ To add/remove/rename nav items — **only edit `js/components.js`**. The `NAV` a
 |-------------|----------|-------|
 | Internal pages | none | — |
 | External sites (Facebook, Instagram, gov, etc.) | `_blank` | `noopener noreferrer` |
-| Privacy policy in form labels | `_blank` | `noopener noreferrer` |
+| Privacy policy links | `_blank` | `noopener noreferrer` |
 
 ---
 
-## Tests
+## Pricing Format
 
-26 Playwright specs in `_dev/tests/`. Specs are adapted from zsenibagoly.hu.
-
-When a new page is built, add it to `_dev/tests/helpers/pages.js`.
-
----
-
-## Do NOT Break
-
-1. Global component injection pattern — every page must have `#site-header` and `#site-footer`
-2. Relative asset paths — absolute paths (`/css/style.css`) break when opening files directly
-3. Hungarian `lang="hu"` on `<html>`
-4. `<img>` width + height attributes — required to prevent CLS
-5. `loading="lazy"` on hero images — **don't add it** (breaks LCP)
-
----
-
-## Pricing Format (Hungarian)
-
-- Thousand separator: **period** (`.`) — e.g., `5.970 Ft` not `5,970 Ft`
+Hungarian number format: thousand separator is **period** (`.`), decimal is **comma** (`,`).
+- Correct: `10.000 Ft`, `28.000 Ft/hó`, `42.000 Ft`
 
 ---
 
 ## Adding a New Page
 
 **5 places to update:**
-1. Create `[section]/index.html` using the page shell above
-2. Add to `_dev/tests/helpers/pages.js` (uncomment from planned list)
-3. Update nav in `js/components.js` if it needs to appear in the menu
-4. Add `og:image` specific to the page if different from default
-5. Update sitemap (once that's built)
+1. Create `pages/[slug]/index.html` using the shell template above
+2. Add to `_dev/tests/helpers/pages.js` (uncomment from planned list or add new entry)
+3. Update nav in `js/components.js` if it needs a menu entry
+4. Add a page-specific `og:image` if different from the default
+5. Add to `sitemap.xml` when that file exists
+
+---
+
+## Auto-Deploy
+
+Pushing to the `main` branch on GitHub automatically deploys to Hostinger via webhook.
+- Webhook ID: 604098473 (Hostinger deploy webhook)
+- GitHub repo: https://github.com/karolypaczari-afk/bagolykaland-hu
+
+---
+
+## Do NOT Break
+
+1. Global component injection — every page must have `#site-header` and `#site-footer`
+2. Relative asset paths — absolute paths (`/css/style.css`) break when opening files directly without a server
+3. Hungarian `lang="hu"` on `<html>`
+4. `<img>` width + height attributes — prevents CLS
+5. `loading="lazy"` must NOT be on hero/LCP images
+6. All pages must be under `pages/` (except `index.html`) — do not create root-level page directories

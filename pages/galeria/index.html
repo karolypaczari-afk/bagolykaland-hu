@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galéria – BagolykaLand Debrecen</title>
+  <meta name="description" content="Képek a BagolykaLand Oktató- és Fejlesztő Központ foglalkozásairól Debrecenben." />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bagolykaland.hu/pages/galeria/" />
+  <meta property="og:title" content="Galéria – BagolykaLand Debrecen" />
+  <meta property="og:description" content="Képek a BagolykaLand Oktató- és Fejlesztő Központ foglalkozásairól Debrecenben." />
+  <meta property="og:image" content="https://bagolykaland.hu/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://bagolykaland.hu/pages/galeria/" />
+  <link rel="icon" href="../../img/favicon.ico" type="image/x-icon" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../../css/style.css" />
+
+  <style>
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+    .gallery-item {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .gallery-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-note {
+      text-align: center;
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      background: #f0f7f2;
+      border-radius: 12px;
+      font-size: 1rem;
+      color: #4a5568;
+    }
+    .gallery-note a {
+      color: #E8734A;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .gallery-note a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Ugrás a tartalomhoz</a>
+  <div id="site-header"></div>
+  <main id="main-content">
+
+    <!-- PAGE HERO -->
+    <section class="page-hero" style="background-color: #E8734A;" aria-labelledby="hero-heading">
+      <div class="container">
+        <p class="section-eyebrow fade-up">Galéria</p>
+        <h1 id="hero-heading" class="fade-up stagger-1">Galéria</h1>
+        <p class="fade-up stagger-2">Pillantás a BagolykaLand mindennapjaiba</p>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="section section-cream fade-up" aria-labelledby="gallery-heading">
+      <div class="container">
+        <div class="section-header fade-up">
+          <p class="section-eyebrow">Képek</p>
+          <h2 id="gallery-heading">Foglalkozásaink hangulatából</h2>
+          <p>Néhány kép arról, hogyan telnek a napok a BagolykaLandban – játék, tanulás, mozgás és sok-sok mosoly.</p>
+        </div>
+
+        <div class="gallery-grid">
+
+          <div class="gallery-item fade-up stagger-1">
+            <img
+              src="../../img/bagolykaland-fejleszto-foglalkozas.jpg"
+              alt="Fejlesztő foglalkozás"
+              width="400"
+              height="240"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="gallery-item fade-up stagger-2">
+            <img
+              src="../../img/bagolykaland-gyerekek-fejlesztes.jpg"
+              alt="Gyerekek fejlesztése"
+              width="400"
+              height="240"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="gallery-item fade-up stagger-3">
+            <img
+              src="../../img/bagolykaland-kiscsoportos-foglalkozas.jpg"
+              alt="Kiscsoportos foglalkozás"
+              width="400"
+              height="240"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="gallery-item fade-up stagger-4">
+            <img
+              src="../../img/bagolykaland-egyeni-fejlesztes.jpg"
+              alt="Egyéni fejlesztés"
+              width="400"
+              height="240"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="gallery-item fade-up stagger-1">
+            <img
+              src="../../img/bagolykaland-jatekok-eszkozok.jpg"
+              alt="Fejlesztő játékok"
+              width="400"
+              height="240"
+              loading="lazy"
+            />
+          </div>
+
+        </div>
+
+        <div class="gallery-note fade-up">
+          <p>További képekért látogass el
+            <a href="https://www.facebook.com/bagolykaland" target="_blank" rel="noopener noreferrer">Facebook oldalunkra!</a>
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="section section-white fade-up" aria-label="Időpontfoglalás">
+      <div class="container" style="text-align: center;">
+        <h2>Szeretnél időpontot foglalni?</h2>
+        <p>Vedd fel velünk a kapcsolatot, és megbeszéljük, hogyan tudunk segíteni gyermekednek!</p>
+        <a href="/pages/kapcsolat/" class="btn btn-primary">Kapcsolatfelvétel</a>
+      </div>
+    </section>
+
+  </main>
+  <div id="site-footer"></div>
+  <script src="../../js/components.js" defer></script>
+  <script src="../../js/main.js" defer></script>
+  <script src="../../js/lead-capture-loader.js"
+          data-popup-css="../../css/popup.css"
+          data-popup-src="../../js/popup.js"
+          defer></script>
+</body>
+</html>

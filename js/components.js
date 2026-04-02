@@ -1,331 +1,327 @@
 /**
- * BAGOLYKALAND.HU — Global Components
- * Injects header and footer into every page.
- * Usage: include this script on every page before </body>
+ * BAGOLYKALAND.HU — Global Components v2
+ * Injects header + footer on every page.
+ * Detects URL depth to compute correct relative asset paths.
  */
-
 (function () {
   'use strict';
 
   /* ------------------------------------------
-     NAV DATA
-     Update menu items and URLs here centrally.
+     DEPTH DETECTION
+     Root   → basePath = ''
+     Depth1 → basePath = '../'
+     Depth2 → basePath = '../../'
   ------------------------------------------ */
-  const NAV = [
+  var depth = 0;
+  var pathParts = window.location.pathname.replace(/^\//, '').replace(/\/$/, '').split('/');
+  if (pathParts[0] !== '' && pathParts[0] !== 'index.html') {
+    depth = pathParts.length;
+    // If last part looks like a file (has extension), don't count it
+    if (/\.[a-z]+$/i.test(pathParts[pathParts.length - 1])) depth = Math.max(depth - 1, 0);
+  }
+  var basePath = depth === 0 ? '' : depth === 1 ? '../' : depth === 2 ? '../../' : '../../../';
+
+  /* ------------------------------------------
+     CONTACT INFO — update here
+  ------------------------------------------ */
+  var CONTACT = {
+    phone:   '+36 30 364 9396',
+    phoneHref: 'tel:+36303649396',
+    email:   'fejlesztobagolyka@gmail.com',
+    address: 'Debrecen belváros',
+    hours:   'H–V: 9:00–17:00',
+  };
+
+  var SOCIAL_FB  = 'https://www.facebook.com/bagolykaland'; // TODO: confirm URL
+  var SOCIAL_IG  = '';                                       // TODO: add if exists
+
+  /* ------------------------------------------
+     NAV STRUCTURE
+  ------------------------------------------ */
+  var NAV = [
     {
       label: 'Rólunk',
+      url: '/pages/rolunk/',
       children: [
-        { label: 'Kedves Anya és Apa', url: '/rolunk/kedves-anya-es-apa/' },
-        { label: 'Kedves Gyermek',     url: '/rolunk/kedves-gyermek/' },
+        { label: 'Kedves Anya és Apa',  url: '/pages/rolunk/kedves-anya-es-apa/' },
+        { label: 'Kedves Gyermek',      url: '/pages/rolunk/kedves-gyermek/' },
       ],
     },
     {
       label: 'Foglalkozásaink',
+      url: '/pages/foglalkozasaink/',
       children: [
-        { label: 'Egyéni fejlesztő foglalkozások', url: '/foglalkozasaink/egyeni-fejleszto-foglalkozasok/' },
-        { label: 'Logopédia',                       url: '/foglalkozasaink/logopedia/' },
-        { label: 'Mozgásfejlesztés',                url: '/foglalkozasaink/mozgasfejlesztes/' },
-        { label: 'Szorongásoldó program',           url: '/foglalkozasaink/szorongasoldo-program/' },
-        { label: 'Iskola-előkészítő foglalkozás',   url: '/foglalkozasaink/iskola-elokeszito-foglalkozas/' },
+        { label: 'Egyéni fejlesztő foglalkozások',  url: '/pages/foglalkozasaink/egyeni-fejleszto-foglalkozasok/' },
+        { label: 'Logopédia',                        url: '/pages/foglalkozasaink/logopedia/' },
+        { label: 'Mozgásfejlesztés',                 url: '/pages/foglalkozasaink/mozgasfejlesztes/' },
+        { label: 'Szorongásoldó program',            url: '/pages/foglalkozasaink/szorongasoldo-program/' },
+        { label: 'Iskola-előkészítő foglalkozás',    url: '/pages/foglalkozasaink/iskola-elokeszito-foglalkozas/' },
       ],
     },
     {
       label: 'Vizsgálatok',
+      url: '/pages/vizsgalatok/',
       children: [
-        { label: 'Logopédiai vizsgálat',             url: '/vizsgalatok/logopediai-vizsgalat/' },
-        { label: 'Iskolaérettségi vizsgálat',        url: '/vizsgalatok/iskolaerettsegi-vizsgalat/' },
-        { label: 'Komplex részképesség vizsgálat',   url: '/vizsgalatok/komplex-reszkepesseg-vizsgalat/' },
+        { label: 'Logopédiai vizsgálat',              url: '/pages/vizsgalatok/logopediai-vizsgalat/' },
+        { label: 'Iskolaérettségi vizsgálat',         url: '/pages/vizsgalatok/iskolaerettsegi-vizsgalat/' },
+        { label: 'Komplex részképesség vizsgálat',    url: '/pages/vizsgalatok/komplex-reszkepesseg-vizsgalat/' },
       ],
     },
     {
       label: 'Programok',
       children: [
-        { label: 'Ernyő alatt program',                      url: '/ernyo-alatt-program/' },
-        { label: 'Kézen fogva – online finommotorika',        url: '/kezen-fogva-online-finommotorika-fejlesztes/' },
+        { label: 'Ernyő alatt program',               url: '/pages/ernyo-alatt-program/' },
+        { label: 'Kézen fogva – online finommotorika',url: '/pages/kezen-fogva-online-finommotorika-fejlesztes/' },
       ],
     },
-    { label: 'Éves/heti rend', url: '/eves-hetirend/' },
-    { label: 'Blog',    url: '/blog/' },
-    { label: 'Galéria', url: '/galeria/' },
-    { label: 'Árlista', url: '/arlista/' },
-  ];
-
-  const FOOTER_COLS = [
-    {
-      heading: 'Foglalkozásaink',
-      links: [
-        { label: 'Egyéni fejlesztő foglalkozások', url: '/foglalkozasaink/egyeni-fejleszto-foglalkozasok/' },
-        { label: 'Logopédia',                       url: '/foglalkozasaink/logopedia/' },
-        { label: 'Mozgásfejlesztés',                url: '/foglalkozasaink/mozgasfejlesztes/' },
-        { label: 'Szorongásoldó program',           url: '/foglalkozasaink/szorongasoldo-program/' },
-        { label: 'Iskola-előkészítő',               url: '/foglalkozasaink/iskola-elokeszito-foglalkozas/' },
-      ],
-    },
-    {
-      heading: 'Vizsgálatok',
-      links: [
-        { label: 'Logopédiai vizsgálat',           url: '/vizsgalatok/logopediai-vizsgalat/' },
-        { label: 'Iskolaérettségi vizsgálat',      url: '/vizsgalatok/iskolaerettsegi-vizsgalat/' },
-        { label: 'Komplex részképesség vizsgálat', url: '/vizsgalatok/komplex-reszkepesseg-vizsgalat/' },
-      ],
-    },
-    {
-      heading: 'Kapcsolat',
-      contact: true,
-    },
+    { label: 'Éves/heti rend', url: '/pages/eves-hetirend/' },
+    { label: 'Blog',           url: '/pages/blog/' },
+    { label: 'Galéria',        url: '/pages/galeria/' },
+    { label: 'Árlista',        url: '/pages/arlista/' },
+    { label: 'Kapcsolat',      url: '/pages/kapcsolat/' },
   ];
 
   /* ------------------------------------------
-     CONTACT & SOCIAL — update these values
+     FOOTER COLUMNS
   ------------------------------------------ */
-  const CONTACT = {
-    address:  'Budapest, [Utca, házszám]',  // TODO: fill in real address
-    phone:    '+36 XX XXX XXXX',             // TODO: fill in real phone
-    email:    'info@bagolykaland.hu',
-    hours:    'H–P: 8:00–18:00',
-  };
-
-  const SOCIALS = [
-    {
-      name: 'Facebook',
-      url:  'https://facebook.com/',         // TODO: fill in real URL
-      svg:  `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
-    },
-    {
-      name: 'Instagram',
-      url:  'https://instagram.com/',        // TODO: fill in real URL
-      svg:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
-    },
+  var FOOTER_SERVICES = [
+    { label: 'Egyéni fejlesztő', url: '/pages/foglalkozasaink/egyeni-fejleszto-foglalkozasok/' },
+    { label: 'Logopédia',        url: '/pages/foglalkozasaink/logopedia/' },
+    { label: 'Mozgásfejlesztés', url: '/pages/foglalkozasaink/mozgasfejlesztes/' },
+    { label: 'Szorongásoldó',    url: '/pages/foglalkozasaink/szorongasoldo-program/' },
+    { label: 'Iskola-előkészítő',url: '/pages/foglalkozasaink/iskola-elokeszito-foglalkozas/' },
+  ];
+  var FOOTER_EXAMS = [
+    { label: 'Logopédiai vizsgálat',    url: '/pages/vizsgalatok/logopediai-vizsgalat/' },
+    { label: 'Iskolaérettségi vizsgálat',url: '/pages/vizsgalatok/iskolaerettsegi-vizsgalat/' },
+    { label: 'Komplex részképesség',    url: '/pages/vizsgalatok/komplex-reszkepesseg-vizsgalat/' },
   ];
 
   /* ------------------------------------------
      SVG ICONS
   ------------------------------------------ */
-  const icons = {
-    chevronDown: `<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
-    chevronRight:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`,
-    phone:       `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
-    mail:        `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
-    mapPin:      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
-    clock:       `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  var IC = {
+    chevDown: '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+    chevRight:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+    phone:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 13a19.79 19.79 0 01-3.07-8.67A2 2 0 013.6 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>',
+    mail:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+    pin:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+    clock:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    fb:       '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>',
   };
+
+  /* ------------------------------------------
+     LOGO HTML
+  ------------------------------------------ */
+  var logoHtml = [
+    '<a href="/" class="site-logo" aria-label="BagolykaLand – Főoldal">',
+    '  <img src="' + basePath + 'img/logo.jpg"',
+    '       alt="BagolykaLand Oktató- és Fejlesztő Központ" width="52" height="52"',
+    '       style="height:50px;width:auto;border-radius:8px;object-fit:contain;"',
+    '       onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">',
+    '  <span class="logo-text" style="display:none">',
+    '    <span class="logo-name">BAGOLYKALAND</span>',
+    '    <span class="logo-sub">Oktató- és Fejlesztő Központ</span>',
+    '  </span>',
+    '</a>'
+  ].join('\n');
+
+  /* ------------------------------------------
+     BUILD NAV ITEMS (desktop)
+  ------------------------------------------ */
+  function buildDesktopNav() {
+    return NAV.map(function(item) {
+      if (item.children) {
+        var parentLink = item.url ? '<a href="' + item.url + '" class="dropdown-parent-link">Összes ' + item.label + '</a>' : '';
+        var dd = item.children.map(function(c) {
+          return '<a href="' + c.url + '">' + c.label + '</a>';
+        }).join('');
+        return '<li class="nav-item">' +
+          '<button class="nav-link" aria-expanded="false" aria-haspopup="true">' + item.label + IC.chevDown + '</button>' +
+          '<div class="dropdown">' + parentLink + dd + '</div>' +
+          '</li>';
+      }
+      return '<li class="nav-item"><a class="nav-link" href="' + item.url + '">' + item.label + '</a></li>';
+    }).join('');
+  }
+
+  /* ------------------------------------------
+     BUILD MOBILE NAV
+  ------------------------------------------ */
+  function buildMobileNav() {
+    return NAV.map(function(item) {
+      if (item.children) {
+        var parentLink = item.url ? '<a href="' + item.url + '" class="mobile-dropdown-parent-link">Összes ' + item.label + '</a>' : '';
+        var dd = item.children.map(function(c) {
+          return '<a href="' + c.url + '">' + c.label + '</a>';
+        }).join('');
+        return '<li class="mobile-nav-item">' +
+          '<button class="mobile-nav-link" aria-expanded="false">' + item.label + IC.chevRight + '</button>' +
+          '<div class="mobile-dropdown">' + parentLink + dd + '</div>' +
+          '</li>';
+      }
+      return '<li><a class="mobile-nav-link" href="' + item.url + '">' + item.label + '</a></li>';
+    }).join('');
+  }
 
   /* ------------------------------------------
      HEADER HTML
   ------------------------------------------ */
-  function buildNavItems(isMobile) {
-    if (isMobile) {
-      return NAV.map((item, i) => {
-        if (item.children) {
-          const children = item.children.map(c =>
-            `<a href="${c.url}">${c.label}</a>`
-          ).join('');
-          return `
-            <li class="mobile-nav-item">
-              <button class="mobile-nav-link" aria-expanded="false">
-                ${item.label} ${icons.chevronRight}
-              </button>
-              <div class="mobile-dropdown" role="region">${children}</div>
-            </li>`;
-        }
-        return `<li><a class="mobile-nav-link" href="${item.url}">${item.label}</a></li>`;
-      }).join('');
-    }
-
-    return NAV.map(item => {
-      if (item.children) {
-        const dropdown = item.children.map(c =>
-          `<a href="${c.url}">${c.label}</a>`
-        ).join('');
-        return `
-          <li class="nav-item" role="none">
-            <button class="nav-link" aria-expanded="false" aria-haspopup="true">
-              ${item.label} ${icons.chevronDown}
-            </button>
-            <div class="dropdown" role="menu">${dropdown}</div>
-          </li>`;
-      }
-      return `<li class="nav-item"><a class="nav-link" href="${item.url}">${item.label}</a></li>`;
-    }).join('');
-  }
-
-  const headerHTML = `
-    <a href="#main-content" class="skip-link">Ugrás a tartalomra</a>
-    <header class="site-header" id="site-header-el" role="banner">
-      <div class="container">
-        <div class="header-inner">
-          <a href="/" class="site-logo" aria-label="Bagolykaland – Főoldal">
-            <div class="logo-icon" aria-hidden="true">🦉</div>
-            <div>
-              <span>Bagolykaland</span>
-              <span class="logo-sub">Fejlesztő Központ</span>
-            </div>
-          </a>
-
-          <nav class="main-nav" aria-label="Főmenü">
-            <ul class="nav-list" role="list">
-              ${buildNavItems(false)}
-            </ul>
-            <a href="/kapcsolat/" class="nav-cta">Időpontfoglalás</a>
-          </nav>
-
-          <button class="hamburger" id="hamburger-btn" aria-label="Menü megnyitása" aria-expanded="false" aria-controls="mobile-nav">
-            <span></span><span></span><span></span>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobil menü" aria-hidden="true">
-      <ul class="mobile-nav-list" role="list">
-        ${buildNavItems(true)}
-      </ul>
-      <a href="/kapcsolat/" class="mobile-cta">📅 Időpontfoglalás</a>
-    </nav>
-  `;
+  var headerHTML = [
+    '<a href="#main-content" class="skip-link">Ugrás a tartalomra</a>',
+    '<header class="site-header" id="site-header-el" role="banner">',
+    '  <div class="container">',
+    '    <div class="header-inner">',
+    '      ' + logoHtml,
+    '      <nav class="main-nav" aria-label="Főmenü">',
+    '        <ul class="nav-list" role="list">' + buildDesktopNav() + '</ul>',
+    '        <a href="/pages/kapcsolat/" class="nav-cta">📅 Időpontfoglalás</a>',
+    '      </nav>',
+    '      <button class="hamburger" id="hamburger-btn" aria-label="Menü megnyitása" aria-expanded="false" aria-controls="mobile-nav">',
+    '        <span></span><span></span><span></span>',
+    '      </button>',
+    '    </div>',
+    '  </div>',
+    '</header>',
+    '<nav class="mobile-nav" id="mobile-nav" aria-label="Mobil menü" aria-hidden="true">',
+    '  <ul class="mobile-nav-list" role="list">' + buildMobileNav() + '</ul>',
+    '  <a href="/pages/kapcsolat/" class="mobile-cta">📅 Időpontfoglalás</a>',
+    '</nav>',
+  ].join('\n');
 
   /* ------------------------------------------
      FOOTER HTML
   ------------------------------------------ */
-  function buildFooterCols() {
-    return FOOTER_COLS.map(col => {
-      if (col.contact) {
-        return `
-          <div class="footer-col">
-            <h4>${col.heading}</h4>
-            <div class="footer-contact-item">${icons.mapPin}<span>${CONTACT.address}</span></div>
-            <div class="footer-contact-item">${icons.phone}<span><a href="tel:${CONTACT.phone.replace(/\s/g,'')}">${CONTACT.phone}</a></span></div>
-            <div class="footer-contact-item">${icons.mail}<span><a href="mailto:${CONTACT.email}">${CONTACT.email}</a></span></div>
-            <div class="footer-contact-item">${icons.clock}<span>${CONTACT.hours}</span></div>
-          </div>`;
-      }
-      const links = col.links.map(l => `<li><a href="${l.url}">${l.label}</a></li>`).join('');
-      return `<div class="footer-col"><h4>${col.heading}</h4><ul>${links}</ul></div>`;
-    }).join('');
-  }
+  var servicesLinks = FOOTER_SERVICES.map(function(l){ return '<li><a href="'+l.url+'">'+l.label+'</a></li>'; }).join('');
+  var examLinks     = FOOTER_EXAMS.map(function(l){ return '<li><a href="'+l.url+'">'+l.label+'</a></li>'; }).join('');
 
-  const footerHTML = `
-    <footer class="site-footer" role="contentinfo">
-      <div class="container">
-        <div class="footer-grid">
-          <div class="footer-brand">
-            <a href="/" class="site-logo" aria-label="Bagolykaland – Főoldal">
-              <div class="logo-icon" aria-hidden="true">🦉</div>
-              <div>
-                <span>Bagolykaland</span>
-                <span class="logo-sub">Fejlesztő Központ</span>
-              </div>
-            </a>
-            <p>Szeretetteljes, szakszerű fejlesztő foglalkozások gyermekek számára. Mert minden kis kalandor egyedi úton jár.</p>
-            <div class="footer-socials">
-              ${SOCIALS.map(s => `<a href="${s.url}" target="_blank" rel="noopener noreferrer" aria-label="${s.name}">${s.svg}</a>`).join('')}
-            </div>
-          </div>
-          ${buildFooterCols()}
-        </div>
-
-        <div class="footer-bottom">
-          <p>© ${new Date().getFullYear()} Bagolykaland Fejlesztő Központ. Minden jog fenntartva.</p>
-          <div class="footer-bottom-links">
-            <a href="/adatkezelesi-tajekoztato/">Adatkezelési tájékoztató</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  `;
+  var footerHTML = [
+    '<footer class="site-footer" role="contentinfo">',
+    '  <div class="container">',
+    '    <div class="footer-top">',
+    '      <div class="footer-brand">',
+    '        ' + logoHtml.replace('site-logo"', 'site-logo footer-logo"'),
+    '        <p>Szeretetteljes, szakszerű fejlesztő foglalkozások gyermekeknek Debrecenben.<br>Egy szerethető út, ami a tudáshoz vezet!</p>',
+    '        <div class="footer-socials">',
+    '          <a href="' + SOCIAL_FB + '" target="_blank" rel="noopener noreferrer" aria-label="Facebook">' + IC.fb + '</a>',
+    '        </div>',
+    '      </div>',
+    '      <div class="footer-col">',
+    '        <h4>Foglalkozásaink</h4>',
+    '        <ul>' + servicesLinks + '</ul>',
+    '      </div>',
+    '      <div class="footer-col">',
+    '        <h4>Vizsgálatok</h4>',
+    '        <ul>' + examLinks + '</ul>',
+    '      </div>',
+    '      <div class="footer-col">',
+    '        <h4>Kapcsolat</h4>',
+    '        <div class="footer-contact-item">' + IC.pin  + '<span>' + CONTACT.address + '</span></div>',
+    '        <div class="footer-contact-item">' + IC.phone + '<span><a href="' + CONTACT.phoneHref + '">' + CONTACT.phone + '</a></span></div>',
+    '        <div class="footer-contact-item">' + IC.mail  + '<span><a href="mailto:' + CONTACT.email + '">' + CONTACT.email + '</a></span></div>',
+    '        <div class="footer-contact-item">' + IC.clock + '<span>' + CONTACT.hours + '</span></div>',
+    '      </div>',
+    '    </div>',
+    '    <div class="footer-bottom">',
+    '      <p>© ' + new Date().getFullYear() + ' BagolykaLand Oktató- és Fejlesztő Központ. Minden jog fenntartva.</p>',
+    '      <div class="footer-bottom-links">',
+    '        <a href="/pages/adatkezelesi-tajekoztato/">Adatkezelési tájékoztató</a>',
+    '      </div>',
+    '    </div>',
+    '  </div>',
+    '</footer>',
+  ].join('\n');
 
   /* ------------------------------------------
-     INJECT COMPONENTS
+     INJECT
   ------------------------------------------ */
-  const headerMount = document.getElementById('site-header');
-  const footerMount = document.getElementById('site-footer');
-
+  var headerMount = document.getElementById('site-header');
+  var footerMount = document.getElementById('site-footer');
   if (headerMount) headerMount.outerHTML = headerHTML;
   if (footerMount) footerMount.outerHTML = footerHTML;
 
   /* ------------------------------------------
-     HEADER: scroll shadow
+     SCROLL SHADOW
   ------------------------------------------ */
-  const header = document.getElementById('site-header-el');
-  if (header) {
-    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 20);
+  var hdr = document.getElementById('site-header-el');
+  if (hdr) {
+    var onScroll = function(){ hdr.classList.toggle('scrolled', window.scrollY > 20); };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
 
   /* ------------------------------------------
-     HEADER: desktop dropdown via click/keyboard
+     DESKTOP DROPDOWNS
   ------------------------------------------ */
-  document.querySelectorAll('.nav-item .nav-link[aria-haspopup]').forEach(btn => {
-    const item = btn.closest('.nav-item');
-
-    btn.addEventListener('click', (e) => {
+  document.querySelectorAll('.nav-item .nav-link[aria-haspopup]').forEach(function(btn) {
+    var item = btn.closest('.nav-item');
+    btn.addEventListener('click', function(e) {
       e.stopPropagation();
-      const isOpen = item.classList.contains('open');
-      // Close all
-      document.querySelectorAll('.nav-item.open').forEach(el => {
+      var wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.nav-item.open').forEach(function(el) {
         el.classList.remove('open');
-        el.querySelector('[aria-haspopup]').setAttribute('aria-expanded', 'false');
+        var b = el.querySelector('[aria-haspopup]');
+        if (b) b.setAttribute('aria-expanded','false');
       });
-      if (!isOpen) {
+      if (!wasOpen) {
         item.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
+        btn.setAttribute('aria-expanded','true');
       }
     });
   });
-
-  document.addEventListener('click', () => {
-    document.querySelectorAll('.nav-item.open').forEach(el => {
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.nav-item.open').forEach(function(el) {
       el.classList.remove('open');
-      el.querySelector('[aria-haspopup]').setAttribute('aria-expanded', 'false');
+      var b = el.querySelector('[aria-haspopup]');
+      if (b) b.setAttribute('aria-expanded','false');
     });
   });
 
   /* ------------------------------------------
-     HEADER: mobile hamburger
+     MOBILE HAMBURGER
   ------------------------------------------ */
-  const hamburger = document.getElementById('hamburger-btn');
-  const mobileNav = document.getElementById('mobile-nav');
-
+  var hamburger = document.getElementById('hamburger-btn');
+  var mobileNav = document.getElementById('mobile-nav');
   if (hamburger && mobileNav) {
-    hamburger.addEventListener('click', () => {
-      const isOpen = hamburger.classList.toggle('open');
-      mobileNav.classList.toggle('open', isOpen);
-      hamburger.setAttribute('aria-expanded', isOpen);
-      mobileNav.setAttribute('aria-hidden', !isOpen);
-      document.body.style.overflow = isOpen ? 'hidden' : '';
+    hamburger.addEventListener('click', function() {
+      var open = hamburger.classList.toggle('open');
+      mobileNav.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+      mobileNav.setAttribute('aria-hidden', !open);
+      document.body.style.overflow = open ? 'hidden' : '';
     });
-
-    // Close on outside click
-    mobileNav.addEventListener('click', (e) => {
-      if (e.target === mobileNav) {
-        hamburger.classList.remove('open');
-        mobileNav.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        mobileNav.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-      }
-    });
-
-    // Mobile accordion dropdowns
-    mobileNav.querySelectorAll('.mobile-nav-item button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const li = btn.closest('.mobile-nav-item');
+    mobileNav.querySelectorAll('.mobile-nav-item button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var li = btn.closest('.mobile-nav-item');
         li.classList.toggle('open');
         btn.setAttribute('aria-expanded', li.classList.contains('open'));
       });
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+        hamburger.classList.remove('open');
+        mobileNav.classList.remove('open');
+        hamburger.setAttribute('aria-expanded','false');
+        mobileNav.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      }
     });
   }
 
   /* ------------------------------------------
      ACTIVE NAV LINK
-     Marks the current page's nav link as active.
   ------------------------------------------ */
-  const path = window.location.pathname.replace(/\/$/, '') || '/';
-
-  document.querySelectorAll('.nav-link[href], .dropdown a, .mobile-nav-link[href], .mobile-dropdown a').forEach(link => {
-    const linkPath = new URL(link.href, location.origin).pathname.replace(/\/$/, '') || '/';
-    if (linkPath === path) link.classList.add('active');
+  var currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+  document.querySelectorAll('.nav-link[href], .dropdown a, .mobile-nav-link[href], .mobile-dropdown a').forEach(function(link) {
+    try {
+      var lp = new URL(link.href, location.origin).pathname.replace(/\/$/, '') || '/';
+      if (lp === currentPath) link.classList.add('active');
+    } catch(e) {}
   });
+
+  /* ------------------------------------------
+     DISPATCH navReady for main.js
+  ------------------------------------------ */
+  document.dispatchEvent(new CustomEvent('navReady'));
 
 })();
