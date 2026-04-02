@@ -25,7 +25,7 @@
   <style>
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
       gap: 1.25rem;
       margin-top: 2rem;
     }
@@ -55,12 +55,17 @@
       color: #4a5568;
     }
     .gallery-note a {
-      color: #E8734A;
+      color: var(--clr-coral);
       font-weight: 600;
       text-decoration: none;
     }
     .gallery-note a:hover {
       text-decoration: underline;
+    }
+    @media (max-width: 480px) {
+      .gallery-grid {
+        gap: 1rem;
+      }
     }
   </style>
 </head>
@@ -70,7 +75,7 @@
   <main id="main-content">
 
     <!-- PAGE HERO -->
-    <section class="page-hero" style="background-color: #E8734A;" aria-labelledby="hero-heading">
+    <section class="page-hero" style="background-color: var(--clr-coral);" aria-labelledby="hero-heading">
       <div class="container">
         <p class="section-eyebrow fade-up">Galéria</p>
         <h1 id="hero-heading" class="fade-up stagger-1">Galéria</h1>

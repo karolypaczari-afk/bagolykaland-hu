@@ -2,39 +2,45 @@
 
 Last updated: 2026-04-02
 
-## Completed in this checkpoint
+## Changelog for this checkpoint
 
-- Updated Playwright helpers and stale specs to match the current directory-based site structure.
-- Fixed broken internal links across the shipped HTML pages.
-- Replaced broken metadata asset references for favicon, Open Graph image, and homepage structured data logo.
-- Prevented duplicate skip-link injection in the shared component loader.
-- Improved mobile navigation accessibility by using `inert` on the closed drawer and removing hidden-menu overflow.
-- Improved homepage contrast for CTA, footer, and badge elements.
-- Fixed homepage mobile text overflow on long button labels.
-- Optimized large image assets and generated missing `webp` companions.
+- Refreshed the remaining stale Playwright audit specs so they match the current `bagolykaland.hu` page structure:
+  - `_dev/tests/06-mobile-nav.spec.js`
+  - `_dev/tests/09-seo.spec.js`
+  - `_dev/tests/11-accessibility.spec.js`
+  - `_dev/tests/22-text-overflow.spec.js`
+  - `_dev/tests/26-asset-integrity.spec.js`
+- Added root crawlability files:
+  - `robots.txt`
+  - `sitemap.xml`
+- Tightened shared contrast tokens in `css/style.css` and added targeted layout fixes for:
+  - legal-content/privacy table styling
+  - mobile team-card overflow on `/pages/rolunk/`
+  - gallery grid behavior on small screens
+  - service-link contrast on themed surfaces
+- Removed low-contrast inline text/link colors from the pricing, contact, service-detail, and diagnostic-detail pages touched in this pass.
+- Updated the privacy page structure so accessibility checks evaluate the final rendered content instead of animated/transitional states.
 
 ## Verified so far
 
 - Broken-link static scan: passed.
 - `_dev/tests/03-links.spec.js`: passed in Chromium with `--workers=1`.
+- `_dev/tests/06-mobile-nav.spec.js`: passed in Chromium.
+- `_dev/tests/07-responsive.spec.js`: passed in Chromium.
+- `_dev/tests/11-accessibility.spec.js`: passed in Chromium.
 - `_dev/tests/16-image-optimization.spec.js`: passed in Chromium with `--workers=1`.
-- Homepage-focused reruns for responsive and overflow coverage passed after the final CSS fixes.
+- `_dev/tests/21-overflow.spec.js`: passed in Chromium.
 
-## Highest-priority remaining work
+## Remaining TODOs
 
-1. Run the full Chromium verification pass again now that the latest CSS and nav changes are in place:
-   - `_dev/tests/06-mobile-nav.spec.js`
-   - `_dev/tests/07-responsive.spec.js`
-   - `_dev/tests/11-accessibility.spec.js`
-   - `_dev/tests/21-overflow.spec.js`
-   - `_dev/tests/22-text-overflow.spec.js`
-2. Review and likely update the still-stale specs before trusting them:
-   - `_dev/tests/09-seo.spec.js`
-   - `_dev/tests/26-asset-integrity.spec.js`
-3. If the remaining suites pass, do a final audit pass for lower-priority polish issues that were not blocking accessibility, navigation, links, or image performance.
+1. Run `_dev/tests/22-text-overflow.spec.js` in Chromium without forcing single-worker mode.
+   The previous attempt timed out at the shell level because that suite covers 147 viewport/page combinations.
+2. Run `_dev/tests/09-seo.spec.js` in Chromium to verify the rewritten metadata, `robots.txt`, and `sitemap.xml` checks.
+3. Run `_dev/tests/26-asset-integrity.spec.js` in Chromium to verify the rewritten local asset/reference checks.
+4. If any of the three remaining suites fail, fix those issues and rerun only the affected suites before the next release checkpoint.
 
 ## Notes for the next session
 
-- `package-lock.json` is included in this checkpoint so the local test toolchain is reproducible.
-- `playwright-report/` and `test-results/` are now ignored at the repo root.
+- `robots.txt` and `sitemap.xml` now exist at the repo root.
+- The interrupted local Playwright `http-server` processes were stopped before this checkpoint commit.
 - Leave `_dev/errors/` untouched unless there is a separate task for it.

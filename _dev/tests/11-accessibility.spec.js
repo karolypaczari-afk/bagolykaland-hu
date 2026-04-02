@@ -14,15 +14,24 @@ test.describe('@a11y 11 — Accessibility', () => {
     test(`${pg.name} — WCAG 2.1 AA + images + skip link`, async ({ suppressedPage: page }) => {
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
       await page.waitForSelector(SITE_SELECTORS.header, { timeout: 5000 });
+      await page.emulateMedia({ reducedMotion: 'reduce' });
 
-      // Make all scroll-animated elements visible so axe checks their real contrast
+      // Freeze motion so axe evaluates the final rendered state instead of
+      // mid-transition semi-transparent text.
       await page.addStyleTag({ content: `
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+        .fade-up,
         .animate-on-scroll,
         .card-animate,
         [class*="-reveal"] {
           opacity: 1 !important;
-          transform: translateY(0) !important;
-          transition: none !important;
+          transform: none !important;
         }
       ` });
       // Ensure closed mega-menus are fully hidden from axe

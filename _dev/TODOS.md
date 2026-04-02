@@ -6,6 +6,7 @@
 
 ## 🔴 Must-do before launch
 
+- [ ] **Final audit rerun** — Run `_dev/tests/22-text-overflow.spec.js`, `_dev/tests/09-seo.spec.js`, and `_dev/tests/26-asset-integrity.spec.js`, then fix any remaining regressions they surface.
 - [ ] **Tracking codes** — IDs are stored in the WP database (not in the file backup). To recover them:
   1. Go to Hostinger cPanel → phpMyAdmin → database `bagolyka_wp1`
   2. Search `wp_options` table for: `googlesitekit_analytics-4_settings` (GA4 ID), `clarity_project_id` (Microsoft Clarity), `ihaf_insert_header` / `ihaf_insert_footer` (WPCode snippets — may have GTM/FB Pixel), `et_divi` → `divi_integration_head` (Divi custom code)
@@ -26,8 +27,6 @@
 - [ ] **Real blog content** — Add real blog articles to `pages/blog/`. Currently placeholder cards only.
 - [ ] **Gallery photos** — Add more real photos to `pages/galeria/`. Add lightbox functionality.
 - [ ] **Cookie consent banner** — Required for GDPR (tracking is blocked until consent). Recommend Cookiebot or custom.
-- [ ] **Sitemap** — Generate `sitemap.xml` (or set up build step). All /pages/* URLs.
-- [ ] **robots.txt** — Create at root: allow all, reference sitemap.
 - [ ] **404 page** — `404.html` with friendly owl message and navigation links.
 - [ ] **Image optimization** — Run `npm run optimize:images` to convert img/ to WebP. Update HTML to use WebP with JPG fallback.
 - [ ] **SEO per-page review** — Verify all `<title>` and `<meta description>` tags are unique and descriptive.
@@ -97,3 +96,7 @@
 - [x] `playwright.config.js` — chromium + webkit-ios projects
 - [x] `_dev/build.js` — CSS/JS minifier
 - [x] `_dev/scripts/optimize-images.js` — WebP converter
+- [x] Audit refresh — mobile nav, accessibility, SEO, text-overflow, and asset-integrity specs updated to the current site structure
+- [x] Audit fixes — contrast, mobile overflow, privacy-page styling, and related service/detail page color cleanup completed
+- [x] `robots.txt` created at repo root and linked to the sitemap
+- [x] `sitemap.xml` created at repo root for the current page set

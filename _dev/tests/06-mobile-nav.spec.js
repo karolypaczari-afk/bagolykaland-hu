@@ -38,7 +38,8 @@ test.describe('06 — Mobile Nav (all pages)', () => {
 test.describe('06 — Mobile Nav (interaction tests)', () => {
   test.beforeEach(async ({ suppressedPage: page }) => {
     await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
-    await page.waitForSelector(SITE_SELECTORS.mobileNav, { timeout: 5000 });
+    await page.waitForSelector(SITE_SELECTORS.hamburger, { timeout: 5000 });
+    await expect(page.locator(SITE_SELECTORS.mobileNav)).toHaveAttribute('aria-hidden', 'true');
   });
 
   test('clicking hamburger opens the menu', async ({ suppressedPage: page }) => {

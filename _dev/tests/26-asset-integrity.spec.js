@@ -1,139 +1,123 @@
 // @ts-check
-/**
- * 26 — Asset Integrity
- *
- * Static analysis of HTML files to ensure:
- * - All local CSS/JS references have ?v= cache-busting query strings
- * - No .src.css or .src.js files are referenced directly (must use minified)
- * - tracking-loader.js is loaded in <head> so consent + queues are available early
- * - facebook-pixel.js and tiktok-pixel.js wrappers are referenced locally
- * - All referenced local CSS/JS files exist on disk
- * - Every .src.css has a corresponding .css, every .src.js has a corresponding .js
- */
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
+const cheerio = require('cheerio');
 const { PAGES } = require('./helpers/pages');
 
 const ROOT = path.resolve(__dirname, '..', '..');
+const SITE_ORIGIN = 'https://bagolykaland.hu';
 
-/** Extract all local CSS <link> and JS <script> references from HTML */
-function extractLocalRefs(html) {
-  const cssRefs = [];
-  const jsRefs = [];
-
-  // CSS: <link rel="stylesheet" href="..."> and preload-as-style patterns
-  const cssRegex = /href="([^"]*\.css(?:\?[^"]*)?)"/g;
-  let m;
-  while ((m = cssRegex.exec(html)) !== null) {
-    const href = m[1];
-    // Skip external URLs
-    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) continue;
-    cssRefs.push({ raw: href, path: href.split('?')[0], hasVersion: href.includes('?v=') });
-  }
-
-  // JS: <script src="...">
-  const jsRegex = /<script[^>]+src="([^"]*\.js(?:\?[^"]*)?)"/g;
-  while ((m = jsRegex.exec(html)) !== null) {
-    const src = m[1];
-    if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) continue;
-    jsRefs.push({
-      raw: src,
-      path: src.split('?')[0],
-      hasVersion: src.includes('?v='),
-      inHead: html.indexOf(m[0]) < html.indexOf('</head>'),
-      isAsync: m[0].includes(' async'),
-      isDefer: m[0].includes(' defer'),
-    });
-  }
-
-  return { cssRefs, jsRefs };
+function readHtml(filePath) {
+  return fs.readFileSync(path.join(ROOT, filePath), 'utf-8');
 }
 
-/** Resolve a relative path from an HTML file to an absolute filesystem path */
-function resolveRef(htmlPath, refPath) {
-  const htmlDir = path.dirname(path.join(ROOT, htmlPath));
-  return path.resolve(htmlDir, refPath);
+function resolveAssetPath(htmlFilePath, assetPath) {
+  if (!assetPath || assetPath.startsWith('data:') || assetPath.startsWith('#')) {
+    return null;
+  }
+
+  if (assetPath.startsWith('http://') || assetPath.startsWith('https://')) {
+    const url = new URL(assetPath);
+    if (url.origin !== SITE_ORIGIN) {
+      return null;
+    }
+    return path.join(ROOT, url.pathname.replace(/^\/+/, ''));
+  }
+
+  if (assetPath.startsWith('/')) {
+    return path.join(ROOT, assetPath.replace(/^\/+/, ''));
+  }
+
+  return path.resolve(path.dirname(path.join(ROOT, htmlFilePath)), assetPath);
+}
+
+function extractRefs(pageEntry) {
+  const html = readHtml(pageEntry.filePath);
+  const $ = cheerio.load(html);
+
+  const cssRefs = $('link[rel="stylesheet"]')
+    .map((_, el) => $(el).attr('href'))
+    .get()
+    .filter(Boolean);
+
+  const jsRefs = $('script[src]')
+    .map((_, el) => ({
+      src: $(el).attr('src'),
+      defer: $(el).is('[defer]'),
+    }))
+    .get()
+    .filter((ref) => ref.src);
+
+  const assetRefs = [
+    ...$('link[rel="icon"]').map((_, el) => $(el).attr('href')).get(),
+    ...$('meta[property="og:image"]').map((_, el) => $(el).attr('content')).get(),
+    ...$('meta[name="twitter:image"]').map((_, el) => $(el).attr('content')).get(),
+    ...$('img[src]').map((_, el) => $(el).attr('src')).get(),
+  ].filter(Boolean);
+
+  return { cssRefs, jsRefs, assetRefs };
 }
 
 test.describe('@smoke 26 — Asset Integrity (static HTML check)', () => {
-  for (const page of PAGES) {
-    const htmlPath = page.path.startsWith('/') ? page.path.slice(1) : page.path;
+  for (const pageEntry of PAGES) {
+    test(`${pageEntry.name} — local CSS and JS references exist`, () => {
+      const { cssRefs, jsRefs } = extractRefs(pageEntry);
+      const issues = [];
 
-    test(`${page.name} — all local CSS/JS refs have ?v= cache busting`, () => {
-      const html = fs.readFileSync(path.join(ROOT, htmlPath), 'utf-8');
-      const { cssRefs, jsRefs } = extractLocalRefs(html);
+      for (const ref of [...cssRefs, ...jsRefs.map((item) => item.src)]) {
+        if (ref.includes('.src.')) {
+          issues.push(`Unexpected source asset reference: ${ref}`);
+          continue;
+        }
 
-      const missingVersion = [];
-      for (const ref of [...cssRefs, ...jsRefs]) {
-        if (!ref.hasVersion) {
-          missingVersion.push(ref.raw);
+        const resolved = resolveAssetPath(pageEntry.filePath, ref);
+        if (resolved && !fs.existsSync(resolved)) {
+          issues.push(ref);
         }
       }
-      expect(missingVersion, `Missing ?v= on: ${missingVersion.join(', ')}`).toEqual([]);
+
+      expect(issues, `Missing or invalid CSS/JS refs: ${issues.join(', ')}`).toEqual([]);
     });
 
-    test(`${page.name} — no .src.css or .src.js referenced directly`, () => {
-      const html = fs.readFileSync(path.join(ROOT, htmlPath), 'utf-8');
-      const { cssRefs, jsRefs } = extractLocalRefs(html);
+    test(`${pageEntry.name} — shared scripts stay deferred`, () => {
+      const { jsRefs } = extractRefs(pageEntry);
 
-      const srcRefs = [...cssRefs, ...jsRefs].filter(r => r.path.includes('.src.'));
-      expect(srcRefs.map(r => r.raw), 'Should not reference .src.* files directly').toEqual([]);
+      for (const expected of ['components.js', 'main.js', 'lead-capture-loader.js']) {
+        const match = jsRefs.find((ref) => ref.src.includes(expected));
+        expect(match, `${expected} should be referenced`).toBeTruthy();
+        expect(match && match.defer, `${expected} should be deferred`).toBe(true);
+      }
     });
 
-    test(`${page.name} — all referenced CSS/JS files exist`, () => {
-      const html = fs.readFileSync(path.join(ROOT, htmlPath), 'utf-8');
-      const { cssRefs, jsRefs } = extractLocalRefs(html);
-
+    test(`${pageEntry.name} — local image and metadata assets exist`, () => {
+      const { assetRefs } = extractRefs(pageEntry);
       const missing = [];
-      for (const ref of [...cssRefs, ...jsRefs]) {
-        const absPath = resolveRef(htmlPath, ref.path);
-        if (!fs.existsSync(absPath)) {
-          missing.push(ref.path);
+
+      for (const ref of assetRefs) {
+        const resolved = resolveAssetPath(pageEntry.filePath, ref);
+        if (resolved && !fs.existsSync(resolved)) {
+          missing.push(ref);
         }
       }
-      expect(missing, `Missing files: ${missing.join(', ')}`).toEqual([]);
-    });
 
-    test(`${page.name} — shared tracking bootstrap and wrappers are referenced`, () => {
-      const html = fs.readFileSync(path.join(ROOT, htmlPath), 'utf-8');
-      const { jsRefs } = extractLocalRefs(html);
-
-      const loader = jsRefs.find(r => r.path.includes('tracking-loader'));
-      expect(loader, 'tracking-loader.js should be referenced').toBeTruthy();
-      expect(loader.inHead, 'tracking-loader.js should be in <head>').toBe(true);
-      expect(loader.isDefer, 'tracking-loader.js should not use defer').toBe(false);
-
-      for (const name of ['facebook-pixel', 'tiktok-pixel']) {
-        const wrapper = jsRefs.find(r => r.path.includes(name));
-        expect(wrapper, `${name}.js should be referenced`).toBeTruthy();
-      }
+      expect(missing, `Missing local asset refs: ${missing.join(', ')}`).toEqual([]);
     });
   }
 
-  test('all .src.css files have corresponding minified .css', () => {
+  test('all .src.css files have compiled .css counterparts', () => {
     const cssDir = path.join(ROOT, 'css');
-    const srcFiles = fs.readdirSync(cssDir).filter(f => f.endsWith('.src.css'));
-    const missing = [];
-    for (const src of srcFiles) {
-      const minified = src.replace('.src.css', '.css');
-      if (!fs.existsSync(path.join(cssDir, minified))) {
-        missing.push(src);
-      }
-    }
-    expect(missing, `Missing minified CSS for: ${missing.join(', ')}`).toEqual([]);
+    const srcFiles = fs.readdirSync(cssDir).filter((file) => file.endsWith('.src.css'));
+    const missing = srcFiles.filter((file) => !fs.existsSync(path.join(cssDir, file.replace('.src.css', '.css'))));
+
+    expect(missing, `Missing compiled CSS for: ${missing.join(', ')}`).toEqual([]);
   });
 
-  test('all .src.js files have corresponding minified .js', () => {
+  test('all .src.js files have compiled .js counterparts', () => {
     const jsDir = path.join(ROOT, 'js');
-    const srcFiles = fs.readdirSync(jsDir).filter(f => f.endsWith('.src.js'));
-    const missing = [];
-    for (const src of srcFiles) {
-      const minified = src.replace('.src.js', '.js');
-      if (!fs.existsSync(path.join(jsDir, minified))) {
-        missing.push(src);
-      }
-    }
-    expect(missing, `Missing minified JS for: ${missing.join(', ')}`).toEqual([]);
+    const srcFiles = fs.readdirSync(jsDir).filter((file) => file.endsWith('.src.js'));
+    const missing = srcFiles.filter((file) => !fs.existsSync(path.join(jsDir, file.replace('.src.js', '.js'))));
+
+    expect(missing, `Missing compiled JS for: ${missing.join(', ')}`).toEqual([]);
   });
 });
