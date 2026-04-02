@@ -1299,6 +1299,29 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.18; }
 .mt-3xl { margin-top: var(--sp-3xl); }
 
 /* =========================================
+   ANNOUNCEMENT (moving notice)
+   ========================================= */
+.announcement-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3xl); align-items: center;
+}
+@media (max-width: 900px) {
+  .announcement-inner {
+    grid-template-columns: 1fr;
+  }
+  .announcement-inner > div:last-child {
+    order: -1;
+  }
+  .announcement-inner img {
+    height: 280px !important;
+  }
+}
+@media (max-width: 640px) {
+  /* Blog banner compact on mobile */
+  .announcement-inner > div:last-child { display: none; }
+}
+
+/* =========================================
    RESPONSIVE
    ========================================= */
 @media (max-width: 1024px) {
