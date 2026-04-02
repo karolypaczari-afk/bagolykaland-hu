@@ -15,10 +15,16 @@
  */
 const { test, expect } = require('./helpers/fixtures');
 const AxeBuilder = require('@axe-core/playwright').default;
-const { PAGES } = require('./helpers/pages');
+const { PAGES, SITE_SELECTORS } = require('./helpers/pages');
 
 // Only run this file in FAST_MODE
 const SKIP = !process.env.FAST_MODE;
+
+function resolveInternalHref(href, pagePath) {
+  const url = new URL(href, `http://127.0.0.1:8080${pagePath}`);
+  const internalHosts = new Set(['127.0.0.1', 'localhost', 'bagolykaland.hu', 'www.bagolykaland.hu']);
+  return internalHosts.has(url.hostname) ? `${url.pathname}${url.search}` : null;
+}
 
 test.describe('00 — Consolidated Smoke (desktop 1280px)', () => {
   if (SKIP) {
@@ -32,30 +38,31 @@ test.describe('00 — Consolidated Smoke (desktop 1280px)', () => {
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
 
       // --- Component injection ---
-      await page.waitForSelector('.header', { timeout: 5000 });
-      await page.waitForSelector('.footer', { timeout: 5000 });
+      await page.waitForSelector(SITE_SELECTORS.header, { timeout: 5000 });
+      await page.waitForSelector(SITE_SELECTORS.footer, { timeout: 5000 });
 
-      const navToggle = page.locator('.nav-toggle');
+      const navToggle = page.locator(SITE_SELECTORS.hamburger);
       await expect(navToggle).toHaveCount(1);
 
-      const logo = page.locator('.header .logo-image');
+      const logo = page.locator(SITE_SELECTORS.logo);
       await expect(logo).toHaveCount(1);
 
-      const footer = page.locator('.footer');
+      const footer = page.locator(SITE_SELECTORS.footer);
       await expect(footer).toBeVisible();
 
-      const footerLinks = page.locator('.footer-nav a');
+      const footerLinks = page.locator(SITE_SELECTORS.footerLinks);
       expect(await footerLinks.count()).toBeGreaterThanOrEqual(4);
 
       // Header visible and positioned correctly
-      const header = page.locator('.header');
+      const header = page.locator(SITE_SELECTORS.header);
       await expect(header).toBeVisible();
       const headerBox = await header.boundingBox();
       expect(headerBox).toBeTruthy();
       expect(headerBox.y).toBeLessThanOrEqual(60);
 
-      // #site-nav placeholder replaced
-      await expect(page.locator('#site-nav')).toHaveCount(0);
+      // Placeholder mounts replaced
+      await expect(page.locator('#site-header')).toHaveCount(0);
+      await expect(page.locator('#site-footer')).toHaveCount(0);
 
       // --- Internal links ---
       const links = await page.locator('a[href]').evaluateAll((anchors) =>
@@ -68,14 +75,10 @@ test.describe('00 — Consolidated Smoke (desktop 1280px)', () => {
       const internalLinks = [];
       for (const link of links) {
         if (!link.href || link.href.startsWith('#') || link.href.startsWith('mailto:') ||
-            link.href.startsWith('tel:') || link.href.startsWith('http://') ||
-            link.href.startsWith('https://')) continue;
+            link.href.startsWith('tel:') || link.href.startsWith('javascript:')) continue;
         try {
-          let url = new URL(link.href, `http://127.0.0.1:8080${pg.path}`).pathname;
-          if (!url.includes('.') && url !== '/') {
-            const slug = url.replace(/^\//, '').replace(/\/$/, '');
-            url = slug === '' ? '/index.html' : `/pages/${slug}.html`;
-          }
+          const url = resolveInternalHref(link.href, pg.path);
+          if (!url) continue;
           internalLinks.push({ url, text: link.text, href: link.href });
         } catch {}
       }
@@ -124,6 +127,7 @@ test.describe('00 — Consolidated Smoke (desktop 1280px)', () => {
       // Skip link
       const skipLink = page.locator('.skip-link');
       await expect(skipLink).toHaveCount(1);
+      await expect(skipLink).toHaveAttribute('href', '#main-content');
     });
   }
 });
@@ -140,7 +144,7 @@ test.describe('00 — Consolidated Smoke (mobile 375px)', () => {
   for (const pg of PAGES) {
     test(`${pg.name} — mobile overflow + nav toggle`, async ({ suppressedPage: page }) => {
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector('.header', { timeout: 5000 });
+      await page.waitForSelector(SITE_SELECTORS.header, { timeout: 5000 });
 
       // Body overflow
       const bodyOverflow = await page.evaluate(() =>
@@ -188,7 +192,7 @@ test.describe('00 — Consolidated Smoke (mobile 375px)', () => {
       expect(offenders, `Overflow at 375px:\n${offenders.join('\n')}`).toHaveLength(0);
 
       // Hamburger visible
-      const toggleVisible = await page.locator('.nav-toggle').isVisible();
+      const toggleVisible = await page.locator(SITE_SELECTORS.hamburger).isVisible();
       expect(toggleVisible, 'Hamburger should be visible at 375px').toBe(true);
     });
   }

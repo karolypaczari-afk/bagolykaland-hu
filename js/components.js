@@ -167,8 +167,12 @@
   /* ------------------------------------------
      HEADER HTML
   ------------------------------------------ */
+  var skipLinkHtml = document.querySelector('.skip-link')
+    ? ''
+    : '<a href="#main-content" class="skip-link">Ugrás a tartalomra</a>';
+
   var headerHTML = [
-    '<a href="#main-content" class="skip-link">Ugrás a tartalomra</a>',
+    skipLinkHtml,
     '<header class="site-header" id="site-header-el" role="banner">',
     '  <div class="container">',
     '    <div class="header-inner">',
@@ -187,7 +191,7 @@
     '  <ul class="mobile-nav-list" role="list">' + buildMobileNav() + '</ul>',
     '  <a href="/pages/kapcsolat/" class="mobile-cta">📅 Időpontfoglalás</a>',
     '</nav>',
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 
   /* ------------------------------------------
      FOOTER HTML
@@ -283,11 +287,18 @@
   var hamburger = document.getElementById('hamburger-btn');
   var mobileNav = document.getElementById('mobile-nav');
   if (hamburger && mobileNav) {
+    mobileNav.setAttribute('inert', '');
+
     hamburger.addEventListener('click', function() {
       var open = hamburger.classList.toggle('open');
-      mobileNav.classList.toggle('open', open);
       hamburger.setAttribute('aria-expanded', open);
+      mobileNav.classList.toggle('open', open);
       mobileNav.setAttribute('aria-hidden', !open);
+      if (open) {
+        mobileNav.removeAttribute('inert');
+      } else {
+        mobileNav.setAttribute('inert', '');
+      }
       document.body.style.overflow = open ? 'hidden' : '';
     });
     mobileNav.querySelectorAll('.mobile-nav-item button').forEach(function(btn) {
@@ -303,6 +314,7 @@
         mobileNav.classList.remove('open');
         hamburger.setAttribute('aria-expanded','false');
         mobileNav.setAttribute('aria-hidden','true');
+        mobileNav.setAttribute('inert', '');
         document.body.style.overflow = '';
       }
     });

@@ -224,14 +224,14 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.18; }
 .nav-cta {
   display: inline-flex; align-items: center; gap: 7px;
   padding: 9px 22px; margin-left: var(--sp-sm);
-  background: var(--clr-coral); color: #fff !important;
+  background: #a84a28; color: #fff !important;
   border-radius: var(--r-full); font-size: .86rem; font-weight: 800;
   box-shadow: 0 4px 14px rgba(232,115,74,0.28);
   transition: background var(--t-mid), transform var(--t-spring), box-shadow var(--t-mid);
   white-space: nowrap; letter-spacing: -.01em;
 }
 .nav-cta:hover {
-  background: var(--clr-coral-dark);
+  background: #8f3f21;
   transform: translateY(-2px);
   box-shadow: 0 8px 22px rgba(232,115,74,0.38);
 }
@@ -259,9 +259,13 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.18; }
   position: fixed; top: var(--header-h); left: 0; right: 0; bottom: 0;
   background: #fff; z-index: 999; overflow-y: auto;
   padding: var(--sp-xl) var(--sp-xl) var(--sp-3xl);
-  transform: translateX(100%); transition: transform var(--t-slow);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity var(--t-slow), visibility 0s linear var(--t-slow);
 }
-.mobile-nav.open { transform: translateX(0); }
+.mobile-nav.open {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transition: opacity var(--t-slow);
+}
 .mobile-nav-list { display: flex; flex-direction: column; gap: 3px; }
 .mobile-nav-link {
   display: flex; align-items: center; justify-content: space-between;
@@ -282,12 +286,12 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.18; }
 .mobile-dropdown a:hover { color: var(--clr-navy); background: var(--clr-teal-light); }
 .mobile-cta {
   display: block; text-align: center; margin-top: var(--sp-xl);
-  padding: 16px; background: var(--clr-coral); color: #fff;
+  padding: 16px; background: #a84a28; color: #fff;
   border-radius: var(--r-full); font-weight: 800; font-size: 1rem;
   box-shadow: var(--sh-color-coral);
   transition: background var(--t-mid), transform var(--t-spring);
 }
-.mobile-cta:hover { background: var(--clr-coral-dark); transform: translateY(-2px); }
+.mobile-cta:hover { background: #8f3f21; transform: translateY(-2px); }
 
 /* =========================================
    FOOTER
@@ -344,9 +348,9 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.18; }
   display: flex; align-items: center; justify-content: space-between;
   padding-top: var(--sp-xl); gap: var(--sp-md); flex-wrap: wrap;
 }
-.footer-bottom p { font-size: .78rem; color: rgba(255,255,255,0.28); }
-.footer-bottom a { font-size: .78rem; color: rgba(255,255,255,0.38); transition: color var(--t-fast); }
-.footer-bottom a:hover { color: rgba(255,255,255,0.75); }
+.footer-bottom p { font-size: .78rem; color: rgba(255,255,255,0.64); }
+.footer-bottom a { font-size: .78rem; color: rgba(255,255,255,0.74); transition: color var(--t-fast); }
+.footer-bottom a:hover { color: #fff; }
 .footer-bottom-links { display: flex; gap: var(--sp-lg); }
 
 /* =========================================
@@ -359,7 +363,8 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.18; }
   font-weight: 800; font-size: .95rem; letter-spacing: -.01em;
   transition: background var(--t-mid), color var(--t-mid),
               transform var(--t-spring), box-shadow var(--t-mid);
-  cursor: pointer; white-space: nowrap; text-decoration: none;
+  cursor: pointer; white-space: normal; text-decoration: none;
+  text-align: center; line-height: 1.35;
 }
 .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
 
@@ -468,9 +473,9 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.18; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 7px;
   padding: 6px 14px; margin-bottom: var(--sp-lg);
-  background: rgba(245,198,64,0.14);
-  color: var(--clr-yellow);
-  border: 1px solid rgba(245,198,64,0.28);
+  background: rgba(21,40,67,0.35);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
   border-radius: var(--r-full);
   font-size: .78rem; font-weight: 700; letter-spacing: .06em;
   text-transform: uppercase;

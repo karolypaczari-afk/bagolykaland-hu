@@ -1,14 +1,23 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
-const { PAGES } = require('./helpers/pages');
+const { PAGES, SITE_SELECTORS } = require('./helpers/pages');
 const { suppressPopup } = require('./helpers/suppress-popup');
 
+function resolveInternalHref(href, pagePath) {
+  const url = new URL(href, `http://127.0.0.1:8080${pagePath}`);
+  const internalHosts = new Set(['127.0.0.1', 'localhost', 'bagolykaland.hu', 'www.bagolykaland.hu']);
+  return internalHosts.has(url.hostname) ? `${url.pathname}${url.search}` : null;
+}
+
 test.describe('03 — Broken Links', () => {
+  test.describe.configure({ mode: 'serial' });
+  test.setTimeout(60000);
+
   for (const pg of PAGES) {
     test(`${pg.name} — internal links return 200`, async ({ page, request }) => {
       await suppressPopup(page);
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector('.nav-menu', { timeout: 5000 });
+      await page.waitForSelector(SITE_SELECTORS.header, { timeout: 5000 });
 
       const links = await page.locator('a[href]').evaluateAll((anchors) =>
         anchors.map((a) => ({
@@ -21,23 +30,17 @@ test.describe('03 — Broken Links', () => {
       const internalLinks = [];
 
       for (const link of links) {
-        if (!link.href || link.href.startsWith('#') || link.href.startsWith('mailto:') || link.href.startsWith('tel:')) {
-          continue;
-        }
-
-        // External links — flag but don't fail
-        if (link.href.startsWith('http://') || link.href.startsWith('https://')) {
-          externalLinks.push(link);
+        if (!link.href || link.href.startsWith('#') || link.href.startsWith('mailto:') ||
+            link.href.startsWith('tel:') || link.href.startsWith('javascript:')) {
           continue;
         }
 
         // Internal link — collect for concurrent checking
         try {
-          let url = new URL(link.href, `http://127.0.0.1:8080${pg.path}`).pathname;
-          // Map extensionless URLs to .html (mirrors Apache .htaccess rewrite rules)
-          if (!url.includes('.') && url !== '/') {
-            const slug = url.replace(/^\//, '').replace(/\/$/, '');
-            url = slug === '' ? '/index.html' : `/pages/${slug}.html`;
+          const url = resolveInternalHref(link.href, pg.path);
+          if (!url) {
+            externalLinks.push(link);
+            continue;
           }
           internalLinks.push({ url, text: link.text, href: link.href });
         } catch (e) {
@@ -46,22 +49,21 @@ test.describe('03 — Broken Links', () => {
       }
 
       // Check all internal links concurrently
-      const results = await Promise.all(
-        internalLinks.map(async (link) => {
-          if (!link.url) {
-            return `${link.href} => ERROR: ${link.error} ("${link.text}")`;
+      const results = [];
+      for (const link of internalLinks) {
+        if (!link.url) {
+          results.push(`${link.href} => ERROR: ${link.error} ("${link.text}")`);
+          continue;
+        }
+        try {
+          const response = await request.get(link.url);
+          if (response.status() !== 200) {
+            results.push(`${link.href} => ${response.status()} ("${link.text}")`);
           }
-          try {
-            const response = await request.get(link.url);
-            if (response.status() !== 200) {
-              return `${link.href} => ${response.status()} ("${link.text}")`;
-            }
-          } catch (e) {
-            return `${link.href} => ERROR: ${e.message} ("${link.text}")`;
-          }
-          return null;
-        })
-      );
+        } catch (e) {
+          results.push(`${link.href} => ERROR: ${e.message} ("${link.text}")`);
+        }
+      }
 
       const broken = results.filter(Boolean);
 

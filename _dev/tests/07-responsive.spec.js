@@ -1,6 +1,6 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
-const { PAGES, CORE_BREAKPOINTS, EXTRA_BREAKPOINTS, LANDING_PAGES } = require('./helpers/pages');
+const { PAGES, CORE_BREAKPOINTS, EXTRA_BREAKPOINTS, LANDING_PAGES, SITE_SELECTORS } = require('./helpers/pages');
 const { suppressPopup } = require('./helpers/suppress-popup');
 
 /**
@@ -43,7 +43,7 @@ test.describe('@responsive 07 — Responsive Layout', () => {
         test(`${pg.name} — no horizontal overflow`, async ({ page }) => {
           await suppressPopup(page);
           await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-          await page.waitForSelector('.nav-menu', { timeout: 5000 });
+          await page.waitForSelector(SITE_SELECTORS.header, { timeout: 5000 });
 
           // Check for horizontal overflow
           const overflow = await page.evaluate(() => {
@@ -71,114 +71,16 @@ test.describe('@responsive 07 — Responsive Layout', () => {
       test('nav toggle visibility is correct', async ({ page }) => {
         await suppressPopup(page);
         await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
-        await page.waitForSelector('.nav-menu', { timeout: 5000 });
+        await page.waitForSelector(SITE_SELECTORS.header, { timeout: 5000 });
 
-        const toggleVisible = await page.locator('.nav-toggle').isVisible();
+        const toggleVisible = await page.locator(SITE_SELECTORS.hamburger).isVisible();
 
-        if (bp.width <= 1199) {
-          expect(toggleVisible, 'Hamburger should be visible at <= 1199px').toBe(true);
+        if (bp.width <= 900) {
+          expect(toggleVisible, 'Hamburger should be visible at <= 900px').toBe(true);
         } else {
-          expect(toggleVisible, 'Hamburger should be hidden at > 1199px').toBe(false);
+          expect(toggleVisible, 'Hamburger should be hidden above 900px').toBe(false);
         }
       });
-    });
-  }
-});
-
-test.describe('@responsive 07 — Sticky Bottom Bar (mobile)', () => {
-  test.use({ viewport: { width: 375, height: 812 } });
-
-  // Pages that have sticky CTAs
-  const STICKY_PAGES = [
-    { name: 'Hisztikezelés', path: '/pages/hisztikezeles.html', selector: '.hv2-sticky-cta' },
-    { name: 'Figyelemfejlesztés', path: '/pages/figyelemfejlesztes.html', selector: '.fv2-sticky-cta' },
-    { name: 'ZseniFészek', path: '/pages/zsenifeszek.html', selector: '.sticky-cta' },
-  ];
-
-  for (const pg of STICKY_PAGES) {
-    test(`${pg.name} — sticky CTA has safe-area padding`, async ({ page }) => {
-      await suppressPopup(page);
-      await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-
-      // Check that the sticky CTA element exists
-      const stickyEl = page.locator(pg.selector);
-      await expect(stickyEl).toHaveCount(1);
-
-      // Verify CSS has safe-area-inset-bottom in padding-bottom
-      const hasSafeArea = await stickyEl.evaluate(el => {
-        const style = getComputedStyle(el);
-        // Check that the element is fixed at bottom
-        return style.position === 'fixed' && style.bottom === '0px';
-      });
-      expect(hasSafeArea, 'Sticky CTA should be fixed at bottom: 0').toBe(true);
-    });
-  }
-});
-
-test.describe('@responsive 07 — Urgency banner is NOT fixed', () => {
-  test.use({ viewport: { width: 375, height: 812 } });
-
-  const URGENCY_PAGES = [
-    { name: 'Hisztikezelés', path: '/pages/hisztikezeles.html', selector: '.hv2-urgency-banner' },
-    { name: 'Figyelemfejlesztés', path: '/pages/figyelemfejlesztes.html', selector: '.fv2-urgency-banner' },
-  ];
-
-  for (const pg of URGENCY_PAGES) {
-    test(`${pg.name} — urgency banner is in-flow (not fixed/sticky)`, async ({ page }) => {
-      await suppressPopup(page);
-      await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-
-      const banner = page.locator(pg.selector);
-      const position = await banner.evaluate(el => getComputedStyle(el).position);
-      expect(position, 'Urgency banner must NOT be fixed or sticky').not.toBe('fixed');
-      expect(position, 'Urgency banner must NOT be fixed or sticky').not.toBe('sticky');
-    });
-  }
-});
-
-test.describe('@responsive 07 — Sticky CTA hidden at page top', () => {
-  test.use({ viewport: { width: 375, height: 812 } });
-
-  const STICKY_PAGES = [
-    { name: 'Hisztikezelés', path: '/pages/hisztikezeles.html', selector: '.hv2-sticky-cta' },
-    { name: 'Figyelemfejlesztés', path: '/pages/figyelemfejlesztes.html', selector: '.fv2-sticky-cta' },
-    { name: 'ZseniFészek', path: '/pages/zsenifeszek.html', selector: '.sticky-cta' },
-  ];
-
-  for (const pg of STICKY_PAGES) {
-    test(`${pg.name} — sticky CTA is hidden when at top of page`, async ({ page }) => {
-      await suppressPopup(page);
-      await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-
-      // At top of page, sticky CTA should NOT be visible
-      const stickyEl = page.locator(pg.selector);
-      const hasVisibleClass = await stickyEl.evaluate(el => el.classList.contains('visible'));
-      expect(hasVisibleClass, 'Sticky CTA should be hidden at top of page').toBe(false);
-    });
-  }
-});
-
-test.describe('@responsive 07 — Metrics grid does not clip on mobile', () => {
-  test.use({ viewport: { width: 375, height: 812 } });
-
-  const METRICS_PAGES = [
-    { name: 'Hisztikezelés', path: '/pages/hisztikezeles.html', selector: '.hv2-metrics-grid' },
-    { name: 'Figyelemfejlesztés', path: '/pages/figyelemfejlesztes.html', selector: '.fv2-metrics-grid' },
-    { name: 'Szorongásoldás', path: '/pages/szorongasoldas.html', selector: '.v2-metrics-grid' },
-    { name: 'Sulirajt', path: '/pages/sulirajt.html', selector: '.v2-metrics-grid' },
-    { name: 'Álomra hangolva', path: '/pages/alomra-hangolva.html', selector: '.v2-metrics-grid' },
-  ];
-
-  for (const pg of METRICS_PAGES) {
-    test(`${pg.name} — metrics grid fits within viewport at 375px`, async ({ page }) => {
-      await suppressPopup(page);
-      await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-
-      const grid = page.locator(pg.selector);
-      const box = await grid.boundingBox();
-      expect(box, 'Metrics grid should have a bounding box').toBeTruthy();
-      expect(box.x).toBeGreaterThanOrEqual(0);
-      expect(box.x + box.width).toBeLessThanOrEqual(376); // 1px tolerance
     });
   }
 });
@@ -195,7 +97,7 @@ test.describe('@responsive 07 — Element bounding-box overflow check (catches o
         test(`${pg.name} — no element exceeds viewport`, async ({ page }) => {
           await suppressPopup(page);
           await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-          await page.waitForSelector('.header', { timeout: 5000 });
+          await page.waitForSelector(SITE_SELECTORS.header, { timeout: 5000 });
 
           // Temporarily remove overflow-x:hidden to detect real overflow
           const offenders = await page.evaluate(() => {

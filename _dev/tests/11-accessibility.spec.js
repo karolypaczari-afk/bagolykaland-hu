@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('./helpers/fixtures');
 const AxeBuilder = require('@axe-core/playwright').default;
-const { PAGES } = require('./helpers/pages');
+const { PAGES, SITE_SELECTORS } = require('./helpers/pages');
 
 test.describe('@a11y 11 — Accessibility', () => {
   // axe scans are expensive DOM traversals; parallel execution mostly causes
@@ -13,7 +13,7 @@ test.describe('@a11y 11 — Accessibility', () => {
     // Single page load: run all a11y checks (axe-core + alt text + skip link)
     test(`${pg.name} — WCAG 2.1 AA + images + skip link`, async ({ suppressedPage: page }) => {
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector('.nav-menu', { timeout: 5000 });
+      await page.waitForSelector(SITE_SELECTORS.header, { timeout: 5000 });
 
       // Make all scroll-animated elements visible so axe checks their real contrast
       await page.addStyleTag({ content: `

@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
 
-const IMAGES_DIR = path.resolve(__dirname, '..', '..', 'assets', 'images');
+const IMAGES_DIR = path.resolve(__dirname, '..', '..', 'img');
 const MAX_FILE_SIZE = 600 * 1024; // 600 KB per image (PNG/JPG)
 const MAX_DIMENSION = 1400; // max width or height in pixels
 

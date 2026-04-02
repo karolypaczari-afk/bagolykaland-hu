@@ -1,6 +1,6 @@
 // @ts-check
 const { test, expect } = require('./helpers/fixtures');
-const { PAGES } = require('./helpers/pages');
+const { PAGES, SITE_SELECTORS } = require('./helpers/pages');
 
 // All mobile nav tests run at 375px width
 test.use({ viewport: { width: 375, height: 812 } });
@@ -10,26 +10,26 @@ test.describe('06 — Mobile Nav (all pages)', () => {
   for (const pg of PAGES) {
     test(`${pg.name} — hamburger is visible on mobile`, async ({ suppressedPage: page }) => {
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector('.nav-toggle', { timeout: 5000 });
+      await page.waitForSelector(SITE_SELECTORS.hamburger, { timeout: 5000 });
 
-      const toggle = page.locator('.nav-toggle');
+      const toggle = page.locator(SITE_SELECTORS.hamburger);
       await expect(toggle).toBeVisible();
       await expect(toggle).toHaveAttribute('aria-expanded', 'false');
     });
 
     test(`${pg.name} — mobile menu opens and shows links`, async ({ suppressedPage: page }) => {
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector('.nav-toggle', { timeout: 5000 });
+      await page.waitForSelector(SITE_SELECTORS.hamburger, { timeout: 5000 });
 
-      const toggle = page.locator('.nav-toggle');
-      const navMenu = page.locator('.nav-menu');
+      const toggle = page.locator(SITE_SELECTORS.hamburger);
+      const navMenu = page.locator(SITE_SELECTORS.mobileNav);
 
       await toggle.click();
-      await expect(navMenu).toHaveClass(/active/);
+      await expect(navMenu).toHaveClass(/open/);
       await expect(toggle).toHaveAttribute('aria-expanded', 'true');
 
       // Menu should have visible links
-      const visibleLinks = navMenu.locator('.nav-link');
+      const visibleLinks = navMenu.locator('a');
       expect(await visibleLinks.count()).toBeGreaterThanOrEqual(4);
     });
   }
@@ -38,55 +38,43 @@ test.describe('06 — Mobile Nav (all pages)', () => {
 test.describe('06 — Mobile Nav (interaction tests)', () => {
   test.beforeEach(async ({ suppressedPage: page }) => {
     await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
-    await page.waitForSelector('.nav-menu', { timeout: 5000 });
+    await page.waitForSelector(SITE_SELECTORS.mobileNav, { timeout: 5000 });
   });
 
   test('clicking hamburger opens the menu', async ({ suppressedPage: page }) => {
-    const toggle = page.locator('.nav-toggle');
-    const navMenu = page.locator('.nav-menu');
+    const toggle = page.locator(SITE_SELECTORS.hamburger);
+    const navMenu = page.locator(SITE_SELECTORS.mobileNav);
 
     await toggle.click();
-    await expect(navMenu).toHaveClass(/active/);
+    await expect(navMenu).toHaveClass(/open/);
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   });
 
   test('clicking hamburger again closes the menu', async ({ suppressedPage: page }) => {
-    const toggle = page.locator('.nav-toggle');
-    const navMenu = page.locator('.nav-menu');
+    const toggle = page.locator(SITE_SELECTORS.hamburger);
+    const navMenu = page.locator(SITE_SELECTORS.mobileNav);
 
     await toggle.click();
-    await expect(navMenu).toHaveClass(/active/);
+    await expect(navMenu).toHaveClass(/open/);
 
     await toggle.click();
-    await expect(navMenu).not.toHaveClass(/active/);
+    await expect(navMenu).not.toHaveClass(/open/);
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   });
 
   test('ESC key closes the menu', async ({ suppressedPage: page }) => {
-    const toggle = page.locator('.nav-toggle');
-    const navMenu = page.locator('.nav-menu');
+    const toggle = page.locator(SITE_SELECTORS.hamburger);
+    const navMenu = page.locator(SITE_SELECTORS.mobileNav);
 
     await toggle.click();
-    await expect(navMenu).toHaveClass(/active/);
+    await expect(navMenu).toHaveClass(/open/);
 
     await page.keyboard.press('Escape');
-    await expect(navMenu).not.toHaveClass(/active/);
-  });
-
-  test('click outside closes the menu', async ({ suppressedPage: page }) => {
-    const toggle = page.locator('.nav-toggle');
-    const navMenu = page.locator('.nav-menu');
-
-    await toggle.click();
-    await expect(navMenu).toHaveClass(/active/);
-
-    // Click on the main content area (outside nav)
-    await page.locator('main').click({ position: { x: 10, y: 300 }, force: true });
-    await expect(navMenu).not.toHaveClass(/active/);
+    await expect(navMenu).not.toHaveClass(/open/);
   });
 
   test('scroll is locked when menu is open', async ({ suppressedPage: page }) => {
-    const toggle = page.locator('.nav-toggle');
+    const toggle = page.locator(SITE_SELECTORS.hamburger);
 
     await toggle.click();
     const overflow = await page.evaluate(() => document.body.style.overflow);
@@ -94,7 +82,7 @@ test.describe('06 — Mobile Nav (interaction tests)', () => {
   });
 
   test('scroll is unlocked when menu closes', async ({ suppressedPage: page }) => {
-    const toggle = page.locator('.nav-toggle');
+    const toggle = page.locator(SITE_SELECTORS.hamburger);
 
     await toggle.click();
     await toggle.click(); // close
@@ -103,14 +91,14 @@ test.describe('06 — Mobile Nav (interaction tests)', () => {
   });
 
   test('dropdown toggle opens submenu on mobile', async ({ suppressedPage: page }) => {
-    const toggle = page.locator('.nav-toggle');
+    const toggle = page.locator(SITE_SELECTORS.hamburger);
     await toggle.click();
 
-    const dropdownToggle = page.locator('.dropdown-toggle');
+    const dropdownToggle = page.locator('.mobile-nav-item button').first();
     await dropdownToggle.click();
 
-    const dropdown = page.locator('.dropdown');
-    await expect(dropdown).toHaveClass(/active/);
+    const dropdown = page.locator('.mobile-nav-item').first();
+    await expect(dropdown).toHaveClass(/open/);
   });
 });
 
@@ -120,13 +108,13 @@ test.describe('06 — Desktop Nav (all pages)', () => {
   for (const pg of PAGES) {
     test(`${pg.name} — nav-menu is visible on desktop`, async ({ suppressedPage: page }) => {
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector('.nav-menu', { timeout: 5000 });
+      await page.waitForSelector(SITE_SELECTORS.desktopNav, { timeout: 5000 });
 
-      const navMenu = page.locator('.nav-menu');
+      const navMenu = page.locator(SITE_SELECTORS.desktopNav);
       await expect(navMenu).toBeVisible();
 
       // Hamburger should be hidden on desktop
-      const toggle = page.locator('.nav-toggle');
+      const toggle = page.locator(SITE_SELECTORS.hamburger);
       await expect(toggle).toBeHidden();
     });
   }

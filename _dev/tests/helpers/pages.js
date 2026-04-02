@@ -1,112 +1,181 @@
-/**
- * BAGOLYKALAND.HU — Central page manifest for tests.
- * Every test spec imports from here — no hardcoded page lists elsewhere.
- *
- * As new pages are built, uncomment them from PLANNED_PAGES below
- * and move them into ALL_PAGES.
- */
+const fs = require('fs');
+const path = require('path');
 
-const ALL_PAGES = [
-  { name: 'Homepage', path: '/index.html' },
+const ROOT = path.resolve(__dirname, '..', '..', '..');
+const PAGES_ROOT = path.join(ROOT, 'pages');
 
-  // Uncomment as pages are built:
-  // { name: 'Rólunk', path: '/rolunk/index.html' },
-  // { name: 'Kedves Anya és Apa', path: '/rolunk/kedves-anya-es-apa/index.html' },
-  // { name: 'Kedves Gyermek', path: '/rolunk/kedves-gyermek/index.html' },
-  // { name: 'Foglalkozásaink', path: '/foglalkozasaink/index.html' },
-  // { name: 'Logopédia', path: '/foglalkozasaink/logopedia/index.html' },
-  // { name: 'Mozgásfejlesztés', path: '/foglalkozasaink/mozgasfejlesztes/index.html' },
-  // { name: 'Egyéni fejlesztő', path: '/foglalkozasaink/egyeni-fejleszto-foglalkozasok/index.html' },
-  // { name: 'Szorongásoldó', path: '/foglalkozasaink/szorongasoldo-program/index.html' },
-  // { name: 'Iskola-előkészítő', path: '/foglalkozasaink/iskola-elokeszito-foglalkozas/index.html' },
-  // { name: 'Vizsgálatok', path: '/vizsgalatok/index.html' },
-  // { name: 'Logopédiai vizsgálat', path: '/vizsgalatok/logopediai-vizsgalat/index.html' },
-  // { name: 'Iskolaérettségi vizsgálat', path: '/vizsgalatok/iskolaerettsegi-vizsgalat/index.html' },
-  // { name: 'Komplex részképesség vizsgálat', path: '/vizsgalatok/komplex-reszkepesseg-vizsgalat/index.html' },
-  // { name: 'Ernyő alatt program', path: '/ernyo-alatt-program/index.html' },
-  // { name: 'Kézen fogva', path: '/kezen-fogva-online-finommotorika-fejlesztes/index.html' },
-  // { name: 'Éves/heti rend', path: '/eves-hetirend/index.html' },
-  // { name: 'Blog', path: '/blog/index.html' },
-  // { name: 'Galéria', path: '/galeria/index.html' },
-  // { name: 'Árlista', path: '/arlista/index.html' },
-  // { name: 'Kapcsolat', path: '/kapcsolat/index.html' },
-  // { name: 'Adatkezelési tájékoztató', path: '/adatkezelesi-tajekoztato/index.html' },
-];
+const PAGE_LABELS = {
+  'index.html': 'Homepage',
+  'pages/adatkezelesi-tajekoztato/index.html': 'Adatkezelesi Tajekoztato',
+  'pages/arlista/index.html': 'Arlista',
+  'pages/blog/index.html': 'Blog',
+  'pages/blog/a-buntetes-mint-neveles-eszkoze/index.html': 'Blog - A buntetes mint a neveles eszkoze',
+  'pages/blog/figyelem-a-gyakorlas-a-tanulas-megutaltatasanak-egyik-legjobb-modja-lehet/index.html': 'Blog - Figyelem a gyakorlas',
+  'pages/blog/kire-utott-ez-a-gyerek/index.html': 'Blog - Kire utott ez a gyerek',
+  'pages/blog/szerinted-is-felesleges-divathobort-az-iskola-elokeszito/index.html': 'Blog - Iskola-elokeszito',
+  'pages/blog/te-is-kikered-a-gyermeked-velemenyet/index.html': 'Blog - Gyermeked velemenye',
+  'pages/blog/te-is-nehezen-viseled-hogy-folyton-rohangal-es-az-agyon-ugral-a-gyermeked/index.html': 'Blog - Rohangalas',
+  'pages/ernyo-alatt-program/index.html': 'Ernyo Alatt Program',
+  'pages/eves-hetirend/index.html': 'Eves Hetirend',
+  'pages/foglalkozasaink/index.html': 'Foglalkozasaink',
+  'pages/foglalkozasaink/egyeni-fejleszto-foglalkozasok/index.html': 'Egyeni Fejleszto Foglalkozasok',
+  'pages/foglalkozasaink/iskola-elokeszito-foglalkozas/index.html': 'Iskola-elokeszito Foglalkozas',
+  'pages/foglalkozasaink/logopedia/index.html': 'Logopedia',
+  'pages/foglalkozasaink/mozgasfejlesztes/index.html': 'Mozgasfejlesztes',
+  'pages/foglalkozasaink/szorongasoldo-program/index.html': 'Szorongasoldo Program',
+  'pages/galeria/index.html': 'Galeria',
+  'pages/kapcsolat/index.html': 'Kapcsolat',
+  'pages/kezen-fogva-online-finommotorika-fejlesztes/index.html': 'Kezen Fogva',
+  'pages/rolunk/index.html': 'Rolunk',
+  'pages/rolunk/kedves-anya-es-apa/index.html': 'Kedves Anya Es Apa',
+  'pages/rolunk/kedves-gyermek/index.html': 'Kedves Gyermek',
+  'pages/vizsgalatok/index.html': 'Vizsgalatok',
+  'pages/vizsgalatok/iskolaerettsegi-vizsgalat/index.html': 'Iskolaerettsegi Vizsgalat',
+  'pages/vizsgalatok/komplex-reszkepesseg-vizsgalat/index.html': 'Komplex Reszkepesseg Vizsgalat',
+  'pages/vizsgalatok/logopediai-vizsgalat/index.html': 'Logopediai Vizsgalat',
+};
 
-/**
- * Fast mode: representative subset.
- * Set FAST_MODE=1 to activate.
- */
-const FAST_PAGES = [
-  { name: 'Homepage', path: '/index.html' },
-];
+function walkIndexFiles(dir) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const files = [];
 
-/**
- * iOS/WebKit smoke subset.
- */
-const IOS_SMOKE_PAGES = [
-  { name: 'Homepage', path: '/index.html' },
-];
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...walkIndexFiles(fullPath));
+      continue;
+    }
 
+    if (entry.name === 'index.html') {
+      files.push(path.relative(ROOT, fullPath).replace(/\\/g, '/'));
+    }
+  }
+
+  return files;
+}
+
+function humanizeSlug(slug) {
+  return slug
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function filePathToRoute(filePath) {
+  if (filePath === 'index.html') {
+    return '/index.html';
+  }
+
+  const directory = path.posix.dirname(filePath);
+  return `/${directory}/`;
+}
+
+function routeToFilePath(route) {
+  const cleanRoute = (route || '/')
+    .split('#')[0]
+    .split('?')[0]
+    .replace(/\\/g, '/');
+
+  if (cleanRoute === '/' || cleanRoute === '/index.html') {
+    return 'index.html';
+  }
+
+  if (cleanRoute.endsWith('.html')) {
+    return cleanRoute.replace(/^\//, '');
+  }
+
+  return `${cleanRoute.replace(/^\//, '').replace(/\/$/, '')}/index.html`;
+}
+
+function createPageEntry(filePath) {
+  const label =
+    PAGE_LABELS[filePath] ||
+    humanizeSlug(path.posix.basename(path.posix.dirname(filePath)));
+
+  return {
+    name: label,
+    path: filePathToRoute(filePath),
+    filePath,
+  };
+}
+
+const DISCOVERED_PAGES = [
+  'index.html',
+  ...walkIndexFiles(PAGES_ROOT),
+].sort((left, right) => left.localeCompare(right));
+
+const ALL_PAGES = DISCOVERED_PAGES.map(createPageEntry);
+
+const FAST_PAGE_PATHS = new Set([
+  'index.html',
+  'pages/foglalkozasaink/index.html',
+  'pages/vizsgalatok/index.html',
+  'pages/kapcsolat/index.html',
+  'pages/blog/index.html',
+]);
+
+const FAST_PAGES = ALL_PAGES.filter((page) => FAST_PAGE_PATHS.has(page.filePath));
+const IOS_SMOKE_PAGES = FAST_PAGES.slice(0, 2);
 const PAGES = process.env.FAST_MODE ? FAST_PAGES : ALL_PAGES;
 
 const BREAKPOINTS = [
-  { name: 'iPhone',      width: 375 },
-  { name: '480px',       width: 480 },
-  { name: '640px',       width: 640 },
-  { name: 'tablet',      width: 768 },
-  { name: 'nav-switch',  width: 900 },  // bagolykaland nav switch at 900px
-  { name: 'desktop',     width: 1200 },
-  { name: 'wide',        width: 1440 },
+  { name: 'iPhone', width: 375 },
+  { name: '480px', width: 480 },
+  { name: 'tablet', width: 768 },
+  { name: 'nav-switch', width: 900 },
+  { name: 'desktop', width: 1200 },
+  { name: 'wide', width: 1440 },
 ];
 
 const VISUAL_BREAKPOINTS = [
-  { name: 'mobile',  width: 375 },
-  { name: 'tablet',  width: 768 },
+  { name: 'mobile', width: 375 },
+  { name: 'tablet', width: 768 },
   { name: 'desktop', width: 1200 },
 ];
 
 const CORE_BREAKPOINTS = [
-  { name: 'iPhone',  width: 375 },
-  { name: 'tablet',  width: 768 },
+  { name: 'iPhone', width: 375 },
+  { name: 'tablet', width: 768 },
   { name: 'desktop', width: 1200 },
 ];
 
 const EXTRA_BREAKPOINTS = [
-  { name: '480px',      width: 480 },
-  { name: '640px',      width: 640 },
+  { name: '480px', width: 480 },
   { name: 'nav-switch', width: 900 },
-  { name: 'wide',       width: 1440 },
+  { name: 'wide', width: 1440 },
 ];
 
-/** All CSS files used by the live site */
-const CSS_FILES = [
-  'css/style.css',
-  // Add page-specific CSS files here as they're created:
-  // 'css/rolunk.css',
-  // 'css/foglalkozasaink.css',
-  // 'css/kapcsolat.css',
-];
+const LANDING_PAGES = PAGES.filter((page) => !page.filePath.startsWith('pages/blog/'));
 
-const KNOWN_ISSUES = {
-  // K1: { file: 'img/favicon.ico', issue: 'placeholder, not yet created' },
+const CSS_FILES = ['css/style.css', 'css/popup.css'];
+
+const KNOWN_ISSUES = {};
+
+const SERVICE_PAGES = PAGES.filter((page) => page.filePath.includes('foglalkozasaink'));
+
+const SITE_SELECTORS = {
+  header: '.site-header',
+  footer: '.site-footer',
+  hamburger: '.hamburger',
+  desktopNav: '.main-nav',
+  mobileNav: '#mobile-nav',
+  logo: '.site-logo img',
+  footerLinks: '.site-footer a',
 };
-
-/** Pages that have service cards (service card section present) */
-const SERVICE_PAGES = [
-  { name: 'Homepage', path: '/index.html' },
-];
 
 module.exports = {
   ALL_PAGES,
-  PAGES,
+  BREAKPOINTS,
+  CORE_BREAKPOINTS,
+  CSS_FILES,
+  EXTRA_BREAKPOINTS,
   FAST_PAGES,
   IOS_SMOKE_PAGES,
-  BREAKPOINTS,
-  VISUAL_BREAKPOINTS,
-  CORE_BREAKPOINTS,
-  EXTRA_BREAKPOINTS,
-  CSS_FILES,
   KNOWN_ISSUES,
+  LANDING_PAGES,
+  PAGES,
+  ROOT,
   SERVICE_PAGES,
+  SITE_SELECTORS,
+  VISUAL_BREAKPOINTS,
+  routeToFilePath,
 };

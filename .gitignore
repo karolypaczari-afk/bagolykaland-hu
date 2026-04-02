@@ -19,3 +19,5 @@ _dev/output/
 # Playwright test reports
 _dev/tests/playwright-report/
 _dev/tests/test-results/
+playwright-report/
+test-results/
