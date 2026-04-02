@@ -1,0 +1,38 @@
+{
+  "name": "bagolykaland-hu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Automated tests and build tooling for bagolykaland.hu static site",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:fast": "FAST_MODE=1 npx playwright test",
+    "test:smoke": "npx playwright test --grep @smoke",
+    "test:a11y": "npx playwright test --grep @a11y",
+    "test:nav": "npx playwright test 06-mobile-nav",
+    "test:responsive": "npx playwright test 07-responsive",
+    "test:seo": "npx playwright test 09-seo",
+    "test:visual": "npx playwright test 08-visual-regression",
+    "visual:update": "npx playwright test 08-visual-regression --update-snapshots",
+    "test:security": "npx playwright test 12-security",
+    "test:images": "npx playwright test 16-image-optimization",
+    "test:full": "npm run build && npx playwright test",
+    "report": "npx playwright show-report",
+    "build": "node _dev/build.js",
+    "build:css": "node _dev/build.js --type css",
+    "build:js": "node _dev/build.js --type js",
+    "watch": "chokidar \"css/*.src.css\" \"js/*.src.js\" -c \"node _dev/build.js --file {path}\"",
+    "optimize:images": "node _dev/scripts/optimize-images.js",
+    "optimize:images:dry": "node _dev/scripts/optimize-images.js --dry-run",
+    "serve": "npx http-server . -p 8080 -c-1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.50.0",
+    "cheerio": "^1.2.0",
+    "chokidar-cli": "^3.0.0",
+    "clean-css-cli": "^4.3.0",
+    "http-server": "^14.1.1",
+    "sharp": "^0.34.5",
+    "terser": "^5.37.0"
+  }
+}

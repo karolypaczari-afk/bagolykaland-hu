@@ -73,6 +73,15 @@ Each page below needs its own HTML file. Use the same shell pattern:
 
 ---
 
+## 🔧 Build pipeline (activate when CSS/JS grows complex)
+
+- [ ] Rename `css/style.css` → `css/style.src.css` and run `npm run build`
+- [ ] Update HTML `<link>` to `css/style.css?v=YYYYMMDDHHII`
+- [ ] Same for JS files (rename to `.src.js`, let build generate minified output)
+- [ ] Set up `npm run watch` in dev workflow
+
+---
+
 ## ✅ Done
 
 - [x] Project structure created (`css/`, `js/`, `_dev/`, `img/`)
@@ -82,3 +91,10 @@ Each page below needs its own HTML file. Use the same shell pattern:
 - [x] `js/tracking.js` — tracking code placeholders (GTM, GA4, FB Pixel)
 - [x] `index.html` — full homepage (hero, services, about, programs, blog preview, CTA)
 - [x] GitHub repo created and initial push done
+- [x] 26 Playwright test specs copied + adapted from zsenibagoly.hu
+- [x] `_dev/tests/helpers/` — pages.js, fixtures.js, suppress-popup.js
+- [x] `package.json` — test + build + watch scripts
+- [x] `playwright.config.js` — chromium + webkit-ios projects
+- [x] `_dev/build.js` — CSS/JS minifier
+- [x] `_dev/scripts/optimize-images.js` — WebP converter
+- [x] `CLAUDE.md` — developer guide
