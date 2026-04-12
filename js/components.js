@@ -176,7 +176,7 @@
   ------------------------------------------ */
   var skipLinkHtml = document.querySelector('.skip-link')
     ? ''
-    : '<a href="#main-content" class="skip-link">Ugrás a tartalomra</a>';
+    : '<a href="#main-content" class="skip-link">Ugrás a tartalomhoz</a>';
 
   var headerHTML = [
     skipLinkHtml,

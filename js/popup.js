@@ -176,12 +176,12 @@
             '          <svg class="bk-popup-submit-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
             '        </button>' +
             '      </div>' +
-            '      <p class="bk-popup-gdpr-inline">A feliratkozással elfogadod az <a href="/adatkezelesi-tajekoztato/" target="_blank" rel="noopener">adatkezelési tájékoztatót</a>.</p>' +
+            '      <p class="bk-popup-gdpr-inline">A feliratkozással elfogadod az <a href="/pages/adatkezelesi-tajekoztato/" target="_blank" rel="noopener">adatkezelési tájékoztatót</a>.</p>' +
             '    </form>' +
             '    <div class="bk-popup-success" id="bk-popup-success" style="display:none">' +
             '      <div class="bk-popup-success-icon">✓</div>' +
             '      <h3>Köszönjük!</h3>' +
-            '      <p>Hamarosan megérkezik az e-mailje!</p>' +
+            '      <p>Hamarosan megérkezik az e-mailed!</p>' +
             '    </div>' +
             '    <p class="bk-popup-privacy">Nem küldünk spamet. Bármikor leiratkozhatsz.</p>' +
             '  </div>' +
