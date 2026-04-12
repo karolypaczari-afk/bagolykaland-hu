@@ -34,7 +34,9 @@ npx playwright test _dev/tests/09-seo.spec.js --headed
 
 **Eleventy static site generator → plain HTML/CSS/JS output. No framework, no WordPress.**
 
-Eleventy processes `.njk` templates and writes `.html` files in-place (input = output = `.`).
+Eleventy processes `.njk` templates in `pages/` and writes `.html` output alongside them (input = output = `.`).
+Both source `.njk` and generated `.html` live inside `pages/`.
+`.htaccess` rewrites clean public URLs (`/rolunk/`) to the actual files (`/pages/rolunk/index.html`).
 The deploy pipeline (GitHub → Hostinger) is unchanged — it still serves the root directory.
 
 ### File Structure
@@ -339,7 +341,7 @@ Standard inner page layout (with sidebar):
 
 **Only edit `_data/nav.json` to change nav.** It is the single source of truth for menus. The header/footer partials loop over it at build time. `js/components.js` handles interactive behaviour only (dropdowns, hamburger, active link).
 
-URL pattern: all subpages are at clean root-level paths (e.g., `/rolunk/`, `/arlista/`) — no `/pages/` prefix.
+URL pattern: public URLs are clean root-level paths (e.g., `/rolunk/`, `/arlista/`) — no `/pages/` prefix visible to users. `.htaccess` rewrites handle the mapping to `pages/` on disk.
 
 ---
 
@@ -429,7 +431,7 @@ Hungarian number format: thousand separator is **period** (`.`), decimal is **co
 3. Update `_data/nav.json` if it needs a menu entry (URL = `/[slug]/`, no `/pages/` prefix)
 4. Add to `sitemap.xml` when that file exists
 
-Then run `npm run eleventy` to generate the HTML at `[slug]/index.html`.
+Then run `npm run eleventy` to generate the HTML at `pages/[slug]/index.html`.
 
 ---
 

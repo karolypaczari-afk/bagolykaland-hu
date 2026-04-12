@@ -2,6 +2,24 @@
 # BAGOLYKALAND.HU — Performance & Caching Rules
 # ============================================
 
+# --- Clean URLs: /slug/ serves from /pages/slug/ ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Skip rewriting for real root-level resources
+  RewriteCond %{REQUEST_URI} ^/(css|js|img|_data|_includes|manifest\.webmanifest|service-worker\.js|robots\.txt|sitemap\.xml|index\.html|favicon) [OR]
+  RewriteCond %{REQUEST_URI} ^/pages/
+  RewriteRule ^ - [L]
+
+  # Rewrite /slug/ to /pages/slug/ if the file exists there
+  RewriteCond %{DOCUMENT_ROOT}/pages%{REQUEST_URI}index.html -f
+  RewriteRule ^(.*)$ /pages/$1 [L]
+
+  # Also handle /slug (without trailing slash) → /pages/slug/
+  RewriteCond %{DOCUMENT_ROOT}/pages%{REQUEST_URI}/index.html -f
+  RewriteRule ^(.+[^/])$ /$1/ [R=301,L]
+</IfModule>
+
 # --- GZIP Compression ---
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html

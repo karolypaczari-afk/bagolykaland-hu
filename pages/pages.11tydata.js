@@ -1,14 +1,13 @@
 /**
  * Eleventy directory data for pages/.
- * Strips the "/pages" segment from output URLs so all pages
- * appear at clean root-level paths, e.g. /rolunk/ instead of /pages/rolunk/.
+ * Output stays inside pages/ in the repo (e.g. pages/rolunk/index.html).
+ * .htaccess rewrites /rolunk/ → /pages/rolunk/ so public URLs stay clean.
  */
 module.exports = {
     eleventyComputed: {
         permalink: function (data) {
             // page.filePathStem = "/pages/rolunk/index"
             const clean = data.page.filePathStem
-                .replace(/^\/pages/, '')
                 .replace(/\/index$/, '');
             return clean + '/';
         },
