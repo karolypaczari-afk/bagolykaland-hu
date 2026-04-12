@@ -35,7 +35,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
 
+  {% if preloadHero %}
+  <link rel="preload" as="image" href="{{ preloadHero }}" type="image/webp" />
+  {% endif %}
+
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/style.css{% if buildHash %}?v={{ buildHash }}{% endif %}" />
 
   {% if headStyles %}<style>{{ headStyles | safe }}</style>{% endif %}

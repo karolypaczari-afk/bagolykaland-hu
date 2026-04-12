@@ -38,8 +38,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
 
+  
+
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/style.css?v=mnvrwini" />
 
   
 
@@ -69,10 +71,13 @@
   <div class="container">
     <div class="header-inner">
       <a href="/" class="site-logo" aria-label="BagolykaLand – Főoldal">
-        <img src="/img/logo-transparent.png"
-             alt="BagolykaLand Oktató- és Fejlesztő Központ" width="200" height="52"
-             style="height:50px;width:auto;object-fit:contain;"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <picture>
+          <source srcset="/img/logo-transparent.webp" type="image/webp">
+          <img src="/img/logo-transparent.png"
+               alt="BagolykaLand Oktató- és Fejlesztő Központ" width="200" height="52"
+               style="height:50px;width:auto;object-fit:contain;"
+               onerror="this.style.display='none';this.parentElement.nextElementSibling.style.display='flex'">
+        </picture>
         <span class="logo-text" style="display:none">
           <span class="logo-name">BAGOLYKALAND</span>
           <span class="logo-sub">Oktató- és Fejlesztő Központ</span>
@@ -708,15 +713,16 @@
 </footer>
 
   <!-- Scripts -->
-  <script src="/js/components.js" defer></script>
-  <script src="/js/install-prompt.js" defer></script>
-  <script src="/js/tracking.js" defer></script>
-  <script src="/js/tracking-loader.js" defer></script>
-  <script src="/js/cookie-consent.js" defer></script>
-  <script src="/js/main.js" defer></script>
-  <script src="/js/lead-capture-loader.js"
-          data-popup-css="/css/popup.css"
-          data-popup-src="/js/popup.js"
+  
+  <script src="/js/components.js?v=mnvrwini" defer></script>
+  <script src="/js/install-prompt.js?v=mnvrwini" defer></script>
+  <script src="/js/tracking.js?v=mnvrwini" defer></script>
+  <script src="/js/tracking-loader.js?v=mnvrwini" defer></script>
+  <script src="/js/cookie-consent.js?v=mnvrwini" defer></script>
+  <script src="/js/main.js?v=mnvrwini" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mnvrwini"
+          data-popup-css="/css/popup.css?v=mnvrwini"
+          data-popup-src="/js/popup.js?v=mnvrwini"
           defer></script>
 
 </body>

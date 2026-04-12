@@ -105,6 +105,12 @@ if (singleFile) {
         }
     }
 
+    // Generate cache-busting hash for Eleventy templates
+    const buildHash = Date.now().toString(36);
+    const hashPath = path.join(ROOT, '_data', 'buildHash.json');
+    fs.writeFileSync(hashPath, JSON.stringify(buildHash));
+    console.log(`=== Build hash: ${buildHash} (written to _data/buildHash.json) ===\n`);
+
     const elapsed = ((Date.now() - start) / 1000).toFixed(1);
     console.log(`Done in ${elapsed}s.`);
 }

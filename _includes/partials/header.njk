@@ -21,10 +21,13 @@
   <div class="container">
     <div class="header-inner">
       <a href="/" class="site-logo" aria-label="BagolykaLand – Főoldal">
-        <img src="/img/logo-transparent.png"
-             alt="BagolykaLand Oktató- és Fejlesztő Központ" width="200" height="52"
-             style="height:50px;width:auto;object-fit:contain;"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <picture>
+          <source srcset="/img/logo-transparent.webp" type="image/webp">
+          <img src="/img/logo-transparent.png"
+               alt="BagolykaLand Oktató- és Fejlesztő Központ" width="200" height="52"
+               style="height:50px;width:auto;object-fit:contain;"
+               onerror="this.style.display='none';this.parentElement.nextElementSibling.style.display='flex'">
+        </picture>
         <span class="logo-text" style="display:none">
           <span class="logo-name">BAGOLYKALAND</span>
           <span class="logo-sub">Oktató- és Fejlesztő Központ</span>
@@ -36,10 +39,10 @@
             {% if item.children and item.megaType %}
               {# ─── MEGA MENU ITEM ─── #}
               <li class="nav-item nav-item--mega">
-                <button class="nav-link" id="nav-mega-{{ loop.index }}" aria-expanded="false" aria-haspopup="true">{{ item.label }}<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <button class="nav-link" id="nav-mega-{{ loop.index }}" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-{{ loop.index }}">{{ item.label }}<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
 
                 {% if item.megaType == 'about' %}
-                <div class="mega-panel mega-panel--compact mega-panel--about" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
+                <div class="mega-panel mega-panel--compact mega-panel--about" id="nav-panel-{{ loop.index }}" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
                   <div class="mega-panel__inner">
                     <div class="mega-nav">
                       {% for child in item.children %}
@@ -75,7 +78,7 @@
                 </div>
 
                 {% elif item.megaType == 'services' %}
-                <div class="mega-panel mega-panel--full mega-panel--services" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
+                <div class="mega-panel mega-panel--full mega-panel--services" id="nav-panel-{{ loop.index }}" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
                   <div class="mega-panel__inner">
                     <div class="mega-services mega-services--cols-{{ item.children | length }}">
                       {% for child in item.children %}
@@ -97,7 +100,7 @@
                 </div>
 
                 {% elif item.megaType == 'programs' %}
-                <div class="mega-panel mega-panel--compact mega-panel--programs" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
+                <div class="mega-panel mega-panel--compact mega-panel--programs" id="nav-panel-{{ loop.index }}" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
                   <div class="mega-panel__inner">
                     <div class="mega-services mega-services--cols-{{ item.children | length }}">
                       {% for child in item.children %}
@@ -118,7 +121,7 @@
                 </div>
 
                 {% elif item.megaType == 'knowledge' %}
-                <div class="mega-panel mega-panel--full mega-panel--knowledge" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
+                <div class="mega-panel mega-panel--full mega-panel--knowledge" id="nav-panel-{{ loop.index }}" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
                   <div class="mega-panel__inner">
                     <div class="mega-nav">
                       {% for child in item.children %}
@@ -151,8 +154,8 @@
             {% elif item.children %}
               {# ─── SIMPLE DROPDOWN (fallback) ─── #}
               <li class="nav-item">
-                <button class="nav-link" aria-expanded="false" aria-haspopup="true">{{ item.label }}<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-                <div class="dropdown">
+                <button class="nav-link" id="nav-dropdown-{{ loop.index }}" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-dropdown-panel-{{ loop.index }}">{{ item.label }}<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="dropdown" id="nav-dropdown-panel-{{ loop.index }}" role="region" aria-labelledby="nav-dropdown-{{ loop.index }}">
                   {% if item.url %}<a href="{{ item.url }}" class="dropdown-parent-link">Összes {{ item.label }}</a>{% endif %}
                   {% for child in item.children %}
                     <a href="{{ child.url }}">{{ child.label }}</a>
@@ -166,7 +169,10 @@
             {% endif %}
           {% endfor %}
         </ul>
-        <a href="/kapcsolat/" class="nav-cta">📅 Időpontfoglalás</a>
+        <a href="/kapcsolat/" class="nav-cta" aria-label="Időpontfoglalás">
+          <span class="nav-cta__icon" aria-hidden="true">📅</span>
+          <span class="nav-cta__label">Időpontfoglalás</span>
+        </a>
       </nav>
       <div class="header-actions">
         <button class="nav-install js-install-app" type="button" hidden aria-haspopup="dialog" aria-label="BagolykaLand telepítése">
@@ -186,8 +192,8 @@
     {% for item in nav %}
       {% if item.children %}
         <li class="mobile-nav-item">
-          <button class="mobile-nav-link" aria-expanded="false">{{ item.label }}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-          <div class="mobile-dropdown">
+          <button class="mobile-nav-link" id="mobile-nav-toggle-{{ loop.index }}" type="button" aria-expanded="false" aria-controls="mobile-dropdown-{{ loop.index }}">{{ item.label }}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <div class="mobile-dropdown" id="mobile-dropdown-{{ loop.index }}" aria-labelledby="mobile-nav-toggle-{{ loop.index }}">
             {% if item.url %}<a href="{{ item.url }}" class="mobile-dropdown-parent-link">Összes {{ item.label }}</a>{% endif %}
             {% for child in item.children %}
               <a href="{{ child.url }}" class="mobile-dropdown__link">

@@ -1,0 +1,95 @@
+# ============================================
+# BAGOLYKALAND.HU — Performance & Caching Rules
+# ============================================
+
+# --- GZIP Compression ---
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/manifest+json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE text/xml
+</IfModule>
+
+# --- Browser Caching ---
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # HTML — short cache, visitors get fresh content quickly after deploy
+  ExpiresByType text/html "access plus 5 minutes"
+
+  # CSS & JS — long cache, busted by ?v= query string on each build
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+
+  # Images — long cache, rarely change
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  # Fonts — long cache
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType application/font-woff2 "access plus 1 year"
+  ExpiresByType application/font-woff "access plus 1 year"
+
+  # Manifest & JSON — medium cache
+  ExpiresByType application/manifest+json "access plus 1 week"
+  ExpiresByType application/json "access plus 1 hour"
+</IfModule>
+
+# --- Cache-Control Headers ---
+<IfModule mod_headers.c>
+  # HTML: must-revalidate so browsers check for updates
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "public, max-age=300, must-revalidate"
+  </FilesMatch>
+
+  # CSS & JS: immutable-like with long max-age (busted by ?v= query string)
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+
+  # Images: long cache
+  <FilesMatch "\.(webp|jpg|jpeg|png|gif|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Fonts: long cache
+  <FilesMatch "\.(woff2|woff|ttf|otf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+
+  # Webmanifest
+  <FilesMatch "\.webmanifest$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+
+  # Service worker must not be cached aggressively
+  <FilesMatch "service-worker\.js$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# --- Security Headers ---
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# --- Correct MIME Types ---
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType image/webp .webp
+  AddType font/woff2 .woff2
+</IfModule>
