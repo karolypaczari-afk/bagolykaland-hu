@@ -799,6 +799,37 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.18; }
 .service-link:hover { gap: 9px; opacity: .8; }
 .service-link svg { width: 15px; height: 15px; }
 
+/* Rich service card extras (list + price, used on foglalkozasaink) */
+.service-card-list {
+  display: flex; flex-direction: column; gap: 6px;
+  margin: 0; padding: 0;
+}
+.service-card-list li {
+  padding-left: var(--sp-lg); position: relative;
+  font-size: .84rem; color: var(--clr-text-muted); line-height: 1.6;
+}
+.service-card-list li::before {
+  content: ''; position: absolute; left: 0; top: .6em;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent, var(--clr-teal));
+}
+.service-card-price {
+  font-family: var(--font-heading); font-size: 1.1rem; font-weight: 900;
+  color: var(--clr-coral); margin-top: auto;
+}
+.service-card-price span {
+  font-size: .78rem; font-weight: 700; color: var(--clr-text-muted);
+}
+
+/* Dark-background service card variant */
+.service-card--dark {
+  background: linear-gradient(135deg, var(--clr-navy-deep) 0%, var(--clr-navy-mid) 100%);
+}
+.service-card--dark h3,
+.service-card--dark p { color: #fff; }
+.service-card--dark .service-card-list li { color: rgba(255,255,255,0.65); }
+.service-card--dark .service-card-list li::before { background: var(--clr-yellow); }
+
 /* =========================================
    ABOUT SPLIT
    ========================================= */
@@ -1683,4 +1714,176 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.18; }
 
 @media (max-width: 560px) {
   .team-grid { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   INNER PAGE COMPONENTS
+   (content pages: foglalkozasok, vizsgálatok, etc.)
+   ========================================= */
+
+/* Lead paragraph — larger intro text */
+.lead {
+  font-size: 1.1rem; color: var(--clr-text-mid);
+  line-height: 1.85; margin-bottom: var(--sp-lg);
+}
+
+/* Content list — teal-bullet styled ul inside content-block */
+.content-list {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: var(--sp-lg); padding: 0;
+}
+.content-list li {
+  padding-left: var(--sp-xl); position: relative;
+  font-size: .95rem; color: var(--clr-text-muted); line-height: 1.75;
+}
+.content-list li::before {
+  content: ''; position: absolute; left: 0; top: .65em;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--clr-teal);
+}
+
+/* Process steps (egyéni fejlesztő: 4-step flow) */
+.process-steps {
+  display: flex; flex-direction: column; gap: var(--sp-xl);
+  margin-block: var(--sp-2xl);
+}
+.process-step {
+  display: flex; gap: var(--sp-lg); align-items: flex-start;
+}
+.process-step__number {
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+  background: var(--clr-navy); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-heading); font-size: 1.15rem; font-weight: 900;
+  box-shadow: var(--sh-sm);
+}
+.process-step__content { flex: 1; min-width: 0; }
+.process-step__content h3 {
+  font-size: 1.05rem; font-weight: 800; color: var(--clr-navy);
+  margin-bottom: var(--sp-sm); letter-spacing: -.01em;
+}
+.process-step__content p {
+  font-size: .9rem; color: var(--clr-text-muted); line-height: 1.75;
+  margin-bottom: var(--sp-sm);
+}
+.process-step__content ul { display: flex; flex-direction: column; gap: 6px; padding: 0; }
+.process-step__content ul li {
+  padding-left: var(--sp-lg); position: relative;
+  font-size: .875rem; color: var(--clr-text-muted); line-height: 1.65;
+}
+.process-step__content ul li::before {
+  content: ''; position: absolute; left: 0; top: .6em;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--clr-teal);
+}
+
+/* Comparison grid (mozgásfejlesztés: egyéni vs. kiscsoportos) */
+.comparison-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-lg); margin-block: var(--sp-xl);
+}
+.comparison-card {
+  background: #fff; border-radius: var(--r-xl);
+  padding: var(--sp-xl); box-shadow: var(--sh-sm);
+  border: 2px solid var(--clr-border);
+  display: flex; flex-direction: column; gap: var(--sp-md);
+  transition: box-shadow var(--t-mid), border-color var(--t-mid);
+}
+.comparison-card:hover { box-shadow: var(--sh-lg); border-color: var(--clr-teal); }
+.comparison-card--featured {
+  border-color: var(--clr-teal);
+  background: linear-gradient(135deg, var(--clr-teal-light) 0%, #fff 60%);
+}
+.comparison-card h3 {
+  font-size: 1.05rem; font-weight: 800; color: var(--clr-navy); letter-spacing: -.01em;
+}
+.comparison-card p { font-size: .875rem; color: var(--clr-text-muted); line-height: 1.7; }
+.comparison-card ul { display: flex; flex-direction: column; gap: 6px; flex: 1; padding: 0; }
+.comparison-card ul li {
+  padding-left: var(--sp-lg); position: relative;
+  font-size: .84rem; color: var(--clr-text-muted); line-height: 1.6;
+}
+.comparison-card ul li::before {
+  content: ''; position: absolute; left: 0; top: .6em;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--clr-teal);
+}
+.comparison-card__price {
+  font-family: var(--font-heading); font-size: 1.1rem; font-weight: 900;
+  color: var(--clr-coral); padding-top: var(--sp-sm);
+  border-top: 1px solid var(--clr-border-soft); margin-top: auto;
+}
+
+/* Program variants (iskola-előkészítő: tanévi vs. nyári intenzív) */
+.program-variants {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-lg); margin-block: var(--sp-xl);
+}
+.variant-card {
+  background: #fff; border-radius: var(--r-xl);
+  padding: var(--sp-xl); box-shadow: var(--sh-sm);
+  border: 2px solid var(--clr-border);
+  display: flex; flex-direction: column; gap: var(--sp-md);
+  transition: box-shadow var(--t-mid), border-color var(--t-mid);
+}
+.variant-card:hover { box-shadow: var(--sh-lg); border-color: var(--clr-royal); }
+.variant-card--featured {
+  border-color: var(--clr-royal);
+  background: linear-gradient(135deg, var(--clr-royal-light) 0%, #fff 60%);
+}
+.variant-card__badge {
+  display: inline-flex; align-items: center; align-self: flex-start;
+  padding: 4px 12px; border-radius: var(--r-full);
+  background: var(--clr-navy); color: #fff;
+  font-size: .72rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.variant-card--featured .variant-card__badge { background: var(--clr-royal); }
+.variant-card h3 {
+  font-size: 1.05rem; font-weight: 800; color: var(--clr-navy); letter-spacing: -.01em;
+}
+.variant-card p { font-size: .875rem; color: var(--clr-text-muted); line-height: 1.7; }
+.variant-card ul { display: flex; flex-direction: column; gap: 6px; flex: 1; padding: 0; }
+.variant-card ul li {
+  padding-left: var(--sp-lg); position: relative;
+  font-size: .84rem; color: var(--clr-text-muted); line-height: 1.6;
+}
+.variant-card ul li::before {
+  content: ''; position: absolute; left: 0; top: .6em;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--clr-royal);
+}
+.variant-card__price {
+  font-family: var(--font-heading); font-size: 1.1rem; font-weight: 900;
+  color: var(--clr-coral); padding-top: var(--sp-sm);
+  border-top: 1px solid var(--clr-border-soft); margin-top: auto;
+}
+
+/* Skills grid (iskola-előkészítő: fejlesztett területek — 4 columns) */
+.skills-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: var(--sp-lg); margin-block: var(--sp-xl);
+}
+.skill-item {
+  background: #fff; border-radius: var(--r-xl);
+  padding: var(--sp-lg); box-shadow: var(--sh-sm);
+  text-align: center; display: flex; flex-direction: column; gap: var(--sp-sm);
+  transition: transform var(--t-spring), box-shadow var(--t-mid);
+}
+.skill-item:hover { transform: translateY(-4px); box-shadow: var(--sh-md); }
+.skill-item__icon { font-size: 2rem; line-height: 1; }
+.skill-item h4 {
+  font-size: .88rem; font-weight: 800; color: var(--clr-navy); letter-spacing: -.01em;
+}
+.skill-item p { font-size: .8rem; color: var(--clr-text-muted); line-height: 1.6; margin: 0; }
+
+/* Responsive overrides for inner page components */
+@media (max-width: 900px) {
+  .comparison-grid  { grid-template-columns: 1fr; }
+  .program-variants { grid-template-columns: 1fr; }
+  .skills-grid      { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 560px) {
+  .skills-grid         { grid-template-columns: 1fr 1fr; }
+  .process-step__number { width: 36px; height: 36px; font-size: 1rem; }
 }

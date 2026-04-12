@@ -1,6 +1,6 @@
-# BAGOLYKALAND.HU — Developer Guide
+# CLAUDE.md
 
-This is the authoritative reference for this project. Read before making changes.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ---
 
@@ -19,6 +19,12 @@ npm run build:html     # HTML shell normalization only
 npm run watch          # Auto-rebuild on .src.* changes
 npm run optimize:images  # Convert _dev/input/ → img/ as WebP
 npm run report         # Open Playwright HTML report
+```
+
+Run a single test file:
+```bash
+npx playwright test _dev/tests/05-components.spec.js
+npx playwright test _dev/tests/09-seo.spec.js --headed
 ```
 
 ---
@@ -226,6 +232,127 @@ Breakpoints:
 
 ---
 
+## Component Reference
+
+### Service Cards — critical HTML structure
+
+**`service-card-top` must always be an empty div.** It is a 6px colored stripe, nothing else. The icon, heading, text, and link all go inside `service-card-body`.
+
+```html
+<!-- CORRECT -->
+<article class="service-card fade-up stagger-1" style="--accent: #6BA9D4;">
+  <div class="service-card-top"></div>      <!-- empty — just the accent stripe -->
+  <div class="service-card-body">
+    <div class="service-icon">🗣️</div>
+    <h3>Service Title</h3>
+    <p>Description text.</p>
+    <a href="/pages/..." class="service-link btn btn-teal">Részletek →</a>
+  </div>
+</article>
+
+<!-- WRONG — do not put content inside service-card-top -->
+<div class="service-card-top">
+  <div class="service-icon">🗣️</div>  ← this crushes to 6px, invisible
+  <h3>Title</h3>                        ← same
+</div>
+```
+
+Rich service cards (with feature list and price, used on `foglalkozasaink/`):
+
+```html
+<div class="service-card stagger-1" style="--accent: #6BA9D4">
+  <div class="service-card-top"></div>
+  <div class="service-card-body">
+    <div class="service-icon">🗣️</div>
+    <h3>Service Title</h3>
+    <p>Description.</p>
+    <ul class="service-card-list">
+      <li>Feature one</li>
+      <li>Feature two</li>
+    </ul>
+    <div class="service-card-price">10.000 Ft <span>/ 60 perc</span></div>
+    <a href="/pages/..." class="service-link btn btn-teal">Részletek →</a>
+  </div>
+</div>
+```
+
+Dark-background variant (last card on `foglalkozasaink/`):
+```html
+<div class="service-card service-card--dark stagger-6">
+  <div class="service-card-top" style="background: var(--clr-yellow)"></div>
+  <div class="service-card-body">...</div>
+</div>
+```
+
+### Blog Cards — use blog-grid, NOT services-grid
+
+Blog post lists use `.blog-grid` + `.blog-card`, **not** `.services-grid` + `.service-card`.
+
+```html
+<div class="blog-grid">
+  <article class="blog-card">
+    <a href="/pages/blog/slug/" class="blog-card-link">
+      <div class="blog-thumb">
+        <img src="..." alt="..." width="400" height="260" loading="lazy" />
+      </div>
+      <div class="blog-body">
+        <div class="blog-meta"><span class="blog-tag">Kategória</span></div>
+        <h3>Post title</h3>
+        <p>Excerpt text.</p>
+        <span class="blog-read-more">Olvasd el →</span>
+      </div>
+    </a>
+  </article>
+</div>
+```
+
+### Inner Page Components (content/detail pages)
+
+All the following classes are defined globally in `css/style.css`:
+
+| Class | Purpose | Used on |
+|-------|---------|---------|
+| `.lead` | Large intro paragraph (1.1rem) | All detail pages |
+| `.content-list` | Teal-bullet styled `<ul>` | All detail pages |
+| `.process-steps` / `.process-step` | Numbered step flow | `egyeni-fejleszto-foglalkozasok/` |
+| `.process-step__number` / `.process-step__content` | Step number circle + body | Same |
+| `.comparison-grid` / `.comparison-card` / `.comparison-card--featured` | Side-by-side option cards | `mozgasfejlesztes/` |
+| `.comparison-card__price` | Price line at bottom of comparison card | Same |
+| `.program-variants` / `.variant-card` / `.variant-card--featured` | Program option cards | `iskola-elokeszito-foglalkozas/` |
+| `.variant-card__badge` / `.variant-card__price` | Badge + price on variant cards | Same |
+| `.skills-grid` / `.skill-item` / `.skill-item__icon` | 4-col skill grid | Same |
+
+Standard inner page layout (with sidebar):
+```html
+<section class="section section-white">
+  <div class="container">
+    <div class="page-layout">           <!-- 1fr 340px grid -->
+      <div class="content-block">
+        <p class="lead">...</p>
+        <h2>Section heading</h2>
+        <ul class="content-list">
+          <li>Item with teal bullet</li>
+        </ul>
+        <div class="highlight-box">Important callout text.</div>
+      </div>
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h4>Ár</h4>
+          <div class="sidebar-price">10.000 Ft</div>
+          <div class="sidebar-price-note">/ 60 perc</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+```
+
+### Pages with Local `<style>` Blocks
+
+`pages/arlista/index.html` and `pages/kapcsolat/index.html` have page-specific `<style>` blocks because they override global component styles (e.g., `.pricing-row` flexbox vs grid). This is intentional — do not remove these local blocks without testing visually.
+
+---
+
 ## Navigation
 
 **Only edit `js/components.js` to change nav.** The `NAV` array is the single source of truth. All dropdowns, mobile menu, and active-state highlighting are generated from it.
@@ -273,6 +400,7 @@ Image rules:
 - Hero images: `fetchpriority="high"`, no `loading="lazy"`
 - All other images: `loading="lazy"`, include `width` + `height`
 - Format: WebP preferred (run `npm run optimize:images`)
+- **Never use WordPress URLs** (`/wp-content/uploads/...`) — the old site is gone
 
 ---
 
@@ -338,3 +466,5 @@ Pushing to the `main` branch on GitHub automatically deploys to Hostinger via we
 4. `<img>` width + height attributes — prevents CLS
 5. `loading="lazy"` must NOT be on hero/LCP images
 6. All pages must be under `pages/` (except `index.html`) — do not create root-level page directories
+7. `service-card-top` must always be empty — never put content inside it (it is a 6px stripe)
+8. Never use BEM class names (e.g. `card__icon`, `card__price`) without first adding CSS for them to `style.css`
