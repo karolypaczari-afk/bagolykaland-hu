@@ -53,7 +53,7 @@
                     <div class="mega-about-side">
                       {% if item.megaExtra.founderImg %}
                         <div class="mega-founder">
-                          <img src="{{ item.megaExtra.founderImg }}" alt="{{ item.megaExtra.founderName }}" class="mega-founder__img" width="72" height="72" loading="lazy">
+                          <img src="{{ item.megaExtra.founderImg }}" alt="{{ item.megaExtra.founderName }}" class="mega-founder__img" width="80" height="80" loading="lazy">
                           <div>
                             <span class="mega-founder__name">{{ item.megaExtra.founderName }}</span>
                             <span class="mega-founder__title">{{ item.megaExtra.founderTitle }}</span>
@@ -62,7 +62,7 @@
                       {% endif %}
                       {% if item.megaExtra.teamImg %}
                         <a href="{{ item.url }}" class="mega-team-link">
-                          <img src="{{ item.megaExtra.teamImg }}" alt="{{ item.megaExtra.teamLabel }}" class="mega-team-link__img" width="240" height="140" loading="lazy">
+                          <img src="{{ item.megaExtra.teamImg }}" alt="{{ item.megaExtra.teamLabel }}" class="mega-team-link__img" width="320" height="180" loading="lazy">
                           <span>{{ item.megaExtra.teamLabel }}</span>
                         </a>
                       {% endif %}
@@ -80,7 +80,7 @@
                     <div class="mega-services mega-services--cols-{{ item.children | length }}">
                       {% for child in item.children %}
                         <a href="{{ child.url }}" class="mega-service-card">
-                          {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mega-service-card__icon" width="48" height="48" loading="lazy">{% endif %}
+                          {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mega-service-card__icon" width="72" height="72" loading="lazy">{% endif %}
                           <span class="mega-service-card__title">{{ child.label }}</span>
                           {% if child.desc %}<span class="mega-service-card__desc">{{ child.desc }}</span>{% endif %}
                         </a>
@@ -102,7 +102,7 @@
                     <div class="mega-services mega-services--cols-{{ item.children | length }}">
                       {% for child in item.children %}
                         <a href="{{ child.url }}" class="mega-service-card">
-                          {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mega-service-card__icon" width="48" height="48" loading="lazy">{% endif %}
+                          {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mega-service-card__icon" width="72" height="72" loading="lazy">{% endif %}
                           <span class="mega-service-card__title">{{ child.label }}</span>
                           {% if child.desc %}<span class="mega-service-card__desc">{{ child.desc }}</span>{% endif %}
                           {% if child.badge %}<span class="mega-service-card__badge">{{ child.badge }}</span>{% endif %}
@@ -134,7 +134,7 @@
                       <div class="mega-blog-grid">
                         {% for post in item.megaExtra.featuredPosts %}
                           <a href="{{ post.url }}" class="mega-blog-card">
-                            <img src="{{ post.img }}" alt="" class="mega-blog-card__img" width="200" height="120" loading="lazy">
+                            <img src="{{ post.img }}" alt="" class="mega-blog-card__img" width="280" height="160" loading="lazy">
                             <span class="mega-blog-card__title">{{ post.title }}</span>
                           </a>
                         {% endfor %}
