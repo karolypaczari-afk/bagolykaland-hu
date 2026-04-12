@@ -180,6 +180,25 @@ div.bk-popup-desc p:last-child {
     font-weight: 600;
 }
 
+.bk-popup-desc strong { color: #1D3557; }
+
+/* Resources list */
+.bk-popup-resources {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto 1.25rem;
+    max-width: 380px;
+    text-align: left;
+}
+.bk-popup-resources li {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #374151;
+    padding: 4px 0;
+}
+.bk-popup-resources li strong { color: #1D3557; }
+
 /* Form */
 .bk-popup-form {
     display: flex;

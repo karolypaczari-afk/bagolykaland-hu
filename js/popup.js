@@ -24,67 +24,25 @@
     var SUBMIT_DAYS = 30;
     var SCROLL_THRESHOLD = /Mobi|Android/i.test(navigator.userAgent) ? 0.30 : 0.50;
 
-    // MailerLite group IDs per page context
-    // TODO: Replace placeholder group IDs with real MailerLite group IDs
-    var ML_GROUPS = {
-        'szorongas':  ['TODO_SZORONGAS_GROUP_ID'],
-        'sulirajt':   ['TODO_SULIRAJT_GROUP_ID'],
-        'mozgas':     ['TODO_MOZGAS_GROUP_ID'],
-        'logopedia':  ['TODO_LOGOPEDIA_GROUP_ID'],
-        'general':    ['TODO_GENERAL_GROUP_ID']
-    };
+    // MailerLite group — same list as Zsenibagoly, tagged with source
+    // TODO: Replace with the real MailerLite group ID (same as zsenifeszek)
+    var ML_GROUP_ID = 'TODO_ZSENIFESZEK_GROUP_ID';
+    var SOURCE = 'bagolykaland';
 
-    var LEAD_MAGNETS = {
-        'szorongas': {
-            tag: 'Ingyenes útmutató',
-            title: '🦉 "Anya, ne menj el!" – Segíts a gyermekednek leküzdeni a szorongást!',
-            desc: [
-                'A szorongó gyermek nem csak magának szenved — a szülő is tehetetlennek érzi magát.',
-                'Küldjük el ingyenes útmutatónkat, amellyel konkrét lépéseket tehetsz a szorongás oldásáért otthon is!'
-            ],
-            button: 'Kérem az ingyenes útmutatót!',
-            group: 'szorongas'
-        },
-        'sulirajt': {
-            tag: 'Ingyenes checklist',
-            title: '🦉 Iskolaérett a gyermeked? Töltsd le az iskolaérettségi checklistet!',
-            desc: [
-                'Mire kell figyelni az iskolaérettség megítélésekor? Mit tehet a szülő a felkészítésben?',
-                'Kapd meg ingyenes checklistünket, és lépj magabiztosan az iskolakezdés felé!'
-            ],
-            button: 'Kérem az ingyenes checklistet!',
-            group: 'sulirajt'
-        },
-        'mozgas': {
-            tag: 'Ingyenes tippek',
-            title: '🦉 3 mozgásfejlesztő gyakorlat, amit otthon is végezhetsz!',
-            desc: [
-                'A mozgás alapja a tanulásnak, a figyelemnek és az önbizalomnak.',
-                'Iratkozz fel és küldünk 3 könnyen elvégezhető, otthoni mozgásfejlesztő gyakorlatot!'
-            ],
-            button: 'Kérem a 3 mozgásos tippet!',
-            group: 'mozgas'
-        },
-        'logopedia': {
-            tag: 'Ingyenes útmutató',
-            title: '🦉 Hogyan segítheted a gyermeked beszédfejlődését otthon?',
-            desc: [
-                'A szülő a legjobb fejlesztő — ha tudja, mit tegyen.',
-                'Küldjük el ingyenes útmutatónkat a mindennapos beszédfejlesztéshez!'
-            ],
-            button: 'Kérem az útmutatót!',
-            group: 'logopedia'
-        },
-        'general': {
-            tag: 'Ingyenes hírlevél',
-            title: '🦉 Szeretnél szakértői tippeket a gyermeked fejlesztéséhez?',
-            desc: [
-                'Csatlakozz hírlevelünkhöz és kapj hasznos tippeket, módszereket közvetlenül a Bagolykáktól!',
-                'Minden hónapban egy-egy praktikus útmutatót küldünk a fejlesztés témájában.'
-            ],
-            button: 'Feliratkozom a hírlevélre!',
-            group: 'general'
-        }
+    // Unified lead magnet — "5 ingyenes segédanyag"
+    var LEAD_MAGNET = {
+        tag: '5 ingyenes segédanyag',
+        title: '🦉 Kapj 5 ingyenes szülői segédanyagot — fejlesztőpedagógustól, azonnal',
+        desc: 'Iratkozz fel és küldünk <strong>5 gyakorlati anyagot</strong>, amit még ma kipróbálhatsz a gyerekeddel.',
+        resources: [
+            '🔥 <strong>Top 5 tűzoltási technika</strong> — viselkedési krízishelyzetekre',
+            '🎬 <strong>Hisztikezelés</strong> — 3 gyakorlati videó',
+            '😰 <strong>Szorongásoldás</strong> — gyakorlati példa videóval',
+            '📝 <strong>Figyelemfejlesztés</strong> — 3 Jolly Joker feladat (letölthető)',
+            '🎓 <strong>Iskolaérettség</strong> — mik az elvárások?'
+        ],
+        button: 'Kérem az 5 ingyenes segédanyagot!',
+        group: 'zsenifeszek'
     };
 
     // ── Cookie Helpers ───────────────────────────────────────
@@ -134,21 +92,20 @@
         return isMobile ? 12000 : 10000;
     }
 
-    // ── Determine Lead Magnet ────────────────────────────────
+    // ── Context key for cookie suppression ────────────────────
     function detectContext() {
-        var path = window.location.pathname.toLowerCase();
-        if (path.indexOf('szorongas') !== -1) return 'szorongas';
-        if (path.indexOf('iskola') !== -1 || path.indexOf('iskolaerettseg') !== -1) return 'sulirajt';
-        if (path.indexOf('mozgas') !== -1) return 'mozgas';
-        if (path.indexOf('logopedia') !== -1) return 'logopedia';
-        return 'general';
+        return 'zsenifeszek';
     }
 
     // ── Build Popup HTML ─────────────────────────────────────
     function buildPopup(lm) {
+        var resourcesHtml = '<ul class="bk-popup-resources">';
+        lm.resources.forEach(function(r) { resourcesHtml += '<li>' + r + '</li>'; });
+        resourcesHtml += '</ul>';
+
         return '' +
             '<div class="bk-popup-overlay" id="bk-popup-overlay">' +
-            '  <div class="bk-popup" role="dialog" aria-modal="true" aria-label="' + lm.title + '">' +
+            '  <div class="bk-popup" role="dialog" aria-modal="true" aria-label="' + lm.tag + '">' +
             '    <button class="bk-popup-close" id="bk-popup-close" aria-label="Bezárás">' +
             '      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>' +
             '    </button>' +
@@ -157,14 +114,8 @@
             '      <span class="bk-popup-tag">' + lm.tag + '</span>' +
             '    </div>' +
             '    <h2 class="bk-popup-title">' + lm.title + '</h2>' +
-            (function() {
-                if (Array.isArray(lm.desc)) {
-                    var h = '<div class="bk-popup-desc">';
-                    lm.desc.forEach(function(p) { h += '<p>' + p + '</p>'; });
-                    return h + '</div>';
-                }
-                return '<p class="bk-popup-desc">' + lm.desc + '</p>';
-            })() +
+            '    <p class="bk-popup-desc">' + lm.desc + '</p>' +
+            resourcesHtml +
             '    <form class="bk-popup-form" id="bk-popup-form">' +
             '      <div class="bk-popup-input-wrap">' +
             '        <label for="bk-popup-name" class="sr-only">Keresztnév</label>' +
@@ -176,14 +127,14 @@
             '          <svg class="bk-popup-submit-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
             '        </button>' +
             '      </div>' +
-            '      <p class="bk-popup-gdpr-inline">A feliratkozással elfogadod az <a href="/pages/adatkezelesi-tajekoztato/" target="_blank" rel="noopener">adatkezelési tájékoztatót</a>.</p>' +
+            '      <p class="bk-popup-gdpr-inline">Csatlakozz több száz tudatos szülőhöz — teljesen ingyen! <a href="/adatkezelesi-tajekoztato/" target="_blank" rel="noopener noreferrer">Adatkezelési tájékoztató</a></p>' +
             '    </form>' +
             '    <div class="bk-popup-success" id="bk-popup-success" style="display:none">' +
             '      <div class="bk-popup-success-icon">✓</div>' +
             '      <h3>Köszönjük!</h3>' +
-            '      <p>Hamarosan megérkezik az e-mailed!</p>' +
+            '      <p>Hamarosan megérkeznek az e-mailben a segédanyagok!</p>' +
             '    </div>' +
-            '    <p class="bk-popup-privacy">Nem küldünk spamet. Bármikor leiratkozhatsz.</p>' +
+            '    <p class="bk-popup-privacy">Bármikor leiratkozhatsz.</p>' +
             '  </div>' +
             '</div>';
     }
@@ -197,7 +148,7 @@
         if (getCookie(COOKIE_PREFIX + ctx)) return;
         popupShown = true;
 
-        var lm = LEAD_MAGNETS[ctx];
+        var lm = LEAD_MAGNET;
         track('bk_popup_shown', {
             popup_context: ctx,
             popup_group: lm.group
@@ -249,7 +200,7 @@
                     popup_group: lm.group
                 });
 
-                submitToMailerLite(email, name, lm.group)
+                submitToMailerLite(email, name)
                     .then(function () {
                         form.style.display = 'none';
                         var successEl = document.getElementById('bk-popup-success');
@@ -308,9 +259,8 @@
     }
 
     // ── MailerLite Integration ───────────────────────────────
-    function submitToMailerLite(email, name, groupKey) {
+    function submitToMailerLite(email, name) {
         var apiKey = (window.BK_ML && window.BK_ML.API_KEY) || '';
-        var groupIds = ML_GROUPS[groupKey] || ML_GROUPS['general'];
 
         if (!apiKey || apiKey.indexOf('TODO') !== -1) {
             console.warn('[BagolykaLand] MailerLite API key not configured. Subscriber:', email);
@@ -319,9 +269,11 @@
 
         var payload = {
             email: email,
-            groups: groupIds,
+            groups: [ML_GROUP_ID],
             fields: {
-                name: name
+                name: name,
+                source: SOURCE,
+                signup_page: window.location.pathname
             }
         };
 

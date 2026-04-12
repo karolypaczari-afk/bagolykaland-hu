@@ -37,9 +37,34 @@
     var hoverTimers = {};
     var canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     var navViewportMedia = window.matchMedia ? window.matchMedia('(max-width: ' + DESKTOP_NAV_BREAKPOINT + 'px)') : null;
+    var HOVER_CLOSE_DELAY = 320;
+    var HOVER_SAFE_X_PADDING = 28;
+    var HOVER_SAFE_Y_PADDING = 18;
+    var HOVER_OPEN_MODE = 'hover';
+    var MANUAL_OPEN_MODE = 'manual';
+    var activeHoverItem = null;
 
     function isMobileNavViewport() {
         return navViewportMedia ? navViewportMedia.matches : window.innerWidth <= DESKTOP_NAV_BREAKPOINT;
+    }
+
+    function normalizePathname(pathname) {
+        var normalizedPath = (pathname || '/')
+            .split('#')[0]
+            .split('?')[0]
+            .replace(/\/index\.html$/, '/');
+
+        if (normalizedPath.indexOf('/pages/') === 0) {
+            normalizedPath = normalizedPath.slice('/pages'.length);
+        }
+
+        return normalizedPath.replace(/\/$/, '') || '/';
+    }
+
+    function clearHoverTimer(key) {
+        if (!hoverTimers[key]) return;
+        clearTimeout(hoverTimers[key]);
+        delete hoverTimers[key];
     }
 
     function clearHoverTimers() {
@@ -49,11 +74,66 @@
         });
     }
 
+    function isPointInsideRect(clientX, clientY, rect, paddingX, paddingY) {
+        return (
+            clientX >= rect.left - paddingX &&
+            clientX <= rect.right + paddingX &&
+            clientY >= rect.top - paddingY &&
+            clientY <= rect.bottom + paddingY
+        );
+    }
+
+    function isPointWithinHoverSafeZone(clientX, clientY, item, panel) {
+        if (!item || !panel) return false;
+
+        var itemRect = item.getBoundingClientRect();
+        var panelRect = panel.getBoundingClientRect();
+
+        if (!panelRect.width || !panelRect.height) {
+            return isPointInsideRect(clientX, clientY, itemRect, HOVER_SAFE_X_PADDING, HOVER_SAFE_Y_PADDING);
+        }
+
+        if (isPointInsideRect(clientX, clientY, itemRect, HOVER_SAFE_X_PADDING, HOVER_SAFE_Y_PADDING)) {
+            return true;
+        }
+
+        if (isPointInsideRect(clientX, clientY, panelRect, HOVER_SAFE_X_PADDING, HOVER_SAFE_Y_PADDING)) {
+            return true;
+        }
+
+        var corridorTop = Math.min(itemRect.bottom, panelRect.top) - HOVER_SAFE_Y_PADDING;
+        var corridorBottom = Math.max(itemRect.bottom, panelRect.top) + HOVER_SAFE_Y_PADDING;
+        var corridorLeft = itemRect.left - HOVER_SAFE_X_PADDING;
+        var corridorRight = itemRect.right + HOVER_SAFE_X_PADDING;
+
+        return (
+            clientX >= corridorLeft &&
+            clientX <= corridorRight &&
+            clientY >= corridorTop &&
+            clientY <= corridorBottom
+        );
+    }
+
+    function keepActiveHoverAlive(event) {
+        if (!canHover || !activeHoverItem || !activeHoverItem.classList.contains('open') || isMobileNavViewport()) return;
+
+        var panel = activeHoverItem.querySelector('.mega-panel, .dropdown');
+        var hoverIndex = activeHoverItem.getAttribute('data-hover-index');
+
+        if (!panel || !hoverIndex) return;
+
+        if (isPointWithinHoverSafeZone(event.clientX, event.clientY, activeHoverItem, panel)) {
+            clearHoverTimer('leave_' + hoverIndex);
+        }
+    }
+
     function closeAllPanels() {
         clearHoverTimers();
+        activeHoverItem = null;
         navItems.forEach(function (el) {
             if (el.classList.contains('open')) {
                 el.classList.remove('open');
+                el.removeAttribute('data-open-mode');
                 var toggle = el.querySelector('.nav-link[aria-haspopup]');
                 if (toggle) toggle.setAttribute('aria-expanded', 'false');
             }
@@ -68,59 +148,94 @@
         var btn = item.querySelector('.nav-link[aria-haspopup]');
         if (!btn) return;
 
+        item.setAttribute('data-hover-index', String(idx));
+
         var panel = item.querySelector('.mega-panel, .dropdown');
         var isMega = item.classList.contains('nav-item--mega');
+        var leaveTimerKey = 'leave_' + idx;
 
-        function openPanel() {
-            var alreadyOpen = item.classList.contains('open');
-            closeAllPanels();
-            if (!alreadyOpen) {
-                item.classList.add('open');
+        function openPanel(openMode) {
+            var nextOpenMode = openMode || MANUAL_OPEN_MODE;
+
+            if (item.classList.contains('open')) {
+                item.setAttribute('data-open-mode', nextOpenMode);
                 btn.setAttribute('aria-expanded', 'true');
+                if (canHover) activeHoverItem = item;
                 if (backdrop && isMega) {
                     backdrop.classList.add('active');
                     backdrop.setAttribute('aria-hidden', 'false');
                 }
-                track('bk_mega_open', { panel: btn.textContent.replace(/\s+/g, ' ').trim() });
+                return;
             }
+
+            closeAllPanels();
+            item.classList.add('open');
+            item.setAttribute('data-open-mode', nextOpenMode);
+            btn.setAttribute('aria-expanded', 'true');
+            if (canHover) activeHoverItem = item;
+            if (backdrop && isMega) {
+                backdrop.classList.add('active');
+                backdrop.setAttribute('aria-hidden', 'false');
+            }
+            track('bk_mega_open', { panel: btn.textContent.replace(/\s+/g, ' ').trim() });
         }
 
         function closePanel() {
             item.classList.remove('open');
+            item.removeAttribute('data-open-mode');
             btn.setAttribute('aria-expanded', 'false');
+            clearHoverTimer(leaveTimerKey);
+            if (activeHoverItem === item) activeHoverItem = null;
             if (backdrop) {
                 backdrop.classList.remove('active');
                 backdrop.setAttribute('aria-hidden', 'true');
             }
         }
 
+        function scheduleClose() {
+            if (item.getAttribute('data-open-mode') === MANUAL_OPEN_MODE) return;
+            clearHoverTimer(leaveTimerKey);
+            hoverTimers[leaveTimerKey] = setTimeout(function () {
+                if (item.matches(':focus-within')) return;
+                closePanel();
+            }, HOVER_CLOSE_DELAY);
+        }
+
         /* Click toggle (all devices) */
         btn.addEventListener('click', function (e) {
             e.stopPropagation();
             if (item.classList.contains('open')) {
-                closePanel();
+                if (item.getAttribute('data-open-mode') === MANUAL_OPEN_MODE) {
+                    closePanel();
+                } else {
+                    openPanel(MANUAL_OPEN_MODE);
+                }
             } else {
-                openPanel();
+                openPanel(MANUAL_OPEN_MODE);
             }
         });
 
         /* Hover intent (desktop pointer devices only) */
         if (canHover) {
-            item.addEventListener('mouseenter', function () {
-                clearTimeout(hoverTimers['leave_' + idx]);
-                hoverTimers['enter_' + idx] = setTimeout(openPanel, 200);
+            item.addEventListener('pointerenter', function () {
+                clearHoverTimer(leaveTimerKey);
+                openPanel(HOVER_OPEN_MODE);
             });
-            item.addEventListener('mouseleave', function () {
-                clearTimeout(hoverTimers['enter_' + idx]);
-                hoverTimers['leave_' + idx] = setTimeout(closePanel, 350);
+
+            item.addEventListener('pointerleave', function (e) {
+                if (e.relatedTarget && item.contains(e.relatedTarget)) return;
+                scheduleClose();
             });
 
             if (panel) {
-                panel.addEventListener('mouseenter', function () {
-                    clearTimeout(hoverTimers['leave_' + idx]);
+                panel.addEventListener('pointerenter', function () {
+                    activeHoverItem = item;
+                    clearHoverTimer(leaveTimerKey);
                 });
-                panel.addEventListener('mouseleave', function () {
-                    hoverTimers['leave_' + idx] = setTimeout(closePanel, 350);
+
+                panel.addEventListener('pointerleave', function (e) {
+                    if (e.relatedTarget && item.contains(e.relatedTarget)) return;
+                    scheduleClose();
                 });
             }
         }
@@ -166,6 +281,10 @@
             closePanel();
         });
     });
+
+    if (canHover) {
+        document.addEventListener('pointermove', keepActiveHoverAlive, { passive: true });
+    }
 
     /* Click outside closes all */
     document.addEventListener('click', function (e) {
@@ -289,10 +408,10 @@
     /* ------------------------------------------
        ACTIVE NAV LINK
     ------------------------------------------ */
-    var currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+    var currentPath = normalizePathname(window.location.pathname);
     document.querySelectorAll('.nav-link[href], .dropdown a, .mega-nav__link, .mega-nav__parent-link, .mega-service-card, .mega-blog-card, .mobile-nav-link[href], .mobile-dropdown a').forEach(function (link) {
         try {
-            var lp = new URL(link.href, location.origin).pathname.replace(/\/$/, '') || '/';
+            var lp = normalizePathname(new URL(link.href, location.origin).pathname);
             if (lp === currentPath) link.classList.add('active');
         } catch (e) {}
     });

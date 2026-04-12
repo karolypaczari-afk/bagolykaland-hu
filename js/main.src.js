@@ -226,13 +226,14 @@
         const btn = form.querySelector('button[type="submit"]');
         const block = form.closest('.lead-catcher');
         const group = block ? block.dataset.lcGroup : 'general';
+        const source = block ? (block.dataset.lcSource || 'bagolykaland') : 'bagolykaland';
         if (!email) return;
 
         const origText = btn.textContent;
         btn.disabled = true;
         btn.textContent = 'Küldés...';
 
-        track('bk_lead_catcher_submit', { lc_group: group });
+        track('bk_lead_catcher_submit', { lc_group: group, lc_source: source });
 
         const cfg = (window.BK_ML || {});
         const apiKey = cfg.API_KEY || '';
@@ -251,7 +252,7 @@
           },
           body: JSON.stringify({
             email: email,
-            fields: { name: name },
+            fields: { name: name, source: source, signup_page: window.location.pathname },
             groups: [group]
           })
         })

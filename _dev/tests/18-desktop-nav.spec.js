@@ -54,6 +54,13 @@ async function measureHeaderState(page) {
   });
 }
 
+async function movePointerAlongPath(page, points, pauseMs = 90) {
+  for (const point of points) {
+    await page.mouse.move(point.x, point.y, { steps: 6 });
+    await page.waitForTimeout(pauseMs);
+  }
+}
+
 // Nav layout is rendered by Eleventy — identical on every page. Sample 3 pages
 // (homepage + deepest nesting + longest title) across all widths to catch layout bugs.
 const NAV_SAMPLE_PAGES = PAGES.filter((pg) =>
@@ -113,8 +120,46 @@ test.describe('18 — Megamenu interactions', () => {
     await expect(servicesPanel.locator('.mega-nav__link--catalog')).toHaveCount(10);
   });
 
+  test('Homepage — desktop hover transfer keeps the combined services panel open', async ({ suppressedPage: page }) => {
+    await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
+
+    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Szolgáltatásaink' }).first();
+    const servicesPanel = page.locator('.mega-panel--catalog').first();
+
+    await servicesToggle.hover();
+    await expect(servicesPanel).toBeVisible({ timeout: 2000 });
+
+    const pointerPath = await page.evaluate(() => {
+      const toggle = Array.from(document.querySelectorAll('.nav-link[aria-haspopup]')).find((link) =>
+        link.textContent.includes('Szolgáltatásaink')
+      );
+      const panel = document.querySelector('.mega-panel--catalog');
+      if (!toggle || !panel) return null;
+
+      const toggleBox = toggle.getBoundingClientRect();
+      const panelBox = panel.getBoundingClientRect();
+      const toggleCenterX = toggleBox.left + (toggleBox.width / 2);
+      const gapY = toggleBox.bottom + Math.max(6, ((panelBox.top - toggleBox.bottom) / 2) || 0);
+
+      return [
+        { x: toggleCenterX, y: toggleBox.bottom - 2 },
+        { x: toggleCenterX, y: gapY },
+        { x: panelBox.left + 40, y: panelBox.top + 36 },
+        { x: panelBox.left + (panelBox.width * 0.22), y: panelBox.top + 72 },
+      ];
+    });
+
+    expect(pointerPath).not.toBeNull();
+    if (pointerPath) {
+      await movePointerAlongPath(page, pointerPath, 110);
+    }
+
+    await expect(servicesPanel).toBeVisible();
+  });
+
   test('Service detail page highlights the combined parent desktop section', async ({ suppressedPage: page }) => {
-    await page.goto('/foglalkozasaink/logopedia/', { waitUntil: 'domcontentloaded' });
+    await page.goto('/pages/foglalkozasaink/logopedia/index.html', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
 
     const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Szolgáltatásaink' }).first();
@@ -132,6 +177,59 @@ test.describe('18 — Megamenu interactions', () => {
     const servicesPanel = page.locator('.mega-panel--catalog').first();
     await expect(servicesPanel).toBeVisible();
     await expect(servicesPanel.locator('a[href]').first()).toBeFocused();
+  });
+
+  test('Laptop-width about and knowledge menus keep their media clearly visible', async ({ suppressedPage: page }) => {
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
+
+    const aboutToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Rólunk' }).first();
+    const aboutPanel = page.locator('.mega-panel--about').first();
+    await aboutToggle.hover();
+    await expect(aboutPanel).toBeVisible({ timeout: 2000 });
+
+    const aboutMedia = await aboutPanel.evaluate((panel) => {
+      const founder = panel.querySelector('.mega-founder__img');
+      const team = panel.querySelector('.mega-team-link__img');
+      const founderBox = founder ? founder.getBoundingClientRect() : null;
+      const teamBox = team ? team.getBoundingClientRect() : null;
+
+      return {
+        founderSrc: founder ? founder.getAttribute('src') || '' : '',
+        founderWidth: founderBox ? Math.round(founderBox.width) : 0,
+        founderHeight: founderBox ? Math.round(founderBox.height) : 0,
+        teamHeight: teamBox ? Math.round(teamBox.height) : 0,
+      };
+    });
+
+    expect(aboutMedia.founderSrc).toContain('/img/alexandra-szabovarga.webp');
+    expect(aboutMedia.founderWidth).toBeGreaterThanOrEqual(88);
+    expect(aboutMedia.founderHeight).toBeGreaterThanOrEqual(88);
+    expect(aboutMedia.teamHeight).toBeGreaterThanOrEqual(180);
+
+    const knowledgeToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Tudástár' }).first();
+    const knowledgePanel = page.locator('.mega-panel--knowledge').first();
+    await knowledgeToggle.hover();
+    await expect(knowledgePanel).toBeVisible({ timeout: 2000 });
+
+    const knowledgeMedia = await knowledgePanel.evaluate((panel) => {
+      const blogCards = Array.from(panel.querySelectorAll('.mega-blog-card'));
+      const blogGrid = panel.querySelector('.mega-blog-grid');
+      const gridStyle = blogGrid ? getComputedStyle(blogGrid).gridTemplateColumns : '';
+      const imageHeights = blogCards
+        .map((card) => card.querySelector('.mega-blog-card__img'))
+        .filter(Boolean)
+        .map((img) => Math.round(img.getBoundingClientRect().height));
+
+      return {
+        columnCount: gridStyle ? gridStyle.split(' ').filter(Boolean).length : 0,
+        minImageHeight: imageHeights.length ? Math.min(...imageHeights) : 0,
+      };
+    });
+
+    expect(knowledgeMedia.columnCount).toBeGreaterThanOrEqual(3);
+    expect(knowledgeMedia.minImageHeight).toBeGreaterThanOrEqual(156);
   });
 });
 
