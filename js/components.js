@@ -127,9 +127,9 @@
   ------------------------------------------ */
   var logoHtml = [
     '<a href="/" class="site-logo" aria-label="BagolykaLand – Főoldal">',
-    '  <img src="' + basePath + 'img/logo.jpg"',
-    '       alt="BagolykaLand Oktató- és Fejlesztő Központ" width="52" height="52"',
-    '       style="height:50px;width:auto;border-radius:8px;object-fit:contain;"',
+    '  <img src="' + basePath + 'img/logo-transparent.png"',
+    '       alt="BagolykaLand Oktató- és Fejlesztő Központ" width="1346" height="379"',
+    '       style="height:46px;width:auto;object-fit:contain;"',
     '       onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">',
     '  <span class="logo-text" style="display:none">',
     '    <span class="logo-name">BAGOLYKALAND</span>',
