@@ -1,0 +1,88 @@
+<div class="site-announcement" role="status" aria-label="Költözési információ és elérhetőségek">
+  <div class="container site-announcement__inner">
+    <p><strong>Költözünk!</strong> 2026. május 1-től új címünk: <strong>Debrecen, Csokonai út 32.</strong></p>
+    <div class="announcement-contacts">
+      <a href="{{ site.contact.phoneHref }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 13a19.79 19.79 0 01-3.07-8.67A2 2 0 013.6 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        <span>{{ site.contact.phone }}</span>
+      </a>
+      <a href="mailto:{{ site.contact.email }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span>{{ site.contact.email }}</span>
+      </a>
+      <a href="{{ site.social.facebook }}" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        <span>Facebook</span>
+      </a>
+    </div>
+  </div>
+</div>
+<header class="site-header" id="site-header-el" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="site-logo" aria-label="BagolykaLand – Főoldal">
+        <img src="/img/logo.jpg"
+             alt="BagolykaLand Oktató- és Fejlesztő Központ" width="52" height="52"
+             style="height:50px;width:auto;border-radius:8px;object-fit:contain;"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span class="logo-text" style="display:none">
+          <span class="logo-name">BAGOLYKALAND</span>
+          <span class="logo-sub">Oktató- és Fejlesztő Központ</span>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="Főmenü">
+        <ul class="nav-list" role="list">
+          {% for item in nav %}
+            {% if item.children %}
+              <li class="nav-item">
+                <button class="nav-link" aria-expanded="false" aria-haspopup="true">{{ item.label }}<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <div class="dropdown">
+                  {% if item.url %}<a href="{{ item.url }}" class="dropdown-parent-link">Összes {{ item.label }}</a>{% endif %}
+                  {% for child in item.children %}
+                    <a href="{{ child.url }}">{{ child.label }}</a>
+                  {% endfor %}
+                </div>
+              </li>
+            {% elif item.external %}
+              <li class="nav-item"><a class="nav-link" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.label }}<svg class="icon-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" style="margin-left:4px;vertical-align:-1px;opacity:.6"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="{{ item.url }}">{{ item.label }}</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <a href="/kapcsolat/" class="nav-cta">📅 Időpontfoglalás</a>
+      </nav>
+      <div class="header-actions">
+        <button class="nav-install js-install-app" type="button" hidden aria-haspopup="dialog" aria-label="BagolykaLand telepítése">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          <span class="nav-install-label">Telepítés</span>
+        </button>
+        <button class="hamburger" id="hamburger-btn" aria-label="Menü megnyitása" aria-expanded="false" aria-controls="mobile-nav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+<nav class="mobile-nav" id="mobile-nav" aria-label="Mobil menü" aria-hidden="true">
+  <ul class="mobile-nav-list" role="list">
+    {% for item in nav %}
+      {% if item.children %}
+        <li class="mobile-nav-item">
+          <button class="mobile-nav-link" aria-expanded="false">{{ item.label }}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <div class="mobile-dropdown">
+            {% if item.url %}<a href="{{ item.url }}" class="mobile-dropdown-parent-link">Összes {{ item.label }}</a>{% endif %}
+            {% for child in item.children %}
+              <a href="{{ child.url }}">{{ child.label }}</a>
+            {% endfor %}
+          </div>
+        </li>
+      {% elif item.external %}
+        <li><a class="mobile-nav-link" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.label }}<svg class="icon-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" style="margin-left:4px;vertical-align:-1px;opacity:.6"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+      {% else %}
+        <li><a class="mobile-nav-link" href="{{ item.url }}">{{ item.label }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+  <a href="/kapcsolat/" class="mobile-cta">📅 Időpontfoglalás</a>
+</nav>

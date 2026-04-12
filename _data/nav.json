@@ -1,0 +1,47 @@
+[
+    {
+        "label": "Rólunk",
+        "url": "/rolunk/",
+        "children": [
+            { "label": "Kedves Anya és Apa", "url": "/rolunk/kedves-anya-es-apa/" },
+            { "label": "Kedves Gyermek",     "url": "/rolunk/kedves-gyermek/" }
+        ]
+    },
+    {
+        "label": "Foglalkozásaink",
+        "url": "/foglalkozasaink/",
+        "children": [
+            { "label": "Egyéni fejlesztő foglalkozások", "url": "/foglalkozasaink/egyeni-fejleszto-foglalkozasok/" },
+            { "label": "Logopédia",                      "url": "/foglalkozasaink/logopedia/" },
+            { "label": "Mozgásfejlesztés",               "url": "/foglalkozasaink/mozgasfejlesztes/" },
+            { "label": "Szorongásoldó program",          "url": "/foglalkozasaink/szorongasoldo-program/" }
+        ]
+    },
+    {
+        "label": "Vizsgálatok",
+        "url": "/vizsgalatok/",
+        "children": [
+            { "label": "Logopédiai vizsgálat",           "url": "/vizsgalatok/logopediai-vizsgalat/" },
+            { "label": "Iskolaérettségi vizsgálat",      "url": "/vizsgalatok/iskolaerettsegi-vizsgalat/" },
+            { "label": "Komplex részképesség vizsgálat", "url": "/vizsgalatok/komplex-reszkepesseg-vizsgalat/" }
+        ]
+    },
+    {
+        "label": "Programok",
+        "children": [
+            { "label": "Iskola-előkészítő foglalkozás",    "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/" },
+            { "label": "Ernyő alatt program",               "url": "/ernyo-alatt-program/" },
+            { "label": "Kézen fogva – online finommotorika", "url": "/kezen-fogva-online-finommotorika-fejlesztes/" }
+        ]
+    },
+    {
+        "label": "Tudástár",
+        "children": [
+            { "label": "Blog",           "url": "/blog/" },
+            { "label": "Galéria",        "url": "/galeria/" },
+            { "label": "Éves/heti rend", "url": "/eves-hetirend/" }
+        ]
+    },
+    { "label": "Árlista", "url": "/arlista/" },
+    { "label": "Zsenifészek", "url": "https://zsenibagoly.hu/zsenifeszek", "external": true }
+]

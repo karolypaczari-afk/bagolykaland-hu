@@ -8,14 +8,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm run serve          # Start local server at http://127.0.0.1:8080
+npm run dev            # Eleventy watch mode (rebuilds .njk → .html on save)
 npm test               # Full Playwright test suite
 npm run test:fast      # FAST_MODE: homepage only
 npm run test:smoke     # @smoke tagged tests only
 npm run test:a11y      # Accessibility tests only
 npm run check          # Biome + HTML + CSS validation
-npm run build          # Minify .src assets + normalize shared HTML shell
+npm run build          # Eleventy + minify .src.css/.src.js
 npm run build:css      # CSS only
-npm run build:html     # HTML shell normalization only
+npm run build:js       # JS only
 npm run watch          # Auto-rebuild on .src.* changes
 npm run optimize:images  # Convert _dev/input/ → img/ as WebP
 npm run report         # Open Playwright HTML report
@@ -31,15 +32,17 @@ npx playwright test _dev/tests/09-seo.spec.js --headed
 
 ## Architecture
 
-**Pure static HTML/CSS/JS — no framework, no WordPress.**
+**Eleventy static site generator → plain HTML/CSS/JS output. No framework, no WordPress.**
 
-Modeled after zsenibagoly.hu (sister site at `C:\claude_desktoprol\1. HTML Creation`).
+Eleventy processes `.njk` templates and writes `.html` files in-place (input = output = `.`).
+The deploy pipeline (GitHub → Hostinger) is unchanged — it still serves the root directory.
 
 ### File Structure
 
 ```
 /                         ← project root
-├── index.html            ← homepage (depth 0)
+├── index.njk             ← homepage source (Eleventy processes → index.html)
+├── index.html            ← homepage output (generated, do not edit directly)
 ├── pages/                ← ALL subpages live here
 │   ├── rolunk/
 │   │   ├── index.html                   (depth 2)
@@ -69,8 +72,18 @@ Modeled after zsenibagoly.hu (sister site at `C:\claude_desktoprol\1. HTML Creat
 │   └── adatkezelesi-tajekoztato/index.html
 ├── css/
 │   └── style.css         ← global stylesheet (do NOT edit style.src.css manually if build is active)
+├── _includes/
+│   ├── layouts/base.njk  ← page shell (html/head/body wrapper)
+│   └── partials/
+│       ├── head.njk      ← <head> meta/canonical/CSS (front matter drives values)
+│       ├── header.njk    ← static site header + nav (loops over _data/nav.json)
+│       ├── footer.njk    ← static site footer
+│       └── scripts.njk   ← shared <script> tags
+├── _data/
+│   ├── nav.json          ← nav structure (single source of truth for menus)
+│   └── site.json         ← contact info, social URLs, site name, defaultOgImage
 ├── js/
-│   ├── components.js     ← header + footer injection (edit here for nav/contact/social changes)
+│   ├── components.js     ← interactive-only: dropdowns, hamburger, active nav, navReady event
 │   ├── install-prompt.js ← PWA install UI + service worker registration
 │   ├── main.js           ← scroll animations, counters, smooth scroll
 │   ├── popup.js          ← lead capture popup logic
@@ -86,71 +99,40 @@ Modeled after zsenibagoly.hu (sister site at `C:\claude_desktoprol\1. HTML Creat
 
 ### Global Component Injection
 
-Header and footer are NOT copy-pasted into every page. Instead:
+Header and footer are rendered at **build time** by Eleventy. No runtime JS injection.
 
-- `js/components.js` injects them at runtime via `#site-header` / `#site-footer` divs
-- `components.js` detects URL depth and adjusts relative asset paths (`basePath`):
+- `_includes/partials/header.njk` — announcement bar, site header, desktop nav, mobile nav
+- `_includes/partials/footer.njk` — footer columns, contact info, copyright year
+- Nav structure lives in `_data/nav.json` — **only edit there** to change menus
+- Contact info / social URLs live in `_data/site.json`
+- Asset paths use **absolute URLs** (`/css/style.css`, `/img/...`) — depth no longer matters
+- `js/components.js` handles interactive behaviour only: dropdowns, hamburger, active link
 
-| URL depth | Example | basePath |
-|-----------|---------|----------|
-| 0 (root) | `/index.html` | `''` |
-| 2 | `/pages/rolunk/index.html` | `'../../'` |
-| 3 | `/pages/rolunk/kedves-anya-es-apa/index.html` | `'../../../'` |
+### New Page (any depth — pages/[slug]/)
 
-> Note: Depth 1 (`/pages/index.html`) doesn't exist — we always use a named subdir inside pages/.
+Create `pages/[slug]/index.njk` with front matter and page content:
 
-### New Page Shell (depth 2 — pages/[slug]/)
+```njk
+---
+layout: "base.njk"
+title: "Oldal Cím – BagolykaLand Debrecen"
+description: "50-160 chars, unique per page"
+canonical: "https://bagolykaland.hu/pages/[slug]/"
+ogImage: "https://bagolykaland.hu/img/custom.webp"  # omit to use site default
+---
 
-```html
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Oldal Cím – BagolykaLand Debrecen</title>
-  <meta name="description" content="50-160 chars, unique per page" />
-  <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#2B746D" />
-  <meta name="application-name" content="BagolykaLand" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="BagolykaLand" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://bagolykaland.hu/pages/[slug]/" />
-  <meta property="og:title" content="Oldal Cím – BagolykaLand Debrecen" />
-  <meta property="og:description" content="..." />
-  <meta property="og:image" content="https://bagolykaland.hu/img/bagolykaland-fejleszto-foglalkozas.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <link rel="canonical" href="https://bagolykaland.hu/pages/[slug]/" />
-  <link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="../../img/apple-touch-icon.png" />
-  <link rel="manifest" href="../../manifest.webmanifest" />
-  <link rel="stylesheet" href="../../css/style.css" />
-</head>
-<body>
-  <a href="#main-content" class="skip-link">Ugrás a tartalomhoz</a>
-  <div id="site-header"></div>
-  <main id="main-content">
-    <!-- page content -->
-  </main>
-  <div id="site-footer"></div>
-  <script src="../../js/components.js" defer></script>
-  <script src="../../js/install-prompt.js" defer></script>
-  <script src="../../js/tracking.js" defer></script>
-  <script src="../../js/tracking-loader.js" defer></script>
-  <script src="../../js/cookie-consent.js" defer></script>
-  <script src="../../js/main.js" defer></script>
-  <script src="../../js/lead-capture-loader.js"
-          data-popup-css="../../css/popup.css"
-          data-popup-src="../../js/popup.js"
-          defer></script>
-</body>
-</html>
+    <!-- PAGE HERO -->
+    <section class="page-hero" aria-labelledby="hero-heading">
+      ...
+    </section>
+
+    <!-- CONTENT -->
+    <section class="section section-white">
+      ...
+    </section>
 ```
 
-For depth 3, use `../../../` instead of `../../`.
+Run `npm run eleventy` (or `npm run dev` for watch mode) to generate the `.html` output.
 
 ### Webapp Layer
 
@@ -355,9 +337,9 @@ Standard inner page layout (with sidebar):
 
 ## Navigation
 
-**Only edit `js/components.js` to change nav.** The `NAV` array is the single source of truth. All dropdowns, mobile menu, and active-state highlighting are generated from it.
+**Only edit `_data/nav.json` to change nav.** It is the single source of truth for menus. The header/footer partials loop over it at build time. `js/components.js` handles interactive behaviour only (dropdowns, hamburger, active link).
 
-Current URL pattern: all subpages are under `/pages/` (e.g., `/pages/rolunk/`, `/pages/arlista/`).
+URL pattern: all subpages are at clean root-level paths (e.g., `/rolunk/`, `/arlista/`) — no `/pages/` prefix.
 
 ---
 
@@ -441,12 +423,13 @@ Hungarian number format: thousand separator is **period** (`.`), decimal is **co
 
 ## Adding a New Page
 
-**5 places to update:**
-1. Create `pages/[slug]/index.html` using the shell template above
-2. Add to `_dev/tests/helpers/pages.js` (uncomment from planned list or add new entry)
-3. Update nav in `js/components.js` if it needs a menu entry
-4. Add a page-specific `og:image` if different from the default
-5. Add to `sitemap.xml` when that file exists
+**4 places to update:**
+1. Create `pages/[slug]/index.njk` using the front matter template above — permalink and canonical are computed automatically
+2. Add a label to `PAGE_LABELS` in `_dev/tests/helpers/pages.js` (page is auto-discovered, this just improves test names)
+3. Update `_data/nav.json` if it needs a menu entry (URL = `/[slug]/`, no `/pages/` prefix)
+4. Add to `sitemap.xml` when that file exists
+
+Then run `npm run eleventy` to generate the HTML at `[slug]/index.html`.
 
 ---
 
@@ -460,11 +443,11 @@ Pushing to the `main` branch on GitHub automatically deploys to Hostinger via we
 
 ## Do NOT Break
 
-1. Global component injection — every page must have `#site-header` and `#site-footer`
-2. Relative asset paths — absolute paths (`/css/style.css`) break when opening files directly without a server
-3. Hungarian `lang="hu"` on `<html>`
-4. `<img>` width + height attributes — prevents CLS
-5. `loading="lazy"` must NOT be on hero/LCP images
-6. All pages must be under `pages/` (except `index.html`) — do not create root-level page directories
+1. Edit source `.njk` files in `pages/`, NEVER the generated `.html` files — they are overwritten by Eleventy
+2. All asset paths in templates use **absolute URLs** (`/css/style.css`, `/img/...`) — no `../../` relative paths
+3. Page URLs have NO `/pages/` prefix — e.g. `/rolunk/` not `/pages/rolunk/`
+4. Hungarian `lang="hu"` on `<html>`
+5. `<img>` width + height attributes — prevents CLS
+6. `loading="lazy"` must NOT be on hero/LCP images
 7. `service-card-top` must always be empty — never put content inside it (it is a 6px stripe)
 8. Never use BEM class names (e.g. `card__icon`, `card__price`) without first adding CSS for them to `style.css`

@@ -1,0 +1,41 @@
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ description }}" />
+  <meta name="robots" content="{{ robots if robots else 'index, follow' }}" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="{{ canonical }}" />
+  <meta property="og:title"       content="{{ ogTitle if ogTitle else title }}" />
+  <meta property="og:description" content="{{ ogDescription if ogDescription else description }}" />
+  <meta property="og:image"       content="{{ ogImage if ogImage else site.defaultOgImage }}" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="{{ ogTitle if ogTitle else title }}" />
+  <meta name="twitter:description" content="{{ ogDescription if ogDescription else description }}" />
+  <meta name="twitter:image"      content="{{ ogImage if ogImage else site.defaultOgImage }}" />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="{{ canonical }}" />
+
+  <!-- App install -->
+  <meta name="theme-color" content="#2B746D" />
+  <meta name="application-name" content="BagolykaLand" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="BagolykaLand" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  {% if headStyles %}<style>{{ headStyles | safe }}</style>{% endif %}

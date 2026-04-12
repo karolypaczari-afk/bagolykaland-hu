@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+{% include "partials/head.njk" %}
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Ugrás a tartalomhoz</a>
+{% include "partials/header.njk" %}
+  <main id="main-content">
+    {{ content | safe }}
+  </main>
+{% include "partials/footer.njk" %}
+{% include "partials/scripts.njk" %}
+</body>
+</html>

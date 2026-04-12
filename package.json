@@ -4,6 +4,8 @@
   "private": true,
   "description": "Automated tests and build tooling for bagolykaland.hu static site",
   "scripts": {
+    "eleventy": "npx @11ty/eleventy",
+    "dev": "npx @11ty/eleventy --watch",
     "biome:check": "biome check biome.json .htmlvalidate.json .stylelintrc.json package.json playwright.config.js",
     "biome:format": "biome format --write biome.json .htmlvalidate.json .stylelintrc.json package.json playwright.config.js",
     "htmlvalidate:check": "html-validate index.html \"pages/**/index.html\"",
@@ -23,9 +25,8 @@
     "test:images": "npx playwright test 16-image-optimization",
     "test:full": "npm run build && npx playwright test",
     "report": "npx playwright show-report",
-    "build": "node _dev/build.js",
+    "build": "npx @11ty/eleventy && node _dev/build.js",
     "build:css": "node _dev/build.js --type css",
-    "build:html": "node _dev/build.js --type html",
     "build:js": "node _dev/build.js --type js",
     "watch": "chokidar \"css/*.src.css\" \"js/*.src.js\" -c \"node _dev/build.js --file {path}\"",
     "optimize:images": "node _dev/scripts/optimize-images.js",
@@ -33,6 +34,7 @@
     "serve": "npx http-server . -p 8080 -c-1"
   },
   "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
     "@axe-core/playwright": "^4.10.0",
     "@biomejs/biome": "^2.4.11",
     "@playwright/test": "^1.50.0",
