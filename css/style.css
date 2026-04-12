@@ -677,8 +677,8 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
   box-shadow: -24px 0 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.06);
 }
 .hero-img-wrap img {
-  width: 100%; height: 500px;
-  object-fit: cover; display: block;
+  width: 100%; height: auto;
+  display: block;
   transition: transform var(--t-slow);
 }
 .hero-img-wrap:hover img { transform: scale(1.03); }
@@ -1062,7 +1062,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 .program-card.featured p { color: #fff; }
 .program-card.featured p { opacity: .75; }
 .program-card-img {
-  width: 160px; height: 160px; border-radius: var(--r-xl); flex-shrink: 0;
+  width: 180px; aspect-ratio: 3/2; border-radius: var(--r-xl); flex-shrink: 0;
   overflow: hidden; box-shadow: var(--sh-sm);
   transition: transform var(--t-spring);
 }
@@ -1123,7 +1123,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 }
 .blog-card:hover { transform: translateY(-6px); box-shadow: var(--sh-lg); }
 .blog-thumb {
-  aspect-ratio: 3/2; background: var(--clr-teal-light); overflow: hidden;
+  aspect-ratio: 1/1; background: var(--clr-teal-light); overflow: hidden;
   position: relative;
 }
 .blog-thumb img {
@@ -1707,10 +1707,9 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
   .hero-img-wrap {
     max-width: 100%;
     border-radius: var(--r-xl);
-    max-height: 300px;
     overflow: hidden;
   }
-  .hero-img-wrap img { height: 300px; }
+  .hero-img-wrap img { height: auto; }
   .hero-chip { display: none; }
 
   .hero h1             { font-size: 2rem; font-size: clamp(2rem,6vw,3rem); }
@@ -2150,7 +2149,7 @@ body {
   .gallery-thumb      { height: 220px; }
   .zsenibagoly-photo  { height: 200px; }
   .blog-thumb         { height: 200px; }
-  .hero-img-wrap      { height: 440px; }
+  /* hero-img-wrap: no height fallback needed, image is height:auto */
 }
 
 /* =========================================
