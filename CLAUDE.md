@@ -156,6 +156,7 @@ For depth 3, use `../../../` instead of `../../`.
 ### Tracking + Consent Layer
 
 - `js/tracking.js` is now a config file, not a paste-bin of raw snippets
+- Preferred path: set only `gtmId` in `window.BK_TRACKING_CONFIG.vendors`, then manage GA4 / Meta / Clarity in GTM
 - Add your own IDs to `window.BK_TRACKING_CONFIG.vendors` when you're ready:
   - `gtmId`
   - `gaMeasurementId`
@@ -164,6 +165,18 @@ For depth 3, use `../../../` instead of `../../`.
 - `js/tracking-loader.js` stays inert until at least one vendor ID is configured
 - `js/cookie-consent.js` only shows a banner when consent is required and a vendor is actually configured
 - `css/cookie-consent.css` is loaded lazily by the banner, so it does not affect normal page render cost
+- The site already pushes GTM-friendly custom events into `dataLayer`, including:
+  - `bk_cta_click`
+  - `bk_contact_click`
+  - `bk_form_start`
+  - `bk_form_submit`
+  - `bk_mobile_nav_toggle`
+  - `bk_install_click`
+  - `bk_install_prompt_result`
+  - `bk_app_installed`
+  - `bk_cookie_banner_view`
+  - `bk_cookie_consent_updated`
+  - `bk_popup_*`
 
 ### Build Pipeline (activate when CSS/JS grows complex)
 

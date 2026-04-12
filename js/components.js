@@ -35,6 +35,12 @@
   var SOCIAL_FB  = 'https://www.facebook.com/bagolykaland'; // TODO: confirm URL
   var SOCIAL_IG  = '';                                       // TODO: add if exists
 
+  function track(eventName, params) {
+    if (window.BKTracking && typeof window.BKTracking.trackEvent === 'function') {
+      window.BKTracking.trackEvent(eventName, params || {});
+    }
+  }
+
   /* ------------------------------------------
      NAV STRUCTURE
   ------------------------------------------ */
@@ -312,12 +318,19 @@
         mobileNav.setAttribute('inert', '');
       }
       document.body.style.overflow = open ? 'hidden' : '';
+      track('bk_mobile_nav_toggle', {
+        nav_state: open ? 'open' : 'closed'
+      });
     });
     mobileNav.querySelectorAll('.mobile-nav-item button').forEach(function(btn) {
       btn.addEventListener('click', function() {
         var li = btn.closest('.mobile-nav-item');
         li.classList.toggle('open');
         btn.setAttribute('aria-expanded', li.classList.contains('open'));
+        track('bk_mobile_nav_section_toggle', {
+          section_label: btn.textContent.replace(/\s+/g, ' ').trim(),
+          section_state: li.classList.contains('open') ? 'open' : 'closed'
+        });
       });
     });
     document.addEventListener('keydown', function(e) {

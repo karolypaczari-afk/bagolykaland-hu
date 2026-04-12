@@ -35,6 +35,11 @@
     metaPageviewTracked: false,
   };
 
+  function ensureDataLayer() {
+    window.dataLayer = window.dataLayer || [];
+    return window.dataLayer;
+  }
+
   function log() {
     if (!config.debug || !window.console || typeof window.console.log !== 'function') {
       return;
@@ -50,6 +55,46 @@
     return Object.keys(vendors).some(function (key) {
       return hasValue(vendors[key]);
     });
+  }
+
+  function getPageType() {
+    var path = window.location.pathname.toLowerCase();
+    if (path === '/' || path === '/index.html') return 'home';
+    if (path.indexOf('/blog/') !== -1) return 'blog';
+    if (path.indexOf('/foglalkozasaink/') !== -1) return 'service';
+    if (path.indexOf('/vizsgalatok/') !== -1) return 'exam';
+    if (path.indexOf('/kapcsolat/') !== -1) return 'contact';
+    if (path.indexOf('/rolunk/') !== -1) return 'about';
+    return 'page';
+  }
+
+  function getConsentState() {
+    var storedConsent = getStoredConsent();
+    if (state.consentGranted || storedConsent === CONSENT_GRANTED) {
+      return 'granted';
+    }
+    if (storedConsent === CONSENT_REJECTED) {
+      return 'denied';
+    }
+    return 'unknown';
+  }
+
+  function pushDataLayerEvent(eventName, params) {
+    var payload = Object.assign(
+      {
+        event: eventName,
+        event_source: 'bagolykaland_site',
+        page_type: getPageType(),
+        page_path: window.location.pathname,
+        page_location: window.location.href,
+        page_title: document.title || '',
+        consent_state: getConsentState(),
+      },
+      params || {}
+    );
+
+    ensureDataLayer().push(payload);
+    return payload;
   }
 
   function escapeCookieName(name) {
@@ -154,7 +199,7 @@
   }
 
   function ensureGtag() {
-    window.dataLayer = window.dataLayer || [];
+    ensureDataLayer();
     if (typeof window.gtag !== 'function') {
       window.gtag = function () {
         window.dataLayer.push(arguments);
@@ -190,8 +235,7 @@
   function loadGtm() {
     if (!hasValue(vendors.gtmId) || state.loaded.gtm) return false;
 
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
+    ensureDataLayer().push({
       'gtm.start': new Date().getTime(),
       event: 'gtm.js',
     });
@@ -290,31 +334,34 @@
     }
 
     applyConsentState();
+    if (settings.track !== false) {
+      pushDataLayerEvent('bk_cookie_consent_updated', {
+        consent_action: state.consentGranted ? 'accept' : 'reject',
+        consent_source: settings.source || 'system',
+      });
+    }
     return state.consentGranted;
   }
 
   function trackEvent(eventName, params) {
-    if (typeof window.gtag === 'function' && hasValue(vendors.gaMeasurementId)) {
+    pushDataLayerEvent(eventName, params);
+
+    if (!hasValue(vendors.gtmId) && typeof window.gtag === 'function' && hasValue(vendors.gaMeasurementId)) {
       window.gtag('event', eventName, Object.assign({ send_to: vendors.gaMeasurementId }, params || {}));
-      return true;
     }
 
-    if (window.dataLayer && typeof window.dataLayer.push === 'function') {
-      var payload = Object.assign({ event: eventName }, params || {});
-      window.dataLayer.push(payload);
-      return true;
-    }
-
-    return false;
+    return true;
   }
+
+  ensureDataLayer();
 
   var storedConsent = getStoredConsent();
   if (storedConsent === CONSENT_GRANTED) {
-    setConsent(true, { persist: false });
+    setConsent(true, { persist: false, track: false, source: 'stored' });
   } else if (storedConsent === CONSENT_REJECTED) {
-    setConsent(false, { persist: false, load: false });
+    setConsent(false, { persist: false, load: false, track: false, source: 'stored' });
   } else if (!config.requireConsent && hasConfiguredVendors()) {
-    setConsent(true, { persist: false });
+    setConsent(true, { persist: false, track: false, source: 'config' });
   }
 
   window.BKTracking = {
@@ -329,6 +376,7 @@
     loadClarity: loadClarity,
     loadMeta: loadMeta,
     loadAll: loadAll,
+    pushDataLayerEvent: pushDataLayerEvent,
     setConsent: setConsent,
     trackEvent: trackEvent,
   };

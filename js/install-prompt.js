@@ -8,6 +8,12 @@
   var previousBodyOverflow = '';
   var overlay = null;
 
+  function track(eventName, params) {
+    if (window.BKTracking && typeof window.BKTracking.trackEvent === 'function') {
+      window.BKTracking.trackEvent(eventName, params || {});
+    }
+  }
+
   function detectEnvironment() {
     var ua = window.navigator.userAgent || '';
     var platform = window.navigator.platform || '';
@@ -210,6 +216,9 @@
     previousBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     installOverlay.hidden = false;
+    track('bk_install_help_opened', {
+      install_mode: mode
+    });
   }
 
   function closeOverlay() {
@@ -285,12 +294,25 @@
     var mode = getInstallMode();
     var button = event.currentTarget;
 
+    track('bk_install_click', {
+      install_mode: mode,
+      button_location: button && button.closest('.header-actions') ? 'header' : 'page'
+    });
+
     if (mode === 'prompt' && deferredPrompt) {
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function () {
+      deferredPrompt.userChoice.then(function (choice) {
+        track('bk_install_prompt_result', {
+          install_mode: mode,
+          outcome: choice && choice.outcome ? choice.outcome : 'unknown'
+        });
         deferredPrompt = null;
         updateButtons();
       }).catch(function () {
+        track('bk_install_prompt_result', {
+          install_mode: mode,
+          outcome: 'error'
+        });
         deferredPrompt = null;
         updateButtons();
       });
@@ -314,11 +336,17 @@
   window.addEventListener('beforeinstallprompt', function (event) {
     event.preventDefault();
     deferredPrompt = event;
+    track('bk_install_prompt_available', {
+      install_mode: 'prompt'
+    });
     updateButtons();
   });
 
   window.addEventListener('appinstalled', function () {
     deferredPrompt = null;
+    track('bk_app_installed', {
+      install_mode: 'installed'
+    });
     closeOverlay();
     updateButtons();
   });

@@ -12,6 +12,12 @@
 (function () {
     'use strict';
 
+    function track(eventName, params) {
+        if (window.BKTracking && typeof window.BKTracking.trackEvent === 'function') {
+            window.BKTracking.trackEvent(eventName, params || {});
+        }
+    }
+
     // ── Configuration ────────────────────────────────────────
     var COOKIE_PREFIX = 'bk_popup_dismissed_';
     var DISMISS_COUNT_PREFIX = 'bk_popup_dismiss_count_';
@@ -192,6 +198,10 @@
         popupShown = true;
 
         var lm = LEAD_MAGNETS[ctx];
+        track('bk_popup_shown', {
+            popup_context: ctx,
+            popup_group: lm.group
+        });
         var wrapper = document.createElement('div');
         wrapper.innerHTML = buildPopup(lm);
         document.body.appendChild(wrapper.firstChild);
@@ -234,12 +244,21 @@
                     submitBtn.querySelector('.bk-popup-submit-text').textContent = 'Küldés...';
                 }
 
+                track('bk_popup_submit', {
+                    popup_context: ctx,
+                    popup_group: lm.group
+                });
+
                 submitToMailerLite(email, name, lm.group)
                     .then(function () {
                         form.style.display = 'none';
                         var successEl = document.getElementById('bk-popup-success');
                         if (successEl) successEl.style.display = 'block';
                         setCookie(COOKIE_PREFIX + ctx, 'submitted', SUBMIT_DAYS);
+                        track('bk_popup_submit_success', {
+                            popup_context: ctx,
+                            popup_group: lm.group
+                        });
                         setTimeout(function () { removePopup(); }, 3000);
                     })
                     .catch(function () {
@@ -251,6 +270,10 @@
                         errorMsg.style.cssText = 'color:#E8734A;font-size:0.85rem;margin-top:12px;text-align:center;';
                         errorMsg.textContent = 'Hiba történt, kérjük próbáld újra.';
                         form.appendChild(errorMsg);
+                        track('bk_popup_submit_error', {
+                            popup_context: ctx,
+                            popup_group: lm.group
+                        });
                         setTimeout(function () {
                             if (errorMsg.parentNode) errorMsg.parentNode.removeChild(errorMsg);
                         }, 4000);
@@ -265,6 +288,11 @@
         setCookie(DISMISS_COUNT_PREFIX + ctx, count, 365);
         var days = getDismissDays(count);
         setCookie(COOKIE_PREFIX + ctx, 'dismissed', days);
+        track('bk_popup_dismissed', {
+            popup_context: ctx,
+            dismiss_count: count,
+            suppress_days: days
+        });
         removePopup();
     }
 

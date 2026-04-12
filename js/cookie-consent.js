@@ -112,13 +112,18 @@
       '</div>';
 
     document.body.appendChild(banner);
+    tracking.trackEvent('bk_cookie_banner_view', {
+      banner_variant: 'default',
+    });
 
     banner.addEventListener('click', function (event) {
       var action = event.target && event.target.getAttribute('data-bk-consent');
       if (!action) return;
 
       var accepted = action === 'accept';
-      tracking.setConsent(accepted);
+      tracking.setConsent(accepted, {
+        source: 'banner',
+      });
       closeBanner(banner);
     });
 

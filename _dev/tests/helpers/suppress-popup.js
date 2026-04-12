@@ -15,6 +15,13 @@ async function suppressPopup(page) {
       path: '/',
       expires: Math.floor(Date.now() / 1000) + 86400,
     },
+    {
+      name: 'bk_popup_dismissed_general',
+      value: 'dismissed',
+      domain: '127.0.0.1',
+      path: '/',
+      expires: Math.floor(Date.now() / 1000) + 86400,
+    },
   ]);
 }
 

@@ -1,9 +1,12 @@
 /**
  * BAGOLYKALAND.HU — Tracking configuration
  *
- * Add your own vendor IDs below when you are ready to enable analytics.
- * The consent banner and loader are already wired sitewide; with blank IDs
- * they stay safely inert.
+ * GTM-first setup:
+ * - set `gtmId` when your Tag Manager container is ready
+ * - the site already emits custom `bk_*` events into `dataLayer`
+ * - direct GA4 / Clarity / Meta IDs remain optional fallbacks
+ *
+ * With blank IDs the tracking layer stays safely inert.
  */
 (function () {
   'use strict';
