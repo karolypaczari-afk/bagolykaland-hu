@@ -91,12 +91,12 @@ test.describe('@responsive 18 — Desktop nav layout is stable', () => {
 test.describe('18 — Megamenu interactions', () => {
   test.use({ viewport: { width: 1200, height: 900 } });
 
-  test('Homepage — services mega panel opens on hover and stays in viewport', async ({ suppressedPage: page }) => {
+  test('Homepage — combined services mega panel opens on hover and stays in viewport', async ({ suppressedPage: page }) => {
     await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
 
-    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Foglalkozásaink' }).first();
-    const servicesPanel = page.locator('.mega-panel--services').first();
+    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Szolgáltatásaink' }).first();
+    const servicesPanel = page.locator('.mega-panel--catalog').first();
 
     await servicesToggle.hover();
     await expect(servicesPanel).toBeVisible({ timeout: 2000 });
@@ -109,28 +109,29 @@ test.describe('18 — Megamenu interactions', () => {
       expect(box.y).toBeGreaterThanOrEqual(0);
     }
 
-    await expect(servicesPanel.locator('.mega-service-card')).toHaveCount(4);
+    await expect(servicesPanel.locator('.mega-catalog-section')).toHaveCount(3);
+    await expect(servicesPanel.locator('.mega-nav__link--catalog')).toHaveCount(10);
   });
 
-  test('Service detail page highlights the parent desktop section', async ({ suppressedPage: page }) => {
+  test('Service detail page highlights the combined parent desktop section', async ({ suppressedPage: page }) => {
     await page.goto('/foglalkozasaink/logopedia/', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
 
-    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Foglalkozásaink' }).first();
+    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Szolgáltatásaink' }).first();
     await expect(servicesToggle).toHaveClass(/active/);
   });
 
-  test('ArrowDown opens a mega panel and focuses its first link', async ({ suppressedPage: page }) => {
+  test('ArrowDown opens the combined mega panel and focuses its first link', async ({ suppressedPage: page }) => {
     await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
 
-    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Foglalkozásaink' }).first();
+    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Szolgáltatásaink' }).first();
     await servicesToggle.focus();
     await page.keyboard.press('ArrowDown');
 
-    const servicesPanel = page.locator('.mega-panel--services').first();
+    const servicesPanel = page.locator('.mega-panel--catalog').first();
     await expect(servicesPanel).toBeVisible();
-    await expect(servicesPanel.locator('.mega-service-card').first()).toBeFocused();
+    await expect(servicesPanel.locator('a[href]').first()).toBeFocused();
   });
 });
 
@@ -162,9 +163,9 @@ test.describe('18 — Nav state resets cleanly across breakpoints', () => {
     await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
 
-    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Foglalkozásaink' }).first();
+    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Szolgáltatásaink' }).first();
     await servicesToggle.click();
-    await expect(page.locator('.mega-panel--services').first()).toBeVisible();
+    await expect(page.locator('.mega-panel--catalog').first()).toBeVisible();
 
     await page.setViewportSize({ width: 768, height: 812 });
     await page.waitForTimeout(300);

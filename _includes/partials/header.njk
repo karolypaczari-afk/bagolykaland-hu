@@ -77,6 +77,42 @@
                   </div>
                 </div>
 
+                {% elif item.megaType == 'catalog' %}
+                <div class="mega-panel mega-panel--full mega-panel--catalog" id="nav-panel-{{ loop.index }}" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
+                  <div class="mega-panel__inner">
+                    <div class="mega-catalog">
+                      {% for section in item.megaExtra.sections %}
+                        <section class="mega-catalog-section" aria-label="{{ section.title }}">
+                          <div class="mega-catalog-section__header">
+                            <p class="mega-catalog-section__title">{{ section.title }}</p>
+                            {% if section.parentUrl %}
+                              <a href="{{ section.parentUrl }}" class="mega-nav__parent-link mega-nav__parent-link--inline">{{ section.parentLabel or ('Összes ' + section.title) }} →</a>
+                            {% endif %}
+                          </div>
+                          <div class="mega-nav mega-nav--catalog">
+                            {% for child in section.items %}
+                              <a href="{{ child.url }}" class="mega-nav__link mega-nav__link--catalog">
+                                <span class="mega-nav__link-title-row">
+                                  <span class="mega-nav__link-title">{{ child.label }}</span>
+                                  {% if child.badge %}<span class="mega-service-card__badge">{{ child.badge }}</span>{% endif %}
+                                </span>
+                                {% if child.desc %}<span class="mega-nav__link-desc">{{ child.desc }}</span>{% endif %}
+                              </a>
+                            {% endfor %}
+                          </div>
+                        </section>
+                      {% endfor %}
+                    </div>
+                    {% if item.megaExtra.ctaLabel %}
+                    <div class="mega-panel__footer">
+                      <div class="mega-panel__footer-ctas">
+                        <a href="{{ item.megaExtra.ctaUrl }}" class="mega-cta mega-cta--primary">📅 {{ item.megaExtra.ctaLabel }}</a>
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+
                 {% elif item.megaType == 'services' %}
                 <div class="mega-panel mega-panel--full mega-panel--services" id="nav-panel-{{ loop.index }}" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
                   <div class="mega-panel__inner">
@@ -194,14 +230,34 @@
         <li class="mobile-nav-item">
           <button class="mobile-nav-link" id="mobile-nav-toggle-{{ loop.index }}" type="button" aria-expanded="false" aria-controls="mobile-dropdown-{{ loop.index }}">{{ item.label }}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
           <div class="mobile-dropdown" id="mobile-dropdown-{{ loop.index }}" aria-labelledby="mobile-nav-toggle-{{ loop.index }}">
-            {% if item.url %}<a href="{{ item.url }}" class="mobile-dropdown-parent-link">Összes {{ item.label }}</a>{% endif %}
-            {% for child in item.children %}
-              <a href="{{ child.url }}" class="mobile-dropdown__link">
-                {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mobile-dropdown__icon" width="24" height="24" loading="lazy">{% endif %}
-                <span>{{ child.label }}</span>
-                {% if child.badge %}<span class="mobile-dropdown__badge">{{ child.badge }}</span>{% endif %}
-              </a>
-            {% endfor %}
+            {% if item.megaExtra and item.megaExtra.sections %}
+              {% for section in item.megaExtra.sections %}
+                <div class="mobile-dropdown__section">
+                  <div class="mobile-dropdown__section-header">
+                    <p class="mobile-dropdown__section-title">{{ section.title }}</p>
+                    {% if section.parentUrl %}
+                      <a href="{{ section.parentUrl }}" class="mobile-dropdown-parent-link">{{ section.parentLabel or ('Összes ' + section.title) }}</a>
+                    {% endif %}
+                  </div>
+                  {% for child in section.items %}
+                    <a href="{{ child.url }}" class="mobile-dropdown__link">
+                      {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mobile-dropdown__icon" width="24" height="24" loading="lazy">{% endif %}
+                      <span>{{ child.label }}</span>
+                      {% if child.badge %}<span class="mobile-dropdown__badge">{{ child.badge }}</span>{% endif %}
+                    </a>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            {% else %}
+              {% if item.url %}<a href="{{ item.url }}" class="mobile-dropdown-parent-link">Összes {{ item.label }}</a>{% endif %}
+              {% for child in item.children %}
+                <a href="{{ child.url }}" class="mobile-dropdown__link">
+                  {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mobile-dropdown__icon" width="24" height="24" loading="lazy">{% endif %}
+                  <span>{{ child.label }}</span>
+                  {% if child.badge %}<span class="mobile-dropdown__badge">{{ child.badge }}</span>{% endif %}
+                </a>
+              {% endfor %}
+            {% endif %}
             {% if item.megaExtra and item.megaExtra.ctaLabel %}
               <a href="{{ item.megaExtra.ctaUrl }}" class="mobile-dropdown__cta">📅 {{ item.megaExtra.ctaLabel }}</a>
             {% endif %}

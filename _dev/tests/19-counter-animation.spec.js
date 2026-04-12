@@ -17,10 +17,9 @@ const COUNTER_PAGES = [
 
 test.describe('19 — Counter Animations', () => {
   for (const pg of COUNTER_PAGES) {
-    test(`${pg.name} — counters animate to non-zero values`, async ({ suppressedPage: page }) => {
+    test(`${pg.name} — counters animate to non-zero values + animated class`, async ({ suppressedPage: page }) => {
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
 
-      // Check if page has metric cards
       const cards = page.locator('.v2-metric-card');
       const count = await cards.count();
       if (count === 0) {
@@ -30,10 +29,13 @@ test.describe('19 — Counter Animations', () => {
 
       // Scroll metrics into view to trigger IntersectionObserver
       await cards.first().scrollIntoViewIfNeeded();
-      // Wait for animation class instead of fixed timeout
       await page.waitForSelector('.v2-metric-card.animated', { timeout: 3000 });
 
-      // Check each card
+      // At least one card should have the 'animated' class
+      const animatedCount = await page.locator('.v2-metric-card.animated').count();
+      expect(animatedCount, `At least one metric card should be animated on ${pg.name}`).toBeGreaterThan(0);
+
+      // Check each card's counter value
       for (let i = 0; i < count; i++) {
         const card = cards.nth(i);
         const numEl = card.locator('.v2-metric-number');
@@ -42,31 +44,10 @@ test.describe('19 — Counter Animations', () => {
 
         const text = await numEl.textContent();
 
-        // Counter should not be "0", "NaN", or empty after animation
         expect(text, `Metric card #${i + 1} on ${pg.name} should not be "0"`).not.toBe('0');
         expect(text, `Metric card #${i + 1} on ${pg.name} should not be "NaN"`).not.toContain('NaN');
         expect(text?.trim().length, `Metric card #${i + 1} on ${pg.name} should not be empty`).toBeGreaterThan(0);
       }
-    });
-
-    test(`${pg.name} — animated class is added after scroll`, async ({ suppressedPage: page }) => {
-      await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-
-      const cards = page.locator('.v2-metric-card');
-      const count = await cards.count();
-      if (count === 0) {
-        test.skip();
-        return;
-      }
-
-      // Scroll into view
-      await cards.first().scrollIntoViewIfNeeded();
-      // Wait for animation class instead of fixed timeout
-      await page.waitForSelector('.v2-metric-card.animated', { timeout: 3000 });
-
-      // At least one card should have the 'animated' class
-      const animatedCount = await page.locator('.v2-metric-card.animated').count();
-      expect(animatedCount, `At least one metric card should be animated on ${pg.name}`).toBeGreaterThan(0);
     });
   }
 });

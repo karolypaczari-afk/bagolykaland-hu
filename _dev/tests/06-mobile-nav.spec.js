@@ -8,27 +8,20 @@ test.use({ viewport: { width: 375, height: 812 } });
 test.describe('06 — Mobile Nav (all pages)', () => {
   // Test nav visibility on EVERY page — this catches the "disappearing menu" bug
   for (const pg of PAGES) {
-    test(`${pg.name} — hamburger is visible on mobile`, async ({ suppressedPage: page }) => {
+    test(`${pg.name} — hamburger visible + menu opens`, async ({ suppressedPage: page }) => {
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
       await page.waitForSelector(SITE_SELECTORS.hamburger, { timeout: 5000 });
 
       const toggle = page.locator(SITE_SELECTORS.hamburger);
       await expect(toggle).toBeVisible();
       await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-    });
 
-    test(`${pg.name} — mobile menu opens and shows links`, async ({ suppressedPage: page }) => {
-      await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector(SITE_SELECTORS.hamburger, { timeout: 5000 });
-
-      const toggle = page.locator(SITE_SELECTORS.hamburger);
+      // Open the menu and verify links
       const navMenu = page.locator(SITE_SELECTORS.mobileNav);
-
       await toggle.click();
       await expect(navMenu).toHaveClass(/open/);
       await expect(toggle).toHaveAttribute('aria-expanded', 'true');
 
-      // Menu should have visible links
       const visibleLinks = navMenu.locator('a');
       expect(await visibleLinks.count()).toBeGreaterThanOrEqual(4);
     });
@@ -103,20 +96,4 @@ test.describe('06 — Mobile Nav (interaction tests)', () => {
   });
 });
 
-test.describe('06 — Desktop Nav (all pages)', () => {
-  test.use({ viewport: { width: 1440, height: 900 } });
-
-  for (const pg of PAGES) {
-    test(`${pg.name} — nav-menu is visible on desktop`, async ({ suppressedPage: page }) => {
-      await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector(SITE_SELECTORS.desktopNav, { timeout: 5000 });
-
-      const navMenu = page.locator(SITE_SELECTORS.desktopNav);
-      await expect(navMenu).toBeVisible();
-
-      // Hamburger should be hidden on desktop
-      const toggle = page.locator(SITE_SELECTORS.hamburger);
-      await expect(toggle).toBeHidden();
-    });
-  }
-});
+// Desktop nav visibility is covered by 18-desktop-nav.spec.js across multiple widths.

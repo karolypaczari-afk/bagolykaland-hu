@@ -13,8 +13,7 @@ const STAT_SELECTORS = [
 ];
 
 test.describe('@responsive 21 — Mobile Overflow & Stat Containers (375px)', () => {
-  // Overflow checks should run on isolated pages; parallel layout work adds noise.
-  test.describe.configure({ mode: 'serial' });
+  // Parallel is fine — each test uses its own page instance.
   test.use({ viewport: { width: 375, height: 812 } });
 
   for (const { name, path } of PAGES) {

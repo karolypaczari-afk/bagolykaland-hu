@@ -29,11 +29,12 @@ function isInternalHref(href) {
 
 test.describe('@a11y 23 — Link Target Rules', () => {
   for (const pageEntry of PAGES) {
-    test(`${pageEntry.name} — internal links must not use target="_blank"`, () => {
+    test(`${pageEntry.name} — link target + rel rules`, () => {
       const html = fs.readFileSync(resolveHtmlPath(pageEntry.filePath), 'utf-8');
       const $ = cheerio.load(html);
-      const violations = [];
 
+      // Internal links must not use target="_blank"
+      const internalViolations = [];
       $('a[target="_blank"]').each((_, element) => {
         const href = $(element).attr('href') || '';
         if (!href || href.startsWith('mailto:') || href.startsWith('tel:')) return;
@@ -42,7 +43,7 @@ test.describe('@a11y 23 — Link Target Rules', () => {
           const fileExts = /\.(png|jpe?g|gif|webp|svg|pdf|docx?|xlsx?|zip|mp[34])(\?.*)?$/i;
           if (fileExts.test(href)) return;
 
-          violations.push({
+          internalViolations.push({
             href,
             text: ($(element).text() || '').trim().substring(0, 80),
           });
@@ -50,16 +51,12 @@ test.describe('@a11y 23 — Link Target Rules', () => {
       });
 
       expect(
-        violations,
-        `Internal links with target="_blank":\n${JSON.stringify(violations, null, 2)}`
+        internalViolations,
+        `Internal links with target="_blank":\n${JSON.stringify(internalViolations, null, 2)}`
       ).toHaveLength(0);
-    });
 
-    test(`${pageEntry.name} — external links opened in new tabs include rel protection`, () => {
-      const html = fs.readFileSync(resolveHtmlPath(pageEntry.filePath), 'utf-8');
-      const $ = cheerio.load(html);
-      const violations = [];
-
+      // External links in new tabs must include rel protection
+      const externalViolations = [];
       $('a[href][target="_blank"]').each((_, element) => {
         const href = $(element).attr('href') || '';
         if (!href.startsWith('http://') && !href.startsWith('https://')) return;
@@ -70,7 +67,7 @@ test.describe('@a11y 23 — Link Target Rules', () => {
         const hasNoreferrer = rel.includes('noreferrer');
 
         if (!hasNoopener || !hasNoreferrer) {
-          violations.push({
+          externalViolations.push({
             href,
             text: ($(element).text() || '').trim().substring(0, 80),
             rel,
@@ -79,8 +76,8 @@ test.describe('@a11y 23 — Link Target Rules', () => {
       });
 
       expect(
-        violations,
-        `External target="_blank" links missing rel protection:\n${JSON.stringify(violations, null, 2)}`
+        externalViolations,
+        `External target="_blank" links missing rel protection:\n${JSON.stringify(externalViolations, null, 2)}`
       ).toHaveLength(0);
     });
   }

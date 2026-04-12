@@ -93,15 +93,15 @@ const CRITICAL_SELECTORS = [
 test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
   test.use({ viewport: { width: 1200, height: 800 } });
 
-  // ── Per-page: ensure no white/near-white text on white/light backgrounds ──
+  // ── Per-page: white-on-white + critical AA contrast + footer readability (single page load) ──
   for (const pg of PAGES) {
-    test(`${pg.name} — no invisible text (white-on-white check)`, async ({ page }) => {
+    test(`${pg.name} — contrast checks (white-on-white + critical AA + footer)`, async ({ page }) => {
       await suppressPopup(page);
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
 
+      // 1. White-on-white check
       const problems = await page.evaluate(() => {
         const issues = [];
-        // Check all visible text elements
         const walker = document.createTreeWalker(
           document.body,
           NodeFilter.SHOW_ELEMENT,
@@ -112,7 +112,6 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
           const el = /** @type {HTMLElement} */ (node);
           const text = (el.textContent || '').trim();
           if (!text) continue;
-          // Only check leaf text nodes (elements whose own text differs from children)
           const childText = Array.from(el.children).map(c => c.textContent || '').join('');
           if (text === childText && el.children.length > 0) continue;
 
@@ -127,16 +126,13 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
           if (!fgMatch) continue;
           const fg = { r: +fgMatch[1], g: +fgMatch[2], b: +fgMatch[3] };
 
-          // Check if text is white/near-white
           if (fg.r < 200 || fg.g < 200 || fg.b < 200) continue;
 
-          // Find background (check both solid bg and gradients)
           let bgStr = null;
           let hasGradient = false;
           let current = el;
           while (current && current !== document.documentElement) {
             const cs = getComputedStyle(current);
-            // Check for gradient backgrounds first
             const bgImage = cs.backgroundImage;
             if (bgImage && bgImage !== 'none' && bgImage.includes('gradient')) {
               hasGradient = true;
@@ -144,7 +140,6 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
             }
             const bc = cs.backgroundColor;
             if (bc && bc !== 'transparent' && bc !== 'rgba(0, 0, 0, 0)') {
-              // Skip semi-transparent backgrounds (alpha < 0.5) — keep walking
               const alphaMatch = bc.match(/rgba\(\d+[, ]+\d+[, ]+\d+[, /]+([0-9.]+)\)/);
               if (alphaMatch && parseFloat(alphaMatch[1]) < 0.5) {
                 current = current.parentElement;
@@ -155,8 +150,6 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
             }
             current = current.parentElement;
           }
-          // If a gradient provides the background, skip — gradient contrast
-          // cannot be reliably computed from getComputedStyle alone.
           if (hasGradient) continue;
           if (!bgStr) bgStr = 'rgb(255, 255, 255)';
 
@@ -164,7 +157,6 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
           if (!bgMatch) continue;
           const bg = { r: +bgMatch[1], g: +bgMatch[2], b: +bgMatch[3] };
 
-          // If background is also light (> 200 on all channels), flag it
           if (bg.r > 200 && bg.g > 200 && bg.b > 200) {
             issues.push({
               text: text.substring(0, 60),
@@ -178,15 +170,8 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
       });
 
       expect(problems, `White-on-white text found: ${JSON.stringify(problems, null, 2)}`).toHaveLength(0);
-    });
-  }
 
-  // ── Per-page: check critical selectors for WCAG AA contrast ──
-  for (const pg of PAGES) {
-    test(`${pg.name} — critical elements meet WCAG AA contrast`, async ({ page }) => {
-      await suppressPopup(page);
-      await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-
+      // 2. Critical elements WCAG AA contrast
       const results = await page.evaluate((selectors) => {
         const data = [];
         for (const sel of selectors) {
@@ -199,15 +184,12 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
 
             const opacity = parseFloat(style.opacity);
 
-            // Find effective background (check element itself + ancestors)
             let bg = null;
             let hasGradient = false;
-            // Helper: check if a bg color is semi-transparent (alpha < 0.5)
             const isSemiTransparent = (bc) => {
               const am = bc.match(/rgba\(\d+[, ]+\d+[, ]+\d+[, /]+([0-9.]+)\)/);
               return am && parseFloat(am[1]) < 0.5;
             };
-            // Check the element's own background first
             const ownBgImage = style.backgroundImage;
             if (ownBgImage && ownBgImage !== 'none' && ownBgImage.includes('gradient')) {
               hasGradient = true;
@@ -216,7 +198,6 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
             if (!hasGradient && ownBg && ownBg !== 'transparent' && ownBg !== 'rgba(0, 0, 0, 0)' && !isSemiTransparent(ownBg)) {
               bg = ownBg;
             }
-            // Walk up ancestors
             if (!bg && !hasGradient) {
               let current = el.parentElement;
               while (current && current !== document.documentElement) {
@@ -238,7 +219,6 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
                 current = current.parentElement;
               }
             }
-            // Skip elements on gradient backgrounds (can't compute contrast reliably)
             if (hasGradient) continue;
             if (!bg) bg = 'rgb(255, 255, 255)';
 
@@ -263,19 +243,16 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
         const bg = parseColor(r.backgroundColor);
         if (!fg || !bg) continue;
 
-        // Apply element opacity to foreground
         let effectiveFg = fg;
         if (r.opacity < 1) {
           effectiveFg = { ...fg, a: fg.a * r.opacity };
         }
 
-        // Blend
         const blended = blendAlpha(effectiveFg, bg);
         const fgLum = luminance(blended.r, blended.g, blended.b);
         const bgLum = luminance(bg.r, bg.g, bg.b);
         const ratio = contrastRatio(fgLum, bgLum);
 
-        // Determine threshold
         const isLargeText = r.fontSize >= 24 || (r.fontSize >= 18.66 && parseInt(r.fontWeight) >= 700);
         const threshold = isLargeText ? AA_LARGE : AA_NORMAL;
 
@@ -293,6 +270,63 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
       }
 
       expect(failures, `Contrast failures:\n${JSON.stringify(failures, null, 2)}`).toHaveLength(0);
+
+      // 3. Footer text readability
+      const footerTexts = await page.evaluate(() => {
+        const ftResults = [];
+        const footer = document.querySelector('footer');
+        if (!footer) return ftResults;
+
+        const textEls = footer.querySelectorAll('p, a, span');
+        for (const el of textEls) {
+          const style = getComputedStyle(el);
+          const rect = el.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) continue;
+          if (style.display === 'none' || style.visibility === 'hidden') continue;
+          const text = (el.textContent || '').trim();
+          if (!text) continue;
+
+          let bg = null;
+          let current = el;
+          while (current && current !== document.documentElement) {
+            const cs = getComputedStyle(current);
+            if (cs.backgroundColor && cs.backgroundColor !== 'transparent' && cs.backgroundColor !== 'rgba(0, 0, 0, 0)') {
+              bg = cs.backgroundColor;
+              break;
+            }
+            current = current.parentElement;
+          }
+
+          ftResults.push({
+            color: style.color,
+            bg: bg || 'rgb(255, 255, 255)',
+            opacity: parseFloat(style.opacity),
+            text: text.substring(0, 40),
+            selector: el.className ? '.' + el.className.split(' ')[0] : el.tagName.toLowerCase(),
+          });
+        }
+        return ftResults;
+      });
+
+      for (const ft of footerTexts) {
+        const fg = parseColor(ft.color);
+        const bg = parseColor(ft.bg);
+        if (!fg || !bg) continue;
+
+        let effectiveFg = fg;
+        if (ft.opacity < 1) {
+          effectiveFg = { ...fg, a: fg.a * ft.opacity };
+        }
+        const blended = blendAlpha(effectiveFg, bg);
+        const fgLum = luminance(blended.r, blended.g, blended.b);
+        const bgLum = luminance(bg.r, bg.g, bg.b);
+        const ratio = contrastRatio(fgLum, bgLum);
+
+        expect(
+          ratio,
+          `Footer "${ft.text}" (${ft.selector}) contrast ${ratio.toFixed(2)} below 3:1`
+        ).toBeGreaterThanOrEqual(AA_LARGE);
+      }
     });
   }
 
@@ -398,71 +432,6 @@ test.describe('@a11y 15 — Colour Contrast (WCAG AA)', () => {
             `${bp.selector} contrast ${ratio.toFixed(2)} below ${threshold}:1`
           ).toBeGreaterThanOrEqual(threshold);
         }
-      }
-    });
-  }
-
-  // ── Footer text must be readable on dark background ──
-  for (const pg of PAGES) {
-    test(`${pg.name} — footer text is readable on dark background`, async ({ page }) => {
-      await suppressPopup(page);
-      await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-
-      const footerTexts = await page.evaluate(() => {
-        const results = [];
-        const footer = document.querySelector('footer');
-        if (!footer) return results;
-
-        const textEls = footer.querySelectorAll('p, a, span');
-        for (const el of textEls) {
-          const style = getComputedStyle(el);
-          const rect = el.getBoundingClientRect();
-          if (rect.width === 0 || rect.height === 0) continue;
-          if (style.display === 'none' || style.visibility === 'hidden') continue;
-          const text = (el.textContent || '').trim();
-          if (!text) continue;
-
-          let bg = null;
-          let current = el;
-          while (current && current !== document.documentElement) {
-            const cs = getComputedStyle(current);
-            if (cs.backgroundColor && cs.backgroundColor !== 'transparent' && cs.backgroundColor !== 'rgba(0, 0, 0, 0)') {
-              bg = cs.backgroundColor;
-              break;
-            }
-            current = current.parentElement;
-          }
-
-          results.push({
-            color: style.color,
-            bg: bg || 'rgb(255, 255, 255)',
-            opacity: parseFloat(style.opacity),
-            text: text.substring(0, 40),
-            selector: el.className ? '.' + el.className.split(' ')[0] : el.tagName.toLowerCase(),
-          });
-        }
-        return results;
-      });
-
-      for (const ft of footerTexts) {
-        const fg = parseColor(ft.color);
-        const bg = parseColor(ft.bg);
-        if (!fg || !bg) continue;
-
-        let effectiveFg = fg;
-        if (ft.opacity < 1) {
-          effectiveFg = { ...fg, a: fg.a * ft.opacity };
-        }
-        const blended = blendAlpha(effectiveFg, bg);
-        const fgLum = luminance(blended.r, blended.g, blended.b);
-        const bgLum = luminance(bg.r, bg.g, bg.b);
-        const ratio = contrastRatio(fgLum, bgLum);
-
-        // Footer text should meet at least AA large (3:1) as minimum
-        expect(
-          ratio,
-          `Footer "${ft.text}" (${ft.selector}) contrast ${ratio.toFixed(2)} below 3:1`
-        ).toBeGreaterThanOrEqual(AA_LARGE);
       }
     });
   }

@@ -373,6 +373,32 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 }
 .mobile-dropdown a:hover { color: var(--clr-navy); background: var(--clr-teal-light); }
 .mobile-dropdown a.active { color: var(--clr-navy); background: var(--clr-teal-light); }
+.mobile-dropdown__section + .mobile-dropdown__section {
+  margin-top: var(--sp-sm);
+  padding-top: var(--sp-sm);
+  border-top: 1px solid var(--clr-border-soft);
+}
+.mobile-dropdown__section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-sm); padding: 6px 14px 4px;
+}
+.mobile-dropdown__section-title {
+  font-family: var(--font-heading); font-size: .74rem; font-weight: 900;
+  color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: .08em;
+}
+.mobile-dropdown-parent-link {
+  font-size: .75rem; font-weight: 800; color: var(--clr-teal);
+}
+.mobile-dropdown__section-header .mobile-dropdown-parent-link {
+  padding: 0;
+  border-radius: 0;
+  white-space: nowrap;
+}
+.mobile-dropdown-parent-link:hover,
+.mobile-dropdown-parent-link.active {
+  color: var(--clr-teal-dark);
+  background: transparent;
+}
 .mobile-cta {
   display: block; text-align: center; margin-top: var(--sp-xl);
   padding: 16px; background: #a84a28; color: #fff;
@@ -520,6 +546,45 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 /* ── Services/Exams panel ── */
 .mega-panel--services .mega-panel__inner {
   display: flex; flex-direction: column; gap: var(--sp-xl);
+}
+.mega-panel--catalog .mega-panel__inner {
+  display: flex; flex-direction: column; gap: var(--sp-xl);
+}
+.mega-catalog {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-lg);
+}
+.mega-catalog-section {
+  display: flex; flex-direction: column; gap: var(--sp-md);
+  min-width: 0; padding: var(--sp-lg);
+  border-radius: var(--r-xl); border: 1px solid var(--clr-border-soft);
+  background: linear-gradient(180deg, #fff 0%, var(--clr-bg) 100%);
+}
+.mega-catalog-section__header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--sp-md);
+}
+.mega-catalog-section__title {
+  font-family: var(--font-heading); font-size: 1rem; font-weight: 900;
+  color: var(--clr-navy); letter-spacing: -.01em;
+}
+.mega-nav--catalog { gap: 6px; }
+.mega-nav__link--catalog {
+  padding: 14px 16px;
+  border: 1px solid rgba(228,237,245,0.85);
+  background: rgba(255,255,255,0.92);
+}
+.mega-nav__link--catalog:hover,
+.mega-nav__link--catalog.active {
+  border-color: rgba(43,116,109,0.16);
+  background: var(--clr-teal-light);
+}
+.mega-nav__link-title-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--sp-sm);
+}
+.mega-nav__parent-link--inline {
+  margin-top: 0;
+  flex-shrink: 0;
 }
 .mega-services {
   display: grid; gap: var(--sp-lg);
@@ -683,6 +748,11 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
     padding: 0;
   }
   .nav-install-label { display: none; }
+}
+
+@media (max-width: 1240px) {
+  .mega-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mega-catalog-section:last-child { grid-column: 1 / -1; }
 }
 
 /* Install experience */

@@ -63,28 +63,24 @@ function extractRefs(pageEntry) {
 
 test.describe('@smoke 26 — Asset Integrity (static HTML check)', () => {
   for (const pageEntry of PAGES) {
-    test(`${pageEntry.name} — local CSS and JS references exist`, () => {
-      const { cssRefs, jsRefs } = extractRefs(pageEntry);
-      const issues = [];
+    test(`${pageEntry.name} — asset refs exist + scripts deferred + images valid`, () => {
+      const { cssRefs, jsRefs, assetRefs } = extractRefs(pageEntry);
 
+      // CSS and JS references exist
+      const refIssues = [];
       for (const ref of [...cssRefs, ...jsRefs.map((item) => item.src)]) {
         if (ref.includes('.src.')) {
-          issues.push(`Unexpected source asset reference: ${ref}`);
+          refIssues.push(`Unexpected source asset reference: ${ref}`);
           continue;
         }
-
         const resolved = resolveAssetPath(pageEntry.filePath, ref);
         if (resolved && !fs.existsSync(resolved)) {
-          issues.push(ref);
+          refIssues.push(ref);
         }
       }
+      expect(refIssues, `Missing or invalid CSS/JS refs: ${refIssues.join(', ')}`).toEqual([]);
 
-      expect(issues, `Missing or invalid CSS/JS refs: ${issues.join(', ')}`).toEqual([]);
-    });
-
-    test(`${pageEntry.name} — shared scripts stay deferred`, () => {
-      const { jsRefs } = extractRefs(pageEntry);
-
+      // Shared scripts stay deferred
       for (const expected of [
         'components.js',
         'install-prompt.js',
@@ -98,19 +94,15 @@ test.describe('@smoke 26 — Asset Integrity (static HTML check)', () => {
         expect(match, `${expected} should be referenced`).toBeTruthy();
         expect(match && match.defer, `${expected} should be deferred`).toBe(true);
       }
-    });
 
-    test(`${pageEntry.name} — local image and metadata assets exist`, () => {
-      const { assetRefs } = extractRefs(pageEntry);
+      // Local image and metadata assets exist
       const missing = [];
-
       for (const ref of assetRefs) {
         const resolved = resolveAssetPath(pageEntry.filePath, ref);
         if (resolved && !fs.existsSync(resolved)) {
           missing.push(ref);
         }
       }
-
       expect(missing, `Missing local asset refs: ${missing.join(', ')}`).toEqual([]);
     });
   }

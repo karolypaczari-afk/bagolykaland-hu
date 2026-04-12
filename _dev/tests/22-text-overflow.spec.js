@@ -58,37 +58,31 @@ async function collectOverflowIssues(page, viewportWidth) {
 }
 
 test.describe('@responsive 22 — Text Overflow Prevention', () => {
-  for (const bp of CORE_BREAKPOINTS) {
-    for (const pg of PAGES) {
-      test(`${pg.name} @ ${bp.name} (${bp.width}px) — no text overflow`, async ({ page }) => {
+  // Test all pages at core breakpoints, landing pages also at extra breakpoints.
+  // Each test checks all applicable breakpoints in a single page context to reduce navigations.
+  for (const pg of PAGES) {
+    const isLanding = !pg.filePath.startsWith('blog/');
+    const breakpoints = isLanding ? [...CORE_BREAKPOINTS, ...EXTRA_BREAKPOINTS] : CORE_BREAKPOINTS;
+
+    test(`${pg.name} — no text overflow at ${breakpoints.length} breakpoints`, async ({ page }) => {
+      await suppressPopup(page);
+
+      const allIssues = [];
+      for (const bp of breakpoints) {
         await page.setViewportSize({ width: bp.width, height: 900 });
-        await suppressPopup(page);
         await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
 
         const issues = await collectOverflowIssues(page, bp.width);
-        const msg = issues.length > 0
-          ? `Text overflow detected (${issues.length} issue${issues.length > 1 ? 's' : ''}):\n${JSON.stringify(issues, null, 2)}`
-          : '';
+        if (issues.length > 0) {
+          allIssues.push({ breakpoint: `${bp.name} (${bp.width}px)`, issues });
+        }
+      }
 
-        expect(issues, msg).toHaveLength(0);
-      });
-    }
-  }
+      const msg = allIssues.length > 0
+        ? `Text overflow detected:\n${JSON.stringify(allIssues, null, 2)}`
+        : '';
 
-  for (const bp of EXTRA_BREAKPOINTS) {
-    for (const pg of LANDING_PAGES) {
-      test(`${pg.name} @ ${bp.name} (${bp.width}px) — no text overflow`, async ({ page }) => {
-        await page.setViewportSize({ width: bp.width, height: 900 });
-        await suppressPopup(page);
-        await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-
-        const issues = await collectOverflowIssues(page, bp.width);
-        const msg = issues.length > 0
-          ? `Text overflow detected (${issues.length} issue${issues.length > 1 ? 's' : ''}):\n${JSON.stringify(issues, null, 2)}`
-          : '';
-
-        expect(issues, msg).toHaveLength(0);
-      });
-    }
+      expect(allIssues, msg).toHaveLength(0);
+    });
   }
 });

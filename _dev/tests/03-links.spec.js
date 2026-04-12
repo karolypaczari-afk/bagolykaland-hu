@@ -10,7 +10,6 @@ function resolveInternalHref(href, pagePath) {
 }
 
 test.describe('03 — Broken Links', () => {
-  test.describe.configure({ mode: 'serial' });
   test.setTimeout(60000);
 
   for (const pg of PAGES) {
