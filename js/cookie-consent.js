@@ -116,10 +116,37 @@
       banner_variant: 'default',
     });
 
+    // Auto-accept on scroll (user implicitly consents by continuing to browse)
+    function onScroll() {
+      if (window.scrollY > 80) {
+        cleanup();
+        tracking.setConsent(true, { source: 'scroll' });
+        closeBanner(banner);
+      }
+    }
+
+    // Auto-accept on any click outside the banner
+    function onDocClick(event) {
+      if (!banner.contains(event.target)) {
+        cleanup();
+        tracking.setConsent(true, { source: 'interaction' });
+        closeBanner(banner);
+      }
+    }
+
+    function cleanup() {
+      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('click', onDocClick, true);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('click', onDocClick, true);
+
     banner.addEventListener('click', function (event) {
       var action = event.target && event.target.getAttribute('data-bk-consent');
       if (!action) return;
 
+      cleanup();
       var accepted = action === 'accept';
       tracking.setConsent(accepted, {
         source: 'banner',
