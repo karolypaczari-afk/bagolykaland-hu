@@ -33,7 +33,123 @@
       <nav class="main-nav" aria-label="Főmenü">
         <ul class="nav-list" role="list">
           {% for item in nav %}
-            {% if item.children %}
+            {% if item.children and item.megaType %}
+              {# ─── MEGA MENU ITEM ─── #}
+              <li class="nav-item nav-item--mega">
+                <button class="nav-link" id="nav-mega-{{ loop.index }}" aria-expanded="false" aria-haspopup="true">{{ item.label }}<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+
+                {% if item.megaType == 'about' %}
+                <div class="mega-panel mega-panel--compact mega-panel--about" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
+                  <div class="mega-panel__inner">
+                    <div class="mega-nav">
+                      {% for child in item.children %}
+                        <a href="{{ child.url }}" class="mega-nav__link">
+                          <span class="mega-nav__link-title">{{ child.label }}</span>
+                          {% if child.desc %}<span class="mega-nav__link-desc">{{ child.desc }}</span>{% endif %}
+                        </a>
+                      {% endfor %}
+                      {% if item.url %}<a href="{{ item.url }}" class="mega-nav__parent-link">Összes {{ item.label }} →</a>{% endif %}
+                    </div>
+                    <div class="mega-about-side">
+                      {% if item.megaExtra.founderImg %}
+                        <div class="mega-founder">
+                          <img src="{{ item.megaExtra.founderImg }}" alt="{{ item.megaExtra.founderName }}" class="mega-founder__img" width="72" height="72" loading="lazy">
+                          <div>
+                            <span class="mega-founder__name">{{ item.megaExtra.founderName }}</span>
+                            <span class="mega-founder__title">{{ item.megaExtra.founderTitle }}</span>
+                          </div>
+                        </div>
+                      {% endif %}
+                      {% if item.megaExtra.teamImg %}
+                        <a href="{{ item.url }}" class="mega-team-link">
+                          <img src="{{ item.megaExtra.teamImg }}" alt="{{ item.megaExtra.teamLabel }}" class="mega-team-link__img" width="240" height="140" loading="lazy">
+                          <span>{{ item.megaExtra.teamLabel }}</span>
+                        </a>
+                      {% endif %}
+                      <a href="{{ site.contact.phoneHref }}" class="mega-phone">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 13a19.79 19.79 0 01-3.07-8.67A2 2 0 013.6 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                        {{ site.contact.phone }}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {% elif item.megaType == 'services' %}
+                <div class="mega-panel mega-panel--full mega-panel--services" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
+                  <div class="mega-panel__inner">
+                    <div class="mega-services mega-services--cols-{{ item.children | length }}">
+                      {% for child in item.children %}
+                        <a href="{{ child.url }}" class="mega-service-card">
+                          {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mega-service-card__icon" width="48" height="48" loading="lazy">{% endif %}
+                          <span class="mega-service-card__title">{{ child.label }}</span>
+                          {% if child.desc %}<span class="mega-service-card__desc">{{ child.desc }}</span>{% endif %}
+                        </a>
+                      {% endfor %}
+                    </div>
+                    <div class="mega-panel__footer">
+                      {% if item.url %}<a href="{{ item.url }}" class="mega-nav__parent-link">Összes {{ item.label }} →</a>{% endif %}
+                      <div class="mega-panel__footer-ctas">
+                        {% if item.megaExtra.ctaLabel %}<a href="{{ item.megaExtra.ctaUrl }}" class="mega-cta mega-cta--primary">📅 {{ item.megaExtra.ctaLabel }}</a>{% endif %}
+                        {% if item.megaExtra.ctaSecondaryLabel %}<a href="{{ item.megaExtra.ctaSecondaryUrl }}" class="mega-cta mega-cta--secondary">{{ item.megaExtra.ctaSecondaryLabel }}</a>{% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {% elif item.megaType == 'programs' %}
+                <div class="mega-panel mega-panel--compact mega-panel--programs" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
+                  <div class="mega-panel__inner">
+                    <div class="mega-services mega-services--cols-{{ item.children | length }}">
+                      {% for child in item.children %}
+                        <a href="{{ child.url }}" class="mega-service-card">
+                          {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mega-service-card__icon" width="48" height="48" loading="lazy">{% endif %}
+                          <span class="mega-service-card__title">{{ child.label }}</span>
+                          {% if child.desc %}<span class="mega-service-card__desc">{{ child.desc }}</span>{% endif %}
+                          {% if child.badge %}<span class="mega-service-card__badge">{{ child.badge }}</span>{% endif %}
+                        </a>
+                      {% endfor %}
+                    </div>
+                    {% if item.megaExtra.ctaLabel %}
+                    <div class="mega-panel__footer">
+                      <a href="{{ item.megaExtra.ctaUrl }}" class="mega-cta mega-cta--primary">📅 {{ item.megaExtra.ctaLabel }}</a>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+
+                {% elif item.megaType == 'knowledge' %}
+                <div class="mega-panel mega-panel--full mega-panel--knowledge" role="region" aria-labelledby="nav-mega-{{ loop.index }}">
+                  <div class="mega-panel__inner">
+                    <div class="mega-nav">
+                      {% for child in item.children %}
+                        <a href="{{ child.url }}" class="mega-nav__link">
+                          <span class="mega-nav__link-title">{{ child.label }}</span>
+                          {% if child.desc %}<span class="mega-nav__link-desc">{{ child.desc }}</span>{% endif %}
+                        </a>
+                      {% endfor %}
+                    </div>
+                    {% if item.megaExtra.featuredPosts %}
+                    <div class="mega-blog-section">
+                      <p class="mega-blog-section__heading">Kiemelt cikkek</p>
+                      <div class="mega-blog-grid">
+                        {% for post in item.megaExtra.featuredPosts %}
+                          <a href="{{ post.url }}" class="mega-blog-card">
+                            <img src="{{ post.img }}" alt="" class="mega-blog-card__img" width="200" height="120" loading="lazy">
+                            <span class="mega-blog-card__title">{{ post.title }}</span>
+                          </a>
+                        {% endfor %}
+                      </div>
+                      <a href="/blog/" class="mega-nav__parent-link">Összes cikk →</a>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                {% endif %}
+
+              </li>
+
+            {% elif item.children %}
+              {# ─── SIMPLE DROPDOWN (fallback) ─── #}
               <li class="nav-item">
                 <button class="nav-link" aria-expanded="false" aria-haspopup="true">{{ item.label }}<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
                 <div class="dropdown">
@@ -64,6 +180,7 @@
     </div>
   </div>
 </header>
+<div class="mega-backdrop" id="mega-backdrop" aria-hidden="true"></div>
 <nav class="mobile-nav" id="mobile-nav" aria-label="Mobil menü" aria-hidden="true">
   <ul class="mobile-nav-list" role="list">
     {% for item in nav %}
@@ -73,8 +190,15 @@
           <div class="mobile-dropdown">
             {% if item.url %}<a href="{{ item.url }}" class="mobile-dropdown-parent-link">Összes {{ item.label }}</a>{% endif %}
             {% for child in item.children %}
-              <a href="{{ child.url }}">{{ child.label }}</a>
+              <a href="{{ child.url }}" class="mobile-dropdown__link">
+                {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mobile-dropdown__icon" width="24" height="24" loading="lazy">{% endif %}
+                <span>{{ child.label }}</span>
+                {% if child.badge %}<span class="mobile-dropdown__badge">{{ child.badge }}</span>{% endif %}
+              </a>
             {% endfor %}
+            {% if item.megaExtra and item.megaExtra.ctaLabel %}
+              <a href="{{ item.megaExtra.ctaUrl }}" class="mobile-dropdown__cta">📅 {{ item.megaExtra.ctaLabel }}</a>
+            {% endif %}
           </div>
         </li>
       {% elif item.external %}
