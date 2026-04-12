@@ -12,12 +12,7 @@ Thumbs.db
 # Node (if any tooling is added later)
 node_modules/
 
-# Dev inputs — old WP backup, large assets not needed in repo
-_dev/input/
-_dev/output/
-
-# Playwright test reports
-_dev/tests/playwright-report/
-_dev/tests/test-results/
+# Dev folder — local only, not tracked by repo
+_dev/
 playwright-report/
 test-results/
