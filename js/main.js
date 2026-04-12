@@ -127,6 +127,11 @@
   function initScrollAnimations() {
     const els = document.querySelectorAll('.fade-up');
     if (!els.length) return;
+    // IntersectionObserver not available in very old WebViews — show elements immediately
+    if (!window.IntersectionObserver) {
+      els.forEach(el => el.classList.add('visible'));
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -153,7 +158,13 @@
         const target = id ? document.getElementById(id) : null;
         if (target) {
           e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // scrollIntoView with behavior:'smooth' requires iOS 15.4+ / Chrome 61+
+          // On older browsers it gracefully falls back to instant scroll
+          try {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } catch (err) {
+            target.scrollIntoView(true);
+          }
         }
       });
     });
@@ -182,6 +193,11 @@
   function initCounters() {
     const counters = document.querySelectorAll('[data-count]');
     if (!counters.length) return;
+    // If IntersectionObserver unavailable, animate immediately
+    if (!window.IntersectionObserver) {
+      counters.forEach(el => animateCounter(el));
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
