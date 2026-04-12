@@ -413,6 +413,19 @@ Playwright config (`playwright.config.js`):
 
 ---
 
+## Pre-Push Checklist
+
+**Always run `npm run build` before committing for a push.** This:
+1. Rebuilds Eleventy templates (`.njk` → `.html`)
+2. Minifies `.src.css` / `.src.js` → production files
+3. Regenerates `_data/buildHash.json` — busts browser caches for CSS/JS/HTML
+
+Without this, visitors may see stale cached assets after deploy.
+
+```bash
+npm run build && git add -A && git commit -m "..." && git push
+```
+
 ## Auto-Deploy
 
 Push to `master` → GitHub webhook → Hostinger auto-deploy.
@@ -431,3 +444,4 @@ Push to `master` → GitHub webhook → Hostinger auto-deploy.
 7. `loading="lazy"` must NOT be on hero/LCP images
 8. `service-card-top` must always be empty — never put content inside it (6px stripe)
 9. Never use BEM class names without first adding CSS for them to `style.src.css`
+10. Always run `npm run build` before pushing — regenerates buildHash so browsers fetch fresh assets
