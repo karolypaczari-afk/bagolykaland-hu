@@ -61,7 +61,6 @@
         { label: 'Logopédia',                        url: '/pages/foglalkozasaink/logopedia/' },
         { label: 'Mozgásfejlesztés',                 url: '/pages/foglalkozasaink/mozgasfejlesztes/' },
         { label: 'Szorongásoldó program',            url: '/pages/foglalkozasaink/szorongasoldo-program/' },
-        { label: 'Iskola-előkészítő foglalkozás',    url: '/pages/foglalkozasaink/iskola-elokeszito-foglalkozas/' },
       ],
     },
     {
@@ -76,15 +75,21 @@
     {
       label: 'Programok',
       children: [
+        { label: 'Iskola-előkészítő foglalkozás',    url: '/pages/foglalkozasaink/iskola-elokeszito-foglalkozas/' },
         { label: 'Ernyő alatt program',               url: '/pages/ernyo-alatt-program/' },
         { label: 'Kézen fogva – online finommotorika',url: '/pages/kezen-fogva-online-finommotorika-fejlesztes/' },
       ],
     },
-    { label: 'Éves/heti rend', url: '/pages/eves-hetirend/' },
-    { label: 'Blog',           url: '/pages/blog/' },
-    { label: 'Galéria',        url: '/pages/galeria/' },
+    {
+      label: 'Tudástár',
+      children: [
+        { label: 'Blog',           url: '/pages/blog/' },
+        { label: 'Galéria',        url: '/pages/galeria/' },
+        { label: 'Éves/heti rend', url: '/pages/eves-hetirend/' },
+      ],
+    },
     { label: 'Árlista',        url: '/pages/arlista/' },
-    { label: 'Kapcsolat',      url: '/pages/kapcsolat/' },
+    { label: 'Zsenifészek',    url: 'https://zsenibagoly.hu/zsenifeszek', external: true },
   ];
 
   /* ------------------------------------------
@@ -95,7 +100,6 @@
     { label: 'Logopédia',        url: '/pages/foglalkozasaink/logopedia/' },
     { label: 'Mozgásfejlesztés', url: '/pages/foglalkozasaink/mozgasfejlesztes/' },
     { label: 'Szorongásoldó',    url: '/pages/foglalkozasaink/szorongasoldo-program/' },
-    { label: 'Iskola-előkészítő',url: '/pages/foglalkozasaink/iskola-elokeszito-foglalkozas/' },
   ];
   var FOOTER_EXAMS = [
     { label: 'Logopédiai vizsgálat',    url: '/pages/vizsgalatok/logopediai-vizsgalat/' },
@@ -115,6 +119,7 @@
     clock:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
     install:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
     fb:       '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>',
+    extLink:  '<svg class="icon-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" style="margin-left:4px;vertical-align:-1px;opacity:.6"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
   };
 
   /* ------------------------------------------
@@ -148,6 +153,9 @@
           '<div class="dropdown">' + parentLink + dd + '</div>' +
           '</li>';
       }
+      if (item.external) {
+        return '<li class="nav-item"><a class="nav-link" href="' + item.url + '" target="_blank" rel="noopener noreferrer">' + item.label + IC.extLink + '</a></li>';
+      }
       return '<li class="nav-item"><a class="nav-link" href="' + item.url + '">' + item.label + '</a></li>';
     }).join('');
   }
@@ -167,6 +175,9 @@
           '<div class="mobile-dropdown">' + parentLink + dd + '</div>' +
           '</li>';
       }
+      if (item.external) {
+        return '<li><a class="mobile-nav-link" href="' + item.url + '" target="_blank" rel="noopener noreferrer">' + item.label + IC.extLink + '</a></li>';
+      }
       return '<li><a class="mobile-nav-link" href="' + item.url + '">' + item.label + '</a></li>';
     }).join('');
   }
@@ -180,9 +191,14 @@
 
   var headerHTML = [
     skipLinkHtml,
-    '<div class="site-announcement" role="status" aria-label="Költözési információ">',
+    '<div class="site-announcement" role="status" aria-label="Költözési információ és elérhetőségek">',
     '  <div class="container site-announcement__inner">',
     '    <p><strong>Költözünk!</strong> 2026. május 1-től új címünk: <strong>Debrecen, Csokonai út 32.</strong></p>',
+    '    <div class="announcement-contacts">',
+    '      <a href="' + CONTACT.phoneHref + '">' + IC.phone + '<span>' + CONTACT.phone + '</span></a>',
+    '      <a href="mailto:' + CONTACT.email + '">' + IC.mail + '<span>' + CONTACT.email + '</span></a>',
+    '      <a href="' + SOCIAL_FB + '" target="_blank" rel="noopener noreferrer">' + IC.fb + '<span>Facebook</span></a>',
+    '    </div>',
     '  </div>',
     '</div>',
     '<header class="site-header" id="site-header-el" role="banner">',
