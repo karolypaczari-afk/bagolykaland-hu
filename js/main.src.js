@@ -215,6 +215,79 @@
   }
 
   /* ------------------------------------------
+     LEAD CATCHER (inline email capture forms)
+  ------------------------------------------ */
+  function initLeadCatchers() {
+    document.querySelectorAll('[data-lc-form]').forEach(form => {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = (form.querySelector('input[name="name"]') || {}).value || '';
+        const email = (form.querySelector('input[type="email"]') || {}).value || '';
+        const btn = form.querySelector('button[type="submit"]');
+        const block = form.closest('.lead-catcher');
+        const group = block ? block.dataset.lcGroup : 'general';
+        if (!email) return;
+
+        const origText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Küldés...';
+
+        track('bk_lead_catcher_submit', { lc_group: group });
+
+        const cfg = (window.BK_ML || {});
+        const apiKey = cfg.API_KEY || '';
+
+        if (!apiKey) {
+          // No API key — show success anyway (dev/preview mode)
+          showLeadSuccess(form, block, group);
+          return;
+        }
+
+        fetch('https://connect.mailerlite.com/api/subscribers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey
+          },
+          body: JSON.stringify({
+            email: email,
+            fields: { name: name },
+            groups: [group]
+          })
+        })
+        .then(r => {
+          if (r.ok || r.status === 409) return showLeadSuccess(form, block, group);
+          throw new Error(r.status);
+        })
+        .catch(() => {
+          btn.disabled = false;
+          btn.textContent = origText;
+          let err = form.querySelector('.lc-error');
+          if (!err) {
+            err = document.createElement('p');
+            err.className = 'lc-error';
+            err.style.cssText = 'color:var(--clr-coral);font-size:.85rem;margin-top:8px;text-align:center;width:100%;';
+            form.appendChild(err);
+          }
+          err.textContent = 'Hiba történt, kérjük próbáld újra.';
+          track('bk_lead_catcher_error', { lc_group: group });
+        });
+      });
+    });
+  }
+
+  function showLeadSuccess(form, block, group) {
+    form.style.display = 'none';
+    const gdpr = block ? block.querySelector('.lead-catcher-gdpr') : null;
+    if (gdpr) gdpr.style.display = 'none';
+    const success = block ? block.querySelector('.lead-catcher-success') : null;
+    if (success) success.classList.add('is-visible');
+    // Suppress popup for this context
+    document.cookie = 'bk_popup_dismissed_' + group + '=submitted;max-age=' + (30 * 86400) + ';path=/;SameSite=Lax';
+    track('bk_lead_catcher_success', { lc_group: group });
+  }
+
+  /* ------------------------------------------
      INIT
   ------------------------------------------ */
   if (document.readyState === 'loading') {
@@ -228,6 +301,7 @@
     initScrollAnimations();
     initSmoothScroll();
     initCounters();
+    initLeadCatchers();
   }
 
 })();

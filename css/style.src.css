@@ -1752,6 +1752,118 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 }
 
 /* =========================================
+   LEAD CATCHER (inline email capture block)
+   ========================================= */
+.lead-catcher {
+  background: linear-gradient(135deg, var(--clr-teal-light) 0%, #f0faf8 100%);
+  border-radius: var(--r-2xl);
+  padding: var(--sp-2xl) var(--sp-2xl);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  max-width: 780px;
+  margin-inline: auto;
+}
+.lead-catcher::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 5px;
+  background: linear-gradient(90deg, var(--clr-teal), var(--clr-sky), var(--clr-green), var(--clr-yellow), var(--clr-coral), var(--clr-pink), var(--clr-purple));
+}
+.lead-catcher-emoji {
+  font-size: 2.5rem; line-height: 1;
+  margin-bottom: var(--sp-sm);
+  display: block;
+}
+.lead-catcher-tag {
+  display: inline-block;
+  font-family: var(--font-heading); font-weight: 700; font-size: .75rem;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--clr-teal-dark);
+  background: rgba(43, 116, 109, .12);
+  padding: 4px 14px; border-radius: var(--r-full);
+  margin-bottom: var(--sp-sm);
+}
+.lead-catcher h3 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 900; color: var(--clr-navy);
+  letter-spacing: -.02em;
+  margin-bottom: var(--sp-xs);
+  line-height: 1.3;
+}
+.lead-catcher-desc {
+  font-size: .95rem; color: var(--clr-text-muted);
+  line-height: 1.7; max-width: 520px;
+  margin-inline: auto; margin-bottom: var(--sp-lg);
+}
+.lead-catcher-form {
+  display: flex; gap: var(--sp-sm);
+  max-width: 520px; margin-inline: auto;
+  flex-wrap: wrap; justify-content: center;
+}
+.lead-catcher-form input {
+  flex: 1; min-width: 160px;
+  padding: 12px 16px;
+  border: 2px solid var(--clr-border);
+  border-radius: var(--r-md);
+  font-family: var(--font-body); font-size: .95rem;
+  background: var(--clr-white);
+  transition: border-color var(--t-fast);
+  color: var(--clr-text);
+}
+.lead-catcher-form input:focus {
+  outline: none;
+  border-color: var(--clr-teal);
+  box-shadow: 0 0 0 3px rgba(43, 116, 109, .15);
+}
+.lead-catcher-form input::placeholder { color: var(--clr-text-muted); opacity: .6; }
+.lead-catcher-form button {
+  padding: 12px 28px;
+  background: var(--clr-coral); color: var(--clr-white);
+  border: none; border-radius: var(--r-md); cursor: pointer;
+  font-family: var(--font-heading); font-weight: 800; font-size: .95rem;
+  letter-spacing: -.01em;
+  transition: background var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+  white-space: nowrap;
+}
+.lead-catcher-form button:hover {
+  background: var(--clr-coral-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--sh-color-coral);
+}
+.lead-catcher-form button:disabled {
+  opacity: .6; cursor: not-allowed; transform: none;
+}
+.lead-catcher-gdpr {
+  font-size: .78rem; color: var(--clr-text-muted);
+  margin-top: var(--sp-sm); opacity: .7;
+}
+.lead-catcher-gdpr a { color: var(--clr-teal-dark); text-decoration: underline; }
+.lead-catcher-success {
+  display: none;
+  text-align: center; padding: var(--sp-md) 0;
+}
+.lead-catcher-success.is-visible { display: block; }
+.lead-catcher-success-icon {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--clr-teal); color: var(--clr-white);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 700;
+  margin-bottom: var(--sp-sm);
+}
+.lead-catcher-success h4 {
+  font-size: 1.2rem; font-weight: 800; color: var(--clr-navy);
+  margin-bottom: 4px;
+}
+.lead-catcher-success p { font-size: .95rem; color: var(--clr-text-muted); }
+
+@media (max-width: 640px) {
+  .lead-catcher { padding: var(--sp-xl) var(--sp-lg); }
+  .lead-catcher-form { flex-direction: column; }
+  .lead-catcher-form input { min-width: 0; }
+  .lead-catcher-form button { width: 100%; }
+}
+
+/* =========================================
    CONTENT (inner page body)
    ========================================= */
 .content-block { max-width: 760px; overflow-wrap: break-word; }
