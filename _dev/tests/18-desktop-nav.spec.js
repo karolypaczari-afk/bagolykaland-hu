@@ -1,158 +1,182 @@
 // @ts-check
 /**
- * 18 — Desktop Navigation
+ * 18 — Desktop Navigation & Megamenu
  *
- * Ensures the desktop nav works correctly at all desktop viewport widths,
- * especially at the 1200px boundary where the hamburger disappears.
- * Catches overflow, clipping, and dropdown issues before deployment.
+ * Covers the current Eleventy header implementation:
+ * - desktop/mobile nav switch at 1120px
+ * - compact desktop actions around 1200px
+ * - mega-panel opening, containment, and resize cleanup
  */
-const { test, expect } = require('@playwright/test');
-const { PAGES } = require('./helpers/pages');
-const { suppressPopup } = require('./helpers/suppress-popup');
+const { test, expect } = require('./helpers/fixtures');
+const { PAGES, SITE_SELECTORS } = require('./helpers/pages');
 
-// Desktop widths to test: boundary (1200), medium (1366), and wide (1920)
-const DESKTOP_WIDTHS = [1200, 1280, 1366, 1920];
+const DESKTOP_WIDTHS = [1121, 1200, 1366, 1920];
 
-test.describe('@responsive 18 — Desktop Nav — items visible at all widths', () => {
+async function measureHeaderState(page) {
+  return page.evaluate(() => {
+    const header = document.querySelector('.header-inner');
+    const navItems = Array.from(document.querySelectorAll('.nav-list > .nav-item'));
+    const install = document.querySelector('.nav-install');
+    const cta = document.querySelector('.nav-cta');
+
+    const headerBox = header ? header.getBoundingClientRect() : null;
+    const installVisible = !!install && !install.hidden && getComputedStyle(install).display !== 'none';
+    const ctaVisible = !!cta && getComputedStyle(cta).display !== 'none';
+    const installBox = installVisible ? install.getBoundingClientRect() : null;
+    const ctaBox = ctaVisible ? cta.getBoundingClientRect() : null;
+    const overlap = installBox && ctaBox
+      ? !(
+        installBox.left >= ctaBox.right ||
+        ctaBox.left >= installBox.right ||
+        installBox.top >= ctaBox.bottom ||
+        ctaBox.top >= installBox.bottom
+      )
+      : false;
+
+    const offenders = navItems
+      .map((item) => {
+        const box = item.getBoundingClientRect();
+        return {
+          text: item.textContent.replace(/\s+/g, ' ').trim(),
+          left: Math.round(box.left),
+          right: Math.round(box.right),
+        };
+      })
+      .filter((item) => headerBox && item.right > Math.round(headerBox.right) + 1);
+
+    return {
+      overlap,
+      installVisible,
+      ctaVisible,
+      headerRight: headerBox ? Math.round(headerBox.right) : null,
+      offenders,
+    };
+  });
+}
+
+// Nav layout is rendered by Eleventy — identical on every page. Sample 3 pages
+// (homepage + deepest nesting + longest title) across all widths to catch layout bugs.
+const NAV_SAMPLE_PAGES = PAGES.filter((pg) =>
+  ['index.html', 'foglalkozasaink/index.html', 'vizsgalatok/komplex-reszkepesseg-vizsgalat/index.html'].includes(pg.filePath)
+);
+
+test.describe('@responsive 18 — Desktop nav layout is stable', () => {
   for (const width of DESKTOP_WIDTHS) {
     test.describe(`@ ${width}px`, () => {
       test.use({ viewport: { width, height: 900 } });
 
-      for (const pg of PAGES) {
-        test(`${pg.name} — all nav items visible`, async ({ page }) => {
-          await suppressPopup(page);
+      for (const pg of NAV_SAMPLE_PAGES) {
+        test(`${pg.name} — desktop nav fits without overlap`, async ({ suppressedPage: page }) => {
           await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-          await page.waitForSelector('.nav-menu', { timeout: 5000 });
+          await page.waitForSelector(SITE_SELECTORS.header, { timeout: 5000 });
+          await page.waitForTimeout(400);
 
-          // Hamburger must be hidden on desktop
-          const toggle = page.locator('.nav-toggle');
-          await expect(toggle).toBeHidden();
+          await expect(page.locator(SITE_SELECTORS.desktopNav)).toBeVisible();
+          await expect(page.locator(SITE_SELECTORS.hamburger)).toBeHidden();
 
-          // Nav menu must be visible
-          const navMenu = page.locator('.nav-menu');
-          await expect(navMenu).toBeVisible();
+          const headerState = await measureHeaderState(page);
+          expect(headerState.offenders, `Nav items overflow header at ${width}px`).toHaveLength(0);
+          expect(headerState.overlap, `CTA and install button overlap at ${width}px`).toBe(false);
 
-          // Every top-level nav link must be visible and within viewport
-          const navLinks = navMenu.locator(':scope > li:not(.nav-close-wrapper)');
-          const count = await navLinks.count();
-          expect(count).toBeGreaterThanOrEqual(5);
-
-          for (let i = 0; i < count; i++) {
-            const li = navLinks.nth(i);
-            await expect(li).toBeVisible();
-
-            // Check the item is within the viewport (not clipped)
-            const box = await li.boundingBox();
-            expect(box).not.toBeNull();
-            if (box) {
-              expect(box.x).toBeGreaterThanOrEqual(0);
-              expect(box.x + box.width).toBeLessThanOrEqual(width + 1); // +1 for rounding
-            }
-          }
+          const hasHorizontalOverflow = await page.evaluate(() =>
+            document.documentElement.scrollWidth > document.documentElement.clientWidth
+          );
+          expect(hasHorizontalOverflow).toBe(false);
         });
       }
     });
   }
 });
 
-test.describe('18 — Desktop Nav — no horizontal overflow', () => {
-  for (const width of DESKTOP_WIDTHS) {
-    test.describe(`@ ${width}px`, () => {
-      test.use({ viewport: { width, height: 900 } });
+test.describe('18 — Megamenu interactions', () => {
+  test.use({ viewport: { width: 1200, height: 900 } });
 
-      test(`Homepage — header does not cause horizontal scroll`, async ({ page }) => {
-        await suppressPopup(page);
-        await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
-        await page.waitForSelector('.nav-menu', { timeout: 5000 });
-
-        const overflow = await page.evaluate(() => {
-          return document.documentElement.scrollWidth > document.documentElement.clientWidth;
-        });
-        expect(overflow).toBe(false);
-      });
-    });
-  }
-});
-
-test.describe('18 — Desktop Nav — dropdown hover', () => {
-  test.use({ viewport: { width: 1440, height: 900 } });
-
-  test('Képzéseink mega-menu opens on hover and is within viewport', async ({ page }) => {
-    await suppressPopup(page);
+  test('Homepage — services mega panel opens on hover and stays in viewport', async ({ suppressedPage: page }) => {
     await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
-    await page.waitForSelector('.dropdown-toggle', { timeout: 5000 });
+    await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
 
-    const dropdown = page.locator('.dropdown').first();
-    const megaMenu = dropdown.locator('.mega-menu');
+    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Foglalkozásaink' }).first();
+    const servicesPanel = page.locator('.mega-panel--services').first();
 
-    // Initially hidden
-    await expect(megaMenu).toBeHidden();
+    await servicesToggle.hover();
+    await expect(servicesPanel).toBeVisible({ timeout: 2000 });
 
-    // Hover to open
-    await dropdown.hover();
-    await expect(megaMenu).toBeVisible({ timeout: 2000 });
-
-    // Check mega-menu is within viewport
-    const box = await megaMenu.boundingBox();
-    expect(box).not.toBeNull();
-    if (box) {
-      expect(box.x).toBeGreaterThanOrEqual(0);
-      expect(box.x + box.width).toBeLessThanOrEqual(1440 + 1);
-      expect(box.y).toBeGreaterThanOrEqual(0);
-    }
-
-    // Check mega-menu has course items
-    const items = megaMenu.locator('.mega-item');
-    expect(await items.count()).toBeGreaterThanOrEqual(12);
-  });
-
-  test('Mega-menu at 1200px — opens on hover and fits viewport', async ({ page, browser }) => {
-    const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } });
-    const narrowPage = await ctx.newPage();
-    await suppressPopup(narrowPage);
-    await narrowPage.goto('/index.html', { waitUntil: 'domcontentloaded' });
-    await narrowPage.waitForSelector('.dropdown-toggle', { timeout: 5000 });
-
-    const dropdown = narrowPage.locator('.dropdown').first();
-    const megaMenu = dropdown.locator('.mega-menu');
-
-    await dropdown.hover();
-    await expect(megaMenu).toBeVisible({ timeout: 2000 });
-
-    const box = await megaMenu.boundingBox();
+    const box = await servicesPanel.boundingBox();
     expect(box).not.toBeNull();
     if (box) {
       expect(box.x).toBeGreaterThanOrEqual(0);
       expect(box.x + box.width).toBeLessThanOrEqual(1201);
+      expect(box.y).toBeGreaterThanOrEqual(0);
     }
 
-    await ctx.close();
+    await expect(servicesPanel.locator('.mega-service-card')).toHaveCount(4);
+  });
+
+  test('Service detail page highlights the parent desktop section', async ({ suppressedPage: page }) => {
+    await page.goto('/foglalkozasaink/logopedia/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
+
+    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Foglalkozásaink' }).first();
+    await expect(servicesToggle).toHaveClass(/active/);
+  });
+
+  test('ArrowDown opens a mega panel and focuses its first link', async ({ suppressedPage: page }) => {
+    await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
+
+    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Foglalkozásaink' }).first();
+    await servicesToggle.focus();
+    await page.keyboard.press('ArrowDown');
+
+    const servicesPanel = page.locator('.mega-panel--services').first();
+    await expect(servicesPanel).toBeVisible();
+    await expect(servicesPanel.locator('.mega-service-card').first()).toBeFocused();
   });
 });
 
-test.describe('18 — Desktop Nav — nav-menu fits within header', () => {
-  for (const width of DESKTOP_WIDTHS) {
-    test.describe(`@ ${width}px`, () => {
-      test.use({ viewport: { width, height: 900 } });
+test.describe('18 — Nav state resets cleanly across breakpoints', () => {
+  test('Open mobile nav closes when resizing to desktop', async ({ suppressedPage: page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector(SITE_SELECTORS.hamburger, { timeout: 5000 });
 
-      test(`nav-menu does not overflow header`, async ({ page }) => {
-        await suppressPopup(page);
-        await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
-        await page.waitForSelector('.nav-menu', { timeout: 5000 });
+    const hamburger = page.locator(SITE_SELECTORS.hamburger);
+    const mobileNav = page.locator(SITE_SELECTORS.mobileNav);
 
-        const headerBox = await page.locator('.header').boundingBox();
-        const navMenuBox = await page.locator('.nav-menu').boundingBox();
+    await hamburger.click();
+    await expect(mobileNav).toHaveClass(/open/);
 
-        expect(headerBox).not.toBeNull();
-        expect(navMenuBox).not.toBeNull();
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.waitForTimeout(300);
 
-        if (headerBox && navMenuBox) {
-          // Nav menu right edge should not exceed header right edge
-          expect(navMenuBox.x + navMenuBox.width).toBeLessThanOrEqual(
-            headerBox.x + headerBox.width + 1
-          );
-        }
-      });
-    });
-  }
+    await expect(page.locator(SITE_SELECTORS.desktopNav)).toBeVisible();
+    await expect(mobileNav).not.toHaveClass(/open/);
+    await expect(hamburger).toHaveAttribute('aria-expanded', 'false');
+
+    const bodyOverflow = await page.evaluate(() => document.body.style.overflow);
+    expect(bodyOverflow).toBe('');
+  });
+
+  test('Open desktop mega panel closes when resizing to mobile', async ({ suppressedPage: page }) => {
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('.nav-link[aria-haspopup]', { timeout: 5000 });
+
+    const servicesToggle = page.locator('.nav-link[aria-haspopup]', { hasText: 'Foglalkozásaink' }).first();
+    await servicesToggle.click();
+    await expect(page.locator('.mega-panel--services').first()).toBeVisible();
+
+    await page.setViewportSize({ width: 768, height: 812 });
+    await page.waitForTimeout(300);
+
+    await expect(page.locator(SITE_SELECTORS.hamburger)).toBeVisible();
+
+    const navState = await page.evaluate(() => ({
+      openItems: document.querySelectorAll('.nav-item.open').length,
+      backdropActive: document.getElementById('mega-backdrop')?.classList.contains('active') || false,
+    }));
+
+    expect(navState.openItems).toBe(0);
+    expect(navState.backdropActive).toBe(false);
+  });
 });

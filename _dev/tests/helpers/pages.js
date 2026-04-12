@@ -139,7 +139,7 @@ const BREAKPOINTS = [
     { name: 'iPhone', width: 375 },
     { name: '480px', width: 480 },
     { name: 'tablet', width: 768 },
-    { name: 'nav-switch', width: 900 },
+    { name: 'nav-switch', width: 1120 },
     { name: 'desktop', width: 1200 },
     { name: 'wide', width: 1440 },
 ];
@@ -158,7 +158,7 @@ const CORE_BREAKPOINTS = [
 
 const EXTRA_BREAKPOINTS = [
     { name: '480px', width: 480 },
-    { name: 'nav-switch', width: 900 },
+    { name: 'nav-switch', width: 1120 },
     { name: 'wide', width: 1440 },
 ];
 

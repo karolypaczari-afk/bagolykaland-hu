@@ -75,10 +75,10 @@ test.describe('@responsive 07 — Responsive Layout', () => {
 
         const toggleVisible = await page.locator(SITE_SELECTORS.hamburger).isVisible();
 
-        if (bp.width <= 900) {
-          expect(toggleVisible, 'Hamburger should be visible at <= 900px').toBe(true);
+        if (bp.width <= 1120) {
+          expect(toggleVisible, 'Hamburger should be visible at <= 1120px').toBe(true);
         } else {
-          expect(toggleVisible, 'Hamburger should be hidden above 900px').toBe(false);
+          expect(toggleVisible, 'Hamburger should be hidden above 1120px').toBe(false);
         }
       });
     });

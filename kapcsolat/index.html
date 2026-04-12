@@ -211,10 +211,10 @@
             
               
               <li class="nav-item nav-item--mega">
-                <button class="nav-link" id="nav-mega-1" aria-expanded="false" aria-haspopup="true">Rólunk<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <button class="nav-link" id="nav-mega-1" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-1">Rólunk<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
 
                 
-                <div class="mega-panel mega-panel--compact mega-panel--about" role="region" aria-labelledby="nav-mega-1">
+                <div class="mega-panel mega-panel--compact mega-panel--about" id="nav-panel-1" role="region" aria-labelledby="nav-mega-1">
                   <div class="mega-panel__inner">
                     <div class="mega-nav">
                       
@@ -263,10 +263,10 @@
             
               
               <li class="nav-item nav-item--mega">
-                <button class="nav-link" id="nav-mega-2" aria-expanded="false" aria-haspopup="true">Foglalkozásaink<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <button class="nav-link" id="nav-mega-2" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-2">Foglalkozásaink<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
 
                 
-                <div class="mega-panel mega-panel--full mega-panel--services" role="region" aria-labelledby="nav-mega-2">
+                <div class="mega-panel mega-panel--full mega-panel--services" id="nav-panel-2" role="region" aria-labelledby="nav-mega-2">
                   <div class="mega-panel__inner">
                     <div class="mega-services mega-services--cols-4">
                       
@@ -314,10 +314,10 @@
             
               
               <li class="nav-item nav-item--mega">
-                <button class="nav-link" id="nav-mega-3" aria-expanded="false" aria-haspopup="true">Vizsgálatok<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <button class="nav-link" id="nav-mega-3" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-3">Vizsgálatok<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
 
                 
-                <div class="mega-panel mega-panel--full mega-panel--services" role="region" aria-labelledby="nav-mega-3">
+                <div class="mega-panel mega-panel--full mega-panel--services" id="nav-panel-3" role="region" aria-labelledby="nav-mega-3">
                   <div class="mega-panel__inner">
                     <div class="mega-services mega-services--cols-3">
                       
@@ -359,10 +359,10 @@
             
               
               <li class="nav-item nav-item--mega">
-                <button class="nav-link" id="nav-mega-4" aria-expanded="false" aria-haspopup="true">Programok<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <button class="nav-link" id="nav-mega-4" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-4">Programok<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
 
                 
-                <div class="mega-panel mega-panel--compact mega-panel--programs" role="region" aria-labelledby="nav-mega-4">
+                <div class="mega-panel mega-panel--compact mega-panel--programs" id="nav-panel-4" role="region" aria-labelledby="nav-mega-4">
                   <div class="mega-panel__inner">
                     <div class="mega-services mega-services--cols-3">
                       
@@ -405,10 +405,10 @@
             
               
               <li class="nav-item nav-item--mega">
-                <button class="nav-link" id="nav-mega-5" aria-expanded="false" aria-haspopup="true">Tudástár<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+                <button class="nav-link" id="nav-mega-5" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-5">Tudástár<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
 
                 
-                <div class="mega-panel mega-panel--full mega-panel--knowledge" role="region" aria-labelledby="nav-mega-5">
+                <div class="mega-panel mega-panel--full mega-panel--knowledge" id="nav-panel-5" role="region" aria-labelledby="nav-mega-5">
                   <div class="mega-panel__inner">
                     <div class="mega-nav">
                       
@@ -469,7 +469,10 @@
             
           
         </ul>
-        <a href="/kapcsolat/" class="nav-cta">📅 Időpontfoglalás</a>
+        <a href="/kapcsolat/" class="nav-cta" aria-label="Időpontfoglalás">
+          <span class="nav-cta__icon" aria-hidden="true">📅</span>
+          <span class="nav-cta__label">Időpontfoglalás</span>
+        </a>
       </nav>
       <div class="header-actions">
         <button class="nav-install js-install-app" type="button" hidden aria-haspopup="dialog" aria-label="BagolykaLand telepítése">
@@ -489,8 +492,8 @@
     
       
         <li class="mobile-nav-item">
-          <button class="mobile-nav-link" aria-expanded="false">Rólunk<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-          <div class="mobile-dropdown">
+          <button class="mobile-nav-link" id="mobile-nav-toggle-1" type="button" aria-expanded="false" aria-controls="mobile-dropdown-1">Rólunk<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <div class="mobile-dropdown" id="mobile-dropdown-1" aria-labelledby="mobile-nav-toggle-1">
             <a href="/rolunk/" class="mobile-dropdown-parent-link">Összes Rólunk</a>
             
               <a href="/rolunk/kedves-anya-es-apa/" class="mobile-dropdown__link">
@@ -512,8 +515,8 @@
     
       
         <li class="mobile-nav-item">
-          <button class="mobile-nav-link" aria-expanded="false">Foglalkozásaink<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-          <div class="mobile-dropdown">
+          <button class="mobile-nav-link" id="mobile-nav-toggle-2" type="button" aria-expanded="false" aria-controls="mobile-dropdown-2">Foglalkozásaink<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <div class="mobile-dropdown" id="mobile-dropdown-2" aria-labelledby="mobile-nav-toggle-2">
             <a href="/foglalkozasaink/" class="mobile-dropdown-parent-link">Összes Foglalkozásaink</a>
             
               <a href="/foglalkozasaink/egyeni-fejleszto-foglalkozasok/" class="mobile-dropdown__link">
@@ -549,8 +552,8 @@
     
       
         <li class="mobile-nav-item">
-          <button class="mobile-nav-link" aria-expanded="false">Vizsgálatok<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-          <div class="mobile-dropdown">
+          <button class="mobile-nav-link" id="mobile-nav-toggle-3" type="button" aria-expanded="false" aria-controls="mobile-dropdown-3">Vizsgálatok<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <div class="mobile-dropdown" id="mobile-dropdown-3" aria-labelledby="mobile-nav-toggle-3">
             <a href="/vizsgalatok/" class="mobile-dropdown-parent-link">Összes Vizsgálatok</a>
             
               <a href="/vizsgalatok/logopediai-vizsgalat/" class="mobile-dropdown__link">
@@ -580,8 +583,8 @@
     
       
         <li class="mobile-nav-item">
-          <button class="mobile-nav-link" aria-expanded="false">Programok<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-          <div class="mobile-dropdown">
+          <button class="mobile-nav-link" id="mobile-nav-toggle-4" type="button" aria-expanded="false" aria-controls="mobile-dropdown-4">Programok<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <div class="mobile-dropdown" id="mobile-dropdown-4" aria-labelledby="mobile-nav-toggle-4">
             
             
               <a href="/foglalkozasaink/iskola-elokeszito-foglalkozas/" class="mobile-dropdown__link">
@@ -611,8 +614,8 @@
     
       
         <li class="mobile-nav-item">
-          <button class="mobile-nav-link" aria-expanded="false">Tudástár<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-          <div class="mobile-dropdown">
+          <button class="mobile-nav-link" id="mobile-nav-toggle-5" type="button" aria-expanded="false" aria-controls="mobile-dropdown-5">Tudástár<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <div class="mobile-dropdown" id="mobile-dropdown-5" aria-labelledby="mobile-nav-toggle-5">
             
             
               <a href="/blog/" class="mobile-dropdown__link">
