@@ -38,9 +38,13 @@ test.describe('@smoke 09 — SEO', () => {
       expect(robots.toLowerCase()).toContain('follow');
 
       expect($('html').attr('lang')).toBe('hu');
+      expect($('meta[name="theme-color"]').attr('content')).toBeTruthy();
 
       const canonical = $('link[rel="canonical"]').attr('href');
       expect(canonical).toBe(expectedCanonical(pageEntry));
+
+      const manifest = $('link[rel="manifest"]').attr('href') || '';
+      expect(manifest.length).toBeGreaterThan(0);
 
       expect($('meta[property="og:type"]').attr('content')).toBeTruthy();
       expect($('meta[property="og:title"]').attr('content')).toBeTruthy();

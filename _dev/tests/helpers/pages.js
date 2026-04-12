@@ -158,7 +158,7 @@ const SITE_SELECTORS = {
   hamburger: '.hamburger',
   desktopNav: '.main-nav',
   mobileNav: '#mobile-nav',
-  logo: '.site-logo img',
+  logo: '.site-header .site-logo img',
   footerLinks: '.site-footer a',
 };
 

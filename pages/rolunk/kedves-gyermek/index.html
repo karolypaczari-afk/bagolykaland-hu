@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Kedves Gyermek – BagolykaLand</title>
   <meta name="description" content="Üzenet a gyermekeknek a BagolykaLand csapatától. Nálunk játszva tanulhatsz, és mindig megdicsérünk, ha jól csinálsz valamit!" />
 
@@ -15,13 +15,23 @@
   <meta name="twitter:card"       content="summary_large_image" />
 
   <!-- Canonical -->
+
+  <!-- App install -->
+  <meta name="theme-color" content="#2B746D" />
+  <meta name="application-name" content="BagolykaLand" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="BagolykaLand" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../../../img/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../../../img/apple-touch-icon.png" />
+  <link rel="manifest" href="../../../manifest.webmanifest" />
+
   <link rel="canonical" href="https://bagolykaland.hu/pages/rolunk/kedves-gyermek/" />
 
   <!-- Robots -->
   <meta name="robots" content="index, follow" />
-
-  <!-- Favicon -->
-  <link rel="icon" href="../../../img/zsenibagoly-logo.png" type="image/x-icon" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -90,7 +100,12 @@
   <!-- Footer injected by components.js -->
   <div id="site-footer"></div>
 
+  <!-- Scripts -->
   <script src="../../../js/components.js" defer></script>
+  <script src="../../../js/install-prompt.js" defer></script>
+  <script src="../../../js/tracking.js" defer></script>
+  <script src="../../../js/tracking-loader.js" defer></script>
+  <script src="../../../js/cookie-consent.js" defer></script>
   <script src="../../../js/main.js" defer></script>
   <script src="../../../js/lead-capture-loader.js"
           data-popup-css="../../../css/popup.css"

@@ -1,0 +1,119 @@
+.bk-cookie-consent {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 10000;
+  transform: translateY(1rem);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.bk-cookie-consent.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.bk-cookie-consent__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(29, 53, 87, 0.12);
+  border-radius: 20px;
+  background: rgba(255, 252, 247, 0.98);
+  box-shadow: 0 18px 40px rgba(29, 53, 87, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+.bk-cookie-consent__copy {
+  color: #28434d;
+}
+
+.bk-cookie-consent__copy strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1d3557;
+}
+
+.bk-cookie-consent__copy p {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.bk-cookie-consent__copy a {
+  color: #2b746d;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.bk-cookie-consent__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.bk-cookie-consent__btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.8rem 1.2rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.bk-cookie-consent__btn:hover {
+  transform: translateY(-1px);
+}
+
+.bk-cookie-consent__btn:focus-visible {
+  outline: 3px solid rgba(43, 116, 109, 0.3);
+  outline-offset: 2px;
+}
+
+.bk-cookie-consent__btn--primary {
+  background: #2b746d;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(43, 116, 109, 0.24);
+}
+
+.bk-cookie-consent__btn--primary:hover {
+  background: #245f5a;
+}
+
+.bk-cookie-consent__btn--secondary {
+  background: #eef4f3;
+  color: #1d3557;
+}
+
+.bk-cookie-consent__btn--secondary:hover {
+  background: #e2ecea;
+}
+
+@media (max-width: 720px) {
+  .bk-cookie-consent__inner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .bk-cookie-consent__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .bk-cookie-consent__btn {
+    width: 100%;
+  }
+}

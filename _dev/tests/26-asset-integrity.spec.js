@@ -51,6 +51,8 @@ function extractRefs(pageEntry) {
 
   const assetRefs = [
     ...$('link[rel="icon"]').map((_, el) => $(el).attr('href')).get(),
+    ...$('link[rel="apple-touch-icon"]').map((_, el) => $(el).attr('href')).get(),
+    ...$('link[rel="manifest"]').map((_, el) => $(el).attr('href')).get(),
     ...$('meta[property="og:image"]').map((_, el) => $(el).attr('content')).get(),
     ...$('meta[name="twitter:image"]').map((_, el) => $(el).attr('content')).get(),
     ...$('img[src]').map((_, el) => $(el).attr('src')).get(),
@@ -83,7 +85,15 @@ test.describe('@smoke 26 — Asset Integrity (static HTML check)', () => {
     test(`${pageEntry.name} — shared scripts stay deferred`, () => {
       const { jsRefs } = extractRefs(pageEntry);
 
-      for (const expected of ['components.js', 'main.js', 'lead-capture-loader.js']) {
+      for (const expected of [
+        'components.js',
+        'install-prompt.js',
+        'tracking.js',
+        'tracking-loader.js',
+        'cookie-consent.js',
+        'main.js',
+        'lead-capture-loader.js',
+      ]) {
         const match = jsRefs.find((ref) => ref.src.includes(expected));
         expect(match, `${expected} should be referenced`).toBeTruthy();
         expect(match && match.defer, `${expected} should be deferred`).toBe(true);
@@ -119,5 +129,24 @@ test.describe('@smoke 26 — Asset Integrity (static HTML check)', () => {
     const missing = srcFiles.filter((file) => !fs.existsSync(path.join(jsDir, file.replace('.src.js', '.js'))));
 
     expect(missing, `Missing compiled JS for: ${missing.join(', ')}`).toEqual([]);
+  });
+
+  test('webapp shell files exist', () => {
+    const requiredFiles = [
+      'manifest.webmanifest',
+      'service-worker.js',
+      'img/apple-touch-icon.png',
+      'img/favicon-16x16.png',
+      'img/favicon-32x32.png',
+      'img/favicon-192x192.png',
+      'img/favicon-512x512.png',
+      'js/tracking.js',
+      'js/tracking-loader.js',
+      'js/cookie-consent.js',
+      'css/cookie-consent.css',
+    ];
+
+    const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(ROOT, file)));
+    expect(missing, `Missing webapp shell files: ${missing.join(', ')}`).toEqual([]);
   });
 });

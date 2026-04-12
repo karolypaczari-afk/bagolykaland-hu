@@ -20,7 +20,7 @@ function resolveHtmlPath(pagePath) {
 test.describe('@smoke 01 — HTML Validation', () => {
   for (const pg of PAGES) {
     test(`${pg.name} — valid HTML structure`, () => {
-      const htmlPath = resolveHtmlPath(pg.path);
+      const htmlPath = resolveHtmlPath(pg.filePath);
       const html = fs.readFileSync(htmlPath, 'utf-8');
       const $ = cheerio.load(html);
 

@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>BagolykaLand – Oktató- és Fejlesztő Központ Debrecen</title>
   <meta name="description" content="Képzett fejlesztőpedagógusok, logopédusok és mozgásterapeuták Debrecenben. Személyre szabott, játékos fejlesztés – logopédia, egyéni fejlesztés, iskola-előkészítő, mozgásfejlesztés. Foglalj időpontot!" />
 
@@ -18,11 +18,21 @@
   <meta name="twitter:image"     content="https://bagolykaland.hu/img/bagolykaland-fejleszto-foglalkozas.jpg" />
 
   <!-- Canonical -->
+
+  <!-- App install -->
+  <meta name="theme-color" content="#2B746D" />
+  <meta name="application-name" content="BagolykaLand" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="BagolykaLand" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+
   <link rel="canonical" href="https://bagolykaland.hu/" />
   <meta name="robots" content="index, follow" />
-
-  <!-- Favicon -->
-  <link rel="icon" href="img/zsenibagoly-logo.png" type="image/x-icon" />
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -487,19 +497,19 @@
         <div class="testimonials-grid">
 
           <article class="testimonial-card fade-up stagger-1">
-            <div class="stars" aria-label="5 csillag">★★★★★</div>
+            <div class="stars" role="img" aria-label="5 csillag">★★★★★</div>
             <p class="testimonial-text">"Keán nagyon ügyesen, az iskolában jól teljesít. Hozza a sok-sok csillagot. Drága Szandi néninek az üzenet..."</p>
             <div class="testimonial-author">— Keán Anyukája</div>
           </article>
 
           <article class="testimonial-card fade-up stagger-2">
-            <div class="stars" aria-label="5 csillag">★★★★★</div>
+            <div class="stars" role="img" aria-label="5 csillag">★★★★★</div>
             <p class="testimonial-text">"Köszönöm a sok pozitív támogatást, amit tőletek kaptunk a fejlesztések során. Nagyon sokat segített!"</p>
             <div class="testimonial-author">— Gréti szülője</div>
           </article>
 
           <article class="testimonial-card fade-up stagger-3">
-            <div class="stars" aria-label="5 csillag">★★★★★</div>
+            <div class="stars" role="img" aria-label="5 csillag">★★★★★</div>
             <p class="testimonial-text">"Szeretnénk megköszönni Szandi éves lelkes munkáját. Beni gyermekünk az iskola-előkészítőnek köszönhetően félelem nélkül kezdte az iskolát."</p>
             <div class="testimonial-author">— Beni szülője</div>
           </article>
@@ -724,10 +734,14 @@
   <!-- Footer injected by components.js -->
   <div id="site-footer"></div>
 
+  <!-- Lead capture popup (deferred until idle / first interaction) -->
   <!-- Scripts -->
   <script src="js/components.js" defer></script>
+  <script src="js/install-prompt.js" defer></script>
+  <script src="js/tracking.js" defer></script>
+  <script src="js/tracking-loader.js" defer></script>
+  <script src="js/cookie-consent.js" defer></script>
   <script src="js/main.js" defer></script>
-  <!-- Lead capture popup (deferred until idle / first interaction) -->
   <script src="js/lead-capture-loader.js"
           data-popup-css="css/popup.css"
           data-popup-src="js/popup.js"

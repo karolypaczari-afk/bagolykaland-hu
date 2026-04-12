@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Kapcsolat – BagolykaLand Debrecen</title>
   <meta name="description" content="Vedd fel velünk a kapcsolatot! Telefon: +36 30 364 9396. E-mail: fejlesztobagolyka@gmail.com. Debrecen belváros." />
   <meta name="robots" content="index, follow" />
@@ -12,8 +12,20 @@
   <meta property="og:description" content="Vedd fel velünk a kapcsolatot! Telefon: +36 30 364 9396. E-mail: fejlesztobagolyka@gmail.com. Debrecen belváros." />
   <meta property="og:image" content="https://bagolykaland.hu/img/bagolykaland-fejleszto-foglalkozas.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- App install -->
+  <meta name="theme-color" content="#2B746D" />
+  <meta name="application-name" content="BagolykaLand" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="BagolykaLand" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../../img/apple-touch-icon.png" />
+  <link rel="manifest" href="../../manifest.webmanifest" />
+
   <link rel="canonical" href="https://bagolykaland.hu/pages/kapcsolat/" />
-  <link rel="icon" href="../../img/zsenibagoly-logo.png" type="image/x-icon" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -123,12 +135,12 @@
     }
     .form-note {
       font-size: .8rem;
-      color: var(--clr-text-muted);
+      color: #526374;
       margin-bottom: 1.25rem;
     }
     .form-note a {
       color: var(--clr-navy);
-      font-weight: 600;
+      font-weight: 700;
       text-decoration: underline;
       text-underline-offset: 2px;
     }
@@ -176,7 +188,7 @@
                 <div>
                   <div class="contact-info-item__label">Telefon</div>
                   <div class="contact-info-item__value">
-                    <a href="tel:+36303649396">+36 30 364 9396</a>
+                    <a href="tel:+36303649396">+36&nbsp;30&nbsp;364&nbsp;9396</a>
                   </div>
                 </div>
               </li>
@@ -219,7 +231,7 @@
                 <input type="email" id="contact-email" name="email" required autocomplete="email" placeholder="nev@email.hu" />
               </div>
               <div class="form-group">
-              <label for="contact-phone">Telefonszám <span style="color:var(--clr-text-muted);font-weight:400;">(opcionális)</span></label>
+              <label for="contact-phone">Telefonszám <span class="form-optional">(opcionális)</span></label>
                 <input type="tel" id="contact-phone" name="phone" autocomplete="tel" placeholder="+36 30 000 0000" />
               </div>
               <div class="form-group">
@@ -228,7 +240,7 @@
               </div>
               <p class="form-note">
                 Az üzenet elküldésével elfogadod az
-                <a href="/pages/adatkezelesi-tajekoztato/" target="_blank" rel="noopener noreferrer">adatkezelési tájékoztatót</a>.
+                <a href="/pages/adatkezelesi-tajekoztato/">adatkezelési tájékoztatót</a>.
               </p>
               <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Üzenet küldése</button>
             </form>
@@ -241,7 +253,7 @@
           <p>
             <strong>Helyszín: Debrecen belváros</strong><br />
             A pontos cím időpontfoglaláskor kerül megadásra. Kérdésed esetén hívj minket:
-              <a href="tel:+36303649396" style="color: var(--clr-coral-dark); font-weight: 600;">+36 30 364 9396</a>
+              <a href="tel:+36303649396" style="color: var(--clr-coral-dark); font-weight: 600;">+36&nbsp;30&nbsp;364&nbsp;9396</a>
           </p>
         </div>
 
@@ -250,7 +262,12 @@
 
   </main>
   <div id="site-footer"></div>
+  <!-- Scripts -->
   <script src="../../js/components.js" defer></script>
+  <script src="../../js/install-prompt.js" defer></script>
+  <script src="../../js/tracking.js" defer></script>
+  <script src="../../js/tracking-loader.js" defer></script>
+  <script src="../../js/cookie-consent.js" defer></script>
   <script src="../../js/main.js" defer></script>
   <script src="../../js/lead-capture-loader.js"
           data-popup-css="../../css/popup.css"

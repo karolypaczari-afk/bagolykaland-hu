@@ -20,7 +20,7 @@ function resolveHtmlPath(pagePath) {
 test.describe('04 — Image Existence', () => {
   for (const pg of PAGES) {
     test(`${pg.name} — all local <img> src files exist on disk`, () => {
-      const htmlPath = resolveHtmlPath(pg.path);
+      const htmlPath = resolveHtmlPath(pg.filePath);
       const html = fs.readFileSync(htmlPath, 'utf-8');
       const $ = cheerio.load(html);
 
@@ -54,7 +54,7 @@ test.describe('04 — Image Existence', () => {
           resolvedPath = path.join(ROOT, img.src);
         } else {
           // Relative to the HTML file's directory
-          const pageDir = path.dirname(path.join(ROOT, pg.path));
+          const pageDir = path.dirname(path.join(ROOT, pg.filePath));
           resolvedPath = path.resolve(pageDir, img.src);
         }
 

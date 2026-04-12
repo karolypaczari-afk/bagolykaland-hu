@@ -28,10 +28,11 @@ test.describe('@smoke 00 iOS — WebKit critical render', () => {
       });
 
       await page.goto(pg.path, { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector('.header', { timeout: 5000 });
-      await page.waitForSelector('.footer', { timeout: 5000 });
+      await page.waitForSelector('.site-header', { timeout: 5000 });
+      await page.waitForSelector('.site-footer', { timeout: 5000 });
+      await page.waitForSelector('.site-announcement', { timeout: 5000 });
 
-      await expect(page.locator('.nav-toggle')).toBeVisible();
+      await expect(page.locator('.hamburger')).toBeVisible();
 
       const bodyOverflow = await page.evaluate(() =>
         document.body.scrollWidth > document.body.clientWidth

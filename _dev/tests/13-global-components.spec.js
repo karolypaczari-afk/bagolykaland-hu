@@ -2,82 +2,84 @@
 /**
  * 13 — Global Component Structure
  *
- * Static analysis of HTML files to ensure every page has the required
- * global elements: #site-nav, #site-footer, components.js, main.js,
- * Google Analytics, Microsoft Clarity, and Meta Pixel.
- *
- * These tests catch missing includes BEFORE deployment — even for newly
- * created pages.
+ * Static analysis of HTML files to ensure every page includes the shared
+ * component mounts, app-install shell and tracking scaffold.
  */
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
 
-/** Recursively find all .html files, excluding _dev/ directory */
 function findHtmlFiles(dir) {
   const results = [];
+
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name === '_dev' || entry.name === 'node_modules' || entry.name === '.git' || entry.name === 'playwright-report' || entry.name === 'test-results') continue;
+      if (['.git', '_dev', 'node_modules', 'playwright-report', 'test-results'].includes(entry.name)) {
+        continue;
+      }
       results.push(...findHtmlFiles(fullPath));
-    } else if (entry.name.endsWith('.html') && !entry.name.startsWith('v8kk3one7bp2yfhjq6fx0ievepeh2p')) {
+    } else if (entry.name.endsWith('.html')) {
       results.push(fullPath);
     }
   }
+
   return results;
 }
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const allHtmlFiles = findHtmlFiles(ROOT).map(f => ({
-  abs: f,
-  rel: path.relative(ROOT, f).replace(/\\/g, '/'),
+const htmlFiles = findHtmlFiles(ROOT).map((filePath) => ({
+  abs: filePath,
+  rel: path.relative(ROOT, filePath).replace(/\\/g, '/'),
 }));
 
 test.describe('@smoke 13 — Global Component Structure (static HTML check)', () => {
-  for (const file of allHtmlFiles) {
-    test(`${file.rel} — all global component checks`, () => {
+  for (const file of htmlFiles) {
+    test(`${file.rel} includes the shared site shell`, () => {
       const html = fs.readFileSync(file.abs, 'utf-8');
 
-      // has #site-nav placeholder
-      expect(html).toContain('id="site-nav"');
-
-      // has #site-footer placeholder
+      expect(html).toContain('id="site-header"');
       expect(html).toContain('id="site-footer"');
+      expect(html).toContain('viewport-fit=cover');
+      expect(html).toContain('theme-color');
+      expect(html).toContain('manifest.webmanifest');
 
-      // includes components.js
       expect(html).toMatch(/components\.js/);
-
-      // includes main.js
+      expect(html).toMatch(/install-prompt\.js/);
+      expect(html).toMatch(/tracking\.js/);
+      expect(html).toMatch(/tracking-loader\.js/);
+      expect(html).toMatch(/cookie-consent\.js/);
       expect(html).toMatch(/main\.js/);
 
-      // includes Google Analytics (gtag.js)
-      expect(html).toContain('G-TKJGRVCHCS');
-
-      // includes Microsoft Clarity
-      expect(html).toContain('clarity');
-      expect(html).toContain('rku8ogc8xf');
-
-      // includes Meta Pixel
-      expect(html).toContain('facebook-pixel');
-
-      // components.js is loaded before main.js
+      const headerIdx = html.indexOf('id="site-header"');
+      const mainIdx = html.indexOf('<main');
+      const footerIdx = html.indexOf('id="site-footer"');
       const componentsIdx = html.indexOf('components.js');
-      const mainIdx = html.indexOf('main.js');
-      expect(componentsIdx).toBeGreaterThan(-1);
-      expect(mainIdx).toBeGreaterThan(-1);
-      expect(componentsIdx).toBeLessThan(mainIdx);
+      const installIdx = html.indexOf('install-prompt.js');
+      const trackingIdx = html.indexOf('tracking.js');
+      const trackingLoaderIdx = html.indexOf('tracking-loader.js');
+      const consentIdx = html.indexOf('cookie-consent.js');
+      const mainScriptIdx = html.indexOf('main.js');
 
-      // #site-nav appears before <main>
-      const navIdx = html.indexOf('id="site-nav"');
-      const mainTagIdx = html.indexOf('<main');
-      expect(navIdx).toBeGreaterThan(-1);
-      if (mainTagIdx > -1) {
-        expect(navIdx).toBeLessThan(mainTagIdx);
+      expect(headerIdx).toBeGreaterThan(-1);
+      expect(footerIdx).toBeGreaterThan(-1);
+      if (mainIdx > -1) {
+        expect(headerIdx).toBeLessThan(mainIdx);
+        expect(footerIdx).toBeGreaterThan(mainIdx);
       }
 
-      // viewport meta has viewport-fit=cover
-      expect(html).toContain('viewport-fit=cover');
+      expect(componentsIdx).toBeGreaterThan(-1);
+      expect(installIdx).toBeGreaterThan(-1);
+      expect(trackingIdx).toBeGreaterThan(-1);
+      expect(trackingLoaderIdx).toBeGreaterThan(-1);
+      expect(consentIdx).toBeGreaterThan(-1);
+      expect(mainScriptIdx).toBeGreaterThan(-1);
+
+      expect(componentsIdx).toBeLessThan(installIdx);
+      expect(installIdx).toBeLessThan(trackingIdx);
+      expect(trackingIdx).toBeLessThan(trackingLoaderIdx);
+      expect(trackingLoaderIdx).toBeLessThan(consentIdx);
+      expect(consentIdx).toBeLessThan(mainScriptIdx);
     });
   }
 });

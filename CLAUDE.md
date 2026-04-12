@@ -12,8 +12,10 @@ npm test               # Full Playwright test suite
 npm run test:fast      # FAST_MODE: homepage only
 npm run test:smoke     # @smoke tagged tests only
 npm run test:a11y      # Accessibility tests only
-npm run build          # Minify all .src.css + .src.js
+npm run check          # Biome + HTML + CSS validation
+npm run build          # Minify .src assets + normalize shared HTML shell
 npm run build:css      # CSS only
+npm run build:html     # HTML shell normalization only
 npm run watch          # Auto-rebuild on .src.* changes
 npm run optimize:images  # Convert _dev/input/ → img/ as WebP
 npm run report         # Open Playwright HTML report
@@ -63,11 +65,17 @@ Modeled after zsenibagoly.hu (sister site at `C:\claude_desktoprol\1. HTML Creat
 │   └── style.css         ← global stylesheet (do NOT edit style.src.css manually if build is active)
 ├── js/
 │   ├── components.js     ← header + footer injection (edit here for nav/contact/social changes)
+│   ├── install-prompt.js ← PWA install UI + service worker registration
 │   ├── main.js           ← scroll animations, counters, smooth scroll
 │   ├── popup.js          ← lead capture popup logic
 │   ├── lead-capture-loader.js  ← deferred popup loader
-│   └── tracking.js       ← GTM / GA4 / FB Pixel placeholders
-└── img/                  ← all images (SEO-friendly filenames)
+│   ├── tracking.js       ← consent/tracking config (fill in your own IDs)
+│   ├── tracking-loader.js ← loads vendors only after consent
+│   └── cookie-consent.js ← cookie banner bootstrap
+├── css/cookie-consent.css ← lazy-loaded cookie banner styles
+├── manifest.webmanifest ← installable webapp manifest
+├── service-worker.js    ← offline shell caching
+└── img/                  ← all images (SEO-friendly filenames + app icons)
 ```
 
 ### Global Component Injection
@@ -92,10 +100,16 @@ Header and footer are NOT copy-pasted into every page. Instead:
 <html lang="hu">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Oldal Cím – BagolykaLand Debrecen</title>
   <meta name="description" content="50-160 chars, unique per page" />
   <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2B746D" />
+  <meta name="application-name" content="BagolykaLand" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="BagolykaLand" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bagolykaland.hu/pages/[slug]/" />
   <meta property="og:title" content="Oldal Cím – BagolykaLand Debrecen" />
@@ -103,7 +117,10 @@ Header and footer are NOT copy-pasted into every page. Instead:
   <meta property="og:image" content="https://bagolykaland.hu/img/bagolykaland-fejleszto-foglalkozas.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://bagolykaland.hu/pages/[slug]/" />
-  <link rel="icon" href="../../img/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../../img/apple-touch-icon.png" />
+  <link rel="manifest" href="../../manifest.webmanifest" />
   <link rel="stylesheet" href="../../css/style.css" />
 </head>
 <body>
@@ -114,6 +131,10 @@ Header and footer are NOT copy-pasted into every page. Instead:
   </main>
   <div id="site-footer"></div>
   <script src="../../js/components.js" defer></script>
+  <script src="../../js/install-prompt.js" defer></script>
+  <script src="../../js/tracking.js" defer></script>
+  <script src="../../js/tracking-loader.js" defer></script>
+  <script src="../../js/cookie-consent.js" defer></script>
   <script src="../../js/main.js" defer></script>
   <script src="../../js/lead-capture-loader.js"
           data-popup-css="../../css/popup.css"
@@ -125,11 +146,24 @@ Header and footer are NOT copy-pasted into every page. Instead:
 
 For depth 3, use `../../../` instead of `../../`.
 
-### Tracking Codes
+### Webapp Layer
 
-Placeholder stubs are in `js/tracking.js`. To activate:
-1. Open `js/tracking.js`, paste real GTM / GA4 / FB Pixel IDs, uncomment blocks
-2. Uncomment `<script src="js/tracking.js" defer></script>` in every HTML file (or add to components.js footer)
+- `manifest.webmanifest` + `service-worker.js` make the site installable and provide a lightweight offline shell
+- `js/install-prompt.js` controls the install button in the shared header and shows manual instructions for iOS / in-app browsers
+- App icons live in `img/`: `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `favicon-192x192.png`, `favicon-512x512.png`
+- The install button is injected by `js/components.js`, so page HTML only needs the manifest/meta tags + `install-prompt.js`
+
+### Tracking + Consent Layer
+
+- `js/tracking.js` is now a config file, not a paste-bin of raw snippets
+- Add your own IDs to `window.BK_TRACKING_CONFIG.vendors` when you're ready:
+  - `gtmId`
+  - `gaMeasurementId`
+  - `clarityId`
+  - `metaPixelId`
+- `js/tracking-loader.js` stays inert until at least one vendor ID is configured
+- `js/cookie-consent.js` only shows a banner when consent is required and a vendor is actually configured
+- `css/cookie-consent.css` is loaded lazily by the banner, so it does not affect normal page render cost
 
 ### Build Pipeline (activate when CSS/JS grows complex)
 
@@ -138,6 +172,11 @@ When ready to minify:
 - Run `npm run build` → generates `css/style.css`
 - Update HTML references with cache-busting: `css/style.css?v=YYYYMMDDHHII`
 - **Never edit `.css` / `.js` directly once build is active — edit `.src.*` only**
+
+Today the build script also normalizes the shared HTML shell:
+- injects the app-install meta/icon/manifest block
+- enforces `viewport-fit=cover`
+- keeps the shared script order consistent across every page
 
 ---
 
@@ -212,7 +251,9 @@ All images live in `img/` with SEO-friendly Hungarian filenames:
 | `bagolykaland-eves-hetirend-2023-2024.jpg` | Schedule page |
 | `bagolykaland-blog-*.jpg` | Blog thumbnails (5 files) |
 | `og-image.jpg` | TODO: create 1200×630 OG image |
-| `favicon.ico` | TODO: add favicon |
+| `favicon-16x16.png` / `favicon-32x32.png` | Browser tab icons |
+| `apple-touch-icon.png` | iOS home-screen icon |
+| `favicon-192x192.png` / `favicon-512x512.png` | Manifest / install icons |
 
 Image rules:
 - All `<img>` must have descriptive Hungarian `alt` text

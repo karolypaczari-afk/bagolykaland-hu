@@ -107,6 +107,7 @@
     mail:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
     pin:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>',
     clock:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    install:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
     fb:       '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>',
   };
 
@@ -173,6 +174,11 @@
 
   var headerHTML = [
     skipLinkHtml,
+    '<div class="site-announcement" role="status" aria-label="Költözési információ">',
+    '  <div class="container site-announcement__inner">',
+    '    <p><strong>Költözünk!</strong> 2026. május 1-től új címünk: <strong>Debrecen, Csokonai út 32.</strong></p>',
+    '  </div>',
+    '</div>',
     '<header class="site-header" id="site-header-el" role="banner">',
     '  <div class="container">',
     '    <div class="header-inner">',
@@ -181,9 +187,15 @@
     '        <ul class="nav-list" role="list">' + buildDesktopNav() + '</ul>',
     '        <a href="/pages/kapcsolat/" class="nav-cta">📅 Időpontfoglalás</a>',
     '      </nav>',
-    '      <button class="hamburger" id="hamburger-btn" aria-label="Menü megnyitása" aria-expanded="false" aria-controls="mobile-nav">',
-    '        <span></span><span></span><span></span>',
-    '      </button>',
+    '      <div class="header-actions">',
+    '        <button class="nav-install js-install-app" type="button" hidden aria-haspopup="dialog" aria-label="BagolykaLand telepítése">',
+    '          ' + IC.install,
+    '          <span class="nav-install-label">Telepítés</span>',
+    '        </button>',
+    '        <button class="hamburger" id="hamburger-btn" aria-label="Menü megnyitása" aria-expanded="false" aria-controls="mobile-nav">',
+    '          <span></span><span></span><span></span>',
+    '        </button>',
+    '      </div>',
     '    </div>',
     '  </div>',
     '</header>',
