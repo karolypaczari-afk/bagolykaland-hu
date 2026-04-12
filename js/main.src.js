@@ -252,7 +252,7 @@
           },
           body: JSON.stringify({
             email: email,
-            fields: { name: name, source: source, signup_page: window.location.pathname },
+            fields: { name: name, signup_source: source, signup_page: window.location.pathname },
             groups: [group]
           })
         })

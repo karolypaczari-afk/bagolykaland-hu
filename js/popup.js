@@ -24,9 +24,8 @@
     var SUBMIT_DAYS = 30;
     var SCROLL_THRESHOLD = /Mobi|Android/i.test(navigator.userAgent) ? 0.30 : 0.50;
 
-    // MailerLite group — same list as Zsenibagoly, tagged with source
-    // TODO: Replace with the real MailerLite group ID (same as zsenifeszek)
-    var ML_GROUP_ID = 'TODO_ZSENIFESZEK_GROUP_ID';
+    // MailerLite group — same list as Zsenibagoly (Hiszti funnel), tagged with source
+    var ML_GROUP_ID = '156829265225057690';
     var SOURCE = 'bagolykaland';
 
     // Unified lead magnet — "5 ingyenes segédanyag"
@@ -272,7 +271,7 @@
             groups: [ML_GROUP_ID],
             fields: {
                 name: name,
-                source: SOURCE,
+                signup_source: SOURCE,
                 signup_page: window.location.pathname
             }
         };
