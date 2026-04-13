@@ -3,178 +3,178 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://bagolykaland.hu/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-egyeni-fejlesztes-szabi.webp</image:loc></image:image>
+    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-hero-group.webp</image:loc></image:image>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/rolunk/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/rolunk/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://bagolykaland.hu/img/alexandra-szabovarga.webp</image:loc></image:image>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/foglalkozasaink/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/rolunk/kedves-anya-es-apa/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/rolunk/kedves-gyermek/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/foglalkozasaink/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/foglalkozasaink/logopedia/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/foglalkozasaink/logopedia/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-logopediai-session.webp</image:loc></image:image>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/foglalkozasaink/mozgasfejlesztes/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/foglalkozasaink/mozgasfejlesztes/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-mozgasfejlesztes-terapeuta.webp</image:loc></image:image>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/foglalkozasaink/egyeni-fejleszto-foglalkozasok/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/foglalkozasaink/egyeni-fejleszto-foglalkozasok/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-egyeni-fejlesztes-szabi.webp</image:loc></image:image>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/foglalkozasaink/iskola-elokeszito-foglalkozas/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/foglalkozasaink/iskola-elokeszito-foglalkozas/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-csoportos-iskola-elokeszito.webp</image:loc></image:image>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/foglalkozasaink/szorongasoldo-program/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/vizsgalatok/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-gyermekfejlesztes-debrecen.webp</image:loc></image:image>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/vizsgalatok/logopediai-vizsgalat/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/vizsgalatok/iskolaerettsegi-vizsgalat/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/vizsgalatok/komplex-reszkepesseg-vizsgalat/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/ernyo-alatt-program/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/kezen-fogva-online-finommotorika-fejlesztes/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/galeria/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/foglalkozasaink/szorongasoldo-program/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-galeria-gyermek-19.webp</image:loc></image:image>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/eves-hetirend/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/vizsgalatok/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-gyermekfejlesztes-debrecen.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/vizsgalatok/logopediai-vizsgalat/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/vizsgalatok/iskolaerettsegi-vizsgalat/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/vizsgalatok/komplex-reszkepesseg-vizsgalat/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/ernyo-alatt-program/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/kezen-fogva-online-finommotorika-fejlesztes/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/arlista/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/galeria/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-eves-hetirend-2023-2024.webp</image:loc></image:image>
+    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-galeria-gyermek-19.webp</image:loc></image:image>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/arlista/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/eves-hetirend/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/blog/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/blog/a-buntetes-mint-a-neveles-eszkoze/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/blog/figyelem-a-gyakorlas-a-tanulas-megutaltatasanak-egyik-legjobb-modja-lehet/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/blog/kire-utott-ez-a-gyerek/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/blog/szerinted-is-felesleges-divathobort-az-iskola-elokeszito/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/blog/te-is-kikered-a-gyermeked-velemenyet/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/blog/te-is-nehezen-viseled-hogy-folyton-rohangal-es-az-agyon-ugral-a-gyermeked/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/pages/kapcsolat/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/kapcsolat/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/rolunk/kedves-anya-es-apa/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://bagolykaland.hu/blog/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/rolunk/kedves-gyermek/</loc>
-    <lastmod>2026-04-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://bagolykaland.hu/blog/a-buntetes-mint-neveles-eszkoze/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/pages/adatkezelesi-tajekoztato/</loc>
-    <lastmod>2026-04-12</lastmod>
+    <loc>https://bagolykaland.hu/blog/figyelem-a-gyakorlas-a-tanulas-megutaltatasanak-egyik-legjobb-modja-lehet/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/blog/kire-utott-ez-a-gyerek/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/blog/szerinted-is-felesleges-divathobort-az-iskola-elokeszito/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/blog/te-is-kikered-a-gyermeked-velemenyet/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/blog/te-is-nehezen-viseled-hogy-folyton-rohangal-es-az-agyon-ugral-a-gyermeked/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/adatkezelesi-tajekoztato/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

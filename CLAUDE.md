@@ -4,6 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
+## Skills
+
+Use the `Skill` tool to invoke these skills at the appropriate moments:
+
+| Skill | Mikor használd |
+|-------|---------------|
+| `frontend-design` | Új oldal, szekció vagy UI komponens tervezésekor / építésekor |
+| `hungarian-localization` | Magyar szöveg íráskor, ellenőrzéskor vagy fordításkor |
+
+---
+
 ## Quick Commands
 
 ```bash

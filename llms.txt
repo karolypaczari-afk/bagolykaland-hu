@@ -1,0 +1,37 @@
+# BagolykaLand – Oktató- és Fejlesztő Központ
+
+> BagolykaLand egy gyermekfejlesztő központ Debrecenben, amely 4–8 éves gyermekek számára kínál logopédiai, mozgásfejlesztő, egyéni fejlesztő és iskola-előkészítő foglalkozásokat. Alapítója Szabó-Varga Alexandra fejlesztőpedagógus, 15+ év tapasztalattal.
+
+## Foglalkozások
+
+- [Logopédia](https://bagolykaland.hu/foglalkozasaink/logopedia/): Beszédfejlesztés, kiejtési zavarok kezelése, nyelvi késés.
+- [Mozgásfejlesztés](https://bagolykaland.hu/foglalkozasaink/mozgasfejlesztes/): Alapozó mozgásterápia, idegrendszeri fejlesztés, testtartás, koordináció.
+- [Egyéni fejlesztő foglalkozások](https://bagolykaland.hu/foglalkozasaink/egyeni-fejleszto-foglalkozasok/): Személyre szabott fejlesztési terv, kognitív és érzelmi készségek.
+- [Iskola-előkészítő](https://bagolykaland.hu/foglalkozasaink/iskola-elokeszito-foglalkozas/): Max. 5–7 fős csoportok, 9 hónapos program, heti 60 perc.
+- [Szorongásoldó program (Mozaik)](https://bagolykaland.hu/foglalkozasaink/szorongasoldo-program/): 10 alkalmas csoportos program félénk, szorongó gyermekeknek.
+- [Kézenfogva – online finommotorika-fejlesztés](https://bagolykaland.hu/kezen-fogva-online-finommotorika-fejlesztes/): 1 hónapos online fejlesztési ciklus ceruzafogás és finommotorika javítására.
+- [Ernyő alatt program](https://bagolykaland.hu/ernyo-alatt-program/): Komplex, egyénre szabott segítség a teljes családnak.
+
+## Vizsgálatok
+
+- [Logopédiai vizsgálat](https://bagolykaland.hu/vizsgalatok/logopediai-vizsgalat/)
+- [Iskolaérettségi vizsgálat](https://bagolykaland.hu/vizsgalatok/iskolaerettsegi-vizsgalat/)
+- [Komplex részképesség vizsgálat](https://bagolykaland.hu/vizsgalatok/komplex-reszkepesseg-vizsgalat/)
+
+## Rólunk
+
+- [A csapatról](https://bagolykaland.hu/rolunk/)
+- [Szülőknek](https://bagolykaland.hu/rolunk/kedves-anya-es-apa/)
+- [Gyermekeknek](https://bagolykaland.hu/rolunk/kedves-gyermek/)
+
+## Hasznos oldalak
+
+- [Árlista](https://bagolykaland.hu/arlista/)
+- [Kapcsolat és időpontfoglalás](https://bagolykaland.hu/kapcsolat/)
+- [Blog – szülőknek szóló cikkek](https://bagolykaland.hu/blog/)
+- [Galéria](https://bagolykaland.hu/galeria/)
+- [Éves heti rend](https://bagolykaland.hu/eves-hetirend/)
+
+## Online képzések
+
+Alexandra online kurzusai szülőknek a [ZseniBagoly.hu](https://zsenibagoly.hu) platformon érhetők el (hisztikezelés, figyelemfejlesztés, szorongásoldás, iskola-előkészítés).
