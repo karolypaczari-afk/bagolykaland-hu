@@ -86,5 +86,5 @@
         }
     },
     { "label": "Nyári tábor", "url": "/nyari-tabor/" },
-    { "label": "Zsenifészek", "url": "https://zsenibagoly.hu/zsenifeszek", "external": true }
+    { "label": "Online képzéseink", "url": "https://zsenibagoly.hu/", "external": true }
 ]
