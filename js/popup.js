@@ -16,6 +16,9 @@
         if (window.BKTracking && typeof window.BKTracking.trackEvent === 'function') {
             window.BKTracking.trackEvent(eventName, params || {});
         }
+        if (typeof window.fbq === 'function' && eventName === 'bk_popup_submit_success') {
+            window.fbq('track', 'Lead', { content_name: 'popup_lead_magnet' });
+        }
     }
 
     // ── Configuration ────────────────────────────────────────

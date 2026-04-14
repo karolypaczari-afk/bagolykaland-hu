@@ -12,6 +12,18 @@
     if (window.BKTracking && typeof window.BKTracking.trackEvent === 'function') {
       window.BKTracking.trackEvent(eventName, params);
     }
+    // Fire Meta Pixel standard events for ad optimization
+    if (typeof window.fbq === 'function') {
+      if (eventName === 'bk_contact_click') {
+        window.fbq('track', 'Contact', { content_name: params.contact_method || '' });
+      } else if (eventName === 'bk_lead_catcher_submit') {
+        window.fbq('track', 'Lead', { content_name: params.lc_source || 'bagolykaland' });
+      } else if (eventName === 'bk_form_submit') {
+        window.fbq('track', 'Schedule', { content_name: params.form_name || '' });
+      } else if (eventName === 'bk_cta_click') {
+        window.fbq('track', 'ViewContent', { content_name: params.cta_label || '' });
+      }
+    }
   }
 
   function normalizeText(value) {

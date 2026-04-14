@@ -14,6 +14,13 @@
   var existingConfig = window.BK_TRACKING_CONFIG || {};
   var existingVendors = existingConfig.vendors || {};
 
+  var defaultVendors = {
+    gtmId: 'GTM-M6H5WKVM',
+    gaMeasurementId: 'G-86N523JP3E',
+    clarityId: 'rqnf90op5b',
+    metaPixelId: '9087042854758379',
+  };
+
   window.BK_TRACKING_CONFIG = Object.assign(
     {
       siteName: 'BagolykaLand',
@@ -24,23 +31,13 @@
       cookiePolicyUrl: '/adatkezelesi-tajekoztato/',
       crossDomainDomains: ['bagolykaland.hu', 'www.bagolykaland.hu'],
       debug: false,
-      vendors: {
-        gtmId: 'GTM-M6H5WKVM',
-        gaMeasurementId: 'G-86N523JP3E',
-        clarityId: 'rqnf90op5b',
-        metaPixelId: '',
-      },
     },
     existingConfig
   );
 
   window.BK_TRACKING_CONFIG.vendors = Object.assign(
-    {
-      gtmId: '',
-      gaMeasurementId: '',
-      clarityId: '',
-      metaPixelId: '',
-    },
+    {},
+    defaultVendors,
     existingVendors
   );
 })();
