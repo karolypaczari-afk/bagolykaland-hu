@@ -1,7 +1,7 @@
 <?php
 /**
  * BAGOLYKALAND.HU — Contact Form Handler
- * Receives POST JSON, validates, sends email to info@bagolykaland.hu
+ * Receives POST JSON, validates, sends email to info@bagolykaland.hu + fejlesztobagolyka@gmail.com
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -66,7 +66,7 @@ if (file_exists($rateLimitFile) && (time() - filemtime($rateLimitFile)) < 60) {
 }
 
 // Build email
-$to = 'info@bagolykaland.hu';
+$to = 'info@bagolykaland.hu, fejlesztobagolyka@gmail.com';
 $subject = 'Kapcsolat - bagolykaland.hu';
 
 $body  = "Felado: {$name}\n";
