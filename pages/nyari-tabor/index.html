@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Divathóbort az iskola-előkészítő? | BagolykaLand</title>
-  <meta name="description" content="Sokan gondolják, hogy az iskola-előkészítő felesleges, de a valóságban éppen ez adja azt az alapot, amelyre a gyermek sikeres iskolakezdése épül." />
+  <title>Kincskereső Élménytábor 2026 – Nyári tábor 5–8 éveseknek | BagolykaLand Debrecen</title>
+  <meta name="description" content="40+ fejlesztő tevékenység, mesés kalandok, max 12 fő/turnus. 9+ éve bevált nyári tábor Debrecenben 5–8 éves gyerekeknek. Július 13–17. és 20–24." />
   <meta name="robots" content="index, follow" />
 
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://bagolykaland.hu/blog/szerinted-is-felesleges-divathobort-az-iskola-elokeszito/" />
-  <meta property="og:title"       content="Divathóbort az iskola-előkészítő? | BagolykaLand" />
-  <meta property="og:description" content="Sokan gondolják, hogy az iskola-előkészítő felesleges – valójában éppen ez adja azt az alapot, amelyre a sikeres iskolakezdés épül." />
-  <meta property="og:image"       content="https://bagolykaland.hu/img/bagolykaland-iskola-elokeszito.png" />
+  <meta property="og:url"         content="https://bagolykaland.hu/nyari-tabor/" />
+  <meta property="og:title"       content="Kincskereső Élménytábor 2026 – Nyári tábor 5–8 éveseknek | BagolykaLand Debrecen" />
+  <meta property="og:description" content="40+ fejlesztő tevékenység, mesés kalandok, max 12 fő/turnus. 9+ éve bevált nyári tábor Debrecenben 5–8 éves gyerekeknek. Július 13–17. és 20–24." />
+  <meta property="og:image"       content="https://bagolykaland.hu/img/bagolykaland-kincskereso-tabor-hero.webp" />
   <meta name="twitter:card"       content="summary_large_image" />
-  <meta name="twitter:title"      content="Divathóbort az iskola-előkészítő? | BagolykaLand" />
-  <meta name="twitter:description" content="Sokan gondolják, hogy az iskola-előkészítő felesleges – valójában éppen ez adja azt az alapot, amelyre a sikeres iskolakezdés épül." />
-  <meta name="twitter:image"      content="https://bagolykaland.hu/img/bagolykaland-iskola-elokeszito.png" />
+  <meta name="twitter:title"      content="Kincskereső Élménytábor 2026 – Nyári tábor 5–8 éveseknek | BagolykaLand Debrecen" />
+  <meta name="twitter:description" content="40+ fejlesztő tevékenység, mesés kalandok, max 12 fő/turnus. 9+ éve bevált nyári tábor Debrecenben 5–8 éves gyerekeknek. Július 13–17. és 20–24." />
+  <meta name="twitter:image"      content="https://bagolykaland.hu/img/bagolykaland-kincskereso-tabor-hero.webp" />
 
   <!-- Canonical -->
-  <link rel="canonical" href="https://bagolykaland.hu/blog/szerinted-is-felesleges-divathobort-az-iskola-elokeszito/" />
+  <link rel="canonical" href="https://bagolykaland.hu/nyari-tabor/" />
 
   <!-- App install -->
   <meta name="theme-color" content="#2B746D" />
@@ -52,7 +52,252 @@
   <!-- Global Styles -->
   <link rel="stylesheet" href="/css/style.css?v=mnyo0aih" />
 
-  
+  <style>
+.camp-urgency {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--clr-coral);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--r-full);
+  margin-bottom: 1.25rem;
+  animation: ctaPulse 2.5s ease-in-out infinite;
+}
+.camp-dates-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0 0;
+}
+.camp-date-chip {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--r-full);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.story-card {
+  background: #fff;
+  border-radius: var(--r-md);
+  padding: 1.5rem;
+  box-shadow: var(--sh-sm);
+  border-left: 4px solid var(--clr-yellow);
+  transition: transform var(--t-mid), box-shadow var(--t-mid);
+}
+.story-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sh-md);
+}
+.story-card__day {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--clr-coral);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+.story-card h4 {
+  color: var(--clr-navy);
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+.story-card p {
+  font-size: 0.9rem;
+  color: var(--clr-text-mid);
+  margin: 0;
+  line-height: 1.6;
+}
+.camp-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.camp-gallery-item {
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--sh-sm);
+  transition: transform var(--t-mid), box-shadow var(--t-mid);
+}
+.camp-gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sh-md);
+}
+.camp-gallery-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--t-mid);
+}
+.camp-gallery-item:hover img {
+  transform: scale(1.06);
+}
+.camp-team {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+.camp-team-photo {
+  flex: 0 0 200px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh-md);
+}
+.camp-team-photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.camp-team-info {
+  flex: 1 1 300px;
+}
+.session-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.session-card {
+  background: #fff;
+  border-radius: var(--r-lg);
+  padding: 2.5rem 2rem;
+  box-shadow: var(--sh-md);
+  text-align: center;
+  border-top: 5px solid var(--clr-yellow);
+  transition: transform var(--t-mid), box-shadow var(--t-mid);
+}
+.session-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sh-lg);
+}
+.session-card__label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--clr-coral);
+  margin-bottom: 0.5rem;
+}
+.session-card h3 {
+  color: var(--clr-navy);
+  font-size: 1.4rem;
+  margin: 0 0 0.75rem;
+}
+.session-card__detail {
+  font-size: 0.95rem;
+  color: var(--clr-text-mid);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+.session-card__spots {
+  display: inline-block;
+  background: #FEF3CD;
+  color: #856404;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.4rem 1rem;
+  border-radius: var(--r-full);
+  margin-bottom: 1.5rem;
+}
+.faq-list {
+  max-width: 760px;
+  margin: 2rem auto 0;
+}
+.faq-item {
+  border-bottom: 1px solid #e2e8f0;
+}
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 0;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--clr-navy);
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--t-fast);
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: '+';
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--clr-teal);
+  transition: transform var(--t-mid);
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+}
+.faq-item summary:hover { color: var(--clr-teal); }
+.faq-item .faq-answer {
+  padding: 0 0 1.25rem;
+  color: var(--clr-text-mid);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+.dev-benefits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.dev-benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(245,198,64,0.08);
+  border-radius: var(--r-md);
+}
+.dev-benefit__icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.dev-benefit__text {
+  font-size: 0.95rem;
+  color: var(--clr-text);
+  line-height: 1.5;
+}
+.dev-benefit__text strong {
+  display: block;
+  color: var(--clr-navy);
+  margin-bottom: 0.15rem;
+}
+@media (max-width: 640px) {
+  .camp-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .camp-gallery-item img {
+    height: 150px;
+  }
+  .session-card {
+    padding: 2rem 1.5rem;
+  }
+  .story-grid {
+    gap: 1rem;
+  }
+}
+</style>
 
   <!-- Google Consent Mode v2 — granted by default (opt-out model) -->
   <script>
@@ -643,106 +888,341 @@
   <main id="main-content">
     
 
-    <section class="page-hero" style="--accent:var(--clr-teal);">
-      <div class="container">
-        <nav class="breadcrumb" aria-label="Navigáció">
+    
+    <section class="page-hero" style="--accent: var(--clr-yellow); background: linear-gradient(135deg, var(--clr-navy) 0%, var(--clr-navy-mid) 100%);">
+      <div class="container" style="text-align:center;">
+        <nav class="breadcrumb fade-up">
           <a href="/">Főoldal</a>
-          <span>›</span>
-          <a href="/blog/">Blog</a>
-          <span>›</span>
-          <span>Szerinted is felesleges divathóbort az iskola-előkészítő?</span>
+          <span>/</span>
+          Kincskereső Élménytábor
         </nav>
-        <div class="page-icon" aria-hidden="true">📝</div>
-        <h1>Szerinted is felesleges divathóbort az iskola-előkészítő?</h1>
-        <div class="accent-bar"></div>
-        <p>2022. szeptember 1. · BagolykaLand Blog</p>
-      </div>
-    </section>
-
-    <section class="section section-white">
-      <div class="container">
-        <div class="page-layout">
-          <article class="content-block">
-
-            <figure class="blog-featured-img fade-up" style="margin:0 0 2rem;border-radius:12px;overflow:hidden;">
-              <img
-                src="/img/bagolykaland-blog-iskola-elokeszito.webp"
-                alt="Iskola-előkészítő foglalkozás – BagolykaLand blog"
-                width="800"
-                height="450"
-                loading="lazy"
-                style="width:100%;height:auto;display:block;"
-              />
-            </figure>
-
-            <h2>Szerinted is csupán divathóbort az iskola-előkészítő?</h2>
-
-            <p>Te is attól tartasz, hogy ha iskola-előkészítő foglalkozásra jár a gyermeked, akkor majd <strong>unatkozni fog az iskolában?</strong></p>
-
-            <p><strong>Ez pontosan olyan, mintha a sportoló felkészülés nélkül érkezne az olimpiára azért, hogy verseny közben ne unatkozzon.</strong></p>
-
-            <p>A folytatásban hozok egy hétköznapi konyhai példát, hogy még könnyebb legyen megértened, mi mindenről szól az iskola-előkészítő és miért nem fog unatkozni a gyermeked, ha már „profin" kezdi az iskolát.</p>
-
-            <h2>Egy konyhai példa</h2>
-
-            <p><strong>Nézzük a példát!</strong></p>
-
-            <p>Képzeljünk el két szituációt!</p>
-
-            <p><strong>Az első esetben</strong> vegyük alapul azt, hogy Te gyakorlatlan szakácsként egy számodra teljesen ismeretlen konyhában szeretnél elkészíteni egy Dobostortát. Ahhoz tudnám hasonlítani a helyzetet, mintha egy főzőverseny kellős közepén találnád magadat. Hogyan fogod végezni a munkádat? Ha röviden akarok válaszolni: kapkodva, idegesen.<br />
-            Nagy valószínűséggel a rendelkezésre álló idő nagy része nem is a sütemény elkészítésével, hanem a körülmények feltérképezésével telik majd. Fejvesztve fogsz ide-oda rohangálni, teljesen tanácstalanul:<br />
-            Melyik recept, milyen edény, hogyan működik a sütő, mikor vegyem ki…? Pillanatok alatt óriás káosz lesz körülötted.<br />
-            Ez tehát az első eset.</p>
-
-            <p><strong>A második eset</strong> a szöges ellentéte az előzőnek. A Te saját, jól ismert konyhádban, a kedvenc, alaposan begyakorolt receptedet kell elkészítened. A saját konyhádban már csukott szemmel is tudsz tájékozódni, annyira magabiztosan mozogsz. Van egy bevált recepted és jó néhány sütési praktikád. Mi zajlik le akkor, ha így állsz neki sütni?<br />
-            Itt már nem a technikai részletekre kell koncentrálnod, így akár variációkkal is tudsz kísérletezni. Élvezetes, gördülékeny lehet a munka számodra, hiszen nem a gyakorlatlanságodból adódó alapozással kell bajlódni.</p>
-
-            <p>Látod, hogy mennyire hatalmas a különbség az előző esethez képest?</p>
-
-            <p><strong>A gyakorlott szakács tehát nem unatkozik. Éppen ellenkezőleg: Felhasználja az előzetes ismereteit és közben élvezi is azt, amit csinál.</strong></p>
-
-            <h2>Hogyan kapcsolódik ez az iskolakezdéshez?</h2>
-
-            <p>Nagyon hasonló a helyzet a saját gyermeked esetén is, <strong>amikor iskolába megy.</strong></p>
-
-            <p>A suliban sem az jelenti az izgalmat, hogy bénázunk egy számunkra teljesen idegen terepen. Ha csak azért nem viszed el a gyermeked az iskola-előkészítőre, mert azt gondolod, hogy ő unatkozni fog az iskolában, akkor az olyan, mintha azt mondanád, hogy csak a káosz, fejetlenség, kiszolgáltatottság tud számára izgalmat jelenteni.<br />
-            Ezek valójában nem izgalmak, hanem félelmek – ahogyan a sütős példán keresztül is látható. Pont ezeket volna jó elkerülni, az iskola-előkészítő pedig pont ebben segít Neked és az óvodásodnak.</p>
-
-            <p><strong>Az iskola-előkészítő egy olyan alap, amelyre könnyedén, gyorsan tud majd épülni a tudás.</strong></p>
-
-            <p>Például gyorsan megy az összeolvasás annak, aki tud hangokra bontani és az írás sem fárasztó, ha helyesen fogjuk a ceruzát, vagy ismerjük a vonalrendszert.</p>
-
-            <h2>Az első osztály legfontosabb feladata</h2>
-
-            <p><strong>Az első osztály legfontosabb feladata, hogy megszeressék a gyermekek a tanulást.</strong> Szeretni azonban sokkal könnyebb azt, ami könnyedén megy, élvezettel vagy esetleg jobban és gyorsabban, mint másoknak.</p>
-
-            <p><strong>Ahhoz, hogy élvezetes legyen a tanulás, biztos alapokra van szükség.</strong></p>
-
-            <p>Egy jól tematizált iskola-előkészítő pedig éppen ezeket az alapokat adja meg a gyermekek számára, ahelyett, hogy minden átmenet nélkül elindulnának egy kiszolgáltatott, ismeretlen – ezáltal félelmetes – úton.</p>
-
-            <p><strong>Élvezze inkább a siker izgalmát, mintsem az ismeretlen félelemét!</strong></p>
-
-          </article>
-          <aside class="sidebar">
-            <div class="sidebar-card">
-              <h4>Időpontfoglalás</h4>
-              <p style="font-size:.875rem;color:var(--clr-text-muted);margin-bottom:1rem;">Kérdésed van? Foglalj időpontot szakembereinkhez!</p>
-              <a href="/kapcsolat/" class="btn btn-primary" style="width:100%;justify-content:center;">Kapcsolatfelvétel</a>
-            </div>
-            <div class="sidebar-card">
-              <h4>Kapcsolódó foglalkozások</h4>
-              <ul style="display:flex;flex-direction:column;gap:8px;">
-                <li><a href="/foglalkozasaink/iskola-elokeszito-foglalkozas/" style="color:var(--clr-teal);font-size:.875rem;">→ Iskola-előkészítő</a></li>
-                <li><a href="/foglalkozasaink/logopedia/" style="color:var(--clr-teal);font-size:.875rem;">→ Logopédia</a></li>
-                <li><a href="/foglalkozasaink/egyeni-fejleszto-foglalkozasok/" style="color:var(--clr-teal);font-size:.875rem;">→ Egyéni fejlesztés</a></li>
-                <li><a href="/vizsgalatok/iskolaerettsegi-vizsgalat/" style="color:var(--clr-teal);font-size:.875rem;">→ Iskolaérettségi vizsgálat</a></li>
-              </ul>
-            </div>
-          </aside>
+        <div class="camp-urgency fade-up stagger-1">Limitált helyek — max 12 fő/turnus!</div>
+        <h1 class="fade-up stagger-1" style="color:#fff;">Kincskereső Élménytábor 2026</h1>
+        <div class="accent-bar" style="background:var(--clr-yellow);"></div>
+        <p class="fade-up stagger-2" style="color:rgba(255,255,255,0.9);max-width:620px;margin:0 auto;">Debrecen legkülönlegesebb kiscsoportos nyári tábora 5–8 éves gyerekeknek — 9+ éve, 40+ fejlesztő tevékenységgel, mesés kalandokkal</p>
+        <div class="camp-dates-bar fade-up stagger-2">
+          <span class="camp-date-chip">1. turnus: július 14–18.</span>
+          <span class="camp-date-chip">2. turnus: július 21–25.</span>
+        </div>
+        <div class="section-cta-actions fade-up stagger-2" style="margin-top:2rem;">
+          <a href="#jelentkezes" class="btn btn-primary btn-lg">Jelentkezem!</a>
+          <a href="#program" class="btn btn-outline-white">Megnézem a programot</a>
         </div>
       </div>
     </section>
 
+
+    
+    <section id="program" class="section section-cream" aria-labelledby="camp-intro">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">Miért különleges?</span>
+          <h2 id="camp-intro" class="fade-up stagger-1">Nem csak tábor — kaland!</h2>
+          <p class="fade-up stagger-2" style="max-width:680px;margin:0 auto;">Minden nap egy új mese, minden mese egy új küldetés. A gyerekek egy héten át mesebeli világokon utaznak keresztül, próbatételeket teljesítenek és együtt keresik az elveszett kincset.</p>
+        </div>
+
+        <div class="story-grid">
+          <div class="story-card fade-up">
+            <div class="story-card__day">1. nap</div>
+            <h4>A rút kiskacsa</h4>
+            <p>A nagy Mesemondó elindítja a kalandot — az első próbatételek és az első nyomok a kincs felé.</p>
+          </div>
+          <div class="story-card fade-up stagger-1">
+            <div class="story-card__day">2. nap</div>
+            <h4>Jancsi és Juliska</h4>
+            <p>A mézeskalács házba vezet az út — a boszorkány legyőzéséhez erő és ügyesség kell. Sütés-főzés is lesz!</p>
+          </div>
+          <div class="story-card fade-up stagger-2">
+            <div class="story-card__day">3. nap</div>
+            <h4>A három kismalac</h4>
+            <p>Az építkezés minden fázisát megismerik a gyerekek — szalmától a tégláig. Építünk, alkotunk, megvédjük a házat!</p>
+          </div>
+          <div class="story-card fade-up stagger-3">
+            <div class="story-card__day">4. nap</div>
+            <h4>Hófehérke</h4>
+            <p>A gonosz Királynő mérgezett almájától senki nem zuhan álomba — csodatévő tükreink minden kívánságot teljesítenek!</p>
+          </div>
+          <div class="story-card fade-up stagger-4">
+            <div class="story-card__day">5. nap</div>
+            <h4>A brémai muzsikusok</h4>
+            <p>Zenével, bátorsággal és összefogással végre megtaláljuk a kincset! A hősök elnyerik méltó jutalmukat.</p>
+          </div>
+        </div>
+
+        <div class="highlight-box fade-up" style="margin-top:2.5rem;text-align:center;">
+          Ez nem egy szabad foglalkozásos tábor. Ez egy <strong>izgalmakkal teli projekt hét</strong>, ahol a kincskeresés köré épülő tevékenységek célzottan fejlesztik a gyerekek képességeit — miközben ők csak azt érzik, hogy <strong>fantasztikusan szórakoznak</strong>.
+        </div>
+      </div>
+    </section>
+
+
+    
+    <section class="section section-white" aria-labelledby="camp-activities">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">40+ tevékenység</span>
+          <h2 id="camp-activities" class="fade-up stagger-1">Amit a gyerekek kapnak</h2>
+          <p class="fade-up stagger-2" style="max-width:600px;margin:0 auto;">A szórakozás mögött tudatos fejlesztés áll — minden játék egy képességet erősít.</p>
+        </div>
+
+        <div class="dev-benefits fade-up">
+          <div class="dev-benefit">
+            <span class="dev-benefit__icon">🎨</span>
+            <div class="dev-benefit__text">
+              <strong>Kézműves foglalkozások</strong>
+              Finommotorika, kreativitás, térlátás fejlesztése
+            </div>
+          </div>
+          <div class="dev-benefit">
+            <span class="dev-benefit__icon">🏃‍♀️</span>
+            <div class="dev-benefit__text">
+              <strong>Akadálypálya</strong>
+              Nagymozgás, egyensúly, koordináció
+            </div>
+          </div>
+          <div class="dev-benefit">
+            <span class="dev-benefit__icon">🔍</span>
+            <div class="dev-benefit__text">
+              <strong>Nyomkövetés és keresés</strong>
+              Figyelem, logikai gondolkodás, megfigyelőképesség
+            </div>
+          </div>
+          <div class="dev-benefit">
+            <span class="dev-benefit__icon">🤝</span>
+            <div class="dev-benefit__text">
+              <strong>Csapatjátékok</strong>
+              Szociális képességek, együttműködés, kommunikáció
+            </div>
+          </div>
+          <div class="dev-benefit">
+            <span class="dev-benefit__icon">🤸‍♂️</span>
+            <div class="dev-benefit__text">
+              <strong>Mozgásfejlesztő játékok</strong>
+              Testséma, téri tájékozódás, ritmusérzék
+            </div>
+          </div>
+          <div class="dev-benefit">
+            <span class="dev-benefit__icon">🧩</span>
+            <div class="dev-benefit__text">
+              <strong>Feladatok és rejtvények</strong>
+              Emlékezet, problémamegoldás, koncentráció
+            </div>
+          </div>
+          <div class="dev-benefit">
+            <span class="dev-benefit__icon">📖</span>
+            <div class="dev-benefit__text">
+              <strong>Mesék és relaxáció</strong>
+              Szókincs, fantázia, érzelmi intelligencia
+            </div>
+          </div>
+          <div class="dev-benefit">
+            <span class="dev-benefit__icon">🎵</span>
+            <div class="dev-benefit__text">
+              <strong>Zenés foglalkozások</strong>
+              Ritmusérzék, hallási figyelem, kifejezőkészség
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    
+    <section class="section section-cream" aria-labelledby="camp-gallery-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">Képekben</span>
+          <h2 id="camp-gallery-heading" class="fade-up stagger-1">Pillantás a 2025-ös táborra</h2>
+          <p class="fade-up stagger-2" style="max-width:560px;margin:0 auto;">A tavalyi Kincskereső Élménytábor legjobb pillanatai</p>
+        </div>
+
+        <div class="camp-gallery fade-up">
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-hero.webp" alt="Gyerekek együtt futnak a kertben a Kincskereső táborban" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-kerti-program.webp" alt="Kerti program a Kincskereső Élménytáborban" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-kezmuves-kert.webp" alt="Kézműves foglalkozás a kertben" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-meseidő.webp" alt="Meseidő — gyerekek körben ülnek és figyelnek" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-csoportos-jatek.webp" alt="Csoportos játék a teremben" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-kreativ-foglalkozas.webp" alt="Kreatív foglalkozás — gyerekek festenek és ragasztanak" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-kezmuves-alkotas.webp" alt="Kézműves alkotás — büszke gyermek mutatja a munkáját" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-medences-jatek.webp" alt="Medencés játék a kertben — vízi szórakozás" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-zeneles.webp" alt="Zenés foglalkozás hangszerekkel" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-szines-terem.webp" alt="Színes terem — vidám fejlesztő környezet" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-epitkezes.webp" alt="Építkezés — gyerekek tornyot építenek" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-rajzolas.webp" alt="Rajzolás — gyerek házat rajzol a Három kismalac napján" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-meselvezes.webp" alt="Meseélvezés — foglalkozásvezető mesél a gyerekeknek" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-mozgas.webp" alt="Mozgásfejlesztő játék a teremben" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-hangszerek.webp" alt="Hangszerek kipróbálása — citera és népi hangszerek" width="624" height="416" loading="lazy" />
+          </div>
+          <div class="camp-gallery-item">
+            <img src="/img/bagolykaland-kincskereso-tabor-kincstalalo.webp" alt="A kincs megtalálása — gyerekek körben a jutalmakkal" width="624" height="416" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    
+    <section class="section section-white" aria-labelledby="camp-team-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">A csapat</span>
+          <h2 id="camp-team-heading" class="fade-up stagger-1">Kik vigyáznak a gyerekekre?</h2>
+        </div>
+
+        <div style="max-width:760px;margin:0 auto;">
+          <p class="lead fade-up">A Kincskereső Élménytábort nem diákmunkások, hanem <strong>képzett fejlesztő szakemberek</strong> vezetik — 9+ éve, szívvel és szakértelemmel.</p>
+
+          <ul class="content-list fade-up" style="margin-top:1.5rem;">
+            <li><strong>Alexandra néni</strong> — a BagolykaLand alapítója, 15+ év tapasztalattal, a tábor szellemi atyja</li>
+            <li><strong>Gabi néni</strong> — társvezető, a mindennapi programok szervezője</li>
+            <li><strong>4 fős segítő csapat</strong> — akik biztosítják, hogy minden gyerek egyéni figyelmet kapjon</li>
+          </ul>
+
+          <div class="highlight-box fade-up" style="margin-top:2rem;">
+            A táborhét során napi szinten küldünk <strong>fotókat és beszámolókat</strong> a szülőknek, hogy Ti is nyomon követhessétek a kalandokat!
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    
+    <section id="jelentkezes" class="section section-cream" aria-labelledby="camp-sessions">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">Turnusok</span>
+          <h2 id="camp-sessions" class="fade-up stagger-1">Válassz turnust és jelentkezz!</h2>
+          <p class="fade-up stagger-2" style="max-width:580px;margin:0 auto;">Két turnust szervezünk, mindkettőben maximum 12 gyermeket fogadunk a személyes figyelem érdekében.</p>
+        </div>
+
+        <div class="session-grid">
+          <div class="session-card fade-up">
+            <div class="session-card__label">1. turnus</div>
+            <h3>Július 14–18.</h3>
+            <div class="session-card__detail">
+              Hétfő – Péntek<br>
+              Naponta 9:00 – 16:00<br>
+              Max. 12 gyermek
+            </div>
+            <div class="session-card__spots">Korlátozott helyek!</div>
+            <a href="/kapcsolat/" class="btn btn-primary" style="width:100%;justify-content:center;">Jelentkezem az 1. turnusra</a>
+          </div>
+          <div class="session-card fade-up stagger-1">
+            <div class="session-card__label">2. turnus</div>
+            <h3>Július 21–25.</h3>
+            <div class="session-card__detail">
+              Hétfő – Péntek<br>
+              Naponta 9:00 – 16:00<br>
+              Max. 12 gyermek
+            </div>
+            <div class="session-card__spots">Korlátozott helyek!</div>
+            <a href="/kapcsolat/" class="btn btn-primary" style="width:100%;justify-content:center;">Jelentkezem a 2. turnusra</a>
+          </div>
+        </div>
+
+        <p class="fade-up" style="text-align:center;margin-top:2rem;color:var(--clr-text-muted);font-size:0.9rem;">Jelentkezni személyesen, telefonon (<a href="tel:+36303649396" style="color:var(--clr-teal);font-weight:600;">+36 30 364 9396</a>), e-mailben (<a href="mailto:fejlesztobagolyka@gmail.com" style="color:var(--clr-teal);font-weight:600;">fejlesztobagolyka@gmail.com</a>) vagy az alábbi űrlapon keresztül is lehet.</p>
+      </div>
+    </section>
+
+
+    
+    <section class="section section-white" aria-labelledby="camp-faq">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">Kérdések</span>
+          <h2 id="camp-faq" class="fade-up stagger-1">Gyakran ismételt kérdések</h2>
+        </div>
+
+        <div class="faq-list fade-up">
+          <details class="faq-item">
+            <summary>Hány éves gyerekeknek szól a tábor?</summary>
+            <div class="faq-answer">Az Élménytábor 5–8 éves gyerekeknek szól. A tevékenységek és a nehézségi szintek ehhez a korosztályhoz vannak igazítva, de ha a gyermeked kicsit fiatalabb vagy idősebb, keress minket és egyeztetünk!</div>
+          </details>
+          <details class="faq-item">
+            <summary>Milyen egy átlagos nap a táborban?</summary>
+            <div class="faq-answer">Reggel 9:00-kor érkezés és reggeli torna, utána az aznapi mese indítja el a kalandot. Délelőtt a főbb próbatételek és tevékenységek zajlanak, ebéd után kézműves foglalkozás, csapatjátékok és relaxáció. 16:00-kor zárunk. Minden nap más mesében utazunk!</div>
+          </details>
+          <details class="faq-item">
+            <summary>Mit kell hoznia a gyereknek?</summary>
+            <div class="faq-answer">Kényelmes, mozgásra alkalmas ruha, váltóruha, zárt cipő, kulacs, tízórai és ebéd (ha nem kér ebédet a szülő helyben), naptej és sapka a kertben töltött idő miatt.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Miért csak 12 fő egy turnusban?</summary>
+            <div class="faq-answer">Azért, mert hiszünk abban, hogy a kis létszám biztosítja, hogy minden gyermek valódi figyelmet, személyes törődést és egyéni élményeket kapjon. Ez az, ami a Kincskereső Élménytábort különlegessé teszi már 9+ éve.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Van-e speciális felkészültségetek?</summary>
+            <div class="faq-answer">A tábort képzett fejlesztő pedagógusok vezetik, nem diákmunkások. Alexandra néni, a BagolykaLand alapítója 15+ éve dolgozik gyermekekkel. A tevékenységek nemcsak szórakoztatóak, hanem tudatosan fejlesztőek is — finommotorika, figyelem, emlékezet, szociális képességek mind részei a programnak.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Mi történik, ha a gyermekem nehezen válik el?</summary>
+            <div class="faq-answer">Tapasztalt csapatunk van, akik türelemmel és szeretettel segítenek a beilleszkedésben. Az első napokat úgy tervezzük, hogy a gyerekek fokozatosan ismerkedjenek meg egymással és a környezettel. Ha szükséges, az első nap a szülő is maradhat egy rövid időre.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+
+    
+    <section class="section section-white" aria-label="Jelentkezés">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">Jelentkezés</span>
+          <h2 class="fade-up stagger-1">Érdekel a tábor? Jelentkezz most!</h2>
+        </div>
+        <div class="program-signup fade-up">
+          <h3>Kincskereső Élménytábor 2026</h3>
+          <p class="program-signup-sub">Add meg az adataidat és felvesszük Veled a kapcsolatot a részletekről!</p>
+          <form data-program-form="Kincskereső Élménytábor 2026" class="program-signup-fields">
+            <input type="text" name="name" placeholder="Szülő neve" required autocomplete="name" />
+            <input type="email" name="email" placeholder="E-mail cím" required autocomplete="email" />
+            <input type="tel" name="phone" placeholder="Telefonszám (opcionális)" autocomplete="tel" />
+            <div style="position:absolute;left:-9999px;" aria-hidden="true">
+              <input type="text" name="website" tabindex="-1" autocomplete="off" />
+            </div>
+            <button type="submit">Jelentkezem / Érdekel!</button>
+            <p class="program-form-error"></p>
+          </form>
+          <p class="program-signup-gdpr">Az adataidat bizalmasan kezeljük. <a href="/adatkezelesi-tajekoztato/">Adatkezelési tájékoztató</a></p>
+          <div class="program-signup-success">
+            <div class="success-icon">✅</div>
+            <h4>Köszönjük a jelentkezést!</h4>
+            <p>Hamarosan felvesszük Veled a kapcsolatot e-mailben vagy telefonon.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
     
 <section class="section section-white" aria-label="Feliratkozás">
   <div class="container">
@@ -779,19 +1259,19 @@
 </section>
 
 
+
+    
     <section class="section section-cream">
-      <div class="container">
-        <div class="cta-banner">
-          <h2>Van kérdése? Segítünk!</h2>
-          <p>Képzett szakembereink szívesen várják gyermeked Debrecenben.</p>
-          <div class="cta-banner-btns">
-            <a href="/kapcsolat/" class="btn btn-yellow btn-lg">Időpontfoglalás</a>
-            <a href="/blog/" class="btn btn-outline-white">Vissza a blogra</a>
-          </div>
+      <div class="container" style="text-align:center;">
+        <span class="section-eyebrow fade-up">Ne maradj le!</span>
+        <h2 class="fade-up stagger-1">Foglald le a helyet gyermekednek!</h2>
+        <p class="fade-up stagger-2" style="max-width:560px;margin:0 auto 2rem;">A helyek gyorsan fogynak — mindkét turnusba maximum 12 gyermeket fogadunk. Lépj kapcsolatba velünk, és biztosítsd gyermeked helyét a nyár legizgalmasabb kalandjára!</p>
+        <div class="section-cta-actions fade-up stagger-2">
+          <a href="/kapcsolat/" class="btn btn-primary btn-lg">Jelentkezem!</a>
+          <a href="tel:+36303649396" class="btn btn-outline">Felhívom: +36 30 364 9396</a>
         </div>
       </div>
     </section>
-
 
   </main>
 <footer class="site-footer" id="site-footer" role="contentinfo">

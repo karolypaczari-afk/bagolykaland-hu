@@ -40,6 +40,7 @@ const PAGE_LABELS = {
     'foglalkozasaink/mozgasfejlesztes/index.html': 'Mozgasfejlesztes',
     'foglalkozasaink/szorongasoldo-program/index.html': 'Szorongasoldo Program',
     'galeria/index.html': 'Galeria',
+    'nyari-tabor/index.html': 'Nyari Tabor',
     'kapcsolat/index.html': 'Kapcsolat',
     'kezen-fogva-online-finommotorika-fejlesztes/index.html': 'Kezen Fogva',
     'rolunk/index.html': 'Rolunk',

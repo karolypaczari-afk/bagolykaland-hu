@@ -3115,3 +3115,47 @@ body {
   .process-step.visible .process-step__number { animation: none !important; }
   .value-item { opacity: 1 !important; transform: none !important; }
 }
+
+/* ── PROGRAM SIGNUP FORM ── */
+.program-signup {
+  background: #fff;
+  border-radius: var(--r-lg);
+  padding: 2.5rem 2rem;
+  box-shadow: var(--sh-md);
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+}
+.program-signup h3 { color: var(--clr-navy); margin-bottom: 0.25rem; }
+.program-signup .program-signup-sub { color: var(--clr-text-mid); font-size: 0.95rem; margin-bottom: 1.5rem; }
+.program-signup-fields { display: flex; flex-direction: column; gap: 0.75rem; }
+.program-signup-fields input {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #d1ddd5;
+  border-radius: var(--r-sm);
+  font-size: 0.95rem;
+  font-family: 'Open Sans', sans-serif;
+  color: var(--clr-navy);
+  background: #fafafa;
+  transition: border-color var(--t-fast);
+}
+.program-signup-fields input:focus { outline: none; border-color: var(--clr-teal); background: #fff; }
+.program-signup-fields button {
+  padding: 0.85rem 1.5rem;
+  border: none;
+  border-radius: var(--r-sm);
+  background: var(--clr-coral);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--t-fast), transform var(--t-fast);
+}
+.program-signup-fields button:hover { background: #9a4528; transform: translateY(-1px); }
+.program-form-error { color: var(--clr-coral); font-size: 0.85rem; margin-top: 0.5rem; display: none; }
+.program-signup-gdpr { font-size: 0.8rem; color: var(--clr-text-muted); margin-top: 0.75rem; }
+.program-signup-gdpr a { color: var(--clr-navy); font-weight: 600; }
+.program-signup-success { display: none; text-align: center; padding: 2rem 0; }
+.program-signup-success .success-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.program-signup-success h4 { color: var(--clr-teal); margin-bottom: 0.5rem; }
+.program-signup-success p { color: var(--clr-text-mid); }

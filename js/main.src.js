@@ -363,6 +363,61 @@
   }
 
   /* ------------------------------------------
+     PROGRAM SIGNUP FORMS (→ /api/contact.php)
+  ------------------------------------------ */
+  function initProgramForms() {
+    document.querySelectorAll('[data-program-form]').forEach(function (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var program = form.dataset.programForm || 'Általános érdeklődés';
+        var name = (form.querySelector('input[name="name"]') || {}).value || '';
+        var email = (form.querySelector('input[type="email"]') || {}).value || '';
+        var phone = (form.querySelector('input[type="tel"]') || {}).value || '';
+        var website = (form.querySelector('input[name="website"]') || {}).value || '';
+        var btn = form.querySelector('button[type="submit"]');
+        var wrapper = form.closest('.program-signup');
+        var errorEl = form.querySelector('.program-form-error');
+        var successEl = wrapper ? wrapper.querySelector('.program-signup-success') : null;
+
+        if (!name.trim() || !email.trim()) {
+          if (errorEl) { errorEl.textContent = 'Kérjük, töltsd ki a nevet és az e-mail címet.'; errorEl.style.display = 'block'; }
+          return;
+        }
+        if (errorEl) errorEl.style.display = 'none';
+
+        var origText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Küldés...';
+
+        var message = 'Jelentkezés / Érdeklődés: ' + program + '\n';
+        if (phone) message += 'Telefon: ' + phone + '\n';
+        message += 'Forrás: ' + window.location.pathname;
+
+        fetch('/api/contact.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name.trim(), email: email.trim(), phone: phone.trim(), message: message, website: website })
+        })
+        .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
+        .then(function (res) {
+          if (res.data.ok) {
+            form.style.display = 'none';
+            if (successEl) successEl.style.display = 'block';
+            track('bk_program_signup', { program: program, page: window.location.pathname });
+          } else {
+            throw new Error(res.data.error || 'Hiba történt.');
+          }
+        })
+        .catch(function (err) {
+          btn.disabled = false;
+          btn.textContent = origText;
+          if (errorEl) { errorEl.textContent = err.message || 'Hiba történt, kérjük próbáld újra.'; errorEl.style.display = 'block'; }
+        });
+      });
+    });
+  }
+
+  /* ------------------------------------------
      INIT
   ------------------------------------------ */
   if (document.readyState === 'loading') {
@@ -378,6 +433,7 @@
     initCounters();
     initLeadCatchers();
     initContactForm();
+    initProgramForms();
   }
 
 })();
