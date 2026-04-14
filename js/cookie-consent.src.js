@@ -1,7 +1,9 @@
 /**
- * BAGOLYKALAND.HU — Cookie consent banner
+ * BAGOLYKALAND.HU — Cookie consent banner (opt-out model)
  *
- * Shows only when tracking vendors are configured and consent is required.
+ * Tracking is granted by default. This banner is shown once as an opt-out
+ * surface — the user can reject cookies if they choose. Scrolling, clicking
+ * outside, or clicking "Elfogadom" dismisses the banner and persists consent.
  */
 (function () {
   'use strict';
@@ -13,8 +15,10 @@
 
   var config = tracking.config;
   var storedConsent = typeof tracking.getStoredConsent === 'function' ? tracking.getStoredConsent() : '';
+
+  // Show banner only when no stored preference exists (first visit).
+  // Tracking is already running — the banner is informational / opt-out.
   var shouldShowBanner =
-    config.requireConsent &&
     (tracking.hasConfiguredVendors() || config.showBannerWithoutVendors) &&
     !storedConsent;
 
@@ -84,7 +88,7 @@
       if (banner.parentNode) {
         banner.parentNode.removeChild(banner);
       }
-    }, 250);
+    }, 400);
   }
 
   function renderBanner() {
@@ -92,33 +96,35 @@
       return;
     }
 
+    // Persist default consent immediately — on next page load the cookie
+    // exists so the banner won't appear again.
+    tracking.setConsent(true, { persist: true, load: false, track: false, source: 'default' });
+
     var banner = document.createElement('aside');
     banner.id = 'bk-cookie-consent';
     banner.className = 'bk-cookie-consent';
     banner.setAttribute('role', 'dialog');
-    banner.setAttribute('aria-label', 'Cookie beállítások');
+    banner.setAttribute('aria-label', 'Cookie hozzájárulás');
     banner.innerHTML =
       '<div class="bk-cookie-consent__inner">' +
       '  <div class="bk-cookie-consent__copy">' +
-      '    <strong>Cookie beállítások</strong>' +
-      '    <p>A statisztikai és marketing cookie-k csak jóváhagyás után indulnak el. A részleteket az <a href="' +
-      config.cookiePolicyUrl +
-      '">adatkezelési tájékoztatóban</a> találod.</p>' +
+      '    <p>Cookie-kat használunk a legjobb élmény érdekében. ' +
+      '<a href="' + (config.cookiePolicyUrl || '/adatkezelesi-tajekoztato/') + '">Cookie tájékoztató</a></p>' +
       '  </div>' +
       '  <div class="bk-cookie-consent__actions">' +
       '    <button type="button" class="bk-cookie-consent__btn bk-cookie-consent__btn--primary" data-bk-consent="accept">Elfogadom</button>' +
-      '    <button type="button" class="bk-cookie-consent__btn bk-cookie-consent__btn--secondary" data-bk-consent="reject">Csak szükségesek</button>' +
+      '    <button type="button" class="bk-cookie-consent__btn bk-cookie-consent__btn--secondary" data-bk-consent="reject">Elutasítom</button>' +
       '  </div>' +
       '</div>';
 
     document.body.appendChild(banner);
     tracking.trackEvent('bk_cookie_banner_view', {
-      banner_variant: 'default',
+      banner_variant: 'opt-out',
     });
 
-    // Auto-accept on scroll (user implicitly consents by continuing to browse)
+    // Auto-accept on scroll (300px, like zsenibagoly)
     function onScroll() {
-      if (window.scrollY > 80) {
+      if (window.scrollY > 300) {
         cleanup();
         tracking.setConsent(true, { source: 'scroll' });
         closeBanner(banner);

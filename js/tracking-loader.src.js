@@ -213,11 +213,10 @@
 
     var gtag = ensureGtag();
     gtag('consent', 'default', {
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      analytics_storage: 'denied',
-      wait_for_update: 500,
+      ad_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+      analytics_storage: 'granted',
     });
     gtag('js', new Date());
     gtag('config', vendors.gaMeasurementId, {
@@ -360,8 +359,11 @@
     setConsent(true, { persist: false, track: false, source: 'stored' });
   } else if (storedConsent === CONSENT_REJECTED) {
     setConsent(false, { persist: false, load: false, track: false, source: 'stored' });
-  } else if (!config.requireConsent && hasConfiguredVendors()) {
-    setConsent(true, { persist: false, track: false, source: 'config' });
+  } else if (hasConfiguredVendors()) {
+    // No preference yet — grant by default (opt-out model like zsenibagoly).
+    // Cookie is NOT persisted here; the cookie-consent banner handles persistence
+    // so it can still show as an opt-out surface on first visit.
+    setConsent(true, { persist: false, track: false, source: 'default' });
   }
 
   window.BKTracking = {

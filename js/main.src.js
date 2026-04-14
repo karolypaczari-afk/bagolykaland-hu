@@ -76,7 +76,7 @@
 
       if (
         control.matches('.btn, .nav-cta, .mobile-cta, .service-link') ||
-        /\/pages\/kapcsolat\/?$/i.test(href)
+        /\/kapcsolat\/?$/i.test(href)
       ) {
         track('bk_cta_click', {
           cta_label: label,

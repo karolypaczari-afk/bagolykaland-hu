@@ -1404,8 +1404,13 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 /* =========================================
    TEAM
    ========================================= */
-.team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--sp-xl); }
+.team-grid {
+  display: flex; flex-wrap: wrap;
+  gap: var(--sp-xl); justify-content: center;
+}
 .team-card {
+  width: calc((100% - 2 * var(--sp-xl)) / 3);
+  display: flex; flex-direction: column;
   text-align: center;
   background: #fff; border-radius: var(--r-xl);
   padding: var(--sp-xl) var(--sp-lg);
@@ -1414,12 +1419,20 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
   min-width: 0;
 }
 .team-card:hover { transform: translateY(-5px); box-shadow: var(--sh-lg); }
-.team-card-body { min-width: 0; }
+.team-card-body {
+  min-width: 0; flex: 1;
+  display: flex; flex-direction: column;
+}
+.team-card-body .team-bio { margin-top: auto; }
 .team-photo {
   width: 120px; height: 120px; border-radius: 50%;
-  object-fit: cover; margin: 0 auto var(--sp-lg);
+  overflow: hidden; margin: 0 auto var(--sp-lg);
   border: 3px solid #fff;
   box-shadow: 0 0 0 4px var(--clr-teal), var(--sh-md);
+}
+.team-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
 }
 .team-photo-placeholder {
   width: 120px; height: 120px; border-radius: 50%;
@@ -1439,6 +1452,18 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
   text-transform: uppercase; letter-spacing: .06em;
 }
 .team-card p { font-size: .85rem; color: var(--clr-text-muted); line-height: 1.65; }
+.team-card blockquote {
+  margin: var(--sp-sm) 0;
+  padding: var(--sp-sm) var(--sp-md);
+  border-left: 3px solid var(--clr-teal);
+  background: var(--clr-teal-light);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  font-style: italic;
+}
+.team-card blockquote p {
+  font-size: .85rem; color: var(--clr-navy-mid);
+  line-height: 1.65; margin: 0;
+}
 
 /* =========================================
    TESTIMONIALS
@@ -2246,7 +2271,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
    ========================================= */
 @media (max-width: 1024px) {
   .footer-top        { grid-template-columns: 1fr 1fr; gap: var(--sp-xl); }
-  .team-grid         { grid-template-columns: repeat(2,1fr); }
+  .team-card         { width: calc((100% - var(--sp-xl)) / 2); }
   .page-layout       { grid-template-columns: 1fr; }
   .sidebar           { position: static; }
   .programs-grid     { grid-template-columns: 1fr; }
@@ -2338,7 +2363,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
   .features-grid       { grid-template-columns: 1fr; }
   .blog-grid           { grid-template-columns: 1fr; }
   .footer-top          { grid-template-columns: 1fr; }
-  .team-grid           { grid-template-columns: repeat(2,1fr); }
+  .team-card           { width: calc((100% - var(--sp-xl)) / 2); }
   .gallery-grid        { grid-template-columns: repeat(2,1fr); }
   .cta-banner          { padding: var(--sp-2xl) var(--sp-xl); border-radius: var(--r-xl); }
   .hero-actions        { flex-direction: column; align-items: flex-start; }
@@ -2364,7 +2389,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 }
 
 @media (max-width: 560px) {
-  .team-grid { grid-template-columns: 1fr; }
+  .team-card { width: 100%; }
 }
 
 /* =========================================

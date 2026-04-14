@@ -48,6 +48,12 @@
 
   {% if headStyles %}<style>{{ headStyles | safe }}</style>{% endif %}
 
+  <!-- Google Consent Mode v2 — granted by default (opt-out model) -->
+  <script>
+  window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+  gtag('consent','default',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
+  </script>
+
   <!-- Structured Data – LocalBusiness -->
   <script type="application/ld+json">
   {
