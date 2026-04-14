@@ -67,23 +67,25 @@ if (file_exists($rateLimitFile) && (time() - filemtime($rateLimitFile)) < 60) {
 
 // Build email
 $to = 'info@bagolykaland.hu, fejlesztobagolyka@gmail.com';
-$subject = 'Kapcsolat - bagolykaland.hu';
+$subject = '=?UTF-8?B?' . base64_encode("Új üzenet – bagolykaland.hu kapcsolat") . '?=';
+$messageId = '<' . bin2hex(random_bytes(16)) . '@bagolykaland.hu>';
 
-$body  = "Felado: {$name}\n";
-$body .= "E-mail: {$email}\n";
+$body  = "Feladó: {$name}\r\n";
+$body .= "E-mail: {$email}\r\n";
 if ($phone !== '') {
-    $body .= "Telefon: {$phone}\n";
+    $body .= "Telefon: {$phone}\r\n";
 }
-$body .= "Idopont: " . date('Y-m-d H:i:s') . "\n";
-$body .= "---\n\n";
-$body .= $message . "\n";
+$body .= "Időpont: " . date('Y-m-d H:i:s') . "\r\n";
+$body .= "---\r\n\r\n";
+$body .= $message . "\r\n";
 
-$headers  = "From: noreply@bagolykaland.hu\r\n";
-$headers .= "Reply-To: {$email}\r\n";
+$headers  = "From: BagolykaLand <info@bagolykaland.hu>\r\n";
+$headers .= "Reply-To: {$name} <{$email}>\r\n";
+$headers .= "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-$headers .= "X-Mailer: BagolykaLand-Contact/1.0\r\n";
+$headers .= "Message-ID: {$messageId}\r\n";
 
-$sent = mail($to, $subject, $body, $headers);
+$sent = mail($to, $subject, $body, $headers, '-f info@bagolykaland.hu');
 
 if ($sent) {
     // Update rate limit file
