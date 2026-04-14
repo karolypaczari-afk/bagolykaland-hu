@@ -289,6 +289,68 @@
   }
 
   /* ------------------------------------------
+     CONTACT FORM (fetch → /api/contact.php)
+  ------------------------------------------ */
+  function initContactForm() {
+    var form = document.getElementById('contact-form');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var btn = form.querySelector('button[type="submit"]');
+      var errorEl = document.getElementById('contact-error');
+      var successEl = document.getElementById('contact-success');
+
+      var name = form.querySelector('#contact-name').value.trim();
+      var email = form.querySelector('#contact-email').value.trim();
+      var phone = form.querySelector('#contact-phone').value.trim();
+      var message = form.querySelector('#contact-message').value.trim();
+      var website = (form.querySelector('input[name="website"]') || {}).value || '';
+
+      // Client-side validation
+      errorEl.style.display = 'none';
+      if (!name || !email || !message) {
+        errorEl.textContent = 'Kérjük, töltsd ki az összes kötelező mezőt.';
+        errorEl.style.display = 'block';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errorEl.textContent = 'Kérjük, adj meg érvényes e-mail címet.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      var origText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Küldés...';
+
+      fetch('/api/contact.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, phone: phone, message: message, website: website })
+      })
+      .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
+      .then(function (res) {
+        if (res.data.ok) {
+          form.style.display = 'none';
+          successEl.style.display = 'block';
+          track('bk_contact_form_success', { form_name: 'contact-form' });
+        } else {
+          throw new Error(res.data.error || 'Hiba történt.');
+        }
+      })
+      .catch(function (err) {
+        btn.disabled = false;
+        btn.textContent = origText;
+        errorEl.textContent = err.message || 'Hiba történt, kérjük próbáld újra.';
+        errorEl.style.display = 'block';
+        track('bk_contact_form_error', { form_name: 'contact-form' });
+      });
+    });
+  }
+
+  /* ------------------------------------------
      INIT
   ------------------------------------------ */
   if (document.readyState === 'loading') {
@@ -303,6 +365,7 @@
     initSmoothScroll();
     initCounters();
     initLeadCatchers();
+    initContactForm();
   }
 
 })();

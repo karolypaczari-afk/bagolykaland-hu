@@ -187,7 +187,7 @@ headStyles: |
           <!-- RIGHT: Contact form -->
           <div class="contact-form fade-up">
             <h3>Küldj üzenetet</h3>
-            <form action="#" method="post" novalidate>
+            <form id="contact-form" action="/api/contact.php" method="post" novalidate>
               <div class="form-group">
               <label for="contact-name">Neved <span aria-hidden="true" style="color:var(--clr-coral);">*</span></label>
                 <input type="text" id="contact-name" name="name" required autocomplete="name" placeholder="Pl. Nagy Éva" />
@@ -204,12 +204,22 @@ headStyles: |
               <label for="contact-message">Üzenet <span aria-hidden="true" style="color:var(--clr-coral);">*</span></label>
                 <textarea id="contact-message" name="message" required placeholder="Írd le kérdésedet, gyermeked korát és miért keresel minket..."></textarea>
               </div>
+              <!-- Honeypot — hidden from real users, catches bots -->
+              <div style="position:absolute;left:-9999px;" aria-hidden="true">
+                <input type="text" name="website" tabindex="-1" autocomplete="off" />
+              </div>
               <p class="form-note">
                 Az üzenet elküldésével elfogadod az
                 <a href="/adatkezelesi-tajekoztato/">adatkezelési tájékoztatót</a>.
               </p>
+              <p id="contact-error" style="display:none;color:var(--clr-coral);font-size:.85rem;margin-bottom:1rem;text-align:center;"></p>
               <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Üzenet küldése</button>
             </form>
+            <div id="contact-success" style="display:none;text-align:center;padding:2rem 1rem;">
+              <div style="font-size:2.5rem;margin-bottom:.75rem;">✅</div>
+              <h3 style="color:var(--clr-teal);margin-bottom:.5rem;">Üzenet elküldve!</h3>
+              <p style="color:var(--clr-text-mid);">Köszönjük megkeresésedet! Hamarosan válaszolunk az e-mail címedre.</p>
+            </div>
           </div>
 
         </div>
