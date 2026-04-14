@@ -437,11 +437,17 @@
 
         var slides = slider.querySelectorAll('.hero-slide');
         var dots = slider.querySelectorAll('.hero-dot');
+        var prevBtn = slider.querySelector('.hero-arrow--prev');
+        var nextBtn = slider.querySelector('.hero-arrow--next');
+        var playPauseBtn = slider.querySelector('.hero-playpause');
+        var iconPause = playPauseBtn && playPauseBtn.querySelector('.hero-icon-pause');
+        var iconPlay = playPauseBtn && playPauseBtn.querySelector('.hero-icon-play');
         if (slides.length < 2) return;
 
         var current = 0;
         var interval = null;
         var DELAY = 4500;
+        var playing = true;
 
         function goTo(index) {
             slides[current].classList.remove('hero-slide--active');
@@ -455,26 +461,56 @@
             goTo((current + 1) % slides.length);
         }
 
+        function prev() {
+            goTo((current - 1 + slides.length) % slides.length);
+        }
+
         function startAutoplay() {
             if (interval) return;
+            playing = true;
+            slider.classList.remove('hero-slider--paused');
             interval = setInterval(next, DELAY);
+            if (iconPause) { iconPause.style.display = ''; iconPlay.style.display = 'none'; }
+            if (playPauseBtn) playPauseBtn.setAttribute('aria-label', 'Megállítás');
         }
 
         function stopAutoplay() {
             clearInterval(interval);
             interval = null;
+            playing = false;
+            slider.classList.add('hero-slider--paused');
+            if (iconPause) { iconPause.style.display = 'none'; iconPlay.style.display = ''; }
+            if (playPauseBtn) playPauseBtn.setAttribute('aria-label', 'Lejátszás');
+        }
+
+        function toggleAutoplay() {
+            if (playing) { stopAutoplay(); } else { startAutoplay(); }
         }
 
         dots.forEach(function (dot, i) {
             dot.addEventListener('click', function () {
+                var wasPlaying = playing;
                 stopAutoplay();
                 goTo(i);
-                startAutoplay();
+                if (wasPlaying) startAutoplay();
             });
         });
 
-        slider.addEventListener('mouseenter', stopAutoplay);
-        slider.addEventListener('mouseleave', startAutoplay);
+        if (prevBtn) prevBtn.addEventListener('click', function () {
+            var wasPlaying = playing;
+            stopAutoplay();
+            prev();
+            if (wasPlaying) startAutoplay();
+        });
+
+        if (nextBtn) nextBtn.addEventListener('click', function () {
+            var wasPlaying = playing;
+            stopAutoplay();
+            next();
+            if (wasPlaying) startAutoplay();
+        });
+
+        if (playPauseBtn) playPauseBtn.addEventListener('click', toggleAutoplay);
 
         startAutoplay();
     }());

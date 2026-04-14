@@ -92,12 +92,24 @@ preloadHero: "/img/bagolykaland-hero-group.webp"
                 loading="lazy"
                 class="hero-slide"
               />
-              <div class="hero-slider-dots">
-                <button class="hero-dot hero-dot--active" aria-label="1. kép"></button>
-                <button class="hero-dot" aria-label="2. kép"></button>
-                <button class="hero-dot" aria-label="3. kép"></button>
-                <button class="hero-dot" aria-label="4. kép"></button>
-                <button class="hero-dot" aria-label="5. kép"></button>
+              <div class="hero-slider-controls">
+                <button class="hero-arrow hero-arrow--prev" aria-label="Előző kép">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <div class="hero-slider-dots">
+                  <button class="hero-dot hero-dot--active" aria-label="1. kép"><span class="hero-dot-progress"></span></button>
+                  <button class="hero-dot" aria-label="2. kép"><span class="hero-dot-progress"></span></button>
+                  <button class="hero-dot" aria-label="3. kép"><span class="hero-dot-progress"></span></button>
+                  <button class="hero-dot" aria-label="4. kép"><span class="hero-dot-progress"></span></button>
+                  <button class="hero-dot" aria-label="5. kép"><span class="hero-dot-progress"></span></button>
+                </div>
+                <button class="hero-arrow hero-arrow--next" aria-label="Következő kép">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+                <button class="hero-playpause" aria-label="Megállítás" data-playing="true">
+                  <svg class="hero-icon-pause" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+                  <svg class="hero-icon-play" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="display:none"><polygon points="6,4 20,12 6,20"/></svg>
+                </button>
               </div>
             </div>
             <div class="hero-chip" style="top:32px;left:-28px;">
