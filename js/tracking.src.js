@@ -26,7 +26,7 @@
       debug: false,
       vendors: {
         gtmId: 'GTM-M6H5WKVM',
-        gaMeasurementId: 'GT-5799SJ4H',
+        gaMeasurementId: 'G-86N523JP3E',
         clarityId: 'rqnf90op5b',
         metaPixelId: '',
       },

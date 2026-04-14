@@ -221,6 +221,7 @@
     gtag('js', new Date());
     gtag('config', vendors.gaMeasurementId, {
       linker: { domains: config.crossDomainDomains || [] },
+      url_passthrough: true,
       send_page_view: true,
     });
 

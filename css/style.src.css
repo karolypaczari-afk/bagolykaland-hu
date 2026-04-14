@@ -2140,7 +2140,8 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 /* =========================================
    WAVE DIVIDER
    ========================================= */
-.wave { display: block; width: 100%; overflow: hidden; line-height: 0; }
+.wave { display: block; width: 100%; overflow: hidden; }
+.wave[aria-hidden="true"] { line-height: 0; }
 .wave svg { display: block; width: 100%; }
 
 /* =========================================
