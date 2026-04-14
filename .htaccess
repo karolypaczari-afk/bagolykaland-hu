@@ -2,6 +2,40 @@
 # BAGOLYKALAND.HU — Performance & Caching Rules
 # ============================================
 
+# --- Custom 404 page ---
+ErrorDocument 404 /pages/404/index.html
+
+# --- 301 Redirects: old WordPress URLs → new site ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Old blog posts were at root level, now under /blog/
+  RewriteRule ^a-buntetes-mint-neveles-eszkoze/?$ /blog/a-buntetes-mint-neveles-eszkoze/ [R=301,L]
+  RewriteRule ^figyelem-a-gyakorlas-a-tanulas-megutaltatasanak-egyik-legjobb-modja-lehet/?$ /blog/figyelem-a-gyakorlas-a-tanulas-megutaltatasanak-egyik-legjobb-modja-lehet/ [R=301,L]
+  RewriteRule ^kire-utott-ez-a-gyerek/?$ /blog/kire-utott-ez-a-gyerek/ [R=301,L]
+  RewriteRule ^szerinted-is-felesleges-divathobort-az-iskola-elokeszito/?$ /blog/szerinted-is-felesleges-divathobort-az-iskola-elokeszito/ [R=301,L]
+  RewriteRule ^te-is-kikered-a-gyermeked-velemenyet/?$ /blog/te-is-kikered-a-gyermeked-velemenyet/ [R=301,L]
+  RewriteRule ^te-is-nehezen-viseled-hogy-folyton-rohangal-es-az-agyon-ugral-a-gyermeked/?$ /blog/te-is-nehezen-viseled-hogy-folyton-rohangal-es-az-agyon-ugral-a-gyermeked/ [R=301,L]
+
+  # Old duplicate page at root level
+  RewriteRule ^iskola-elokeszito-foglalkozas/?$ /foglalkozasaink/iskola-elokeszito-foglalkozas/ [R=301,L]
+
+  # WordPress taxonomy/archive pages → blog
+  RewriteRule ^category/blog/?$ /blog/ [R=301,L]
+  RewriteRule ^category/post/?$ /blog/ [R=301,L]
+  RewriteRule ^category/(.*)$ /blog/ [R=301,L]
+  RewriteRule ^tag/(.*)$ /blog/ [R=301,L]
+  RewriteRule ^author/(.*)$ /rolunk/ [R=301,L]
+
+  # WordPress artifacts
+  RewriteRule ^wp-content/(.*)$ / [R=301,L]
+  RewriteRule ^wp-admin/?$ / [R=301,L]
+  RewriteRule ^wp-login\.php$ / [R=301,L]
+  RewriteRule ^feed/?$ / [R=301,L]
+  RewriteRule ^comments/feed/?$ / [R=301,L]
+  RewriteRule ^xmlrpc\.php$ / [R=301,L]
+</IfModule>
+
 # --- Clean URLs: /slug/ serves from /pages/slug/ ---
 <IfModule mod_rewrite.c>
   RewriteEngine On

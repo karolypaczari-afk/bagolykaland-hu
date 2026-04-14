@@ -429,6 +429,57 @@
     });
 
     /* ------------------------------------------
+       HERO SLIDER
+    ------------------------------------------ */
+    (function initHeroSlider() {
+        var slider = document.querySelector('.hero-slider');
+        if (!slider) return;
+
+        var slides = slider.querySelectorAll('.hero-slide');
+        var dots = slider.querySelectorAll('.hero-dot');
+        if (slides.length < 2) return;
+
+        var current = 0;
+        var interval = null;
+        var DELAY = 4500;
+
+        function goTo(index) {
+            slides[current].classList.remove('hero-slide--active');
+            dots[current].classList.remove('hero-dot--active');
+            current = index;
+            slides[current].classList.add('hero-slide--active');
+            dots[current].classList.add('hero-dot--active');
+        }
+
+        function next() {
+            goTo((current + 1) % slides.length);
+        }
+
+        function startAutoplay() {
+            if (interval) return;
+            interval = setInterval(next, DELAY);
+        }
+
+        function stopAutoplay() {
+            clearInterval(interval);
+            interval = null;
+        }
+
+        dots.forEach(function (dot, i) {
+            dot.addEventListener('click', function () {
+                stopAutoplay();
+                goTo(i);
+                startAutoplay();
+            });
+        });
+
+        slider.addEventListener('mouseenter', stopAutoplay);
+        slider.addEventListener('mouseleave', startAutoplay);
+
+        startAutoplay();
+    }());
+
+    /* ------------------------------------------
        DISPATCH navReady for main.js
     ------------------------------------------ */
     document.dispatchEvent(new CustomEvent('navReady'));

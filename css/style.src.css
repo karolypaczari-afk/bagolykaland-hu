@@ -1145,6 +1145,44 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 }
 .hero-img-wrap:hover img { transform: scale(1.03); }
 
+/* Hero slider */
+.hero-slider { position: relative; }
+.hero-slide {
+  position: absolute; inset: 0;
+  width: 100%; height: 500px;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+  z-index: 0;
+}
+.hero-slide--active {
+  opacity: 1;
+  z-index: 1;
+  position: relative;
+}
+.hero-slider-dots {
+  position: absolute; bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 8px;
+  z-index: 5;
+}
+.hero-dot {
+  width: 10px; height: 10px;
+  border-radius: var(--r-full);
+  border: 2px solid #fff;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--t-fast), transform var(--t-fast);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.hero-dot--active {
+  background: #fff;
+  transform: scale(1.2);
+}
+.hero-dot:hover { background: rgba(255,255,255,0.7); }
+.hero-slider:hover .hero-slide--active { transform: none; }
+
 /* Floating stat chips — glassmorphism */
 .hero-chip {
   position: absolute;
@@ -2328,6 +2366,9 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
     overflow: hidden;
   }
   .hero-img-wrap img { height: 300px; }
+  .hero-slide { height: 300px; }
+  .hero-slide--active { height: 300px; }
+  .hero-slider-dots { bottom: 10px; }
   .hero-chip { display: none; }
 
   .hero                { min-height: auto; }
@@ -3098,6 +3139,7 @@ body {
   .hero-inner { grid-template-columns: 1fr 1fr; }
   .hero-visual { order: 0; }
   .hero-img-wrap { max-height: 280px; }
+  .hero-slide, .hero-slide--active { height: 280px; }
 }
 
 /* --- Reduced motion: disable all new animations --- */
@@ -3114,6 +3156,7 @@ body {
   .testimonial-card::before { transition: none !important; }
   .process-step.visible .process-step__number { animation: none !important; }
   .value-item { opacity: 1 !important; transform: none !important; }
+  .hero-slide { transition: none !important; }
 }
 
 /* ── PROGRAM SIGNUP FORM ── */
