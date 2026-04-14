@@ -1013,6 +1013,16 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
 .btn-lg { padding: 16px 38px; font-size: 1.05rem; }
 .btn-sm { padding: 8px 18px; font-size: .8rem; }
 
+/* Shared CTA action row for inner-page closing sections */
+.section-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-md);
+  margin-top: var(--sp-sm);
+}
+.section-cta-actions .btn { margin: 0; }
+
 /* =========================================
    HERO
    ========================================= */
@@ -2381,6 +2391,13 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
   .section-header p { font-size: .95rem; }
   .about-content h2 { font-size: clamp(1.5rem,5vw,1.9rem); }
   .cta-banner h2 { font-size: clamp(1.5rem,5vw,1.9rem); }
+  .section-cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  .section-cta-actions .btn {
+    width: min(100%, 320px);
+  }
   .nav-install {
     width: 44px;
     min-width: 44px;
