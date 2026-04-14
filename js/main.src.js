@@ -137,7 +137,7 @@
      when they enter the viewport.
   ------------------------------------------ */
   function initScrollAnimations() {
-    const els = document.querySelectorAll('.fade-up');
+    const els = document.querySelectorAll('.fade-up, .fade-in-left, .fade-in-right, .scale-in, .value-item, .process-step');
     if (!els.length) return;
     // IntersectionObserver not available in very old WebViews — show elements immediately
     if (!window.IntersectionObserver) {
