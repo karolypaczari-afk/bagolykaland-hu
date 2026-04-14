@@ -17,7 +17,7 @@
     </div>
   </div>
 </div>
-<header class="site-header" id="site-header-el" role="banner">
+<header class="site-header" id="site-header" role="banner">
   <div class="container">
     <div class="header-inner">
       <a href="/" class="site-logo" aria-label="BagolykaLand – Főoldal">
@@ -173,7 +173,7 @@
                       <div class="mega-blog-grid">
                         {% for post in item.megaExtra.featuredPosts %}
                           <a href="{{ post.url }}" class="mega-blog-card">
-                            <img src="{{ post.img }}" alt="" class="mega-blog-card__img" width="280" height="160" loading="lazy">
+                            <img src="{{ post.img }}" alt="{{ post.title }}" class="mega-blog-card__img" width="280" height="160" loading="lazy">
                             <span class="mega-blog-card__title">{{ post.title }}</span>
                           </a>
                         {% endfor %}

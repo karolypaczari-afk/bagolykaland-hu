@@ -60,9 +60,9 @@ test.describe('00 — Consolidated Smoke (desktop 1280px)', () => {
       expect(headerBox).toBeTruthy();
       expect(headerBox.y).toBeLessThanOrEqual(60);
 
-      // Placeholder mounts replaced
-      await expect(page.locator('#site-header')).toHaveCount(0);
-      await expect(page.locator('#site-footer')).toHaveCount(0);
+      // Header and footer IDs present
+      await expect(page.locator('#site-header')).toHaveCount(1);
+      await expect(page.locator('#site-footer')).toHaveCount(1);
 
       // --- Internal links ---
       const links = await page.locator('a[href]').evaluateAll((anchors) =>

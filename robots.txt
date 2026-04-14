@@ -48,3 +48,4 @@ Allow: /
 
 Sitemap: https://bagolykaland.hu/sitemap.xml
 LLMs: https://bagolykaland.hu/llms.txt
+LLMs-full: https://bagolykaland.hu/llms-full.txt

@@ -30,6 +30,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
   <link rel="manifest" href="/manifest.webmanifest" />
 
+  <!-- LLM SEO -->
+  <link rel="alternate" type="text/plain" title="LLM summary" href="https://bagolykaland.hu/llms.txt" />
+  <link rel="alternate" type="text/plain" title="LLM full content" href="https://bagolykaland.hu/llms-full.txt" />
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,8 +59,8 @@
     "logo": "https://bagolykaland.hu/img/logo.webp",
     "image": "https://bagolykaland.hu/img/bagolykaland-hero-group.webp",
     "description": "Gyermekfejlesztő központ Debrecenben 4–8 éves gyermekek számára. Logopédia, mozgásfejlesztés, egyéni fejlesztő foglalkozások és iskola-előkészítő képzett szakemberektől.",
-    "telephone": "",
-    "email": "",
+    "telephone": "{{ site.contact.phone }}",
+    "email": "{{ site.contact.email }}",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Csokonai utca 32.",

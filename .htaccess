@@ -7,7 +7,7 @@
   RewriteEngine On
 
   # Skip rewriting for real root-level resources
-  RewriteCond %{REQUEST_URI} ^/(css|js|img|_data|_includes|manifest\.webmanifest|service-worker\.js|robots\.txt|sitemap\.xml|index\.html|favicon) [OR]
+  RewriteCond %{REQUEST_URI} ^/(css|js|img|_data|_includes|manifest\.webmanifest|service-worker\.js|robots\.txt|sitemap\.xml|llms\.txt|llms-full\.txt|index\.html|favicon) [OR]
   RewriteCond %{REQUEST_URI} ^/pages/
   RewriteRule ^ - [L]
 
@@ -103,6 +103,8 @@
   Header set X-Content-Type-Options "nosniff"
   Header set X-Frame-Options "SAMEORIGIN"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "camera=(), microphone=(), geolocation=(self), payment=()"
+  Header set X-XSS-Protection "1; mode=block"
 </IfModule>
 
 # --- Correct MIME Types ---

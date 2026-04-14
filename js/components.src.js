@@ -22,7 +22,7 @@
     /* ------------------------------------------
        SCROLL SHADOW
     ------------------------------------------ */
-    var hdr = document.getElementById('site-header-el');
+    var hdr = document.getElementById('site-header');
     if (hdr) {
         var onScroll = function () { hdr.classList.toggle('scrolled', window.scrollY > 20); };
         window.addEventListener('scroll', onScroll, { passive: true });

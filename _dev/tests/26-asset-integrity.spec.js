@@ -26,7 +26,7 @@ function resolveAssetPath(htmlFilePath, assetPath) {
   }
 
   if (assetPath.startsWith('/')) {
-    return path.join(ROOT, assetPath.replace(/^\/+/, ''));
+    return path.join(ROOT, assetPath.replace(/^\/+/, '').replace(/\?.*$/, ''));
   }
 
   return path.resolve(path.dirname(path.join(ROOT, htmlFilePath)), assetPath);
