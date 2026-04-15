@@ -52,7 +52,7 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=mnzjm6af" />
+  <link rel="stylesheet" href="/css/style.css?v=mnzjx2w6" />
 
   <style>
 .camp-urgency {
@@ -133,6 +133,19 @@
   overflow: hidden;
   box-shadow: var(--sh-sm);
   transition: transform var(--t-mid), box-shadow var(--t-mid);
+  cursor: pointer;
+  position: relative;
+}
+.camp-gallery-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(29,53,87,0);
+  transition: background var(--t-mid);
+  pointer-events: none;
+}
+.camp-gallery-item:hover::after {
+  background: rgba(29,53,87,0.18);
 }
 .camp-gallery-item:hover {
   transform: translateY(-4px);
@@ -147,6 +160,112 @@
 }
 .camp-gallery-item:hover img {
   transform: scale(1.06);
+}
+
+/* Lightbox */
+.camp-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.camp-lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+.camp-lightbox__img {
+  max-width: min(90vw, 1100px);
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--r-md);
+  box-shadow: 0 8px 60px rgba(0,0,0,0.6);
+  transition: transform 0.3s ease, opacity 0.25s ease;
+  transform: scale(0.92);
+  opacity: 0;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.camp-lightbox.is-open .camp-lightbox__img {
+  transform: scale(1);
+  opacity: 1;
+}
+.camp-lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--t-fast), transform var(--t-fast);
+  z-index: 2;
+}
+.camp-lightbox__close:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+.camp-lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.12);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--t-fast), transform var(--t-fast);
+  z-index: 2;
+}
+.camp-lightbox__nav:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-50%) scale(1.1);
+}
+.camp-lightbox__prev { left: 1rem; }
+.camp-lightbox__next { right: 1rem; }
+.camp-lightbox__counter {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+@media (max-width: 640px) {
+  .camp-lightbox__nav {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  .camp-lightbox__prev { left: 0.5rem; }
+  .camp-lightbox__next { right: 0.5rem; }
+  .camp-lightbox__img {
+    max-width: 96vw;
+    max-height: 75vh;
+    border-radius: var(--r-sm);
+  }
 }
 .camp-team {
   display: flex;
@@ -284,7 +403,143 @@
   color: var(--clr-navy);
   margin-bottom: 0.15rem;
 }
+/* Founder card */
+.camp-founder {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: var(--r-lg);
+  padding: 2.5rem;
+  box-shadow: var(--sh-md);
+  border-left: 5px solid var(--clr-yellow);
+}
+.camp-founder__photo {
+  flex: 0 0 180px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh-sm);
+}
+.camp-founder__photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+.camp-founder__body {
+  flex: 1 1 0;
+}
+.camp-founder__body h3 {
+  color: var(--clr-navy);
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+}
+.camp-founder__role {
+  color: var(--clr-teal);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+.camp-founder__quote {
+  font-style: italic;
+  color: var(--clr-text-mid);
+  border-left: 3px solid var(--clr-yellow);
+  padding-left: 1rem;
+  margin: 0 0 1.25rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+.camp-founder__facts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1.5rem;
+}
+.camp-founder__facts li {
+  font-size: 0.88rem;
+  color: var(--clr-text);
+  line-height: 1.5;
+  padding-left: 1.25rem;
+  position: relative;
+}
+.camp-founder__facts li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--clr-teal);
+  font-weight: 700;
+}
+/* Team grid */
+.camp-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 2rem;
+  margin-top: 2.5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.camp-team-member {
+  background: #fff;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--sh-sm);
+  transition: transform var(--t-mid), box-shadow var(--t-mid);
+}
+.camp-team-member:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sh-md);
+}
+.camp-team-member img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+.camp-team-member__body {
+  padding: 1.25rem 1.5rem;
+}
+.camp-team-member__body h4 {
+  color: var(--clr-navy);
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+.camp-team-member__body p {
+  font-size: 0.9rem;
+  color: var(--clr-text-mid);
+  line-height: 1.6;
+  margin: 0;
+}
+
 @media (max-width: 640px) {
+  .camp-founder {
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  .camp-founder__photo {
+    flex: none;
+    width: 120px;
+    margin: 0 auto;
+  }
+  .camp-founder__body {
+    text-align: center;
+  }
+  .camp-founder__quote {
+    border-left: none;
+    padding-left: 0;
+    border-top: 3px solid var(--clr-yellow);
+    padding-top: 1rem;
+  }
+  .camp-founder__facts {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
   .camp-gallery {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
@@ -1122,8 +1377,81 @@
             <img src="/img/bagolykaland-kincskereso-tabor-kincstalalo.webp" alt="A kincs megtalálása — gyerekek körben a jutalmakkal" width="624" height="416" loading="lazy" />
           </div>
         </div>
+
+        
+        <div class="camp-lightbox" id="campLightbox" role="dialog" aria-modal="true" aria-label="Képnagyító">
+          <button class="camp-lightbox__close" aria-label="Bezárás">&times;</button>
+          <button class="camp-lightbox__nav camp-lightbox__prev" aria-label="Előző kép">&#8249;</button>
+          <img class="camp-lightbox__img" id="campLightboxImg" src="" alt="" />
+          <button class="camp-lightbox__nav camp-lightbox__next" aria-label="Következő kép">&#8250;</button>
+          <div class="camp-lightbox__counter" id="campLightboxCounter"></div>
+        </div>
       </div>
     </section>
+
+    <script>
+    (function(){
+      var lb = document.getElementById('campLightbox');
+      if (!lb) return;
+      var img = document.getElementById('campLightboxImg');
+      var counter = document.getElementById('campLightboxCounter');
+      var items = document.querySelectorAll('.camp-gallery-item');
+      var images = [];
+      var idx = 0;
+
+      items.forEach(function(item, i){
+        var src = item.querySelector('img');
+        if (src) {
+          images.push({ src: src.src, alt: src.alt });
+          item.addEventListener('click', function(){ open(i); });
+        }
+      });
+
+      function open(i) {
+        idx = i;
+        show();
+        lb.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        lb.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+
+      function show() {
+        img.src = images[idx].src;
+        img.alt = images[idx].alt;
+        counter.textContent = (idx + 1) + ' / ' + images.length;
+      }
+
+      function prev() { idx = (idx - 1 + images.length) % images.length; show(); }
+      function next() { idx = (idx + 1) % images.length; show(); }
+
+      lb.querySelector('.camp-lightbox__close').addEventListener('click', close);
+      lb.querySelector('.camp-lightbox__prev').addEventListener('click', prev);
+      lb.querySelector('.camp-lightbox__next').addEventListener('click', next);
+
+      lb.addEventListener('click', function(e) {
+        if (e.target === lb) close();
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (!lb.classList.contains('is-open')) return;
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') prev();
+        else if (e.key === 'ArrowRight') next();
+      });
+
+      // Touch swipe
+      var tx = 0;
+      lb.addEventListener('touchstart', function(e) { tx = e.changedTouches[0].clientX; }, {passive:true});
+      lb.addEventListener('touchend', function(e) {
+        var dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 50) { dx > 0 ? prev() : next(); }
+      }, {passive:true});
+    })();
+    </script>
 
 
     
@@ -1132,21 +1460,254 @@
         <div class="section-header">
           <span class="section-eyebrow fade-up">A csapat</span>
           <h2 id="camp-team-heading" class="fade-up stagger-1">Kik vigyáznak a gyerekekre?</h2>
+          <p class="fade-up stagger-2" style="max-width:580px;margin:0 auto;">Nem diákmunkások, hanem <strong>képzett fejlesztő szakemberek</strong> — 9+ éve, szívvel és szakértelemmel.</p>
         </div>
 
-        <div style="max-width:760px;margin:0 auto;">
-          <p class="lead fade-up">A Kincskereső Élménytábort nem diákmunkások, hanem <strong>képzett fejlesztő szakemberek</strong> vezetik — 9+ éve, szívvel és szakértelemmel.</p>
-
-          <ul class="content-list fade-up" style="margin-top:1.5rem;">
-            <li><strong>Alexandra néni</strong> — a BagolykaLand alapítója, 15+ év tapasztalattal, a tábor szellemi atyja</li>
-            <li><strong>Gabi néni</strong> — társvezető, a mindennapi programok szervezője</li>
-            <li><strong>4 fős segítő csapat</strong> — akik biztosítják, hogy minden gyerek egyéni figyelmet kapjon</li>
-          </ul>
-
-          <div class="highlight-box fade-up" style="margin-top:2rem;">
-            A táborhét során napi szinten küldünk <strong>fotókat és beszámolókat</strong> a szülőknek, hogy Ti is nyomon követhessétek a kalandokat!
+        
+        <div class="camp-founder fade-up">
+          <div class="camp-founder__photo">
+            <img src="/img/bagolykaland-szabo-varga-alexandra-portret.webp"
+                 alt="Szabó-Varga Alexandra, a BagolykaLand alapítója és a Kincskereső Élménytábor megálmodója"
+                 width="400" height="400" loading="lazy" />
+          </div>
+          <div class="camp-founder__body">
+            <h3>Szabó-Varga Alexandra</h3>
+            <p class="camp-founder__role">Alapító, vezető fejlesztőpedagógus, alapozó mozgásterapeuta</p>
+            <blockquote class="camp-founder__quote">
+              „Hiszek abban, hogy minden gyermek jó valamiben. A BagolykaLand nem csupán egy fejlesztő központ — a BagolykaLand egy szerethető út, ami a tudáshoz vezet!"
+            </blockquote>
+            <ul class="camp-founder__facts">
+              <li><strong>15+ év</strong> tapasztalat gyermekfejlesztésben</li>
+              <li><strong>9+ éve</strong> szervezi a Kincskereső Élménytábort</li>
+              <li><strong>Háromgyermekes anyuka</strong> — tudja, mire van szüksége egy gyermeknek</li>
+              <li><strong>A tábor szellemi atyja</strong> — minden nap programját ő tervezi és felügyeli</li>
+            </ul>
           </div>
         </div>
+
+        
+        <div class="camp-team-grid fade-up">
+          <div class="camp-team-member">
+            <img src="/img/bagolykaland-kincskereso-tabor-csapat-szabadban.webp"
+                 alt="A Kincskereső Élménytábor csapata a gyerekekkel a szabadban"
+                 width="624" height="416" loading="lazy" />
+            <div class="camp-team-member__body">
+              <h4>A tábori csapat</h4>
+              <p>Alexandra néni mellett <strong>Gabi néni</strong> társvezetőként felügyeli a mindennapi programokat, <strong>4 fős segítő csapat</strong> pedig biztosítja, hogy minden gyerek egyéni figyelmet kapjon.</p>
+            </div>
+          </div>
+          <div class="camp-team-member">
+            <img src="/img/bagolykaland-csapat-csoportfoto.webp"
+                 alt="A BagolykaLand teljes csapata — szakemberek, akikben megbízhatsz"
+                 width="624" height="416" loading="lazy" />
+            <div class="camp-team-member__body">
+              <h4>Háttérben a BagolykaLand</h4>
+              <p>A tábor mögött a <strong>BagolykaLand Fejlesztő Központ</strong> teljes szakembergárdája áll — fejlesztőpedagógusok, logopédus és mozgásterapeuta. 9+ éve bizonyított szakmai háttér.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="highlight-box fade-up" style="max-width:760px;margin:2.5rem auto 0;">
+          A táborhét során napi szinten küldünk <strong>fotókat és beszámolókat</strong> a szülőknek, hogy Ti is nyomon követhessétek a kalandokat!
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="section section-cream" aria-labelledby="camp-reviews-heading">
+      <div class="container">
+        <div class="section-header fade-up">
+          <span class="section-eyebrow">Szülői vélemények</span>
+          <h2 id="camp-reviews-heading">Amit a szülők a BagolykaLandről mondanak</h2>
+          <div class="reviews-summary">
+            <svg class="reviews-summary__glogo" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            <span class="reviews-summary__score">5.0</span>
+            <span class="reviews-summary__stars" role="img" aria-label="5.0 csillag">★★★★★</span>
+            <span class="reviews-summary__count">20 vélemény</span>
+          </div>
+        </div>
+
+        <div class="reviews-slider fade-up" aria-roledescription="carousel" aria-label="Google vélemények">
+          <div class="reviews-slider__track">
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="1. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">K</div>
+                <div>
+                  <div class="review-card__name">Keán Anyukája</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"Keán nagyon ügyes, az iskolában jól teljesít. Hozza a sok-sok csillagot. Drága Szandi néninek is üzenem, hogy nagyon-nagyon köszönjük a segítségét!"</p>
+            </article>
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="2. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">G</div>
+                <div>
+                  <div class="review-card__name">Gréti Anyukája</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"Köszönöm a sok pozitív támogatást gyermekeink felé, hálásak vagyunk érte. A foglalkozások remekül sikerültek, Gréti mindig alig várta, hogy menjen!"</p>
+            </article>
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="3. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">B</div>
+                <div>
+                  <div class="review-card__name">Beni Anyukája</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"Szeretnénk megköszönni Szandi éves lelkes munkáját, ahogyan kitüntetett figyelemmel foglalkozott az iskola-előkészítőn a gyerekekkel. Beni nagyon sokat fejlődött!"</p>
+            </article>
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="4. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">L</div>
+                <div>
+                  <div class="review-card__name">Lili Édesanyja</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"Csodálatos hely, fantasztikus szakemberek! Lili imádott idejárni, az iskolakezdés gördülékenyen ment a felkészítésnek köszönhetően. Mindenkinek ajánlom!"</p>
+            </article>
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="5. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">M</div>
+                <div>
+                  <div class="review-card__name">Máté Apukája</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"Kiváló mozgásfejlesztés! A fiam nagyon sokat fejlődött a koordinációja terén. A tornaterem felszereltsége és a szakmai hozzáértés kiemelkedő."</p>
+            </article>
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="6. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">N</div>
+                <div>
+                  <div class="review-card__name">Nóri Anyukája</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"A logopédiai foglalkozásoknak hála Nóri pár hónap alatt elkezdett tisztán beszélni. Türelmes, kedves légkör, nagyon profi csapat!"</p>
+            </article>
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="7. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">Á</div>
+                <div>
+                  <div class="review-card__name">Ádám Szülei</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"A szorongásoldó program csodát tett Ádámmal. Magabiztosabb lett, szívesen megy iskolába. Köszönjük Alexandrának a személyre szabott figyelmet!"</p>
+            </article>
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="8. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">E</div>
+                <div>
+                  <div class="review-card__name">Emma Nagymamája</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"Unokámat hordtam ide, az egyéni fejlesztő foglalkozások kiválóak. Szandi és a csapat nagyon értik a dolgukat, és ami a legfontosabb: a gyerekek szeretnek idejárni."</p>
+            </article>
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="9. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">Z</div>
+                <div>
+                  <div class="review-card__name">Zsombor Anyukája</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"Az iskola-előkészítő programot csak ajánlani tudom! Zsombor rengeteget fejlődött a figyelme és a finommotorikája terén. A csoportlétszám ideális, mindenki kap elég figyelmet."</p>
+            </article>
+            
+            <article class="review-card" role="group" aria-roledescription="slide" aria-label="10. vélemény 10-ból">
+              <div class="review-card__head">
+                <div class="review-card__avatar" aria-hidden="true">H</div>
+                <div>
+                  <div class="review-card__name">Hanna Édesanyja</div>
+                  <div class="review-card__meta">
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09a6.97 6.97 0 010-4.17V7.07H2.18a11.96 11.96 0 000 9.86l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span>Google vélemény</span>
+                  </div>
+                </div>
+                <div class="review-card__stars" role="img" aria-label="5 csillag">★★★★★</div>
+              </div>
+              <p class="review-card__text">"Az Ernyő alatt programot választottuk, és ez volt a legjobb döntésünk. A komplex megközelítés tényleg működik. Hanna boldogan készül az iskolára!"</p>
+            </article>
+            
+          </div>
+
+          <div class="reviews-slider__controls">
+            <button class="reviews-slider__arrow reviews-slider__arrow--prev" aria-label="Előző vélemények">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="reviews-slider__dots" role="tablist" aria-label="Vélemény oldalak"></div>
+            <button class="reviews-slider__arrow reviews-slider__arrow--next" aria-label="Következő vélemények">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="reviews-cta fade-up">
+          <a href="https://www.google.com/maps/place/BagolykaLand/@47.5389796,21.625248,17z/data=!3m1!4b1!4m6!3m5!1s0x47470e0fc6ca3f8b:0xc198bdceef5b7a62!8m2!3d47.5389796!4d21.6278229!16s%2Fg%2F11g8vsp3jp" target="_blank" rel="noopener noreferrer"
+             class="btn btn-outline reviews-cta__btn"
+             data-track="bk_google_review_click" data-track-variant="camp-view-reviews">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Összes vélemény a Google-ön
+          </a>
+          <a href="https://search.google.com/local/writereview?placeid=ChIJiz_Kxg8OdEcRYnpb7s69mME" target="_blank" rel="noopener noreferrer"
+             class="btn btn-teal reviews-cta__btn"
+             data-track="bk_google_review_click" data-track-variant="camp-write-review">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Adj nekünk visszajelzést!
+          </a>
+        </div>
+
       </div>
     </section>
 
@@ -1400,15 +1961,15 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=mnzjm6af" defer></script>
-  <script src="/js/install-prompt.js?v=mnzjm6af" defer></script>
-  <script src="/js/tracking.js?v=mnzjm6af" defer></script>
-  <script src="/js/tracking-loader.js?v=mnzjm6af" defer></script>
-  <script src="/js/cookie-consent.js?v=mnzjm6af" defer></script>
-  <script src="/js/main.js?v=mnzjm6af" defer></script>
-  <script src="/js/lead-capture-loader.js?v=mnzjm6af"
-          data-popup-css="/css/popup.css?v=mnzjm6af"
-          data-popup-src="/js/popup.js?v=mnzjm6af"
+  <script src="/js/components.js?v=mnzjx2w6" defer></script>
+  <script src="/js/install-prompt.js?v=mnzjx2w6" defer></script>
+  <script src="/js/tracking.js?v=mnzjx2w6" defer></script>
+  <script src="/js/tracking-loader.js?v=mnzjx2w6" defer></script>
+  <script src="/js/cookie-consent.js?v=mnzjx2w6" defer></script>
+  <script src="/js/main.js?v=mnzjx2w6" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mnzjx2w6"
+          data-popup-css="/css/popup.css?v=mnzjx2w6"
+          data-popup-src="/js/popup.js?v=mnzjx2w6"
           defer></script>
 
 </body>
