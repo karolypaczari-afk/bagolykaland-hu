@@ -429,6 +429,188 @@
     });
 
     /* ------------------------------------------
+       REVIEWS SLIDER
+    ------------------------------------------ */
+    (function initReviewsSlider() {
+        var slider = document.querySelector('.reviews-slider');
+        if (!slider) return;
+
+        var track = slider.querySelector('.reviews-slider__track');
+        var cards = track.querySelectorAll('.review-card');
+        var prevBtn = slider.querySelector('.reviews-slider__arrow--prev');
+        var nextBtn = slider.querySelector('.reviews-slider__arrow--next');
+        var dotsContainer = slider.querySelector('.reviews-slider__dots');
+        if (cards.length < 2) return;
+
+        // How many cards visible at once
+        function getPerView() {
+            if (window.innerWidth <= 640) return 1;
+            if (window.innerWidth <= 900) return 2;
+            return 3;
+        }
+
+        var currentPage = 0;
+
+        function getTotalPages() {
+            var perView = getPerView();
+            return Math.max(1, Math.ceil(cards.length / perView));
+        }
+
+        // Build dots
+        function buildDots() {
+            dotsContainer.innerHTML = '';
+            var total = getTotalPages();
+            for (var i = 0; i < total; i++) {
+                var dot = document.createElement('button');
+                dot.className = 'reviews-slider__dot' + (i === currentPage ? ' reviews-slider__dot--active' : '');
+                dot.setAttribute('role', 'tab');
+                dot.setAttribute('aria-label', (i + 1) + '. oldal');
+                dot.setAttribute('aria-selected', i === currentPage ? 'true' : 'false');
+                dot.dataset.page = i;
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function scrollToPage(page) {
+            var totalPages = getTotalPages();
+            if (page < 0) page = 0;
+            if (page >= totalPages) page = totalPages - 1;
+            currentPage = page;
+
+            var perView = getPerView();
+            var cardIndex = page * perView;
+            if (cardIndex >= cards.length) cardIndex = cards.length - 1;
+
+            var target = cards[cardIndex];
+            var trackRect = track.getBoundingClientRect();
+            var targetRect = target.getBoundingClientRect();
+            var scrollLeft = target.offsetLeft - track.offsetLeft;
+            track.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+
+            updateUI();
+        }
+
+        function updateUI() {
+            var totalPages = getTotalPages();
+            // Update dots
+            var dots = dotsContainer.querySelectorAll('.reviews-slider__dot');
+            dots.forEach(function (dot, i) {
+                dot.classList.toggle('reviews-slider__dot--active', i === currentPage);
+                dot.setAttribute('aria-selected', i === currentPage ? 'true' : 'false');
+            });
+            // Update arrows
+            if (prevBtn) prevBtn.disabled = currentPage <= 0;
+            if (nextBtn) nextBtn.disabled = currentPage >= totalPages - 1;
+        }
+
+        // Detect page from scroll position (for drag/swipe)
+        function syncPageFromScroll() {
+            var perView = getPerView();
+            var cardWidth = cards[0].offsetWidth + parseFloat(getComputedStyle(track).gap || 24);
+            var rawPage = Math.round(track.scrollLeft / (cardWidth * perView));
+            var totalPages = getTotalPages();
+            currentPage = Math.max(0, Math.min(rawPage, totalPages - 1));
+            updateUI();
+        }
+
+        // Scroll event — sync dots when user drags/swipes
+        var scrollTimer;
+        track.addEventListener('scroll', function () {
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(syncPageFromScroll, 120);
+        }, { passive: true });
+
+        // Arrow clicks
+        if (prevBtn) prevBtn.addEventListener('click', function () {
+            stopAutoplay();
+            scrollToPage(currentPage - 1);
+            startAutoplay();
+        });
+        if (nextBtn) nextBtn.addEventListener('click', function () {
+            stopAutoplay();
+            scrollToPage(currentPage + 1);
+            startAutoplay();
+        });
+
+        // Dot clicks
+        dotsContainer.addEventListener('click', function (e) {
+            var dot = e.target.closest('.reviews-slider__dot');
+            if (!dot) return;
+            stopAutoplay();
+            scrollToPage(parseInt(dot.dataset.page, 10));
+            startAutoplay();
+        });
+
+        // Autoplay
+        var autoplayInterval = null;
+        var AUTOPLAY_DELAY = 6000;
+
+        function startAutoplay() {
+            if (autoplayInterval) return;
+            autoplayInterval = setInterval(function () {
+                var totalPages = getTotalPages();
+                var nextPage = (currentPage + 1) % totalPages;
+                scrollToPage(nextPage);
+            }, AUTOPLAY_DELAY);
+        }
+
+        function stopAutoplay() {
+            clearInterval(autoplayInterval);
+            autoplayInterval = null;
+        }
+
+        // Pause on hover/focus
+        slider.addEventListener('mouseenter', stopAutoplay);
+        slider.addEventListener('focusin', stopAutoplay);
+        slider.addEventListener('mouseleave', startAutoplay);
+        slider.addEventListener('focusout', function (e) {
+            if (!slider.contains(e.relatedTarget)) startAutoplay();
+        });
+
+        // Resize: rebuild dots, clamp page
+        var resizeTimer;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                var totalPages = getTotalPages();
+                if (currentPage >= totalPages) currentPage = totalPages - 1;
+                buildDots();
+                scrollToPage(currentPage);
+            }, 200);
+        });
+
+        // Touch swipe support
+        var touchStartX = 0;
+        var touchStartScrollLeft = 0;
+        track.addEventListener('touchstart', function (e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartScrollLeft = track.scrollLeft;
+            stopAutoplay();
+        }, { passive: true });
+
+        track.addEventListener('touchend', function (e) {
+            var dx = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(dx) > 50) {
+                if (dx < 0) scrollToPage(currentPage + 1);
+                else scrollToPage(currentPage - 1);
+            }
+            startAutoplay();
+        }, { passive: true });
+
+        // Init
+        buildDots();
+        updateUI();
+        startAutoplay();
+
+        // Track review slider interaction
+        track.addEventListener('click', function (e) {
+            var card = e.target.closest('.review-card');
+            if (!card) return;
+            track('bk_google_review_click', { click_variant: 'slider-card' });
+        });
+    }());
+
+    /* ------------------------------------------
        HERO SLIDER
     ------------------------------------------ */
     (function initHeroSlider() {

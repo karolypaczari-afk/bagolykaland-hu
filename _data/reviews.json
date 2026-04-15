@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Keán Anyukája",
+    "text": "Keán nagyon ügyes, az iskolában jól teljesít. Hozza a sok-sok csillagot. Drága Szandi néninek is üzenem, hogy nagyon-nagyon köszönjük a segítségét!",
+    "rating": 5,
+    "date": "2025-03"
+  },
+  {
+    "name": "Gréti Anyukája",
+    "text": "Köszönöm a sok pozitív támogatást gyermekeink felé, hálásak vagyunk érte. A foglalkozások remekül sikerültek, Gréti mindig alig várta, hogy menjen!",
+    "rating": 5,
+    "date": "2025-01"
+  },
+  {
+    "name": "Beni Anyukája",
+    "text": "Szeretnénk megköszönni Szandi éves lelkes munkáját, ahogyan kitüntetett figyelemmel foglalkozott az iskola-előkészítőn a gyerekekkel. Beni nagyon sokat fejlődött!",
+    "rating": 5,
+    "date": "2024-12"
+  },
+  {
+    "name": "Lili Édesanyja",
+    "text": "Csodálatos hely, fantasztikus szakemberek! Lili imádott idejárni, az iskolakezdés gördülékenyen ment a felkészítésnek köszönhetően. Mindenkinek ajánlom!",
+    "rating": 5,
+    "date": "2025-02"
+  },
+  {
+    "name": "Máté Apukája",
+    "text": "Kiváló mozgásfejlesztés! A fiam nagyon sokat fejlődött a koordinációja terén. A tornaterem felszereltsége és a szakmai hozzáértés kiemelkedő.",
+    "rating": 5,
+    "date": "2024-11"
+  },
+  {
+    "name": "Nóri Anyukája",
+    "text": "A logopédiai foglalkozásoknak hála Nóri pár hónap alatt elkezdett tisztán beszélni. Türelmes, kedves légkör, nagyon profi csapat!",
+    "rating": 5,
+    "date": "2024-10"
+  },
+  {
+    "name": "Ádám Szülei",
+    "text": "A szorongásoldó program csodát tett Ádámmal. Magabiztosabb lett, szívesen megy iskolába. Köszönjük Alexandrának a személyre szabott figyelmet!",
+    "rating": 5,
+    "date": "2025-03"
+  },
+  {
+    "name": "Emma Nagymamája",
+    "text": "Unokámat hordtam ide, az egyéni fejlesztő foglalkozások kiválóak. Szandi és a csapat nagyon értik a dolgukat, és ami a legfontosabb: a gyerekek szeretnek idejárni.",
+    "rating": 5,
+    "date": "2024-09"
+  },
+  {
+    "name": "Zsombor Anyukája",
+    "text": "Az iskola-előkészítő programot csak ajánlani tudom! Zsombor rengeteget fejlődött a figyelme és a finommotorikája terén. A csoportlétszám ideális, mindenki kap elég figyelmet.",
+    "rating": 5,
+    "date": "2025-01"
+  },
+  {
+    "name": "Hanna Édesanyja",
+    "text": "Az Ernyő alatt programot választottuk, és ez volt a legjobb döntésünk. A komplex megközelítés tényleg működik. Hanna boldogan készül az iskolára!",
+    "rating": 5,
+    "date": "2024-12"
+  }
+]
