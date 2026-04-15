@@ -52,7 +52,7 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=mnzk88ay" />
+  <link rel="stylesheet" href="/css/style.css?v=mnzkorz9" />
 
   <style>
 .camp-urgency {
@@ -336,45 +336,120 @@
   border-radius: var(--r-full);
   margin-bottom: 1.5rem;
 }
-.faq-list {
-  max-width: 760px;
-  margin: 2rem auto 0;
+/* ── FAQ categories ── */
+.faq-categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 auto 2.5rem;
 }
-.faq-item {
-  border-bottom: 1px solid #e2e8f0;
+.faq-cat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.2rem;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--r-full);
+  background: #fff;
+  color: var(--clr-text-mid);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--t-fast);
 }
-.faq-item summary {
+.faq-cat-btn:hover {
+  border-color: var(--clr-teal);
+  color: var(--clr-teal);
+}
+.faq-cat-btn.active {
+  background: var(--clr-teal);
+  border-color: var(--clr-teal);
+  color: #fff;
+}
+
+/* ── FAQ card grid ── */
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 1.25rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.faq-card {
+  background: #fff;
+  border: 1px solid #e8ecf1;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: box-shadow var(--t-mid), border-color var(--t-mid);
+}
+.faq-card:hover {
+  border-color: var(--clr-teal-light);
+  box-shadow: var(--sh-sm);
+}
+.faq-card summary {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 0;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--clr-navy);
   cursor: pointer;
   list-style: none;
   transition: color var(--t-fast);
 }
-.faq-item summary::-webkit-details-marker { display: none; }
-.faq-item summary::after {
-  content: '+';
-  font-size: 1.4rem;
-  font-weight: 400;
-  color: var(--clr-teal);
-  transition: transform var(--t-mid);
+.faq-card summary::-webkit-details-marker { display: none; }
+.faq-card summary .faq-icon {
   flex-shrink: 0;
-  margin-left: 1rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-md);
+  font-size: 1.1rem;
 }
-.faq-item[open] summary::after {
+.faq-card summary .faq-toggle {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-full);
+  background: var(--clr-bg);
+  color: var(--clr-teal);
+  font-size: 1.2rem;
+  font-weight: 400;
+  transition: transform var(--t-mid), background var(--t-fast);
+}
+.faq-card[open] summary .faq-toggle {
   transform: rotate(45deg);
+  background: var(--clr-teal-light);
 }
-.faq-item summary:hover { color: var(--clr-teal); }
-.faq-item .faq-answer {
-  padding: 0 0 1.25rem;
+.faq-card summary:hover { color: var(--clr-teal); }
+.faq-card .faq-answer {
+  padding: 0 1.5rem 1.5rem;
   color: var(--clr-text-mid);
   line-height: 1.7;
   font-size: 0.95rem;
+  border-top: 1px solid #f0f3f6;
+  margin: 0 1rem;
+  padding-top: 1rem;
 }
+.faq-card[data-cat] {
+  transition: opacity var(--t-mid), box-shadow var(--t-mid), border-color var(--t-mid);
+}
+.faq-card.faq-hidden {
+  display: none;
+}
+/* Category icon backgrounds */
+.faq-icon--general { background: var(--clr-teal-light); color: var(--clr-teal-dark); }
+.faq-icon--program { background: #FEF3CD; color: #856404; }
+.faq-icon--practical { background: #E8F4FD; color: var(--clr-sky); }
+.faq-icon--price { background: #E6F9E0; color: var(--clr-green); }
 .dev-benefits {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
@@ -1772,7 +1847,7 @@
         
         <div class="camp-founder fade-up">
           <div class="camp-founder__photo">
-            <img src="/img/bagolykaland-szabo-varga-alexandra-portret.webp"
+            <img src="/img/bagolykaland-alexandra-szession-tukorrel.webp"
                  alt="Szabó-Varga Alexandra, a BagolykaLand alapítója és a Kincskereső Élménytábor megálmodója"
                  width="400" height="400" loading="lazy" />
           </div>
@@ -1794,8 +1869,8 @@
         
         <div class="camp-team-grid fade-up">
           <div class="camp-team-member">
-            <img src="/img/bagolykaland-kincskereso-tabor-csapat-szabadban.webp"
-                 alt="A Kincskereső Élménytábor csapata a gyerekekkel a szabadban"
+            <img src="/img/bagolykaland-kincskereso-tabor-csoportos-jatek.webp"
+                 alt="A Kincskereső Élménytábor csapata csoportos foglalkozáson a gyerekekkel"
                  width="624" height="416" loading="lazy" />
             <div class="camp-team-member__body">
               <h4>A tábori csapat</h4>
@@ -1803,8 +1878,8 @@
             </div>
           </div>
           <div class="camp-team-member">
-            <img src="/img/bagolykaland-csapat-csoportfoto.webp"
-                 alt="A BagolykaLand teljes csapata — szakemberek, akikben megbízhatsz"
+            <img src="/img/bagolykaland-kincskereso-tabor-kerti-program.webp"
+                 alt="A BagolykaLand tábori program a kertben — kerti foglalkozás a gyerekekkel"
                  width="624" height="416" loading="lazy" />
             <div class="camp-team-member__body">
               <h4>Háttérben a BagolykaLand</h4>
@@ -2138,45 +2213,104 @@
         <div class="section-header">
           <span class="section-eyebrow fade-up">Kérdések</span>
           <h2 id="camp-faq" class="fade-up stagger-1">Gyakran ismételt kérdések</h2>
+          <p class="fade-up stagger-2" style="max-width:560px;margin:0 auto;">Válaszoltunk a leggyakoribb szülői kérdésekre — ha mégsem találod a választ, <a href="/kapcsolat/" style="color:var(--clr-teal);font-weight:700;">írj nekünk</a>!</p>
         </div>
 
-        <div class="faq-list fade-up">
-          <details class="faq-item" open>
-            <summary>Hány éves gyerekeknek szól a tábor?</summary>
+        <div class="faq-categories fade-up">
+          <button class="faq-cat-btn active" data-filter="all">Mind</button>
+          <button class="faq-cat-btn" data-filter="general">Általános</button>
+          <button class="faq-cat-btn" data-filter="program">Program</button>
+          <button class="faq-cat-btn" data-filter="practical">Praktikus</button>
+          <button class="faq-cat-btn" data-filter="price">Árak</button>
+        </div>
+
+        <div class="faq-grid fade-up">
+
+          
+          <details class="faq-card" data-cat="general" open>
+            <summary>
+              <span class="faq-icon faq-icon--general">?</span>
+              <span>Hány éves gyerekeknek szól a tábor?</span>
+              <span class="faq-toggle">+</span>
+            </summary>
             <div class="faq-answer">Az Élménytábor 5–8 éves gyerekeknek szól. A tevékenységek és a nehézségi szintek ehhez a korosztályhoz vannak igazítva, de ha a gyermeked kicsit fiatalabb vagy idősebb, keress minket és egyeztetünk!</div>
           </details>
-          <details class="faq-item" open>
-            <summary>Milyen egy átlagos nap a táborban?</summary>
-            <div class="faq-answer">Reggel 9:00-kor érkezés és reggeli torna, utána az aznapi mese indítja el a kalandot. Délelőtt a főbb próbatételek és tevékenységek zajlanak, ebéd után kézműves foglalkozás, csapatjátékok és relaxáció. 16:00-kor zárunk. Minden nap más mesében utazunk!</div>
-          </details>
-          <details class="faq-item" open>
-            <summary>Mit kell hoznia a gyereknek?</summary>
-            <div class="faq-answer">Kényelmes, mozgásra alkalmas ruha, váltóruha, zárt cipő, kulacs, tízórai és ebéd (ha nem kér ebédet a szülő helyben), naptej és sapka a kertben töltött idő miatt.</div>
-          </details>
-          <details class="faq-item">
-            <summary>Miért csak 12 fő egy turnusban?</summary>
+
+          <details class="faq-card" data-cat="general">
+            <summary>
+              <span class="faq-icon faq-icon--general">?</span>
+              <span>Miért csak 12 fő egy turnusban?</span>
+              <span class="faq-toggle">+</span>
+            </summary>
             <div class="faq-answer">Azért, mert hiszünk abban, hogy a kis létszám biztosítja, hogy minden gyermek valódi figyelmet, személyes törődést és egyéni élményeket kapjon. Ez az, ami a Kincskereső Élménytábort különlegessé teszi már 9+ éve.</div>
           </details>
-          <details class="faq-item">
-            <summary>Van-e speciális felkészültségetek?</summary>
+
+          <details class="faq-card" data-cat="general">
+            <summary>
+              <span class="faq-icon faq-icon--general">?</span>
+              <span>Van-e speciális felkészültségetek?</span>
+              <span class="faq-toggle">+</span>
+            </summary>
             <div class="faq-answer">A tábort képzett fejlesztő pedagógusok vezetik, nem diákmunkások. Alexandra néni, a BagolykaLand alapítója 15+ éve dolgozik gyermekekkel. A tevékenységek nemcsak szórakoztatóak, hanem tudatosan fejlesztőek is — finommotorika, figyelem, emlékezet, szociális képességek mind részei a programnak.</div>
           </details>
-          <details class="faq-item">
-            <summary>Mi történik, ha a gyermekem nehezen válik el?</summary>
+
+          
+          <details class="faq-card" data-cat="program" open>
+            <summary>
+              <span class="faq-icon faq-icon--program">&#9734;</span>
+              <span>Milyen egy átlagos nap a táborban?</span>
+              <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-answer">Reggel 9:00-kor érkezés és reggeli torna, utána az aznapi mese indítja el a kalandot. Délelőtt a főbb próbatételek és tevékenységek zajlanak, ebéd után kézműves foglalkozás, csapatjátékok és relaxáció. 16:00-kor zárunk. Minden nap más mesében utazunk!</div>
+          </details>
+
+          <details class="faq-card" data-cat="program">
+            <summary>
+              <span class="faq-icon faq-icon--program">&#9734;</span>
+              <span>Mi történik, ha a gyermekem nehezen válik el?</span>
+              <span class="faq-toggle">+</span>
+            </summary>
             <div class="faq-answer">Tapasztalt csapatunk van, akik türelemmel és szeretettel segítenek a beilleszkedésben. Az első napokat úgy tervezzük, hogy a gyerekek fokozatosan ismerkedjenek meg egymással és a környezettel. Ha szükséges, az első nap a szülő is maradhat egy rövid időre.</div>
           </details>
-          <details class="faq-item">
-            <summary>Mennyibe kerül a tábor?</summary>
-            <div class="faq-answer">A tábor ára <strong>75.000 Ft / gyermek / turnus</strong>. Ez tartalmazza a teljes 5 napos programot, mind a 40+ fejlesztő tevékenységet, a fejlesztőpedagógus és mozgásterapeuta felügyeletét, a napi fotóriportot, valamint minden szükséges eszközt és anyagot. <strong>Testvérkedvezménnyel: 70.000 Ft / fő.</strong></div>
+
+          
+          <details class="faq-card" data-cat="practical" open>
+            <summary>
+              <span class="faq-icon faq-icon--practical">&#9998;</span>
+              <span>Mit kell hoznia a gyereknek?</span>
+              <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-answer">Kényelmes, mozgásra alkalmas ruha, váltóruha, zárt cipő, kulacs, tízórai és ebéd (ha nem kér ebédet a szülő helyben), naptej és sapka a kertben töltött idő miatt.</div>
           </details>
-          <details class="faq-item">
-            <summary>Van-e testvérkedvezmény?</summary>
-            <div class="faq-answer">Igen! Ha testvérek jönnek, a tábor ára <strong>70.000 Ft / fő</strong> (az alap 75.000 Ft helyett). A kedvezmény minden testvérre vonatkozik.</div>
-          </details>
-          <details class="faq-item">
-            <summary>Mi történik rossz idő esetén?</summary>
+
+          <details class="faq-card" data-cat="practical">
+            <summary>
+              <span class="faq-icon faq-icon--practical">&#9998;</span>
+              <span>Mi történik rossz idő esetén?</span>
+              <span class="faq-toggle">+</span>
+            </summary>
             <div class="faq-answer">A BagolykaLand Fejlesztő Központ teljes belső terét használjuk a tábor során — kézműves terem, mozgásterem, mesetér. Rossz idő esetén a teljes program zavartalanul zajlik bent. A kerti programokat mindig tudjuk belső alternatívával helyettesíteni.</div>
           </details>
+
+          
+          <details class="faq-card" data-cat="price">
+            <summary>
+              <span class="faq-icon faq-icon--price">&#9733;</span>
+              <span>Mennyibe kerül a tábor?</span>
+              <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-answer">A tábor ára <strong>75.000 Ft / gyermek / turnus</strong>. Ez tartalmazza a teljes 5 napos programot, mind a 40+ fejlesztő tevékenységet, a fejlesztőpedagógus és mozgásterapeuta felügyeletét, a napi fotóriportot, valamint minden szükséges eszközt és anyagot. <strong>Testvérkedvezménnyel: 70.000 Ft / fő.</strong></div>
+          </details>
+
+          <details class="faq-card" data-cat="price">
+            <summary>
+              <span class="faq-icon faq-icon--price">&#9733;</span>
+              <span>Van-e testvérkedvezmény?</span>
+              <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-answer">Igen! Ha testvérek jönnek, a tábor ára <strong>70.000 Ft / fő</strong> (az alap 75.000 Ft helyett). A kedvezmény minden testvérre vonatkozik.</div>
+          </details>
+
         </div>
       </div>
     </section>
@@ -2267,6 +2401,27 @@
         </div>
       </div>
     </section>
+
+    <script>
+    (function() {
+      var btns = document.querySelectorAll('.faq-cat-btn');
+      var cards = document.querySelectorAll('.faq-card[data-cat]');
+      btns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          btns.forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var f = btn.getAttribute('data-filter');
+          cards.forEach(function(c) {
+            if (f === 'all' || c.getAttribute('data-cat') === f) {
+              c.classList.remove('faq-hidden');
+            } else {
+              c.classList.add('faq-hidden');
+            }
+          });
+        });
+      });
+    })();
+    </script>
 
   </main>
 <footer class="site-footer" id="site-footer" role="contentinfo">
@@ -2359,15 +2514,15 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=mnzk88ay" defer></script>
-  <script src="/js/install-prompt.js?v=mnzk88ay" defer></script>
-  <script src="/js/tracking.js?v=mnzk88ay" defer></script>
-  <script src="/js/tracking-loader.js?v=mnzk88ay" defer></script>
-  <script src="/js/cookie-consent.js?v=mnzk88ay" defer></script>
-  <script src="/js/main.js?v=mnzk88ay" defer></script>
-  <script src="/js/lead-capture-loader.js?v=mnzk88ay"
-          data-popup-css="/css/popup.css?v=mnzk88ay"
-          data-popup-src="/js/popup.js?v=mnzk88ay"
+  <script src="/js/components.js?v=mnzkorz9" defer></script>
+  <script src="/js/install-prompt.js?v=mnzkorz9" defer></script>
+  <script src="/js/tracking.js?v=mnzkorz9" defer></script>
+  <script src="/js/tracking-loader.js?v=mnzkorz9" defer></script>
+  <script src="/js/cookie-consent.js?v=mnzkorz9" defer></script>
+  <script src="/js/main.js?v=mnzkorz9" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mnzkorz9"
+          data-popup-css="/css/popup.css?v=mnzkorz9"
+          data-popup-src="/js/popup.js?v=mnzkorz9"
           defer></script>
 
 </body>
