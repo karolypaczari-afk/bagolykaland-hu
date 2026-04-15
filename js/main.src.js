@@ -86,6 +86,15 @@
         return;
       }
 
+      if (control.dataset.track === 'bk_google_review_click') {
+        track('bk_google_review_click', {
+          click_variant: control.dataset.trackVariant || '',
+          click_label: label,
+          click_href: href || '',
+        });
+        return;
+      }
+
       if (
         control.matches('.btn, .nav-cta, .mobile-cta, .service-link') ||
         /\/kapcsolat\/?$/i.test(href)

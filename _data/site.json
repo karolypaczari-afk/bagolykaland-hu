@@ -12,5 +12,11 @@
     },
     "social": {
         "facebook": "https://www.facebook.com/bagolykaland"
+    },
+    "googleReview": {
+        "rating": "5.0",
+        "reviewCount": "20",
+        "url": "https://www.google.com/maps/place/BagolykaLand/@47.5389796,21.625248,17z/data=!3m1!4b1!4m6!3m5!1s0x47470e0fc6ca3f8b:0xc198bdceef5b7a62!8m2!3d47.5389796!4d21.6278229!16s%2Fg%2F11g8vsp3jp",
+        "placeId": "ChIJiz_Kxg8OdEcRYnpb7s69mME"
     }
 }

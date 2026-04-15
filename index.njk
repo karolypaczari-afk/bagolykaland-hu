@@ -52,6 +52,9 @@ preloadHero: "/img/bagolykaland-hero-group.webp"
                 15+ év tapasztalat
               </div>
             </div>
+
+            {% set reviewVariant = "compact" %}
+            {% include "partials/google-review-badge.njk" %}
           </div>
 
           <!-- Visual side — hero slider -->
@@ -611,6 +614,9 @@ preloadHero: "/img/bagolykaland-hero-group.webp"
           </article>
 
         </div>
+
+        {% set reviewVariant = "full" %}
+        {% include "partials/google-review-badge.njk" %}
       </div>
     </section>
 

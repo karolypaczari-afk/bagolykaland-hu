@@ -81,8 +81,8 @@
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "47.5308",
-      "longitude": "21.6262"
+      "latitude": "47.5389796",
+      "longitude": "21.6278229"
     },
     "openingHoursSpecification": [
       {
@@ -97,8 +97,17 @@
       "name": "Szabó-Varga Alexandra",
       "jobTitle": "Fejlesztőpedagógus, Alapozó Mozgásterapeuta"
     },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "{{ site.googleReview.rating }}",
+      "bestRating": "5",
+      "worstRating": "1",
+      "ratingCount": "{{ site.googleReview.reviewCount }}"
+    },
     "sameAs": [
-      "https://zsenibagoly.hu"
+      "https://zsenibagoly.hu",
+      "{{ site.social.facebook }}",
+      "{{ site.googleReview.url }}"
     ],
     "areaServed": {
       "@type": "City",
