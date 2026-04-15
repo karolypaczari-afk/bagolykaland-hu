@@ -177,7 +177,7 @@ ogImage: "https://bagolykaland.hu/img/bagolykaland-csoportos-iskola-elokeszito.w
             <div class="sidebar-card">
               <h4>Időpontfoglalás</h4>
               <p style="font-size:.875rem;color:var(--clr-text-muted);margin-bottom:1rem;">Kérdésed van? Vedd fel velünk a kapcsolatot!</p>
-              <a href="/kapcsolat/" class="btn btn-primary" style="width:100%;justify-content:center;">📅 Foglalj időpontot</a>
+              <a href="#jelentkezes" class="btn btn-primary" style="width:100%;justify-content:center;">Foglalj időpontot</a>
             </div>
             <div class="sidebar-card">
               <h4>Kapcsolódó szolgáltatások</h4>
@@ -196,15 +196,11 @@ ogImage: "https://bagolykaland.hu/img/bagolykaland-csoportos-iskola-elokeszito.w
 
     {% include "partials/lead-catcher.njk" %}
 
-    <section class="section section-cream">
-      <div class="container" style="text-align:center;">
-        <span class="section-eyebrow">Következő lépés</span>
-        <h2>Készítsd fel gyermeked az iskolakezdésre!</h2>
-        <p style="max-width:580px;margin:0 auto 2rem;">A helyek száma korlátozott! Ha érdekel a tanévi program (szeptembertől) vagy a nyári intenzív változat, vedd fel velünk a kapcsolatot minél hamarabb.</p>
-        <div class="section-cta-actions">
-          <a href="/kapcsolat/" class="btn btn-primary">📅 Időpontot foglalok</a>
-          <a href="/foglalkozasaink/" class="btn btn-outline">Vissza a foglalkozásokhoz</a>
-        </div>
-      </div>
-    </section>
+    {% set formProgram = "Iskola-előkészítő foglalkozás" %}
+    {% set formTitle = "Készítsd fel gyermeked az iskolakezdésre!" %}
+    {% set formSub = "A helyek száma korlátozott! Ha érdekel a tanévi program vagy a nyári intenzív változat, jelezd érdeklődésed." %}
+    {% set formButton = "Érdekel az iskola-előkészítő" %}
+    {% set formShowChild = true %}
+    {% set formId = "jelentkezes" %}
+    {% include "partials/program-form.njk" %}
 

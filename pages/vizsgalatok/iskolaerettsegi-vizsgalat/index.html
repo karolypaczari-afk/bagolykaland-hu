@@ -50,7 +50,7 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=mnzkorz9" />
+  <link rel="stylesheet" href="/css/style.css?v=mnzqnhzm" />
 
   
 
@@ -731,7 +731,7 @@
             <div class="sidebar-card" style="margin-top:1rem">
               <h4>Időpontfoglalás</h4>
               <p style="font-size:.875rem;color:var(--clr-text-muted);margin-bottom:1rem;">Kérdésed van? Foglalj időpontot!</p>
-              <a href="/kapcsolat/" class="btn btn-primary" style="width:100%;justify-content:center;display:flex;">📅 Időpont foglalása</a>
+              <a href="#jelentkezes" class="btn btn-primary" style="width:100%;justify-content:center;display:flex;">Időpont foglalása</a>
             </div>
             <div class="sidebar-card" style="margin-top:1rem">
               <h4>Kapcsolódó oldalak</h4>
@@ -747,18 +747,40 @@
       </div>
     </section>
 
-    <section class="section section-white">
-      <div class="container">
-        <div class="cta-banner fade-up">
-          <h2>Kérdésed van? Vedd fel velünk a kapcsolatot!</h2>
-          <p>Segítünk megtalálni a gyermekednek legmegfelelőbb fejlesztési vagy vizsgálati lehetőséget.</p>
-          <div class="cta-banner-btns">
-            <a href="/kapcsolat/" class="btn btn-yellow btn-lg">📅 Időpontfoglalás</a>
-            <a href="/arlista/" class="btn btn-outline-white btn-lg">Árlista</a>
-          </div>
+    
+    
+    
+    
+    
+    
+    
+<section id="jelentkezes" class="section section-cream" aria-label="Jelentkezés">
+  <div class="container">
+    <div class="program-signup fade-up">
+      <h3>Foglalj időpontot iskolaérettségi vizsgálatra!</h3>
+      <p class="program-signup-sub">Segítünk felmérni, hogy gyermeked felkészült-e az iskolakezdésre.</p>
+      <form data-program-form="Iskolaérettségi vizsgálat" class="program-signup-fields">
+        <input type="text" name="name" placeholder="Szülő neve" required autocomplete="name" />
+        <input type="email" name="email" placeholder="E-mail cím" required autocomplete="email" />
+        <input type="tel" name="phone" placeholder="Telefonszám (opcionális)" autocomplete="tel" />
+        <input type="text" name="child_name" placeholder="Gyermek neve" />
+        <input type="text" name="child_age" placeholder="Gyermek kora (pl. 6 éves)" />
+        <div style="position:absolute;left:-9999px;" aria-hidden="true">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
         </div>
+        <button type="submit">Időpontot foglalok</button>
+        <p class="program-form-error"></p>
+      </form>
+      <p class="program-signup-gdpr">Az adataidat bizalmasan kezeljük. <a href="/adatkezelesi-tajekoztato/">Adatkezelési tájékoztató</a></p>
+      <div class="program-signup-success">
+        <div class="success-icon">&#10004;</div>
+        <h4>Köszönjük az érdeklődést!</h4>
+        <p>Hamarosan felvesszük Veled a kapcsolatot e-mailben vagy telefonon.</p>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
+
 
 
   </main>
@@ -852,15 +874,15 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=mnzkorz9" defer></script>
-  <script src="/js/install-prompt.js?v=mnzkorz9" defer></script>
-  <script src="/js/tracking.js?v=mnzkorz9" defer></script>
-  <script src="/js/tracking-loader.js?v=mnzkorz9" defer></script>
-  <script src="/js/cookie-consent.js?v=mnzkorz9" defer></script>
-  <script src="/js/main.js?v=mnzkorz9" defer></script>
-  <script src="/js/lead-capture-loader.js?v=mnzkorz9"
-          data-popup-css="/css/popup.css?v=mnzkorz9"
-          data-popup-src="/js/popup.js?v=mnzkorz9"
+  <script src="/js/components.js?v=mnzqnhzm" defer></script>
+  <script src="/js/install-prompt.js?v=mnzqnhzm" defer></script>
+  <script src="/js/tracking.js?v=mnzqnhzm" defer></script>
+  <script src="/js/tracking-loader.js?v=mnzqnhzm" defer></script>
+  <script src="/js/cookie-consent.js?v=mnzqnhzm" defer></script>
+  <script src="/js/main.js?v=mnzqnhzm" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mnzqnhzm"
+          data-popup-css="/css/popup.css?v=mnzqnhzm"
+          data-popup-src="/js/popup.js?v=mnzqnhzm"
           defer></script>
 
 </body>

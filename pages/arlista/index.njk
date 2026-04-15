@@ -198,12 +198,11 @@ headStyles: |
 
     {% include "partials/lead-catcher.njk" %}
 
-    <!-- CTA BANNER -->
-    <section class="section section-white fade-up" aria-label="Időpontfoglalás">
-      <div class="container" style="text-align: center;">
-        <h2>Szeretnél időpontot foglalni?</h2>
-        <p>Vedd fel velünk a kapcsolatot, és megbeszéljük, hogyan tudunk segíteni gyermekednek!</p>
-        <a href="/kapcsolat/" class="btn btn-primary">Kapcsolatfelvétel</a>
-      </div>
-    </section>
+    {% set formProgram = "Árlista – általános érdeklődés" %}
+    {% set formTitle = "Szeretnél időpontot foglalni?" %}
+    {% set formSub = "Add meg az adataidat, és megbeszéljük, hogyan tudunk segíteni gyermekednek!" %}
+    {% set formButton = "Időpontot foglalok" %}
+    {% set formBg = "section-white" %}
+    {% set formId = "jelentkezes" %}
+    {% include "partials/program-form.njk" %}
 

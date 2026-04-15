@@ -1,0 +1,42 @@
+{#
+  Inline program signup form — reusable partial.
+
+  Variables (set before including):
+    formProgram   — program name sent in email subject (required)
+    formTitle     — h3 heading (default: "Érdeklődsz?")
+    formSub       — subtitle paragraph (default: generic)
+    formButton    — submit button text (default: "Érdekel!")
+    formSuccessTitle — success heading (default: "Köszönjük az érdeklődést!")
+    formSuccessMsg   — success message (default: generic)
+    formBg        — section background class: "section-cream" or "section-white" (default: "section-cream")
+    formShowChild — if true, show child name + age fields
+    formId        — optional section id for anchor links
+#}
+<section{% if formId %} id="{{ formId }}"{% endif %} class="section {{ formBg | default('section-cream') }}" aria-label="Jelentkezés">
+  <div class="container">
+    <div class="program-signup fade-up">
+      <h3>{{ formTitle | default("Érdeklődsz? Vedd fel velünk a kapcsolatot!") }}</h3>
+      <p class="program-signup-sub">{{ formSub | default("Add meg az adataidat és hamarosan felvesszük Veled a kapcsolatot — személyre szabottan segítünk!") }}</p>
+      <form data-program-form="{{ formProgram }}" class="program-signup-fields">
+        <input type="text" name="name" placeholder="Szülő neve" required autocomplete="name" />
+        <input type="email" name="email" placeholder="E-mail cím" required autocomplete="email" />
+        <input type="tel" name="phone" placeholder="Telefonszám (opcionális)" autocomplete="tel" />
+        {%- if formShowChild %}
+        <input type="text" name="child_name" placeholder="Gyermek neve" />
+        <input type="text" name="child_age" placeholder="Gyermek kora (pl. 6 éves)" />
+        {%- endif %}
+        <div style="position:absolute;left:-9999px;" aria-hidden="true">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+        <button type="submit">{{ formButton | default("Érdekel!") }}</button>
+        <p class="program-form-error"></p>
+      </form>
+      <p class="program-signup-gdpr">Az adataidat bizalmasan kezeljük. <a href="/adatkezelesi-tajekoztato/">Adatkezelési tájékoztató</a></p>
+      <div class="program-signup-success">
+        <div class="success-icon">&#10004;</div>
+        <h4>{{ formSuccessTitle | default("Köszönjük az érdeklődést!") }}</h4>
+        <p>{{ formSuccessMsg | default("Hamarosan felvesszük Veled a kapcsolatot e-mailben vagy telefonon.") }}</p>
+      </div>
+    </div>
+  </div>
+</section>

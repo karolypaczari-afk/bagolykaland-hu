@@ -85,7 +85,7 @@ ogDescription: "Logopédiai szűrővizsgálat 4,5–5 éves kortól. Feltárja a
             <div class="sidebar-card" style="margin-top:1rem">
               <h4>Időpontfoglalás</h4>
               <p style="font-size:.875rem;color:var(--clr-text-muted);margin-bottom:1rem;">Kérdésed van? Foglalj időpontot!</p>
-              <a href="/kapcsolat/" class="btn btn-primary" style="width:100%;justify-content:center;display:flex;">📅 Időpont foglalása</a>
+              <a href="#jelentkezes" class="btn btn-primary" style="width:100%;justify-content:center;display:flex;">Időpont foglalása</a>
             </div>
             <div class="sidebar-card" style="margin-top:1rem">
               <h4>Kapcsolódó oldalak</h4>
@@ -101,16 +101,11 @@ ogDescription: "Logopédiai szűrővizsgálat 4,5–5 éves kortól. Feltárja a
       </div>
     </section>
 
-    <section class="section section-white">
-      <div class="container">
-        <div class="cta-banner fade-up">
-          <h2>Kérdésed van? Vedd fel velünk a kapcsolatot!</h2>
-          <p>Segítünk megtalálni a gyermekednek legmegfelelőbb fejlesztési vagy vizsgálati lehetőséget.</p>
-          <div class="cta-banner-btns">
-            <a href="/kapcsolat/" class="btn btn-yellow btn-lg">📅 Időpontfoglalás</a>
-            <a href="/arlista/" class="btn btn-outline-white btn-lg">Árlista</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    {% set formProgram = "Logopédiai vizsgálat" %}
+    {% set formTitle = "Foglalj időpontot logopédiai vizsgálatra!" %}
+    {% set formSub = "Szakértő logopédusunk felméri gyermeked beszédfejlettségét és javaslatot tesz a további lépésekre." %}
+    {% set formButton = "Időpontot foglalok" %}
+    {% set formShowChild = true %}
+    {% set formId = "jelentkezes" %}
+    {% include "partials/program-form.njk" %}
 

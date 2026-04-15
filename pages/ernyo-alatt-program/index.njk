@@ -109,7 +109,7 @@ ogDescription: "Komplex, családra szabott fejlesztési program – átfogó viz
                 <li>🤝 <strong>Folyamatos kísérés</strong> – nem maradtok egyedül</li>
                 <li>📈 <strong>Mérhető eredmények</strong> – tudjátok, hol tartotok</li>
               </ul>
-              <a href="/kapcsolat/" class="btn btn-primary" style="width:100%;margin-top:1.5rem;text-align:center;">Érdeklődés</a>
+              <a href="#jelentkezes" class="btn btn-primary" style="width:100%;margin-top:1.5rem;text-align:center;">Érdeklődés</a>
             </div>
             <div class="sidebar-card" style="background:var(--clr-navy);color:#fff;">
               <h3 style="color:#fff;">Az Ernyő Alatt Program ára</h3>
@@ -120,15 +120,10 @@ ogDescription: "Komplex, családra szabott fejlesztési program – átfogó viz
         </div>
       </div>
     </section>
-    <section class="section section-cream">
-      <div class="container">
-        <div class="cta-banner fade-up">
-          <h2>Szeretnéd, hogy ernyő alatt tartsuk a családodat?</h2>
-          <p>Vedd fel velünk a kapcsolatot, és beszéljük meg, hogyan segíthetünk a gyermekednek!</p>
-          <div class="cta-banner-btns">
-            <a href="/kapcsolat/" class="btn btn-yellow btn-lg">Kapcsolatfelvétel</a>
-            <a href="/arlista/" class="btn btn-outline-white btn-lg">Árlista</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    {% set formProgram = "Ernyő Alatt Program" %}
+    {% set formTitle = "Szeretnéd, hogy ernyő alatt tartsuk a családodat?" %}
+    {% set formSub = "Add meg az adataidat, és beszéljük meg, hogyan segíthetünk a gyermekednek!" %}
+    {% set formButton = "Érdekel a program" %}
+    {% set formShowChild = true %}
+    {% set formId = "jelentkezes" %}
+    {% include "partials/program-form.njk" %}

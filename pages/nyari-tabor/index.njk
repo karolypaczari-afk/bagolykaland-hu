@@ -1542,11 +1542,19 @@ headStyles: |
           <form data-program-form="Kincskereső Élménytábor 2026" class="program-signup-fields">
             <input type="text" name="name" placeholder="Szülő neve" required autocomplete="name" />
             <input type="email" name="email" placeholder="E-mail cím" required autocomplete="email" />
-            <input type="tel" name="phone" placeholder="Telefonszám (opcionális)" autocomplete="tel" />
+            <input type="tel" name="phone" placeholder="Telefonszám" autocomplete="tel" />
+            <input type="text" name="child_name" placeholder="Gyermek neve" />
+            <input type="text" name="child_age" placeholder="Gyermek kora (pl. 6 éves)" />
+            <select name="turnus" style="padding:0.85rem 1rem;border:1px solid #e2e8f0;border-radius:var(--r-md);font-size:0.95rem;color:var(--clr-text);background:#f8fafc;">
+              <option value="">Melyik turnus érdekel?</option>
+              <option value="1. turnus (júl. 7–11.)">1. turnus — júl. 7–11.</option>
+              <option value="2. turnus (júl. 14–18.)">2. turnus — júl. 14–18.</option>
+              <option value="Mindkettő érdekel">Mindkettő érdekel</option>
+            </select>
             <div style="position:absolute;left:-9999px;" aria-hidden="true">
               <input type="text" name="website" tabindex="-1" autocomplete="off" />
             </div>
-            <button type="submit">Jelentkezem / Érdekel!</button>
+            <button type="submit">Jelentkezem!</button>
             <p class="program-form-error"></p>
           </form>
           <p class="program-signup-gdpr">Az adataidat bizalmasan kezeljük. <a href="/adatkezelesi-tajekoztato/">Adatkezelési tájékoztató</a></p>

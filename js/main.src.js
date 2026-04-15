@@ -398,14 +398,18 @@
         btn.disabled = true;
         btn.textContent = 'Küldés...';
 
-        var message = 'Jelentkezés / Érdeklődés: ' + program + '\n';
-        if (phone) message += 'Telefon: ' + phone + '\n';
-        message += 'Forrás: ' + window.location.pathname;
+        var message = 'Jelentkezés / Érdeklődés: ' + program;
+        var childName = (form.querySelector('input[name="child_name"]') || {}).value || '';
+        var childAge = (form.querySelector('input[name="child_age"]') || {}).value || '';
+        var turnus = (form.querySelector('select[name="turnus"]') || {}).value || '';
+        if (childName) message += '\nGyermek neve: ' + childName;
+        if (childAge) message += '\nGyermek kora: ' + childAge;
+        if (turnus) message += '\nVálasztott turnus: ' + turnus;
 
         fetch('/api/contact.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: name.trim(), email: email.trim(), phone: phone.trim(), message: message, website: website })
+          body: JSON.stringify({ name: name.trim(), email: email.trim(), phone: phone.trim(), message: message, program: program, source: window.location.pathname, website: website })
         })
         .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
         .then(function (res) {

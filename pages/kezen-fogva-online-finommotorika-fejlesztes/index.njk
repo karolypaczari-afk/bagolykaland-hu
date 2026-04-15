@@ -64,21 +64,16 @@ ogDescription: "Online finommotorika fejlesztő program: 1 hónapos személyes v
                 <li style="font-size:0.875rem;">✅ 1 hónapos fejlesztési ciklus</li>
                 <li style="font-size:0.875rem;">✅ Ismételhető program</li>
               </ul>
-              <a href="/kapcsolat/" class="btn btn-primary" style="width:100%;text-align:center;">Megrendelem</a>
+              <a href="#jelentkezes" class="btn btn-primary" style="width:100%;text-align:center;">Megrendelem</a>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <section class="section section-cream">
-      <div class="container">
-        <div class="cta-banner fade-up">
-          <h2>Kérdésed van a programról?</h2>
-          <p>Szívesen válaszolunk minden kérdésedre – hívj minket vagy írj!</p>
-          <div class="cta-banner-btns">
-            <a href="/kapcsolat/" class="btn btn-yellow btn-lg">Kapcsolatfelvétel</a>
-            <a href="/arlista/" class="btn btn-outline-white btn-lg">Teljes árlista</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    {% set formProgram = "Kézen Fogva – Online finommotorika fejlesztés" %}
+    {% set formTitle = "Rendeld meg a Kézen Fogva programot!" %}
+    {% set formSub = "Add meg az adataidat, és hamarosan küldjük a további részleteket." %}
+    {% set formButton = "Megrendelem" %}
+    {% set formShowChild = true %}
+    {% set formId = "jelentkezes" %}
+    {% include "partials/program-form.njk" %}

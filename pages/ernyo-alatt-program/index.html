@@ -50,7 +50,7 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=mnzkorz9" />
+  <link rel="stylesheet" href="/css/style.css?v=mnzqnhzm" />
 
   
 
@@ -760,7 +760,7 @@
                 <li>🤝 <strong>Folyamatos kísérés</strong> – nem maradtok egyedül</li>
                 <li>📈 <strong>Mérhető eredmények</strong> – tudjátok, hol tartotok</li>
               </ul>
-              <a href="/kapcsolat/" class="btn btn-primary" style="width:100%;margin-top:1.5rem;text-align:center;">Érdeklődés</a>
+              <a href="#jelentkezes" class="btn btn-primary" style="width:100%;margin-top:1.5rem;text-align:center;">Érdeklődés</a>
             </div>
             <div class="sidebar-card" style="background:var(--clr-navy);color:#fff;">
               <h3 style="color:#fff;">Az Ernyő Alatt Program ára</h3>
@@ -771,18 +771,40 @@
         </div>
       </div>
     </section>
-    <section class="section section-cream">
-      <div class="container">
-        <div class="cta-banner fade-up">
-          <h2>Szeretnéd, hogy ernyő alatt tartsuk a családodat?</h2>
-          <p>Vedd fel velünk a kapcsolatot, és beszéljük meg, hogyan segíthetünk a gyermekednek!</p>
-          <div class="cta-banner-btns">
-            <a href="/kapcsolat/" class="btn btn-yellow btn-lg">Kapcsolatfelvétel</a>
-            <a href="/arlista/" class="btn btn-outline-white btn-lg">Árlista</a>
-          </div>
+    
+    
+    
+    
+    
+    
+    
+<section id="jelentkezes" class="section section-cream" aria-label="Jelentkezés">
+  <div class="container">
+    <div class="program-signup fade-up">
+      <h3>Szeretnéd, hogy ernyő alatt tartsuk a családodat?</h3>
+      <p class="program-signup-sub">Add meg az adataidat, és beszéljük meg, hogyan segíthetünk a gyermekednek!</p>
+      <form data-program-form="Ernyő Alatt Program" class="program-signup-fields">
+        <input type="text" name="name" placeholder="Szülő neve" required autocomplete="name" />
+        <input type="email" name="email" placeholder="E-mail cím" required autocomplete="email" />
+        <input type="tel" name="phone" placeholder="Telefonszám (opcionális)" autocomplete="tel" />
+        <input type="text" name="child_name" placeholder="Gyermek neve" />
+        <input type="text" name="child_age" placeholder="Gyermek kora (pl. 6 éves)" />
+        <div style="position:absolute;left:-9999px;" aria-hidden="true">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
         </div>
+        <button type="submit">Érdekel a program</button>
+        <p class="program-form-error"></p>
+      </form>
+      <p class="program-signup-gdpr">Az adataidat bizalmasan kezeljük. <a href="/adatkezelesi-tajekoztato/">Adatkezelési tájékoztató</a></p>
+      <div class="program-signup-success">
+        <div class="success-icon">&#10004;</div>
+        <h4>Köszönjük az érdeklődést!</h4>
+        <p>Hamarosan felvesszük Veled a kapcsolatot e-mailben vagy telefonon.</p>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
+
 
   </main>
 <footer class="site-footer" id="site-footer" role="contentinfo">
@@ -875,15 +897,15 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=mnzkorz9" defer></script>
-  <script src="/js/install-prompt.js?v=mnzkorz9" defer></script>
-  <script src="/js/tracking.js?v=mnzkorz9" defer></script>
-  <script src="/js/tracking-loader.js?v=mnzkorz9" defer></script>
-  <script src="/js/cookie-consent.js?v=mnzkorz9" defer></script>
-  <script src="/js/main.js?v=mnzkorz9" defer></script>
-  <script src="/js/lead-capture-loader.js?v=mnzkorz9"
-          data-popup-css="/css/popup.css?v=mnzkorz9"
-          data-popup-src="/js/popup.js?v=mnzkorz9"
+  <script src="/js/components.js?v=mnzqnhzm" defer></script>
+  <script src="/js/install-prompt.js?v=mnzqnhzm" defer></script>
+  <script src="/js/tracking.js?v=mnzqnhzm" defer></script>
+  <script src="/js/tracking-loader.js?v=mnzqnhzm" defer></script>
+  <script src="/js/cookie-consent.js?v=mnzqnhzm" defer></script>
+  <script src="/js/main.js?v=mnzqnhzm" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mnzqnhzm"
+          data-popup-css="/css/popup.css?v=mnzqnhzm"
+          data-popup-src="/js/popup.js?v=mnzqnhzm"
           defer></script>
 
 </body>

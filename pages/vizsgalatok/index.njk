@@ -70,16 +70,11 @@ ogDescription: "Derítsd ki pontosan, mire van szükség gyermekednek – szaksz
       </div>
     </section>
 
-    <section class="section section-white">
-      <div class="container">
-        <div class="cta-banner fade-up">
-          <h2>Kérdésed van? Vedd fel velünk a kapcsolatot!</h2>
-          <p>Segítünk megtalálni a gyermekednek legmegfelelőbb fejlesztési vagy vizsgálati lehetőséget.</p>
-          <div class="cta-banner-btns">
-            <a href="/kapcsolat/" class="btn btn-yellow btn-lg">📅 Időpontfoglalás</a>
-            <a href="/arlista/" class="btn btn-outline-white btn-lg">Árlista</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    {% set formProgram = "Vizsgálat – általános érdeklődés" %}
+    {% set formTitle = "Foglalj időpontot vizsgálatra!" %}
+    {% set formSub = "Segítünk megtalálni a gyermeked számára legmegfelelőbb vizsgálati lehetőséget." %}
+    {% set formButton = "Időpontot foglalok" %}
+    {% set formShowChild = true %}
+    {% set formId = "jelentkezes" %}
+    {% include "partials/program-form.njk" %}
 

@@ -26,6 +26,8 @@ $name    = trim(strip_tags($input['name'] ?? ''));
 $email   = trim($input['email'] ?? '');
 $phone   = trim(strip_tags($input['phone'] ?? ''));
 $message = trim(strip_tags($input['message'] ?? ''));
+$program = trim(strip_tags($input['program'] ?? ''));
+$source  = trim(strip_tags($input['source'] ?? ''));
 
 // Validate required fields
 $errors = [];
@@ -65,17 +67,32 @@ if (file_exists($rateLimitFile) && (time() - filemtime($rateLimitFile)) < 60) {
     exit;
 }
 
-// Build email
+// Build email — subject reflects which form was filled out
 $to = 'info@bagolykaland.hu, fejlesztobagolyka@gmail.com';
-$subject = '=?UTF-8?B?' . base64_encode("Új üzenet – bagolykaland.hu kapcsolat") . '?=';
+
+if ($program !== '') {
+    $subjectText = "Jelentkezés: {$program} – bagolykaland.hu";
+} else {
+    $subjectText = "Új üzenet – bagolykaland.hu kapcsolat";
+}
+$subject = '=?UTF-8?B?' . base64_encode($subjectText) . '?=';
 $messageId = '<' . bin2hex(random_bytes(16)) . '@bagolykaland.hu>';
 
-$body  = "Feladó: {$name}\r\n";
+$body = "";
+if ($program !== '') {
+    $body .= "═══════════════════════════════\r\n";
+    $body .= "PROGRAM: {$program}\r\n";
+    $body .= "═══════════════════════════════\r\n\r\n";
+}
+$body .= "Feladó: {$name}\r\n";
 $body .= "E-mail: {$email}\r\n";
 if ($phone !== '') {
     $body .= "Telefon: {$phone}\r\n";
 }
 $body .= "Időpont: " . date('Y-m-d H:i:s') . "\r\n";
+if ($source !== '') {
+    $body .= "Forrás oldal: {$source}\r\n";
+}
 $body .= "---\r\n\r\n";
 $body .= $message . "\r\n";
 
