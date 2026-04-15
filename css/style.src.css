@@ -310,7 +310,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
   transform: translateY(-2px);
   box-shadow: 0 8px 22px rgba(232,115,74,0.38);
 }
-.nav-cta__icon { font-size: 1rem; line-height: 1; flex-shrink: 0; }
+.nav-cta__icon { width: 18px; height: 18px; flex-shrink: 0; stroke: #fff; }
 .nav-cta__label { white-space: nowrap; }
 
 .nav-install {
