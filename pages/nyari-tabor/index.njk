@@ -1,7 +1,8 @@
 ---
 layout: "base.njk"
 title: "Kincskereső Élménytábor 2026 – Nyári tábor 5–8 éveseknek | BagolykaLand Debrecen"
-description: "40+ fejlesztő tevékenység, mesés kalandok, max 12 fő/turnus. 9+ éve bevált nyári tábor Debrecenben 5–8 éves gyerekeknek. Július 13–17. és 20–24."
+description: "40+ fejlesztő tevékenység, mesés kalandok, max 12 fő/turnus. 9+ éve bevált nyári tábor Debrecenben 5–8 éves gyerekeknek. Július 14–18. és 21–25."
+preloadHero: "/img/bagolykaland-kincskereso-tabor-hero.webp"
 ogImage: "https://bagolykaland.hu/img/bagolykaland-kincskereso-tabor-hero.webp"
 headStyles: |
 
@@ -252,9 +253,16 @@ headStyles: |
 ---
 
 
-    {# ── HERO ── #}
-    <section class="page-hero" style="--accent: var(--clr-yellow); background: linear-gradient(135deg, var(--clr-navy) 0%, var(--clr-navy-mid) 100%);">
-      <div class="container" style="text-align:center;">
+    {# ── HERO WITH PHOTO ── #}
+    <section class="page-hero" style="--accent: var(--clr-yellow); background: linear-gradient(135deg, var(--clr-navy) 0%, var(--clr-navy-mid) 100%); overflow:hidden; position:relative;">
+      <div style="position:absolute;inset:0;z-index:0;">
+        <img src="/img/bagolykaland-kincskereso-tabor-hero.webp"
+             alt=""
+             width="1200" height="800"
+             loading="eager" fetchpriority="high"
+             style="width:100%;height:100%;object-fit:cover;opacity:0.2;" />
+      </div>
+      <div class="container" style="text-align:center;position:relative;z-index:1;">
         <nav class="breadcrumb fade-up">
           <a href="/">Főoldal</a>
           <span>/</span>
@@ -265,8 +273,8 @@ headStyles: |
         <div class="accent-bar" style="background:var(--clr-yellow);"></div>
         <p class="fade-up stagger-2" style="color:rgba(255,255,255,0.9);max-width:620px;margin:0 auto;">Debrecen legkülönlegesebb kiscsoportos nyári tábora 5–8 éves gyerekeknek — 9+ éve, 40+ fejlesztő tevékenységgel, mesés kalandokkal</p>
         <div class="camp-dates-bar fade-up stagger-2">
-          <span class="camp-date-chip">1. turnus: július 14–18.</span>
-          <span class="camp-date-chip">2. turnus: július 21–25.</span>
+          <span class="camp-date-chip">1. turnus: 2026. július 14–18.</span>
+          <span class="camp-date-chip">2. turnus: 2026. július 21–25.</span>
         </div>
         <div class="section-cta-actions fade-up stagger-2" style="margin-top:2rem;">
           <a href="#jelentkezes" class="btn btn-primary btn-lg">Jelentkezem!</a>
@@ -275,6 +283,18 @@ headStyles: |
       </div>
     </section>
 
+
+    {# ── HERO PHOTO STRIP ── #}
+    <section class="section section-white" style="padding-top:0;padding-bottom:0;">
+      <div class="container" style="max-width:960px;">
+        <div class="fade-up" style="border-radius:0 0 var(--r-lg) var(--r-lg);overflow:hidden;box-shadow:var(--sh-lg);margin-top:-2rem;position:relative;z-index:2;">
+          <img src="/img/bagolykaland-kincskereso-tabor-csapat-szabadban.webp"
+               alt="Kincskereső Élménytábor — a teljes csapat a szabadban, mosolygós gyerekek"
+               width="960" height="540" loading="eager"
+               style="width:100%;height:auto;display:block;" />
+        </div>
+      </div>
+    </section>
 
     {# ── NEM CSAK TÁBOR — KALAND! ── #}
     <section id="program" class="section section-cream" aria-labelledby="camp-intro">
@@ -491,7 +511,7 @@ headStyles: |
         <div class="session-grid">
           <div class="session-card fade-up">
             <div class="session-card__label">1. turnus</div>
-            <h3>Július 14–18.</h3>
+            <h3>2026. július 14–18.</h3>
             <div class="session-card__detail">
               Hétfő – Péntek<br>
               Naponta 9:00 – 16:00<br>
@@ -502,7 +522,7 @@ headStyles: |
           </div>
           <div class="session-card fade-up stagger-1">
             <div class="session-card__label">2. turnus</div>
-            <h3>Július 21–25.</h3>
+            <h3>2026. július 21–25.</h3>
             <div class="session-card__detail">
               Hétfő – Péntek<br>
               Naponta 9:00 – 16:00<br>
