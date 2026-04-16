@@ -202,6 +202,25 @@
                     popup_group: lm.group
                 });
 
+                // Save to Supabase (fire-and-forget)
+                var sbKey = 'sb_publishable_WbKSuHWa6yRLGShUnR6bcw_341Kp-Xz';
+                fetch('https://esiittanpkwxvmghqbsy.supabase.co/rest/v1/leads', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': sbKey,
+                        'Authorization': 'Bearer ' + sbKey,
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        name: name.trim() || null,
+                        email: email.trim(),
+                        source_page: window.location.pathname,
+                        group_name: lm.group,
+                        form_type: 'popup'
+                    })
+                }).catch(function () {});
+
                 submitToMailerLite(email, name)
                     .then(function () {
                         form.style.display = 'none';

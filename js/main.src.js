@@ -6,6 +6,28 @@
 (function () {
   'use strict';
 
+  /* ------------------------------------------
+     SUPABASE SAVE HELPER
+     Silently saves form data to Supabase DB.
+     Uses anon key + RLS (INSERT only).
+     Honeypot: skips if `website` field is filled.
+  ------------------------------------------ */
+  var SB_URL = 'https://esiittanpkwxvmghqbsy.supabase.co/rest/v1/';
+  var SB_KEY = 'sb_publishable_WbKSuHWa6yRLGShUnR6bcw_341Kp-Xz';
+
+  function sbInsert(table, payload) {
+    return fetch(SB_URL + table, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    }).catch(function () {}); // silent fail — never blocks UI
+  }
+
   const trackedForms = new WeakSet();
 
   function track(eventName, params = {}) {
@@ -250,6 +272,19 @@
         const source = block ? (block.dataset.lcSource || 'bagolykaland') : 'bagolykaland';
         if (!email) return;
 
+        // Honeypot check
+        const honeypot = (form.querySelector('input[name="website"]') || {}).value || '';
+        if (honeypot) return;
+
+        // Save to Supabase (fire-and-forget)
+        sbInsert('leads', {
+          name: name.trim() || null,
+          email: email.trim(),
+          source_page: window.location.pathname,
+          group_name: group,
+          form_type: 'lead_catcher'
+        });
+
         const origText = btn.textContent;
         btn.disabled = true;
         btn.textContent = 'Küldés...';
@@ -331,6 +366,7 @@
 
       // Client-side validation
       errorEl.style.display = 'none';
+      if (website) return; // honeypot
       if (!name || !email || !message) {
         errorEl.textContent = 'Kérjük, töltsd ki az összes kötelező mezőt.';
         errorEl.style.display = 'block';
@@ -354,6 +390,13 @@
       .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
       .then(function (res) {
         if (res.data.ok) {
+          // Save to Supabase (fire-and-forget)
+          sbInsert('contacts', {
+            name: name,
+            email: email,
+            phone: phone || null,
+            message: message
+          });
           form.style.display = 'none';
           successEl.style.display = 'block';
           track('bk_contact_form_success', { form_name: 'contact-form' });
@@ -388,6 +431,7 @@
         var errorEl = form.querySelector('.program-form-error');
         var successEl = wrapper ? wrapper.querySelector('.program-signup-success') : null;
 
+        if (website) return; // honeypot
         if (!name.trim() || !email.trim()) {
           if (errorEl) { errorEl.textContent = 'Kérjük, töltsd ki a nevet és az e-mail címet.'; errorEl.style.display = 'block'; }
           return;
@@ -414,6 +458,17 @@
         .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
         .then(function (res) {
           if (res.data.ok) {
+            // Save to Supabase (fire-and-forget)
+            sbInsert('signups', {
+              parent_name: name.trim(),
+              email: email.trim(),
+              phone: phone.trim() || null,
+              child_name: childName || null,
+              child_age: childAge || null,
+              turnus: turnus || null,
+              program: program,
+              source_page: window.location.pathname
+            });
             form.style.display = 'none';
             if (successEl) successEl.style.display = 'block';
             track('bk_program_signup', { program: program, page: window.location.pathname });
