@@ -2100,8 +2100,9 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
     rgba(91,184,173,0.15) 0%, transparent 65%);
   pointer-events: none;
 }
+.page-hero .container { text-align: center; }
 .page-hero .breadcrumb {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
   font-size: .78rem; color: rgba(255,255,255,0.45); margin-bottom: var(--sp-lg);
 }
 .page-hero .breadcrumb a {
@@ -2120,10 +2121,12 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
   width: 56px; height: 4px; border-radius: 2px;
   background: var(--accent, var(--clr-yellow));
   margin-bottom: var(--sp-lg);
+  margin-left: auto; margin-right: auto;
 }
 .page-hero p {
   font-size: 1.05rem; color: rgba(255,255,255,0.7);
   max-width: 560px; line-height: 1.8;
+  margin-left: auto; margin-right: auto;
 }
 .page-hero__notice {
   margin-top: var(--sp-md);
