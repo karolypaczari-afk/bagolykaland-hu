@@ -2409,17 +2409,17 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
    GALLERY
    ========================================= */
 .gallery-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-sm);
+  columns: 4; column-gap: var(--sp-md);
 }
 .gallery-item {
-  aspect-ratio: 4/3; border-radius: var(--r-lg); overflow: hidden;
-  box-shadow: var(--sh-sm);
+  break-inside: avoid; border-radius: var(--r-lg); overflow: hidden;
+  box-shadow: var(--sh-sm); margin-bottom: var(--sp-md);
 }
 .gallery-item img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: auto; display: block;
   transition: transform var(--t-slow);
 }
-.gallery-item:hover img { transform: scale(1.08); }
+.gallery-item:hover img { transform: scale(1.06); }
 
 /* =========================================
    CONTACT
@@ -2702,7 +2702,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); line-height: 1.25; text-wr
   .blog-grid           { grid-template-columns: 1fr; }
   .footer-top          { grid-template-columns: 1fr; }
   .team-card           { width: calc((100% - var(--sp-xl)) / 2); }
-  .gallery-grid        { grid-template-columns: repeat(2,1fr); }
+  .gallery-grid        { columns: 2; }
   .cta-banner          { padding: var(--sp-2xl) var(--sp-xl); border-radius: var(--r-xl); }
   .hero-actions        { flex-direction: column; align-items: flex-start; }
   .hero-actions .btn   { width: 100%; justify-content: center; }
@@ -3104,7 +3104,6 @@ body {
 @supports not (aspect-ratio: 1) {
   .about-img-frame    { height: 420px; }
   .alexandra-img-frame { height: 340px; }
-  .gallery-item,
   .gallery-thumb      { height: 220px; }
   .zsenibagoly-photo  { height: 200px; }
   .blog-thumb         { height: 200px; }
