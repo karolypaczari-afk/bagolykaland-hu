@@ -1412,7 +1412,7 @@ headStyles: |
             <div class="session-card__price-note">Testvérkedvezménnyel: 70.000 Ft / fő</div>
             {# UPDATE: frissítsd a szabad helyek számát! #}
             <div class="session-card__spots">Már csak 8 szabad hely a 2 turnusban!</div>
-            <a href="#camp-form" class="btn btn-primary" style="width:100%;justify-content:center;">Jelentkezem az 1. turnusra</a>
+            <a href="#camp-form" class="btn btn-primary" style="width:100%;justify-content:center;" data-select-turnus="1. turnus (júl. 14–18.)">Jelentkezem az 1. turnusra</a>
           </div>
           <div class="session-card fade-up stagger-1">
             <div class="session-card__label">2. turnus</div>
@@ -1426,7 +1426,7 @@ headStyles: |
             <div class="session-card__price-note">Testvérkedvezménnyel: 70.000 Ft / fő</div>
             {# UPDATE: frissítsd a szabad helyek számát! #}
             <div class="session-card__spots">Már csak 8 szabad hely a 2 turnusban!</div>
-            <a href="#camp-form" class="btn btn-primary" style="width:100%;justify-content:center;">Jelentkezem a 2. turnusra</a>
+            <a href="#camp-form" class="btn btn-primary" style="width:100%;justify-content:center;" data-select-turnus="2. turnus (júl. 21–25.)">Jelentkezem a 2. turnusra</a>
           </div>
         </div>
 
@@ -1464,7 +1464,7 @@ headStyles: |
             <div class="faq-answer">Az Élménytábor 5–8 éves gyerekeknek szól. A tevékenységek és a nehézségi szintek ehhez a korosztályhoz vannak igazítva, de ha a gyermeked kicsit fiatalabb vagy idősebb, keress minket és egyeztetünk!</div>
           </details>
 
-          <details class="faq-card" data-cat="general">
+          <details class="faq-card" data-cat="general" open>
             <summary>
               <span class="faq-icon faq-icon--general">?</span>
               <span>Miért csak 12 fő egy turnusban?</span>
@@ -1473,7 +1473,7 @@ headStyles: |
             <div class="faq-answer">Azért, mert hiszünk abban, hogy a kis létszám biztosítja, hogy minden gyermek valódi figyelmet, személyes törődést és egyéni élményeket kapjon. Ez az, ami a Kincskereső Élménytábort különlegessé teszi már 9+ éve.</div>
           </details>
 
-          <details class="faq-card" data-cat="general">
+          <details class="faq-card" data-cat="general" open>
             <summary>
               <span class="faq-icon faq-icon--general">?</span>
               <span>Van-e speciális felkészültségetek?</span>
@@ -1492,7 +1492,7 @@ headStyles: |
             <div class="faq-answer">Reggel 9:00-kor érkezés és reggeli torna, utána az aznapi mese indítja el a kalandot. Délelőtt a főbb próbatételek és tevékenységek zajlanak, ebéd után kézműves foglalkozás, csapatjátékok és relaxáció. 16:00-kor zárunk. Minden nap más mesében utazunk!</div>
           </details>
 
-          <details class="faq-card" data-cat="program">
+          <details class="faq-card" data-cat="program" open>
             <summary>
               <span class="faq-icon faq-icon--program">&#9734;</span>
               <span>Mi történik, ha a gyermekem nehezen válik el?</span>
@@ -1511,7 +1511,7 @@ headStyles: |
             <div class="faq-answer">Kényelmes, mozgásra alkalmas ruha, váltóruha, zárt cipő, kulacs, tízórai és ebéd (ha nem kér ebédet a szülő helyben), naptej és sapka a kertben töltött idő miatt.</div>
           </details>
 
-          <details class="faq-card" data-cat="practical">
+          <details class="faq-card" data-cat="practical" open>
             <summary>
               <span class="faq-icon faq-icon--practical">&#9998;</span>
               <span>Mi történik rossz idő esetén?</span>
@@ -1521,7 +1521,7 @@ headStyles: |
           </details>
 
           {# ── Árak ── #}
-          <details class="faq-card" data-cat="price">
+          <details class="faq-card" data-cat="price" open>
             <summary>
               <span class="faq-icon faq-icon--price">&#9733;</span>
               <span>Mennyibe kerül a tábor?</span>
@@ -1530,7 +1530,7 @@ headStyles: |
             <div class="faq-answer">A tábor ára <strong>75.000 Ft / gyermek / turnus</strong>. Ez tartalmazza a teljes 5 napos programot, mind a 40+ fejlesztő tevékenységet, a fejlesztőpedagógus és mozgásterapeuta felügyeletét, a napi fotóriportot, valamint minden szükséges eszközt és anyagot. <strong>Testvérkedvezménnyel: 70.000 Ft / fő.</strong></div>
           </details>
 
-          <details class="faq-card" data-cat="price">
+          <details class="faq-card" data-cat="price" open>
             <summary>
               <span class="faq-icon faq-icon--price">&#9733;</span>
               <span>Van-e testvérkedvezmény?</span>
@@ -1562,8 +1562,8 @@ headStyles: |
             <input type="text" name="child_age" placeholder="Gyermek kora (pl. 6 éves)" />
             <select name="turnus" style="padding:0.85rem 1rem;border:1px solid #e2e8f0;border-radius:var(--r-md);font-size:0.95rem;color:var(--clr-text);background:#f8fafc;">
               <option value="">Melyik turnus érdekel?</option>
-              <option value="1. turnus (júl. 7–11.)">1. turnus — júl. 7–11.</option>
-              <option value="2. turnus (júl. 14–18.)">2. turnus — júl. 14–18.</option>
+              <option value="1. turnus (júl. 14–18.)">1. turnus — júl. 14–18.</option>
+              <option value="2. turnus (júl. 21–25.)">2. turnus — júl. 21–25.</option>
               <option value="Mindkettő érdekel">Mindkettő érdekel</option>
             </select>
             <div style="position:absolute;left:-9999px;" aria-hidden="true">
@@ -1620,6 +1620,23 @@ headStyles: |
               c.classList.add('faq-hidden');
             }
           });
+        });
+      });
+    })();
+    </script>
+    <script>
+    (function() {
+      document.querySelectorAll('[data-select-turnus]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var val = btn.getAttribute('data-select-turnus');
+          var sel = document.querySelector('select[name="turnus"]');
+          if (!sel || !val) return;
+          for (var i = 0; i < sel.options.length; i++) {
+            if (sel.options[i].value === val) {
+              sel.selectedIndex = i;
+              break;
+            }
+          }
         });
       });
     })();
