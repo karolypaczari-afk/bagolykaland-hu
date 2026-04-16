@@ -31,8 +31,6 @@ const PAGE_LABELS = {
     'blog/szerinted-is-felesleges-divathobort-az-iskola-elokeszito/index.html': 'Blog - Iskola-elokeszito',
     'blog/te-is-kikered-a-gyermeked-velemenyet/index.html': 'Blog - Gyermeked velemenye',
     'blog/te-is-nehezen-viseled-hogy-folyton-rohangal-es-az-agyon-ugral-a-gyermeked/index.html': 'Blog - Rohangalas',
-    'ernyo-alatt-program/index.html': 'Ernyo Alatt Program',
-    'eves-hetirend/index.html': 'Eves Hetirend',
     'foglalkozasaink/index.html': 'Foglalkozasaink',
     'foglalkozasaink/egyeni-fejleszto-foglalkozasok/index.html': 'Egyeni Fejleszto Foglalkozasok',
     'foglalkozasaink/iskola-elokeszito-foglalkozas/index.html': 'Iskola-elokeszito Foglalkozas',

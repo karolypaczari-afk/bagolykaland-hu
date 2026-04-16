@@ -101,12 +101,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://bagolykaland.hu/ernyo-alatt-program/</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://bagolykaland.hu/kezen-fogva-online-finommotorika-fejlesztes/</loc>
     <lastmod>2026-04-14</lastmod>
     <changefreq>monthly</changefreq>
@@ -124,12 +118,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-galeria-gyermek-19.webp</image:loc></image:image>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/eves-hetirend/</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bagolykaland.hu/kapcsolat/</loc>

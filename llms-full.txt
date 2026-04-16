@@ -21,10 +21,6 @@
 - 3 gyermek édesanyja
 - Online képzések: ZseniBagoly.hu platformon
 
-### Tamásné Pocsai Boglárka
-- Fejlesztőpedagógus
-- A BagolykaLand munkatársa
-
 ---
 
 ## Foglalkozások részletesen
@@ -52,10 +48,6 @@ Személyre szabott fejlesztési terv minden gyermeknek. Bevezető felmérés →
 ### Kézenfogva – Online Finommotorika-fejlesztés
 **URL:** https://bagolykaland.hu/kezen-fogva-online-finommotorika-fejlesztes/
 1 hónapos online fejlesztési program ceruzafogás, színezés, írás előkészítése. Napi néhány perc, játékos feladatok, virtuális személyes vezetés. Ára: 18.900 Ft.
-
-### Ernyő alatt program
-**URL:** https://bagolykaland.hu/ernyo-alatt-program/
-Komplex, egyénre szabott segítség a teljes családnak. Több fejlesztési terület egyidejű kezelése, szülői támogatás, folyamatos konzultáció.
 
 ---
 

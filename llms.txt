@@ -10,7 +10,6 @@
 - [Iskola-előkészítő](https://bagolykaland.hu/foglalkozasaink/iskola-elokeszito-foglalkozas/): Max. 5–7 fős csoportok, 9 hónapos program, heti 60 perc.
 - [Szorongásoldó program (Mozaik)](https://bagolykaland.hu/foglalkozasaink/szorongasoldo-program/): 10 alkalmas csoportos program félénk, szorongó gyermekeknek.
 - [Kézenfogva – online finommotorika-fejlesztés](https://bagolykaland.hu/kezen-fogva-online-finommotorika-fejlesztes/): 1 hónapos online fejlesztési ciklus ceruzafogás és finommotorika javítására.
-- [Ernyő alatt program](https://bagolykaland.hu/ernyo-alatt-program/): Komplex, egyénre szabott segítség a teljes családnak.
 
 ## Vizsgálatok
 
@@ -30,7 +29,6 @@
 - [Kapcsolat és időpontfoglalás](https://bagolykaland.hu/kapcsolat/)
 - [Blog – szülőknek szóló cikkek](https://bagolykaland.hu/blog/)
 - [Galéria](https://bagolykaland.hu/galeria/)
-- [Éves heti rend](https://bagolykaland.hu/eves-hetirend/)
 
 ## Online képzések
 

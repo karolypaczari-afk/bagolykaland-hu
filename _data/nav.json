@@ -12,7 +12,6 @@
             { "label": "Komplex részképesség vizsgálat", "url": "/vizsgalatok/komplex-reszkepesseg-vizsgalat/",    "icon": "/img/service_vizsgalatok_ai.webp", "desc": "Átfogó képességfelmérés", "group": "Vizsgálatok" },
             { "label": "Kincskereső Élménytábor",        "url": "/nyari-tabor/",                                   "icon": "/img/service_iskola_ai.webp", "desc": "Nyári fejlesztő tábor 5–8 éveseknek", "badge": "Nyári!", "group": "Programok" },
             { "label": "Iskola-előkészítő foglalkozás",  "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/", "icon": "/img/service_iskola_ai.webp", "desc": "Felkészítés az iskolakezdésre", "badge": "Népszerű", "group": "Programok" },
-            { "label": "Ernyő alatt program",            "url": "/ernyo-alatt-program/",                           "desc": "Közösségi program családoknak", "group": "Programok" },
             { "label": "Kézen fogva – online finommotorika", "url": "/kezen-fogva-online-finommotorika-fejlesztes/", "desc": "Online fejlesztő program", "badge": "Online", "group": "Programok" }
         ],
         "megaExtra": {
@@ -43,7 +42,6 @@
                     "items": [
                         { "label": "Kincskereső Élménytábor",           "url": "/nyari-tabor/",                                    "desc": "Nyári fejlesztő tábor júliusban", "badge": "Nyári!" },
                         { "label": "Iskola-előkészítő foglalkozás",     "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/", "desc": "Felkészítés az iskolakezdésre", "badge": "Népszerű" },
-                        { "label": "Ernyő alatt program",               "url": "/ernyo-alatt-program/",                            "desc": "Közösségi program családoknak" },
                         { "label": "Kézen fogva – online finommotorika", "url": "/kezen-fogva-online-finommotorika-fejlesztes/",   "desc": "Online fejlesztő program", "badge": "Online" }
                     ]
                 }
@@ -58,7 +56,8 @@
         "megaType": "about",
         "children": [
             { "label": "Kedves Anya és Apa", "url": "/rolunk/kedves-anya-es-apa/", "desc": "Szülőknek szóló bemutatkozás" },
-            { "label": "Kedves Gyermek",     "url": "/rolunk/kedves-gyermek/",     "desc": "Gyermekeknek szóló oldal" }
+            { "label": "Kedves Gyermek",     "url": "/rolunk/kedves-gyermek/",     "desc": "Gyermekeknek szóló oldal" },
+            { "label": "Galéria",            "url": "/galeria/",                   "desc": "Képek a mindennapokról" }
         ],
         "megaExtra": {
             "founderName": "Szabó-Varga Alexandra",
@@ -74,8 +73,7 @@
         "children": [
             { "label": "Árlista",        "url": "/arlista/",       "desc": "Árak és csomagok áttekintése" },
             { "label": "Blog",           "url": "/blog/",          "desc": "Szakértői cikkek szülőknek" },
-            { "label": "Galéria",        "url": "/galeria/",       "desc": "Képek a mindennapokról" },
-            { "label": "Éves/heti rend", "url": "/eves-hetirend/", "desc": "Foglalkozási időpontok" }
+            { "label": "Galéria",        "url": "/galeria/",       "desc": "Képek a mindennapokról" }
         ],
         "megaExtra": {
             "featuredPosts": [
