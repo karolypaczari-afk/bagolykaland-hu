@@ -64,6 +64,7 @@ async function run() {
 
     try {
       await sharp(src)
+        .rotate()
         .webp({ quality: 80 })
         .toFile(dest);
 

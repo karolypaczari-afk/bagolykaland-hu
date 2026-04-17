@@ -25,6 +25,7 @@ const PAGE_LABELS = {
     'adatkezelesi-tajekoztato/index.html': 'Adatkezelesi Tajekoztato',
     'arlista/index.html': 'Arlista',
     'blog/index.html': 'Blog',
+    'blog/koltozunk-uj-helyszin-csokonai-ut-32/index.html': 'Blog - Bekoltozunk Csokonai ut 32',
     'blog/a-buntetes-mint-neveles-eszkoze/index.html': 'Blog - A buntetes mint a neveles eszkoze',
     'blog/figyelem-a-gyakorlas-a-tanulas-megutaltatasanak-egyik-legjobb-modja-lehet/index.html': 'Blog - Figyelem a gyakorlas',
     'blog/kire-utott-ez-a-gyerek/index.html': 'Blog - Kire utott ez a gyerek',
