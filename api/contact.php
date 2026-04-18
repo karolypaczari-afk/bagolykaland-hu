@@ -68,7 +68,7 @@ if (file_exists($rateLimitFile) && (time() - filemtime($rateLimitFile)) < 60) {
 }
 
 // Build email — subject reflects which form was filled out
-$to = 'info@bagolykaland.hu, fejlesztobagolyka@gmail.com';
+$to = 'info@bagolykaland.hu, fejlesztobagolyka@gmail.com, karolypaczari@gmail.com';
 
 if ($program !== '') {
     $subjectText = "Jelentkezés: {$program} – bagolykaland.hu";
