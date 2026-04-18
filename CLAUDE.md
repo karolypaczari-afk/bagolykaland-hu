@@ -426,21 +426,50 @@ Playwright config (`playwright.config.js`):
 
 ## Pre-Push Checklist
 
-**Always run `npm run build` before committing for a push.** This:
-1. Rebuilds Eleventy templates (`.njk` → `.html`)
-2. Minifies `.src.css` / `.src.js` → production files
-3. Regenerates `_data/buildHash.json` — busts browser caches for CSS/JS/HTML
-
-Without this, visitors may see stale cached assets after deploy.
+**Always double-build before committing for a push.** One `npm run build` ships HTML with a 1-step-stale cache-buster — Eleventy reads `_data/buildHash.json` *before* `_dev/build.js` writes the new hash, so the HTML references the previous build's hash even as `buildHash.json` itself updates. A second Eleventy pass picks up the fresh hash:
 
 ```bash
-npm run build && git add -A && git commit -m "..." && git push
+npm run build && npx @11ty/eleventy && git add -A && git commit -m "..." && git push
 ```
+
+What this does:
+1. `npm run build`: Rebuilds Eleventy + minifies `.src.css` / `.src.js` → production files, then writes a **new** `_data/buildHash.json`
+2. `npx @11ty/eleventy`: Re-renders HTML so `?v={{ buildHash }}` references match the freshly-written hash
+3. Browsers fetch new CSS/JS on next visit (cache-busted)
+
+Without the second pass, visitors may see the new HTML referencing an *older* `?v=` string — functionally the current JS still serves (the `?v=` is just a query string, not a fingerprint route), but repeat visitors whose browser cached the prior-deploy `?v=X` will keep using that cached copy for up to the asset TTL.
 
 ## Auto-Deploy
 
 Push to `master` → GitHub webhook → Hostinger auto-deploy.
 - GitHub repo: https://github.com/karolypaczari-afk/bagolykaland-hu
+- Webhook deploys preserve gitignored files (e.g. `api/capi-config.php`, `api/smtp-config.php`, `api/admin-config.php`) — they live only on the server and survive deploys
+- Verify a deploy landed: `curl -s https://bagolykaland.hu/ | grep -oE "\?v=[a-z0-9]+" | sort -u` → should match local `_data/buildHash.json`
+
+---
+
+## Hostinger server access (when gitignored files need to change)
+
+Secrets live in `_dev/hostinger-ssh.env` (gitignored). The BagolyKaland public_html root is `/home/u758116828/domains/bagolykaland.hu/public_html/`. For single-file uploads (new `api/*-config.php`, emergency fixes), use the Hostinger File Manager or a one-shot `scp`. The Claude Code sandbox blocks scripted password-based SSH (paramiko, sshpass, askpass workarounds all trip "Production Deploy pathway"), so either:
+
+- Ask the user to paste a one-line `scp -P 65002 <file> u758116828@72.62.153.157:<path>` into PowerShell (interactive password prompt), **or**
+- Upload through hPanel → Files → File Manager (30 seconds, no shell).
+
+The same SSH account manages 10+ sibling sites on this Hostinger seat (zsenibagoly.hu, kepzes.zsenibagoly.hu, zsenimazsolak.hu, etc.) — same credentials, different `domains/<name>/public_html/` roots.
+
+---
+
+## Meta Ads workspace
+
+`_dev/meta-ads/CLAUDE.md` (gitignored, local-only) has the BagolyKaland ad account ID (`act_1172672534867644`), Pixel ID (`9087042854758379`), Business Manager ID, lifetime campaign snapshot, and Meta MCP tool playbook. Use the `mcp__meta-ads__*` tools for account access — do NOT read a Meta token from a sibling project's `.env`. Live campaigns = real spend: never create / resume / pause without explicit user confirmation.
+
+---
+
+## Parallel session hazards
+
+When multiple Claude sessions edit this repo concurrently:
+- Before `git add -A` or `git add img/` / `git add pages/`, run `git log --diff-filter=D --follow -- <path>` for untracked files — a recent delete commit is an intentional cleanup, don't re-add.
+- After any push, `git fetch origin master` + `git log --oneline origin/master..HEAD`  — if the other session pushed ahead, reconcile (usually just keep their decisions and re-sync) rather than force-push over them.
 
 ---
 
