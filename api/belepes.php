@@ -7,13 +7,13 @@
 
 session_start();
 
+// Default password hash (bcrypt, cost=10). Overridable via api/admin-config.php.
+$adminPasswordHash = '$2b$10$q1cSIMNVN44vDzkhh6zX4O5DTFPPQ67pa7OLQgwgsDUiMYS6esnO6';
+
 $configFile = __DIR__ . '/admin-config.php';
-if (!file_exists($configFile)) {
-    http_response_code(500);
-    echo '<h1>Config hiányzik</h1><p>Másold az <code>admin-config.example.php</code> fájlt <code>admin-config.php</code> néven és állítsd be a jelszó hash-t.</p>';
-    exit;
+if (file_exists($configFile)) {
+    require $configFile;
 }
-require $configFile;
 
 $logFile = __DIR__ . '/logs/submissions.log';
 
