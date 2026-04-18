@@ -52,21 +52,57 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=mo2mzcyh" />
+  <link rel="stylesheet" href="/css/style.css?v=mo42709v" />
 
   <style>
 .camp-urgency {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: var(--clr-coral);
+  gap: 0.6rem;
+  background: linear-gradient(135deg, var(--clr-coral) 0%, #d96a3a 55%, var(--clr-yellow) 160%);
   color: #fff;
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 0.75rem 1.6rem;
   border-radius: var(--r-full);
-  margin-bottom: 1.25rem;
-  animation: ctaPulse 2.5s ease-in-out infinite;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.12);
+  box-shadow:
+    0 0 0 0 rgba(245, 198, 64, 0.7),
+    0 8px 24px rgba(179, 84, 49, 0.45);
+  animation: urgencyPulse 1.9s ease-in-out infinite;
+  border: 2px solid rgba(255,255,255,0.35);
+}
+.camp-urgency__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transform-origin: top center;
+  animation: urgencyBell 1.6s ease-in-out infinite;
+}
+@keyframes urgencyPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 0 0 rgba(245, 198, 64, 0.55),
+      0 8px 24px rgba(179, 84, 49, 0.45);
+  }
+  50% {
+    transform: scale(1.045);
+    box-shadow:
+      0 0 0 12px rgba(245, 198, 64, 0),
+      0 10px 28px rgba(179, 84, 49, 0.55);
+  }
+}
+@keyframes urgencyBell {
+  0%, 55%, 100% { transform: rotate(0); }
+  10%, 30%     { transform: rotate(-14deg); }
+  20%, 40%     { transform: rotate(14deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .camp-urgency,
+  .camp-urgency__icon { animation: none; }
 }
 .camp-dates-bar {
   display: flex;
@@ -1452,7 +1488,12 @@
           Kincskereső Élménytábor
         </nav>
         
-        <div class="camp-urgency fade-up stagger-1">Már csak 8 szabad hely a 2 turnusban!</div>
+        <div class="camp-urgency fade-up stagger-1">
+          <svg class="camp-urgency__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M12 2a1 1 0 0 0-1 1v.6A7 7 0 0 0 5 10.5V14l-1.7 2.55A1 1 0 0 0 4.13 18h15.74a1 1 0 0 0 .83-1.45L19 14v-3.5A7 7 0 0 0 13 3.6V3a1 1 0 0 0-1-1Zm-2 18a2 2 0 0 0 4 0h-4Z"/>
+          </svg>
+          Már csak 10 szabad hely van a turnusokban!
+        </div>
         <h1 class="fade-up stagger-1" style="color:#fff;">Egy hét, ami után gyermeked magabiztosabb, kreatívabb és boldogabb lesz</h1>
         <div class="accent-bar" style="background:var(--clr-yellow);"></div>
         <p class="fade-up stagger-2" style="color:rgba(255,255,255,0.9);max-width:660px;margin:0 auto;">A Kincskereső Élménytábor 9 éve ad felejthetetlen élményeket kiscsoportban, fejlesztő szakemberek vezetésével — Debrecenben, 5–8 éveseknek.</p>
@@ -1492,7 +1533,7 @@
       <div class="container">
         <div class="section-header">
           <span class="section-eyebrow fade-up">Az átalakulás</span>
-          <h2 id="camp-transform" class="fade-up stagger-1">Egy hét előtt és után</h2>
+          <h2 id="camp-transform" class="fade-up stagger-1">Egy hét a tábor előtt és után</h2>
         </div>
         <div class="comparison-grid fade-up">
           <div class="comparison-card">
@@ -2184,7 +2225,7 @@
             <div class="session-card__price">75.000 Ft</div>
             <div class="session-card__price-note">Testvérkedvezménnyel: 70.000 Ft / fő</div>
             
-            <div class="session-card__spots">Már csak 8 szabad hely a 2 turnusban!</div>
+            <div class="session-card__spots">Már csak 10 szabad hely van a turnusokban!</div>
             <a href="#camp-form" class="btn btn-primary" style="width:100%;justify-content:center;" data-select-turnus="1. turnus (júl. 14–18.)">Jelentkezem az 1. turnusra</a>
           </div>
           <div class="session-card fade-up stagger-1">
@@ -2198,7 +2239,7 @@
             <div class="session-card__price">75.000 Ft</div>
             <div class="session-card__price-note">Testvérkedvezménnyel: 70.000 Ft / fő</div>
             
-            <div class="session-card__spots">Már csak 8 szabad hely a 2 turnusban!</div>
+            <div class="session-card__spots">Már csak 10 szabad hely van a turnusokban!</div>
             <a href="#camp-form" class="btn btn-primary" style="width:100%;justify-content:center;" data-select-turnus="2. turnus (júl. 21–25.)">Jelentkezem a 2. turnusra</a>
           </div>
         </div>
@@ -2398,7 +2439,7 @@
       <div class="container" style="text-align:center;">
         <span class="section-eyebrow fade-up">Ne hagyd, hogy lemaradjon</span>
         
-        <h2 class="fade-up stagger-1">Már csak 8 szabad hely — foglald le most!</h2>
+        <h2 class="fade-up stagger-1">Már csak 10 szabad hely — foglald le most!</h2>
         <ul class="fade-up stagger-2" style="list-style:none;padding:0;max-width:480px;margin:0 auto 2rem;text-align:left;display:flex;flex-direction:column;gap:0.75rem;">
           <li style="padding-left:1.75rem;position:relative;font-size:0.95rem;line-height:1.6;"><span style="position:absolute;left:0;color:var(--clr-teal);font-weight:700;">&#10003;</span> <strong>40+ fejlesztő tevékenység</strong> kiscsoportban, max 12 fő</li>
           <li style="padding-left:1.75rem;position:relative;font-size:0.95rem;line-height:1.6;"><span style="position:absolute;left:0;color:var(--clr-teal);font-weight:700;">&#10003;</span> <strong>Képzett fejlesztő szakemberek</strong>, nem diákmunkások</li>
@@ -2540,15 +2581,15 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=mo2mzcyh" defer></script>
-  <script src="/js/install-prompt.js?v=mo2mzcyh" defer></script>
-  <script src="/js/tracking.js?v=mo2mzcyh" defer></script>
-  <script src="/js/tracking-loader.js?v=mo2mzcyh" defer></script>
-  <script src="/js/cookie-consent.js?v=mo2mzcyh" defer></script>
-  <script src="/js/main.js?v=mo2mzcyh" defer></script>
-  <script src="/js/lead-capture-loader.js?v=mo2mzcyh"
-          data-popup-css="/css/popup.css?v=mo2mzcyh"
-          data-popup-src="/js/popup.js?v=mo2mzcyh"
+  <script src="/js/components.js?v=mo42709v" defer></script>
+  <script src="/js/install-prompt.js?v=mo42709v" defer></script>
+  <script src="/js/tracking.js?v=mo42709v" defer></script>
+  <script src="/js/tracking-loader.js?v=mo42709v" defer></script>
+  <script src="/js/cookie-consent.js?v=mo42709v" defer></script>
+  <script src="/js/main.js?v=mo42709v" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mo42709v"
+          data-popup-css="/css/popup.css?v=mo42709v"
+          data-popup-src="/js/popup.js?v=mo42709v"
           defer></script>
 
 </body>
