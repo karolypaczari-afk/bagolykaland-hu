@@ -13,7 +13,7 @@ RedirectMatch 403 ^/api/logs(/.*)?$
 </FilesMatch>
 
 # Block access to config files
-<FilesMatch "^(smtp-config|admin-config)(\.example)?\.php$">
+<FilesMatch "^(smtp-config|admin-config|capi-config)(\.example)?\.php$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>

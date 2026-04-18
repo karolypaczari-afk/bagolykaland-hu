@@ -36,6 +36,19 @@
   var CAMP_PROGRAM_NAME = 'Kincskereső Élménytábor 2026';
   var CAMP_VALUE_HUF = 75000;
 
+  // UUID v4 for deduplicating browser pixel events against
+  // the server-side Conversions API event fired from /api/contact.php.
+  function bkUuid() {
+    if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+      return window.crypto.randomUUID();
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (Math.random() * 16) | 0;
+      var v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+
   function track(eventName, params = {}) {
     if (window.BKTracking && typeof window.BKTracking.trackEvent === 'function') {
       window.BKTracking.trackEvent(eventName, params);
@@ -61,18 +74,19 @@
 
     } else if (eventName === 'bk_program_signup') {
       var program = params.program || '';
+      var dedup = params.event_id ? { eventID: params.event_id } : undefined;
       if (program === CAMP_PROGRAM_NAME) {
         window.fbq('trackCustom', 'CampApplication', {
           content_name: program,
           content_category: 'summer_camp',
           value: CAMP_VALUE_HUF,
           currency: 'HUF',
-        });
+        }, dedup);
       } else {
         window.fbq('trackCustom', 'ProgramSignup', {
           content_name: program,
           content_category: 'program_inquiry',
-        });
+        }, dedup);
       }
 
     } else if (eventName === 'bk_cta_click') {
@@ -482,10 +496,23 @@
         if (childAge) message += '\nGyermek kora: ' + childAge;
         if (turnus) message += '\nVálasztott turnus: ' + turnus;
 
+        // Shared event_id: browser pixel + server-side Meta CAPI dedup.
+        var eventId = bkUuid();
+
         fetch('/api/contact.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: name.trim(), email: email.trim(), phone: phone.trim(), message: message, program: program, source: window.location.pathname, website: website })
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            message: message,
+            program: program,
+            source: window.location.pathname,
+            website: website,
+            event_id: eventId,
+            page_url: window.location.href
+          })
         })
         .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
         .then(function (res) {
@@ -503,7 +530,7 @@
             });
             form.style.display = 'none';
             if (successEl) successEl.style.display = 'block';
-            track('bk_program_signup', { program: program, page: window.location.pathname });
+            track('bk_program_signup', { program: program, page: window.location.pathname, event_id: eventId });
           } else {
             throw new Error(res.data.error || 'Hiba történt.');
           }

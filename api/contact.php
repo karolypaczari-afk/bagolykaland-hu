@@ -26,6 +26,8 @@ $phone   = trim(strip_tags($input['phone'] ?? ''));
 $message = trim(strip_tags($input['message'] ?? ''));
 $program = trim(strip_tags($input['program'] ?? ''));
 $source  = trim(strip_tags($input['source'] ?? ''));
+$eventId = trim(strip_tags($input['event_id'] ?? ''));
+$pageUrl = filter_var($input['page_url'] ?? '', FILTER_SANITIZE_URL);
 
 $errors = [];
 if ($name === '') $errors[] = 'Kérjük, add meg a neved.';
@@ -70,6 +72,32 @@ if (!is_dir($logDir)) @mkdir($logDir, 0700, true);
 $msgForLog = str_replace(["\r\n", "\n"], ' · ', $message);
 $logLine = date('Y-m-d H:i:s') . " | " . $name . " | " . $email . " | " . $phone . " | " . $program . " | " . $msgForLog . "\n";
 @file_put_contents($logDir . '/submissions.log', $logLine, FILE_APPEND | LOCK_EX);
+
+// ── Meta Conversions API (server-side event, dedup with browser pixel) ──
+// Fires only for the summer-camp application form so ad campaigns can
+// optimize cleanly. `capi-config.php` is gitignored; if missing or empty
+// the helper silently no-ops.
+if ($program === 'Kincskereső Élménytábor 2026') {
+    require_once __DIR__ . '/meta-capi.php';
+    [$firstName, $lastName] = bk_meta_capi_split_name($name);
+    @bk_meta_capi_send(
+        'CampApplication',
+        $eventId ?: null,
+        [
+            'email'     => $email,
+            'phone'     => $phone,
+            'firstName' => $firstName,
+            'lastName'  => $lastName,
+        ],
+        [
+            'content_name'     => $program,
+            'content_category' => 'summer_camp',
+            'value'            => 75000,
+            'currency'         => 'HUF',
+        ],
+        $pageUrl ?: null
+    );
+}
 
 // Load SMTP config
 $smtpConfig = __DIR__ . '/smtp-config.php';

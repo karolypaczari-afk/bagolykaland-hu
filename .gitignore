@@ -2,6 +2,7 @@
 .env
 api/smtp-config.php
 api/admin-config.php
+api/capi-config.php
 api/logs/
 
 # OS
