@@ -67,7 +67,8 @@ $body .= "---\r\n\r\n" . $message . "\r\n";
 // Always write to log file as safety net
 $logDir  = __DIR__ . '/logs';
 if (!is_dir($logDir)) @mkdir($logDir, 0700, true);
-$logLine = date('Y-m-d H:i:s') . " | " . $name . " | " . $email . " | " . $phone . " | " . $program . " | " . str_replace(["\r\n", "\n"], ' ', $message) . "\n";
+$msgForLog = str_replace(["\r\n", "\n"], ' · ', $message);
+$logLine = date('Y-m-d H:i:s') . " | " . $name . " | " . $email . " | " . $phone . " | " . $program . " | " . $msgForLog . "\n";
 @file_put_contents($logDir . '/submissions.log', $logLine, FILE_APPEND | LOCK_EX);
 
 // Load SMTP config

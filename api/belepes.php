@@ -100,6 +100,21 @@ if ($filter !== '') {
 }
 
 function h($s) { return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8'); }
+
+function parseMessageFields($message) {
+    if (!$message || trim($message) === '') return ['fields' => [], 'free' => ''];
+    $segments = array_filter(array_map('trim', explode(' · ', $message)), function ($s) { return $s !== ''; });
+    $fields = [];
+    $free = [];
+    foreach ($segments as $seg) {
+        if (preg_match('/^([^:]{1,60}):\s*(.+)$/u', $seg, $m)) {
+            $fields[] = ['label' => trim($m[1]), 'value' => trim($m[2])];
+        } else {
+            $free[] = $seg;
+        }
+    }
+    return ['fields' => $fields, 'free' => implode("\n", $free)];
+}
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -221,7 +236,69 @@ function h($s) { return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8'); }
       vertical-align: top;
     }
     tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: #FBFBF9; }
+    tbody .entry-row { cursor: pointer; transition: background 0.15s; }
+    tbody .entry-row:hover { background: #F4F9F8; }
+    tbody .entry-row.expanded { background: var(--teal-light); }
+    tbody .entry-row.expanded td { color: var(--navy); }
+    tbody .entry-row::after { content: ''; }
+    .expand-indicator {
+      display: inline-block;
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-left: 0.4rem;
+      transition: transform 0.2s;
+    }
+    .entry-row.expanded .expand-indicator { transform: rotate(90deg); color: var(--teal); }
+
+    /* Detail row */
+    .detail-row td {
+      padding: 0 !important;
+      background: #F7FAFB;
+      border-bottom: 2px solid var(--teal) !important;
+    }
+    .detail-content { padding: 1.75rem 2rem; }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0.6rem 1.25rem;
+      margin: 0;
+    }
+    .detail-grid dt {
+      font-weight: 700;
+      color: var(--teal-dark);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding-top: 0.15rem;
+    }
+    .detail-grid dd {
+      margin: 0;
+      color: var(--text);
+      word-break: break-word;
+      font-size: 0.95rem;
+    }
+    .detail-grid dd a { color: var(--teal); }
+    .detail-message-block {
+      margin-top: 1.25rem;
+      padding: 1rem 1.15rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--teal);
+      border-radius: 6px;
+      white-space: pre-wrap;
+      font-family: ui-monospace, 'SF Mono', Monaco, Consolas, monospace;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .detail-message-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--teal-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 1.25rem 0 0.35rem;
+    }
     .col-time { white-space: nowrap; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.85rem; }
     .col-name { font-weight: 600; color: var(--navy); }
     .col-email a, .col-phone a { color: var(--teal); text-decoration: none; }
@@ -236,7 +313,16 @@ function h($s) { return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8'); }
       font-weight: 600;
       white-space: nowrap;
     }
-    .col-message { max-width: 420px; color: var(--text); white-space: pre-wrap; word-break: break-word; }
+    .col-message {
+      max-width: 380px;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+      font-size: 0.88rem;
+    }
     .empty {
       text-align: center;
       padding: 4rem 2rem;
@@ -381,18 +467,18 @@ function h($s) { return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8'); }
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($entries as $e): ?>
-              <tr>
-                <td data-label="Időpont" class="col-time"><?= h($e['time']) ?></td>
+            <?php foreach ($entries as $idx => $e): $parsed = parseMessageFields($e['message']); ?>
+              <tr class="entry-row" data-index="<?= $idx ?>" title="Kattints a részletekért">
+                <td data-label="Időpont" class="col-time"><?= h($e['time']) ?><span class="expand-indicator">▶</span></td>
                 <td data-label="Név" class="col-name"><?= h($e['name']) ?></td>
                 <td data-label="E-mail" class="col-email">
                   <?php if ($e['email']): ?>
-                    <a href="mailto:<?= h($e['email']) ?>"><?= h($e['email']) ?></a>
+                    <a href="mailto:<?= h($e['email']) ?>" onclick="event.stopPropagation()"><?= h($e['email']) ?></a>
                   <?php endif; ?>
                 </td>
                 <td data-label="Telefon" class="col-phone">
                   <?php if ($e['phone']): ?>
-                    <a href="tel:<?= h(preg_replace('/[^+0-9]/', '', $e['phone'])) ?>"><?= h($e['phone']) ?></a>
+                    <a href="tel:<?= h(preg_replace('/[^+0-9]/', '', $e['phone'])) ?>" onclick="event.stopPropagation()"><?= h($e['phone']) ?></a>
                   <?php endif; ?>
                 </td>
                 <td data-label="Program" class="col-program">
@@ -402,12 +488,52 @@ function h($s) { return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8'); }
                 </td>
                 <td data-label="Üzenet" class="col-message"><?= h($e['message']) ?></td>
               </tr>
+              <tr class="detail-row" data-index="<?= $idx ?>" hidden>
+                <td colspan="6">
+                  <div class="detail-content">
+                    <dl class="detail-grid">
+                      <dt>Időpont</dt><dd><?= h($e['time']) ?></dd>
+                      <dt>Név</dt><dd><?= h($e['name']) ?></dd>
+                      <?php if ($e['email']): ?>
+                        <dt>E-mail</dt><dd><a href="mailto:<?= h($e['email']) ?>"><?= h($e['email']) ?></a></dd>
+                      <?php endif; ?>
+                      <?php if ($e['phone']): ?>
+                        <dt>Telefon</dt><dd><a href="tel:<?= h(preg_replace('/[^+0-9]/', '', $e['phone'])) ?>"><?= h($e['phone']) ?></a></dd>
+                      <?php endif; ?>
+                      <?php if ($e['program']): ?>
+                        <dt>Program</dt><dd><strong><?= h($e['program']) ?></strong></dd>
+                      <?php endif; ?>
+                      <?php foreach ($parsed['fields'] as $f): ?>
+                        <dt><?= h($f['label']) ?></dt><dd><?= h($f['value']) ?></dd>
+                      <?php endforeach; ?>
+                    </dl>
+                    <?php if ($parsed['free'] !== ''): ?>
+                      <div class="detail-message-title">További üzenet</div>
+                      <div class="detail-message-block"><?= h($parsed['free']) ?></div>
+                    <?php endif; ?>
+                  </div>
+                </td>
+              </tr>
             <?php endforeach; ?>
           </tbody>
         </table>
       </div>
     <?php endif; ?>
   </div>
+
+  <script>
+    document.querySelectorAll('.entry-row').forEach(function (row) {
+      row.addEventListener('click', function (e) {
+        if (e.target.closest('a')) return;
+        var idx = row.dataset.index;
+        var detail = document.querySelector('.detail-row[data-index="' + idx + '"]');
+        if (!detail) return;
+        var wasHidden = detail.hidden;
+        detail.hidden = !wasHidden;
+        row.classList.toggle('expanded', wasHidden);
+      });
+    });
+  </script>
 <?php endif; ?>
 
 </body>
