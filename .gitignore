@@ -1,5 +1,7 @@
 # Secrets
 .env
+api/smtp-config.php
+api/logs/
 
 # OS
 .DS_Store

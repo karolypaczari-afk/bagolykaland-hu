@@ -1,19 +1,18 @@
 <?php
 /**
  * BAGOLYKALAND.HU — Contact Form Handler
- * Receives POST JSON, validates, sends email to info@bagolykaland.hu + fejlesztobagolyka@gmail.com
+ * Sends via SMTP (PHPMailer-style raw SMTP) + file log fallback.
+ * Config: api/smtp-config.php (not committed to git)
  */
 
 header('Content-Type: application/json; charset=utf-8');
 
-// Only allow POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['ok' => false, 'error' => 'Method not allowed']);
     exit;
 }
 
-// Parse JSON body
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input) {
     http_response_code(400);
@@ -21,7 +20,6 @@ if (!$input) {
     exit;
 }
 
-// Extract and sanitize fields
 $name    = trim(strip_tags($input['name'] ?? ''));
 $email   = trim($input['email'] ?? '');
 $phone   = trim(strip_tags($input['phone'] ?? ''));
@@ -29,17 +27,10 @@ $message = trim(strip_tags($input['message'] ?? ''));
 $program = trim(strip_tags($input['program'] ?? ''));
 $source  = trim(strip_tags($input['source'] ?? ''));
 
-// Validate required fields
 $errors = [];
-if ($name === '') {
-    $errors[] = 'Kérjük, add meg a neved.';
-}
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errors[] = 'Kérjük, adj meg érvényes e-mail címet.';
-}
-if ($message === '') {
-    $errors[] = 'Kérjük, írd meg az üzeneted.';
-}
+if ($name === '') $errors[] = 'Kérjük, add meg a neved.';
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Kérjük, adj meg érvényes e-mail címet.';
+if ($message === '') $errors[] = 'Kérjük, írd meg az üzeneted.';
 
 if (!empty($errors)) {
     http_response_code(422);
@@ -47,18 +38,14 @@ if (!empty($errors)) {
     exit;
 }
 
-// Honeypot check — if a hidden field is filled, it's a bot
 if (!empty($input['website'])) {
-    // Silently accept to not tip off bots
     echo json_encode(['ok' => true]);
     exit;
 }
 
-// Rate limit: simple file-based, 1 submission per IP per 60 seconds
+// Rate limit
 $rateLimitDir = sys_get_temp_dir() . '/bk_contact_rate';
-if (!is_dir($rateLimitDir)) {
-    @mkdir($rateLimitDir, 0700, true);
-}
+if (!is_dir($rateLimitDir)) @mkdir($rateLimitDir, 0700, true);
 $ipHash = md5($_SERVER['REMOTE_ADDR'] ?? 'unknown');
 $rateLimitFile = $rateLimitDir . '/' . $ipHash;
 if (file_exists($rateLimitFile) && (time() - filemtime($rateLimitFile)) < 60) {
@@ -67,48 +54,120 @@ if (file_exists($rateLimitFile) && (time() - filemtime($rateLimitFile)) < 60) {
     exit;
 }
 
-// Build email — subject reflects which form was filled out
-$to = 'info@bagolykaland.hu, fejlesztobagolyka@gmail.com, karolypaczari@gmail.com';
+// Build message body
+$subjectText = $program !== '' ? "Jelentkezés: {$program} – bagolykaland.hu" : "Új üzenet – bagolykaland.hu kapcsolat";
+$body  = $program !== '' ? "PROGRAM: {$program}\r\n\r\n" : '';
+$body .= "Feladó:   {$name}\r\n";
+$body .= "E-mail:   {$email}\r\n";
+if ($phone !== '') $body .= "Telefon:  {$phone}\r\n";
+$body .= "Időpont:  " . date('Y-m-d H:i:s') . "\r\n";
+if ($source !== '') $body .= "Forrás:   {$source}\r\n";
+$body .= "---\r\n\r\n" . $message . "\r\n";
 
-if ($program !== '') {
-    $subjectText = "Jelentkezés: {$program} – bagolykaland.hu";
+// Always write to log file as safety net
+$logDir  = __DIR__ . '/logs';
+if (!is_dir($logDir)) @mkdir($logDir, 0700, true);
+$logLine = date('Y-m-d H:i:s') . " | " . $name . " | " . $email . " | " . $phone . " | " . $program . " | " . str_replace(["\r\n", "\n"], ' ', $message) . "\n";
+@file_put_contents($logDir . '/submissions.log', $logLine, FILE_APPEND | LOCK_EX);
+
+// Load SMTP config
+$smtpConfig = __DIR__ . '/smtp-config.php';
+if (file_exists($smtpConfig)) {
+    require $smtpConfig;
 } else {
-    $subjectText = "Új üzenet – bagolykaland.hu kapcsolat";
-}
-$subject = '=?UTF-8?B?' . base64_encode($subjectText) . '?=';
-$messageId = '<' . bin2hex(random_bytes(16)) . '@bagolykaland.hu>';
-
-$body = "";
-if ($program !== '') {
-    $body .= "═══════════════════════════════\r\n";
-    $body .= "PROGRAM: {$program}\r\n";
-    $body .= "═══════════════════════════════\r\n\r\n";
-}
-$body .= "Feladó: {$name}\r\n";
-$body .= "E-mail: {$email}\r\n";
-if ($phone !== '') {
-    $body .= "Telefon: {$phone}\r\n";
-}
-$body .= "Időpont: " . date('Y-m-d H:i:s') . "\r\n";
-if ($source !== '') {
-    $body .= "Forrás oldal: {$source}\r\n";
-}
-$body .= "---\r\n\r\n";
-$body .= $message . "\r\n";
-
-$headers  = "From: BagolykaLand <info@bagolykaland.hu>\r\n";
-$headers .= "Reply-To: {$name} <{$email}>\r\n";
-$headers .= "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-$headers .= "Message-ID: {$messageId}\r\n";
-
-$sent = mail($to, $subject, $body, $headers, '-f info@bagolykaland.hu');
-
-if ($sent) {
-    // Update rate limit file
+    // Fallback: try native mail() if no SMTP config yet
+    $to      = 'info@bagolykaland.hu, fejlesztobagolyka@gmail.com, karolypaczari@gmail.com';
+    $subject = '=?UTF-8?B?' . base64_encode($subjectText) . '?=';
+    $headers = "From: BagolykaLand <info@bagolykaland.hu>\r\nReply-To: {$name} <{$email}>\r\nContent-Type: text/plain; charset=UTF-8";
+    $sent    = @mail($to, $subject, $body, $headers);
     @touch($rateLimitFile);
     echo json_encode(['ok' => true]);
+    exit;
+}
+
+// SMTP send
+$recipients = ['info@bagolykaland.hu', 'fejlesztobagolyka@gmail.com', 'karolypaczari@gmail.com'];
+$sent = bk_smtp_send($smtpHost, $smtpPort, $smtpUser, $smtpPass, $smtpFrom, $recipients, $subjectText, $body, $name, $email);
+
+@touch($rateLimitFile);
+
+if ($sent === true) {
+    echo json_encode(['ok' => true]);
 } else {
-    http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'Az üzenet küldése sikertelen. Kérjük, próbáld telefonon.']);
+    // SMTP failed but we have the log — still return ok so user isn't blocked
+    error_log('BK SMTP error: ' . $sent);
+    echo json_encode(['ok' => true]);
+}
+
+// ── Raw SMTP helper (no external libs needed) ──────────────────────────────
+function bk_smtp_send($host, $port, $user, $pass, $from, $recipients, $subject, $body, $replyName, $replyEmail) {
+    $timeout = 15;
+    $ssl = ($port == 465) ? 'ssl://' : '';
+    $sock = @fsockopen($ssl . $host, $port, $errno, $errstr, $timeout);
+    if (!$sock) return "fsockopen failed: {$errstr} ({$errno})";
+
+    function smtp_cmd($sock, $cmd, $expect) {
+        if ($cmd !== null) fwrite($sock, $cmd . "\r\n");
+        $res = '';
+        while (!feof($sock)) {
+            $line = fgets($sock, 512);
+            $res .= $line;
+            if (strlen($line) >= 4 && $line[3] === ' ') break;
+        }
+        $code = substr($res, 0, 3);
+        return (strpos($expect, $code) !== false) ? true : $res;
+    }
+
+    $r = smtp_cmd($sock, null, '220');
+    if ($r !== true) return "Greeting: $r";
+
+    $r = smtp_cmd($sock, "EHLO bagolykaland.hu", '250');
+    if ($r !== true) return "EHLO: $r";
+
+    if ($port == 587) {
+        $r = smtp_cmd($sock, "STARTTLS", '220');
+        if ($r !== true) return "STARTTLS: $r";
+        stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+        $r = smtp_cmd($sock, "EHLO bagolykaland.hu", '250');
+        if ($r !== true) return "EHLO2: $r";
+    }
+
+    $r = smtp_cmd($sock, "AUTH LOGIN", '334');
+    if ($r !== true) return "AUTH: $r";
+    $r = smtp_cmd($sock, base64_encode($user), '334');
+    if ($r !== true) return "USER: $r";
+    $r = smtp_cmd($sock, base64_encode($pass), '235');
+    if ($r !== true) return "PASS: $r";
+
+    $r = smtp_cmd($sock, "MAIL FROM:<{$from}>", '250');
+    if ($r !== true) return "MAIL FROM: $r";
+
+    foreach ($recipients as $rcpt) {
+        $r = smtp_cmd($sock, "RCPT TO:<{$rcpt}>", '250251');
+        if ($r !== true) return "RCPT TO {$rcpt}: $r";
+    }
+
+    $r = smtp_cmd($sock, "DATA", '354');
+    if ($r !== true) return "DATA: $r";
+
+    $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+    $toHeader = implode(', ', $recipients);
+    $msgId = '<' . bin2hex(random_bytes(16)) . '@bagolykaland.hu>';
+    $headers  = "From: BagolykaLand <{$from}>\r\n";
+    $headers .= "Reply-To: {$replyName} <{$replyEmail}>\r\n";
+    $headers .= "To: {$toHeader}\r\n";
+    $headers .= "Subject: {$encodedSubject}\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $headers .= "Content-Transfer-Encoding: base64\r\n";
+    $headers .= "Message-ID: {$msgId}\r\n";
+    $headers .= "Date: " . date('r') . "\r\n";
+
+    $encodedBody = chunk_split(base64_encode($body));
+    $r = smtp_cmd($sock, $headers . "\r\n" . $encodedBody . "\r\n.", '250');
+    if ($r !== true) return "BODY: $r";
+
+    smtp_cmd($sock, "QUIT", '221');
+    fclose($sock);
+    return true;
 }
