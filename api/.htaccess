@@ -3,10 +3,22 @@ RedirectMatch 403 ^/api/logs(/.*)?$
 
 # Block direct access to any .log file
 <FilesMatch "\.log$">
-  Require all denied
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+  </IfModule>
 </FilesMatch>
 
-# Block access to config files (defense in depth; they're PHP so normally fine)
+# Block access to config files
 <FilesMatch "^(smtp-config|admin-config)(\.example)?\.php$">
-  Require all denied
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+  </IfModule>
 </FilesMatch>
