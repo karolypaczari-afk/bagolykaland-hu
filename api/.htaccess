@@ -1,0 +1,12 @@
+# Block public access to logs directory
+RedirectMatch 403 ^/api/logs(/.*)?$
+
+# Block direct access to any .log file
+<FilesMatch "\.log$">
+  Require all denied
+</FilesMatch>
+
+# Block access to config files (defense in depth; they're PHP so normally fine)
+<FilesMatch "^(smtp-config|admin-config)(\.example)?\.php$">
+  Require all denied
+</FilesMatch>

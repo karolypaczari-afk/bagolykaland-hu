@@ -1,6 +1,7 @@
 # Secrets
 .env
 api/smtp-config.php
+api/admin-config.php
 api/logs/
 
 # OS
