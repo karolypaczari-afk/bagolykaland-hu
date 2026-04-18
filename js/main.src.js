@@ -30,21 +30,53 @@
 
   const trackedForms = new WeakSet();
 
+  // Primary camp-application program name — fired as a dedicated Meta
+  // custom event so ad campaigns can optimize on it without being diluted
+  // by the lead-magnet or other program inquiries.
+  var CAMP_PROGRAM_NAME = 'Kincskereső Élménytábor 2026';
+  var CAMP_VALUE_HUF = 75000;
+
   function track(eventName, params = {}) {
     if (window.BKTracking && typeof window.BKTracking.trackEvent === 'function') {
       window.BKTracking.trackEvent(eventName, params);
     }
-    // Fire Meta Pixel standard events for ad optimization
-    if (typeof window.fbq === 'function') {
-      if (eventName === 'bk_contact_click') {
-        window.fbq('track', 'Contact', { content_name: params.contact_method || '' });
-      } else if (eventName === 'bk_lead_catcher_submit') {
-        window.fbq('track', 'Lead', { content_name: params.lc_source || 'bagolykaland' });
-      } else if (eventName === 'bk_form_submit') {
-        window.fbq('track', 'Schedule', { content_name: params.form_name || '' });
-      } else if (eventName === 'bk_cta_click') {
-        window.fbq('track', 'ViewContent', { content_name: params.cta_label || '' });
+
+    // ── Meta Pixel mapping ──
+    // Each form/action maps to exactly one Meta event to keep ad
+    // optimization signals clean:
+    //   • "5 ingyenes segédanyag" lead magnet (inline + popup) → Lead
+    //   • Nyári tábor jelentkezés → trackCustom CampApplication
+    //   • Egyéb program/vizsgálat jelentkezés     → trackCustom ProgramSignup
+    //   • Generic bk_form_submit fires no Meta event (dataLayer only)
+    if (typeof window.fbq !== 'function') return;
+
+    if (eventName === 'bk_contact_click') {
+      window.fbq('track', 'Contact', { content_name: params.contact_method || '' });
+
+    } else if (eventName === 'bk_lead_catcher_submit') {
+      window.fbq('track', 'Lead', {
+        content_name: params.lc_source || 'bagolykaland',
+        content_category: 'lead_magnet',
+      });
+
+    } else if (eventName === 'bk_program_signup') {
+      var program = params.program || '';
+      if (program === CAMP_PROGRAM_NAME) {
+        window.fbq('trackCustom', 'CampApplication', {
+          content_name: program,
+          content_category: 'summer_camp',
+          value: CAMP_VALUE_HUF,
+          currency: 'HUF',
+        });
+      } else {
+        window.fbq('trackCustom', 'ProgramSignup', {
+          content_name: program,
+          content_category: 'program_inquiry',
+        });
       }
+
+    } else if (eventName === 'bk_cta_click') {
+      window.fbq('track', 'ViewContent', { content_name: params.cta_label || '' });
     }
   }
 
