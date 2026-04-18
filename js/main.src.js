@@ -67,10 +67,16 @@
       window.fbq('track', 'Contact', { content_name: params.contact_method || '' });
 
     } else if (eventName === 'bk_lead_catcher_submit') {
-      window.fbq('track', 'Lead', {
-        content_name: params.lc_source || 'bagolykaland',
-        content_category: 'lead_magnet',
-      });
+      // Prefer the BKMeta path (fbq + CAPI mirror with shared eventID)
+      // so iOS/adblocker pixel loss is recovered on the server.
+      if (window.BKMeta && typeof window.BKMeta.reportLead === 'function') {
+        window.BKMeta.reportLead(params.lc_source || 'bagolykaland', params.email || '');
+      } else {
+        window.fbq('track', 'Lead', {
+          content_name: params.lc_source || 'bagolykaland',
+          content_category: 'lead_magnet',
+        });
+      }
 
     } else if (eventName === 'bk_program_signup') {
       var program = params.program || '';
@@ -88,6 +94,12 @@
           content_category: 'program_inquiry',
         }, dedup);
       }
+
+    } else if (eventName === 'bk_contact_form_success') {
+      var contactDedup = params.event_id ? { eventID: params.event_id } : undefined;
+      window.fbq('track', 'Contact', {
+        content_name: params.form_name || 'contact-form',
+      }, contactDedup);
 
     } else if (eventName === 'bk_cta_click') {
       window.fbq('track', 'ViewContent', { content_name: params.cta_label || '' });
@@ -335,7 +347,7 @@
         btn.disabled = true;
         btn.textContent = 'Küldés...';
 
-        track('bk_lead_catcher_submit', { lc_group: group, lc_source: source });
+        track('bk_lead_catcher_submit', { lc_group: group, lc_source: source, email: email });
 
         const cfg = (window.BK_ML || {});
         const apiKey = cfg.API_KEY || '';
@@ -428,10 +440,16 @@
       btn.disabled = true;
       btn.textContent = 'Küldés...';
 
+      // Shared event_id: browser pixel + server-side CAPI dedup.
+      var contactEventId = bkUuid();
+
       fetch('/api/contact.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name, email: email, phone: phone, message: message, website: website })
+        body: JSON.stringify({
+          name: name, email: email, phone: phone, message: message, website: website,
+          event_id: contactEventId, page_url: window.location.href
+        })
       })
       .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
       .then(function (res) {
@@ -445,7 +463,7 @@
           });
           form.style.display = 'none';
           successEl.style.display = 'block';
-          track('bk_contact_form_success', { form_name: 'contact-form' });
+          track('bk_contact_form_success', { form_name: 'contact-form', event_id: contactEventId });
         } else {
           throw new Error(res.data.error || 'Hiba történt.');
         }

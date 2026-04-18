@@ -74,26 +74,52 @@ $logLine = date('Y-m-d H:i:s') . " | " . $name . " | " . $email . " | " . $phone
 @file_put_contents($logDir . '/submissions.log', $logLine, FILE_APPEND | LOCK_EX);
 
 // ── Meta Conversions API (server-side event, dedup with browser pixel) ──
-// Fires only for the summer-camp application form so ad campaigns can
-// optimize cleanly. `capi-config.php` is gitignored; if missing or empty
-// the helper silently no-ops.
+// Fires a matching CAPI event for every form submission so Meta Events
+// Manager sees both browser and server signal for each Lead / Contact /
+// CampApplication, improving match quality and ad attribution.
+// `capi-config.php` is gitignored; if missing the helper silently no-ops.
+require_once __DIR__ . '/meta-capi.php';
+[$firstName, $lastName] = bk_meta_capi_split_name($name);
+$capiUser = [
+    'email'     => $email,
+    'phone'     => $phone,
+    'firstName' => $firstName,
+    'lastName'  => $lastName,
+];
+
 if ($program === 'Kincskereső Élménytábor 2026') {
-    require_once __DIR__ . '/meta-capi.php';
-    [$firstName, $lastName] = bk_meta_capi_split_name($name);
     @bk_meta_capi_send(
         'CampApplication',
         $eventId ?: null,
-        [
-            'email'     => $email,
-            'phone'     => $phone,
-            'firstName' => $firstName,
-            'lastName'  => $lastName,
-        ],
+        $capiUser,
         [
             'content_name'     => $program,
             'content_category' => 'summer_camp',
             'value'            => 75000,
             'currency'         => 'HUF',
+        ],
+        $pageUrl ?: null
+    );
+} elseif ($program !== '') {
+    // Any other program/exam signup → Meta Lead (ad-optimization friendly)
+    @bk_meta_capi_send(
+        'Lead',
+        $eventId ?: null,
+        $capiUser,
+        [
+            'content_name'     => $program,
+            'content_category' => 'program_inquiry',
+        ],
+        $pageUrl ?: null
+    );
+} else {
+    // Generic contact form → Meta Contact
+    @bk_meta_capi_send(
+        'Contact',
+        $eventId ?: null,
+        $capiUser,
+        [
+            'content_name'     => 'contact_form',
         ],
         $pageUrl ?: null
     );

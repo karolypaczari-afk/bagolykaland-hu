@@ -13,11 +13,18 @@
     'use strict';
 
     function track(eventName, params) {
+        params = params || {};
         if (window.BKTracking && typeof window.BKTracking.trackEvent === 'function') {
-            window.BKTracking.trackEvent(eventName, params || {});
+            window.BKTracking.trackEvent(eventName, params);
         }
-        if (typeof window.fbq === 'function' && eventName === 'bk_popup_submit_success') {
-            window.fbq('track', 'Lead', { content_name: 'popup_lead_magnet' });
+        if (eventName === 'bk_popup_submit_success') {
+            // Prefer the BKMeta path — fbq + CAPI mirror with shared eventID
+            // so iOS/adblocker pixel loss is recovered on the server.
+            if (window.BKMeta && typeof window.BKMeta.reportLead === 'function') {
+                window.BKMeta.reportLead('popup_lead_magnet', params.email || '');
+            } else if (typeof window.fbq === 'function') {
+                window.fbq('track', 'Lead', { content_name: 'popup_lead_magnet' });
+            }
         }
     }
 
@@ -229,7 +236,8 @@
                         setCookie(COOKIE_PREFIX + ctx, 'submitted', SUBMIT_DAYS);
                         track('bk_popup_submit_success', {
                             popup_context: ctx,
-                            popup_group: lm.group
+                            popup_group: lm.group,
+                            email: email
                         });
                         setTimeout(function () { removePopup(); }, 3000);
                     })
