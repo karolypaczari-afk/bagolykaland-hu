@@ -32,6 +32,33 @@ headStyles: |
         color: #1D3557;
         font-size: 1rem;
       }
+      .pricing-row__name-link {
+        color: inherit;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: baseline;
+        gap: .4rem;
+        transition: color .2s ease;
+      }
+      .pricing-row__name-link::after {
+        content: "→";
+        font-weight: 700;
+        color: var(--clr-teal);
+        opacity: .55;
+        transition: transform .2s ease, opacity .2s ease;
+      }
+      .pricing-row__name-link:hover,
+      .pricing-row__name-link:focus-visible {
+        color: var(--clr-teal);
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 3px;
+      }
+      .pricing-row__name-link:hover::after,
+      .pricing-row__name-link:focus-visible::after {
+        transform: translateX(4px);
+        opacity: 1;
+      }
         .pricing-row__detail {
           font-size: .875rem;
           color: var(--clr-text-muted);
@@ -96,7 +123,7 @@ headStyles: |
 
           <div class="pricing-row">
             <div>
-              <div class="pricing-row__name">Egyéni fejlesztő foglalkozás</div>
+              <div class="pricing-row__name"><a class="pricing-row__name-link" href="/foglalkozasaink/egyeni-fejleszto-foglalkozasok/">Egyéni fejlesztő foglalkozás</a></div>
               <div class="pricing-row__detail">Személyre szabott fejlesztési terv alapján</div>
             </div>
             <div class="pricing-row__price">
@@ -107,7 +134,7 @@ headStyles: |
 
           <div class="pricing-row">
             <div>
-              <div class="pricing-row__name">Egyéni mozgásfejlesztés</div>
+              <div class="pricing-row__name"><a class="pricing-row__name-link" href="/foglalkozasaink/mozgasfejlesztes/">Egyéni mozgásfejlesztés</a></div>
               <div class="pricing-row__detail">Testséma, egyensúly, koordináció fejlesztése</div>
             </div>
             <div class="pricing-row__price">
@@ -118,7 +145,7 @@ headStyles: |
 
           <div class="pricing-row">
             <div>
-              <div class="pricing-row__name">Kiscsoportos mozgásfejlesztés</div>
+              <div class="pricing-row__name"><a class="pricing-row__name-link" href="/foglalkozasaink/mozgasfejlesztes/">Kiscsoportos mozgásfejlesztés</a></div>
               <div class="pricing-row__detail">Max. 5–7 fős csoportban, havi bérlet</div>
             </div>
             <div class="pricing-row__price">
@@ -129,7 +156,7 @@ headStyles: |
 
           <div class="pricing-row">
             <div>
-              <div class="pricing-row__name">Iskola-előkészítő foglalkozás</div>
+              <div class="pricing-row__name"><a class="pricing-row__name-link" href="/foglalkozasaink/iskola-elokeszito-foglalkozas/">Iskola-előkészítő foglalkozás</a></div>
               <div class="pricing-row__detail">Max. 5–7 fő, heti 60 perc, 9 hónapos program</div>
             </div>
             <div class="pricing-row__price">
@@ -140,7 +167,7 @@ headStyles: |
 
           <div class="pricing-row">
             <div>
-              <div class="pricing-row__name">Szorongásoldó program</div>
+              <div class="pricing-row__name"><a class="pricing-row__name-link" href="/foglalkozasaink/szorongasoldo-program/">Szorongásoldó program</a></div>
               <div class="pricing-row__detail">6–9 éves korosztálynak, 10 strukturált alkalom</div>
             </div>
             <div class="pricing-row__price">
@@ -162,12 +189,12 @@ headStyles: |
 
           <div class="pricing-row">
             <div>
-              <div class="pricing-row__name">Kézen fogva online finommotorika</div>
-              <div class="pricing-row__detail">Otthon végezhető online fejlesztő program</div>
+              <div class="pricing-row__name"><a class="pricing-row__name-link" href="/kezen-fogva-online-finommotorika-fejlesztes/">Kézen fogva online finommotorika</a></div>
+              <div class="pricing-row__detail">4 hetes online tanfolyam, 27 leckével</div>
             </div>
             <div class="pricing-row__price">
-              18.900 Ft
-              <span class="pricing-row__unit">/ 1 hónap</span>
+              7.990 Ft
+              <span class="pricing-row__unit">/ tanfolyam</span>
             </div>
           </div>
 
@@ -178,7 +205,7 @@ headStyles: |
 
           <div class="pricing-row">
             <div>
-              <div class="pricing-row__name">Komplex részképesség vizsgálat</div>
+              <div class="pricing-row__name"><a class="pricing-row__name-link" href="/vizsgalatok/komplex-reszkepesseg-vizsgalat/">Komplex részképesség vizsgálat</a></div>
               <div class="pricing-row__detail">Részletes írásos lelet, szülői konzultáció</div>
             </div>
             <div class="pricing-row__price">
