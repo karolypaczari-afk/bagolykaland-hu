@@ -26,7 +26,7 @@
     "test:images": "npx playwright test 16-image-optimization",
     "test:full": "npm run build && npx playwright test",
     "report": "npx playwright show-report",
-    "build": "npx @11ty/eleventy && node _dev/build.js",
+    "build": "node _dev/build.js && npx @11ty/eleventy",
     "build:css": "node _dev/build.js --type css",
     "build:js": "node _dev/build.js --type js",
     "watch": "chokidar \"css/*.src.css\" \"js/*.src.js\" -c \"node _dev/build.js --file {path}\"",

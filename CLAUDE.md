@@ -426,18 +426,16 @@ Playwright config (`playwright.config.js`):
 
 ## Pre-Push Checklist
 
-**Always double-build before committing for a push.** One `npm run build` ships HTML with a 1-step-stale cache-buster — Eleventy reads `_data/buildHash.json` *before* `_dev/build.js` writes the new hash, so the HTML references the previous build's hash even as `buildHash.json` itself updates. A second Eleventy pass picks up the fresh hash:
+Single `npm run build` is sufficient. The script runs `node _dev/build.js && npx @11ty/eleventy` in that order:
+
+1. `_dev/build.js` minifies `.src.css` / `.src.js` and writes a fresh `_data/buildHash.json`
+2. Eleventy then renders HTML with the just-written hash, so `?v={{ buildHash }}` matches the deployed assets
 
 ```bash
-npm run build && npx @11ty/eleventy && git add -A && git commit -m "..." && git push
+npm run build && git add -A && git commit -m "..." && git push
 ```
 
-What this does:
-1. `npm run build`: Rebuilds Eleventy + minifies `.src.css` / `.src.js` → production files, then writes a **new** `_data/buildHash.json`
-2. `npx @11ty/eleventy`: Re-renders HTML so `?v={{ buildHash }}` references match the freshly-written hash
-3. Browsers fetch new CSS/JS on next visit (cache-busted)
-
-Without the second pass, visitors may see the new HTML referencing an *older* `?v=` string — functionally the current JS still serves (the `?v=` is just a query string, not a fingerprint route), but repeat visitors whose browser cached the prior-deploy `?v=X` will keep using that cached copy for up to the asset TTL.
+(Historical note: earlier the order was reversed — Eleventy ran first, reading the *previous* hash, so a second Eleventy pass was required. Fixed by flipping the script order.)
 
 ## Auto-Deploy
 

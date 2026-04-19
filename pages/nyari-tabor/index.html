@@ -52,7 +52,7 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=mo4orqpo" />
+  <link rel="stylesheet" href="/css/style.css?v=mo5mlmfo" />
 
   <style>
 .camp-urgency {
@@ -874,6 +874,49 @@
   font-size: 1.3rem;
   font-weight: 900;
   color: var(--clr-navy);
+}
+.zf-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0.85rem 1.25rem;
+  background: #fafbfc;
+  border: 1px solid rgba(43, 116, 109, 0.12);
+  border-radius: var(--r-full);
+  font-size: 0.9rem;
+  color: var(--clr-text-mid);
+}
+.zf-bar__icon {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.zf-bar__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.zf-bar__text strong {
+  color: var(--clr-navy);
+  font-weight: 700;
+}
+.zf-bar__link {
+  flex-shrink: 0;
+  color: var(--clr-teal-dark);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: color var(--t-fast);
+}
+.zf-bar__link:hover,
+.zf-bar__link:focus { color: var(--clr-teal); text-decoration: underline; }
+@media (max-width: 640px) {
+  .zf-bar { border-radius: var(--r-md); text-align: center; padding: 1rem; }
+  .zf-bar__text { flex-basis: 100%; }
 }
 </style>
 
@@ -2439,6 +2482,21 @@
       </div>
     </section>
 
+    
+    <section class="section section-white" style="padding-block:var(--sp-lg);" aria-label="ZseniFészek — egész éves online szülői támogatás">
+      <div class="container">
+        <aside class="zf-bar fade-up">
+          <span class="zf-bar__icon" aria-hidden="true">🪺</span>
+          <span class="zf-bar__text">
+            Egész éves támogatás otthonról: <strong>ZseniFészek</strong> — Alexandra online szülői programja hisztikezelésről, szorongásoldásról, iskolaérettségről.
+          </span>
+          <a href="https://zsenibagoly.hu/zsenifeszek" target="_blank" rel="noopener noreferrer" class="zf-bar__link" data-cta="zsenifeszek-from-tabor">
+            Megnézem →
+          </a>
+        </aside>
+      </div>
+    </section>
+
     <script>
     (function() {
       var btns = document.querySelectorAll('.faq-cat-btn');
@@ -2568,16 +2626,16 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=mo4orqpo" defer></script>
-  <script src="/js/install-prompt.js?v=mo4orqpo" defer></script>
-  <script src="/js/tracking.js?v=mo4orqpo" defer></script>
-  <script src="/js/tracking-loader.js?v=mo4orqpo" defer></script>
-  <script src="/js/meta-enhance.js?v=mo4orqpo" defer></script>
-  <script src="/js/cookie-consent.js?v=mo4orqpo" defer></script>
-  <script src="/js/main.js?v=mo4orqpo" defer></script>
-  <script src="/js/lead-capture-loader.js?v=mo4orqpo"
-          data-popup-css="/css/popup.css?v=mo4orqpo"
-          data-popup-src="/js/popup.js?v=mo4orqpo"
+  <script src="/js/components.js?v=mo5mlmfo" defer></script>
+  <script src="/js/install-prompt.js?v=mo5mlmfo" defer></script>
+  <script src="/js/tracking.js?v=mo5mlmfo" defer></script>
+  <script src="/js/tracking-loader.js?v=mo5mlmfo" defer></script>
+  <script src="/js/meta-enhance.js?v=mo5mlmfo" defer></script>
+  <script src="/js/cookie-consent.js?v=mo5mlmfo" defer></script>
+  <script src="/js/main.js?v=mo5mlmfo" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mo5mlmfo"
+          data-popup-css="/css/popup.css?v=mo5mlmfo"
+          data-popup-src="/js/popup.js?v=mo5mlmfo"
           defer></script>
 
 </body>
