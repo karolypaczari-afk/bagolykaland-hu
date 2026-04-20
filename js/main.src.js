@@ -180,6 +180,14 @@
         return;
       }
 
+      if (control.dataset.track === 'bk_messenger_click') {
+        track('bk_messenger_click', {
+          click_href: href || '',
+          click_location: 'fab',
+        });
+        return;
+      }
+
       if (
         control.matches('.btn, .nav-cta, .mobile-cta, .service-link') ||
         /\/kapcsolat\/?$/i.test(href)

@@ -1,0 +1,31 @@
+{#
+  Floating Meta Messenger button.
+  Opens m.me/bagolykaland — Messenger app on mobile, facebook.com/messages on desktop
+  (Meta shut down messenger.com on 2026-04-16; the m.me deep link now redirects there).
+  Meta deprecated the embedded Customer Chat Plugin on 2024-05-09, so this m.me
+  deep-link is Meta's officially supported way to message a Page from a website.
+
+  Query params (per developers.facebook.com/docs/messenger-platform/discovery/m-me-links/):
+    ref  — shows up in Page inbox, lets the team see the lead came from the site FAB
+    text — pre-fills a friendly Hungarian greeting so the first tap sends a real message
+#}
+<a href="https://m.me/bagolykaland?ref=website_fab&text=Szia%21+Szeretn%C3%A9k+%C3%A9rdekl%C5%91dni+a+BagolykaLand-ban+k%C3%ADn%C3%A1lt+foglalkoz%C3%A1sokr%C3%B3l."
+   class="messenger-fab"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Írj nekünk Messengeren — azonnal válaszolunk"
+   data-track="bk_messenger_click">
+  <span class="messenger-fab__tooltip" aria-hidden="true">Írj nekünk!</span>
+  <span class="messenger-fab__icon" aria-hidden="true">
+    <svg viewBox="0 0 36 36" width="28" height="28" focusable="false">
+      <defs>
+        <linearGradient id="messengerFabGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#0099FF"/>
+          <stop offset="60%" stop-color="#A033FF"/>
+          <stop offset="100%" stop-color="#FF5285"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#messengerFabGrad)" d="M18 2C9.16 2 2 8.64 2 16.84c0 4.67 2.32 8.84 5.94 11.56V34l5.43-2.98c1.45.4 2.98.62 4.63.62 8.84 0 16-6.64 16-14.84S26.84 2 18 2Zm1.59 19.99-4.07-4.34-7.94 4.34 8.73-9.27 4.17 4.34 7.84-4.34-8.73 9.27Z"/>
+    </svg>
+  </span>
+</a>
