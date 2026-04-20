@@ -385,11 +385,25 @@ After load, `configureClarity()` runs automatically:
 
 GTM-friendly `bk_*` events already pushed: `bk_cta_click`, `bk_contact_click`, `bk_form_start`, `bk_form_submit`, `bk_mobile_nav_toggle`, `bk_install_click`, `bk_install_prompt_result`, `bk_app_installed`, `bk_cookie_banner_view`, `bk_cookie_consent_updated`, `bk_popup_*`, `bk_program_signup`.
 
+### Meta event funnel (browser pixel + CAPI, shared `event_id` → dedup)
+
+| Event | Fires when | Browser | Server |
+|---|---|---|---|
+| `PageView` | every page | `fbq('track', 'PageView')` | `api/meta-capi-relay.php` |
+| `ViewContent` | high-intent LP (camp, szorongásoldó, kézen-fogva) | `meta-enhance.src.js` VIEW_CONTENT_MAP | relay |
+| `InitiateCheckout` | first focus/input on any lead form | `meta-enhance.src.js` | relay |
+| `CampApplication` | successful `/nyari-tabor/` form submit | `main.src.js:95` `fbq('trackCustom', 'CampApplication')` | `api/contact.php` → `meta-capi.php` `bk_meta_capi_send('CampApplication')` |
+| `Lead` | other program/exam signups | `main.src.js` | `api/contact.php` |
+| `Contact` | generic contact form | `main.src.js` | `api/contact.php` |
+
+The current nyári tábor ad set optimizes on `CampApplication` via a custom conversion embedded in `promoted_object.pixel_rule`. Diagnose campaign-missing-conversions questions by splitting them: (a) did the event reach Meta? — check `api/logs/capi.log` for `http=200`; (b) did the campaign get credit? — check campaign performance actions. These are different questions; a lead from organic traffic is invisible to campaign insights but still appears in Events Manager.
+
 ### "Never break" rules
 
 1. **Never re-add parallel `gtag('config', 'G-xxx')` hardcoded alongside GTM.** The loader already guards — don't undo the guard.
 2. GA4 config stays in the GTM container. Same for Google Ads conversions.
 3. `meta-enhance` hashes in `localStorage` are the authoritative source for Enhanced Conversions user-provided data — don't add a separate hashing path for Google Ads.
+4. Pixel event names are case-sensitive. `CampApplication` ≠ `campapplication` ≠ `CAMPAPPLICATION`. Changing the event name in one place (JS, PHP, ad set rule) without the others silently breaks optimization.
 
 ---
 
@@ -491,14 +505,42 @@ Push to `master` → GitHub webhook → Hostinger auto-deploy.
 
 ---
 
-## Hostinger server access (when gitignored files need to change)
+## Hostinger server access
 
-Secrets live in `_dev/hostinger-ssh.env` (gitignored). The BagolyKaland public_html root is `/home/u758116828/domains/bagolykaland.hu/public_html/`. For single-file uploads (new `api/*-config.php`, emergency fixes), use the Hostinger File Manager or a one-shot `scp`. The Claude Code sandbox blocks scripted password-based SSH (paramiko, sshpass, askpass workarounds all trip "Production Deploy pathway"), so either:
+`public_html` root: `/home/u758116828/domains/bagolykaland.hu/public_html/`. The same `u758116828` account manages 10+ sibling sites (zsenibagoly.hu, kepzes.zsenibagoly.hu, zsenimazsolak.hu, etc.) — same SSH target, different `domains/<name>/public_html/` roots.
 
-- Ask the user to paste a one-line `scp -P 65002 <file> u758116828@72.62.153.157:<path>` into PowerShell (interactive password prompt), **or**
-- Upload through hPanel → Files → File Manager (30 seconds, no shell).
+### Non-interactive SSH (preferred — works from Claude Code sandbox)
 
-The same SSH account manages 10+ sibling sites on this Hostinger seat (zsenibagoly.hu, kepzes.zsenibagoly.hu, zsenimazsolak.hu, etc.) — same credentials, different `domains/<name>/public_html/` roots.
+As of 2026-04-20 an ed25519 pubkey is uploaded to the Hostinger account (hPanel → Advanced → SSH Access → Manage SSH Keys). Local setup on the user's machine:
+- Private key: `~/.ssh/id_bagoly_ed25519` (NTFS-ACL locked, never commit)
+- SSH config alias: `Host bagoly` → `72.62.153.157:65002` as `u758116828`
+
+Use it directly:
+```bash
+ssh bagoly "<remote command>"
+scp -P 65002 <local> bagoly:<remote>
+```
+
+Password auth (`_dev/hostinger-ssh.env`, gitignored) is the fallback for new machines before a pubkey is set up. **Do NOT try to script password auth from the sandbox** — paramiko install, sshpass, SSH_ASKPASS, and interactive prompts are all blocked by the harness as "Remote Shell Writes to production".
+
+### Server log files (`~/domains/bagolykaland.hu/public_html/api/logs/`)
+
+| File | Written by | Contains |
+|---|---|---|
+| `submissions.log` | `api/contact.php` | Every form POST: timestamp, name, email, phone, program, turnus, src, page_url, referer, `_fbp`, `_fbc`, event_id, message |
+| `capi.log` | `api/meta-capi.php` | Server-side Meta CAPI events (CampApplication, Lead, Contact). Format: `timestamp \| event \| id=<eid> \| http=<code>` |
+| `capi-relay.log` | `api/meta-capi-relay.php` | Browser-initiated events relayed server-side (PageView, ViewContent, InitiateCheckout) — high volume |
+
+Standard diagnostic:
+```bash
+ssh bagoly "cd ~/domains/bagolykaland.hu/public_html/api/logs && tail -30 capi.log && echo --- && tail -10 submissions.log"
+```
+
+**PII:** submissions.log holds name/email/phone/cookies. Excerpt only the relevant fields when sharing. Never commit, never paste into a PR description.
+
+### Gitignored config files on server (preserved across deploys)
+
+`api/capi-config.php`, `api/smtp-config.php`, `api/admin-config.php` live only on the server. Webhook deploys don't touch them. For edits use `scp bagoly:<path> ./` or the File Manager, never check them in.
 
 ---
 
@@ -527,4 +569,4 @@ When multiple Claude sessions edit this repo concurrently:
 7. `loading="lazy"` must NOT be on hero/LCP images
 8. `service-card-top` must always be empty — never put content inside it (6px stripe)
 9. Never use BEM class names without first adding CSS for them to `style.src.css`
-10. Always run `npm run build` before pushing — regenerates buildHash so browsers fetch fresh assets
+10. Always run `npm run build` before pushing **frontend** changes (`.src.css`, `.src.js`, `.njk`, `_data/*.json` that drives templates) — regenerates buildHash so browsers fetch fresh assets. Skip the build for PHP/backend-only commits (`api/*.php`): no cache-bust needed, and running build would clobber any parallel session's in-progress assets.
