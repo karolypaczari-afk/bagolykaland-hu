@@ -71,7 +71,30 @@ $body .= "---\r\n\r\n" . $message . "\r\n";
 $logDir  = __DIR__ . '/logs';
 if (!is_dir($logDir)) @mkdir($logDir, 0700, true);
 $msgForLog = str_replace(["\r\n", "\n"], ' · ', $message);
-$logLine = date('Y-m-d H:i:s') . " | " . $name . " | " . $email . " | " . $phone . " | " . $program . " | " . $msgForLog . "\n";
+
+// Attribution diagnostics — captures where the lead came from so we can
+// later verify Meta/Google ad attribution without SSH access to the box.
+// page_url (window.location.href) carries fbclid/gclid/utm_* from the
+// landing URL; referer is the previous hop; _fbp/_fbc cookies are Meta's
+// own click/browser IDs that match what CAPI sent.
+$referer  = $_SERVER['HTTP_REFERER']   ?? '';
+$fbp      = $_COOKIE['_fbp']           ?? '';
+$fbc      = $_COOKIE['_fbc']           ?? '';
+$pageUrlForLog = $pageUrl ?: '';
+$logLine = date('Y-m-d H:i:s')
+    . " | " . $name
+    . " | " . $email
+    . " | " . $phone
+    . " | " . $program
+    . " | " . $turnus
+    . " | src=" . $source
+    . " | url=" . $pageUrlForLog
+    . " | ref=" . $referer
+    . " | fbp=" . $fbp
+    . " | fbc=" . $fbc
+    . " | eid=" . $eventId
+    . " | msg=" . $msgForLog
+    . "\n";
 @file_put_contents($logDir . '/submissions.log', $logLine, FILE_APPEND | LOCK_EX);
 
 // ── Meta Conversions API (server-side event, dedup with browser pixel) ──
