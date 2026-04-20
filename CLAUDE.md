@@ -338,14 +338,14 @@ Public URLs are clean: `/rolunk/`, `/arlista/` — no `/pages/` prefix. `.htacce
 
 ## Tracking + Consent Layer
 
-**GTM is the single source of truth.** GA4 + Google Ads are configured inside the GTM container (`GTM-M6H5WKVM`), NOT via parallel `gtag.js` on the page.
+**Direct gtag.js is the source of truth for GA4.** GTM container `GTM-M6H5WKVM` exists but has **0 published versions** — it is NOT in use. `gtmId` is intentionally blank in `js/tracking.src.js` so the loader loads `gtag.js` with `G-86N523JP3E` directly and fires `page_view`. Do NOT set `gtmId` again until someone publishes a real GTM version (empty container = silent analytics).
 
 ### Vendor config (`window.BK_TRACKING_CONFIG.vendors` in `js/tracking.src.js`)
 
 | Key | Current | Purpose |
 |-----|---------|---------|
-| `gtmId` | `GTM-M6H5WKVM` | Master container. Drives GA4 + Google Ads tagging. |
-| `gaMeasurementId` | `G-86N523JP3E` | Fallback only — `tracking-loader` **skips direct `gtag.js` load when `gtmId` is set** (prevents double pageviews). |
+| `gtmId` | *(empty — disabled)* | GTM-M6H5WKVM exists but has no published version. Leave blank until GTM is actually built out, otherwise the loader suppresses direct `gtag.js` and page_views stop. |
+| `gaMeasurementId` | `G-86N523JP3E` | **Active.** Loaded directly by `tracking-loader` (since `gtmId` is blank) → sends `page_view` and drives GA4 / Google Ads Enhanced Conversions via `gtag('set','user_data',...)`. |
 | `gAdsId` | *(empty)* | Google Ads conversion ID (`AW-xxx`). Scaffold ready — plug in, no other changes needed. |
 | `gAdsLabel` | *(empty)* | Optional — primary conversion label. |
 | `clarityId` | `rqnf90op5b` | Microsoft Clarity — loads its own SDK independently of GTM. |
@@ -400,8 +400,8 @@ The current nyári tábor ad set optimizes on `CampApplication` via a custom con
 
 ### "Never break" rules
 
-1. **Never re-add parallel `gtag('config', 'G-xxx')` hardcoded alongside GTM.** The loader already guards — don't undo the guard.
-2. GA4 config stays in the GTM container. Same for Google Ads conversions.
+1. **GTM is currently disabled (`gtmId: ''`).** If you set it again without publishing a real GTM container version, page_views stop (loader skips direct gtag.js when `gtmId` is truthy). Check `https://tagmanager.google.com/` versions count before re-enabling.
+2. Google Ads conversions: when `gAdsId` is added, use direct gtag.js (same path as GA4) OR publish a GTM container — not both.
 3. `meta-enhance` hashes in `localStorage` are the authoritative source for Enhanced Conversions user-provided data — don't add a separate hashing path for Google Ads.
 4. Pixel event names are case-sensitive. `CampApplication` ≠ `campapplication` ≠ `CAMPAPPLICATION`. Changing the event name in one place (JS, PHP, ad set rule) without the others silently breaks optimization.
 

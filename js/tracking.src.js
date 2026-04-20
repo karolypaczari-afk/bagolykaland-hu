@@ -1,10 +1,11 @@
 /**
  * BAGOLYKALAND.HU — Tracking configuration
  *
- * GTM-first setup:
- * - `gtmId` drives the whole stack; configure GA4 + Google Ads INSIDE GTM
- * - `gaMeasurementId` is a fallback for direct gtag.js load (skipped when gtmId is set
- *   to prevent duplicate pageviews — GTM already fires the GA4 config tag)
+ * Direct gtag.js setup (GTM container exists but is empty / unused):
+ * - `gaMeasurementId` drives GA4 via direct gtag.js load — this sends `page_view`
+ * - `gtmId` is intentionally blank. Do NOT re-enable until a published GTM
+ *   container version exists; otherwise the loader skips direct gtag.js and
+ *   page_views stop firing entirely.
  * - `gAdsId` / `gAdsLabel` power Google Ads Enhanced Conversions when set
  * - `clarityId` / `metaPixelId` load their own SDKs (independent of GTM)
  *
@@ -17,7 +18,7 @@
   var existingVendors = existingConfig.vendors || {};
 
   var defaultVendors = {
-    gtmId: 'GTM-M6H5WKVM',
+    gtmId: '',
     gaMeasurementId: 'G-86N523JP3E',
     gAdsId: '',
     gAdsLabel: '',
