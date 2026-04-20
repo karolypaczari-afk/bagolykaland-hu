@@ -230,17 +230,57 @@
   function detectPageName() {
     var path = window.location.pathname.toLowerCase();
     if (path === '/' || path.indexOf('/index') === 0) return 'home';
-    if (path.indexOf('/taborok/kincskereso') !== -1) return 'camp_kincskereso';
-    if (path.indexOf('/taborok') !== -1) return 'camp';
-    if (path.indexOf('/szorongasold') !== -1) return 'szorongasoldo';
-    if (path.indexOf('/iskolaelokeszit') !== -1) return 'iskolaelokeszito';
+    if (path.indexOf('/nyari-tabor') !== -1) return 'camp_kincskereso';
+    if (path.indexOf('/szorongasoldo') !== -1) return 'szorongasoldo';
+    if (path.indexOf('/iskola-elokeszito') !== -1) return 'iskolaelokeszito';
     if (path.indexOf('/foglalkozasaink') !== -1) return 'service';
+    if (path.indexOf('/vizsgalatok') !== -1) return 'assessment';
+    if (path.indexOf('/kezen-fogva') !== -1) return 'kezen_fogva';
     if (path.indexOf('/blog/') !== -1) return 'blog';
     if (path.indexOf('/kapcsolat') !== -1) return 'kapcsolat';
     if (path.indexOf('/rolunk') !== -1) return 'rolunk';
+    if (path.indexOf('/arlista') !== -1) return 'arlista';
     return 'other';
   }
   var pageName = detectPageName();
+
+  // High-value pages emit a standard ViewContent with value/content_ids so
+  // Meta's optimizer sees the funnel: ViewContent → InitiateCheckout →
+  // CampApplication/Lead. ViewContent is a standard event (unlike
+  // custom CTAClick) and counts toward Aggregated Event Measurement.
+  var VIEW_CONTENT_MAP = {
+    camp_kincskereso: {
+      content_ids: ['kincskereso-2026'],
+      content_name: 'Kincskereső Élménytábor 2026',
+      content_category: 'summer_camp',
+      value: 75000,
+      currency: 'HUF'
+    },
+    szorongasoldo: {
+      content_ids: ['szorongasoldo-program'],
+      content_name: 'Szorongásoldó program',
+      content_category: 'program',
+      value: 10000,
+      currency: 'HUF'
+    },
+    iskolaelokeszito: {
+      content_ids: ['iskola-elokeszito'],
+      content_name: 'Iskola-előkészítő',
+      content_category: 'program',
+      value: 10000,
+      currency: 'HUF'
+    },
+    service: {
+      content_category: 'service',
+      value: 10000,
+      currency: 'HUF'
+    },
+    assessment: {
+      content_category: 'assessment',
+      value: 15000,
+      currency: 'HUF'
+    }
+  };
 
   // ── Public API for form handlers ─────────────────────────────────────────
   function reportLead(source, email) {
@@ -347,6 +387,36 @@
     });
   }
 
+  // InitiateCheckout — fires once the visitor touches any lead-capture or
+  // program form. Signals high intent a step earlier than the submit event,
+  // giving Meta more data to optimize on (especially valuable during the
+  // learning phase when CampApplication volume is still low).
+  var initiateCheckoutFired = false;
+  function wireInitiateCheckout() {
+    if (initiateCheckoutFired) return;
+    var selector = '[data-program-form] input, [data-program-form] select, [data-program-form] textarea, .lead-catcher-form input, form.program-signup-fields input, form.program-signup-fields select';
+    document.addEventListener('focusin', function (e) {
+      if (initiateCheckoutFired) return;
+      if (!e.target.matches || !e.target.matches(selector)) return;
+      initiateCheckoutFired = true;
+      var form = e.target.closest('[data-program-form], .lead-catcher-form, form');
+      var program = (form && form.getAttribute('data-program-form')) || '';
+      var payload = {
+        content_name: program || pageName,
+        content_category: program ? 'program_inquiry' : 'lead_magnet',
+        page: pageName
+      };
+      var mapped = VIEW_CONTENT_MAP[pageName];
+      if (mapped && mapped.content_ids) {
+        payload.content_ids = mapped.content_ids;
+        payload.value = mapped.value;
+        payload.currency = mapped.currency;
+        payload.num_items = 1;
+      }
+      trackMetaEvent('InitiateCheckout', payload);
+    }, true);
+  }
+
   // ── Boot — only once consent is granted ──────────────────────────────────
   function boot() {
     if (window._bkMetaEnhanceBooted) return;
@@ -356,17 +426,31 @@
     ensureFbCookies();
 
     // Backfill PageView CAPI — tracking-loader fires fbq PageView but not CAPI.
-    var pvId = genId();
+    // Reuse the event_id that tracking-loader generated so Meta dedups the
+    // browser + server PageView into a single attributed event (Meta's docs
+    // require identical event_name + event_id within 48h for dedup).
+    var pvId = window.BK_PV_EVENT_ID || genId();
     sendCapi('PageView', pvId, { page_name: pageName });
+
+    // Standard ViewContent with monetary value on high-intent landing pages —
+    // feeds Meta's optimizer the full funnel: ViewContent → InitiateCheckout
+    // → CampApplication. Standard events count toward AEM (Aggregated Event
+    // Measurement) so iOS 14.5+ users are attributed correctly.
+    var vc = VIEW_CONTENT_MAP[pageName];
+    if (vc) {
+      trackMetaEvent('ViewContent', Object.assign({ page: pageName }, vc));
+    }
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function () {
         wireCtaTracking();
         wireEngagement();
+        wireInitiateCheckout();
       });
     } else {
       wireCtaTracking();
       wireEngagement();
+      wireInitiateCheckout();
     }
 
     // Re-wire CTAs after dynamic nav injection (components.js)

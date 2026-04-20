@@ -72,9 +72,14 @@ if (empty($metaAccessToken) || empty($metaPixelId)) bk_relay_noop('capi config i
 $apiVersion = !empty($metaApiVersion) ? $metaApiVersion : 'v21.0';
 
 $serverUd = [];
-// Browser-supplied pre-hashed em — trust it (64-char sha256 hex)
-if (!empty($ud['em']) && is_string($ud['em']) && preg_match('/^[a-f0-9]{64}$/i', $ud['em'])) {
-    $serverUd['em'] = [$ud['em']];
+// Browser-supplied pre-hashed fields — trust them if they look like sha256 hex.
+// Meta's docs (https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-information-parameters)
+// confirm pre-hashed values are accepted directly.
+$hashedPassthrough = ['em', 'ph', 'fn', 'ln'];
+foreach ($hashedPassthrough as $k) {
+    if (!empty($ud[$k]) && is_string($ud[$k]) && preg_match('/^[a-f0-9]{64}$/i', $ud[$k])) {
+        $serverUd[$k] = [$ud[$k]];
+    }
 }
 if (!empty($ud['external_id'])) {
     // external_id from browser is already hashed; don't double-hash

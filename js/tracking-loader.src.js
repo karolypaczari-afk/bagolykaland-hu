@@ -292,10 +292,41 @@
       s.parentNode.insertBefore(t, s);
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
-    window.fbq('init', vendors.metaPixelId);
+    // Surface any stored Advanced Matching hashes (written by meta-enhance
+    // after a prior form submit) so the browser PageView carries identity —
+    // directly addresses Meta's "send email with PageView" recommendation.
+    // Pre-hashed 64-char hex SHA-256 values are detected by the Pixel SDK
+    // and not re-hashed.
+    var advancedMatching = {};
+    try {
+      var storedEm = localStorage.getItem('bk_meta_em_hash');
+      var storedPh = localStorage.getItem('bk_meta_ph_hash');
+      var storedFn = localStorage.getItem('bk_meta_fn_hash');
+      var storedLn = localStorage.getItem('bk_meta_ln_hash');
+      if (storedEm) advancedMatching.em = storedEm;
+      if (storedPh) advancedMatching.ph = storedPh;
+      if (storedFn) advancedMatching.fn = storedFn;
+      if (storedLn) advancedMatching.ln = storedLn;
+    } catch (e) { /* storage blocked */ }
+    var extIdMatch = document.cookie.match(/(?:^|; )bk_ext_id=([^;]+)/);
+    if (extIdMatch) {
+      advancedMatching.external_id = decodeURIComponent(extIdMatch[1]);
+    }
+
+    if (Object.keys(advancedMatching).length > 0) {
+      window.fbq('init', vendors.metaPixelId, advancedMatching);
+    } else {
+      window.fbq('init', vendors.metaPixelId);
+    }
     window.fbq('consent', state.consentGranted ? 'grant' : 'revoke');
     if (state.consentGranted && !state.metaPageviewTracked) {
-      window.fbq('track', 'PageView');
+      // Share eventID with the CAPI PageView (meta-enhance) so Meta dedupes
+      // browser + server events into one hit instead of counting both.
+      var pvEventId = (window.crypto && typeof crypto.randomUUID === 'function')
+        ? crypto.randomUUID()
+        : (Date.now() + '_' + Math.random().toString(36).slice(2));
+      window.BK_PV_EVENT_ID = pvEventId;
+      window.fbq('track', 'PageView', {}, { eventID: pvEventId });
       state.metaPageviewTracked = true;
     }
 
