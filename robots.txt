@@ -1,9 +1,19 @@
+# BagolykaLand – robots.txt
+# Maximum classic + AI search visibility
+# Updated: 2026-04-20
+
+# ─── Classic search engines ───
 User-agent: *
 Allow: /
 Disallow: /_dev/
 Disallow: /node_modules/
+Disallow: /api/
+Disallow: /*?*utm_
+Disallow: /*?*fbclid
+Disallow: /*?*gclid
 
-# AI crawlers – engedélyezve indexelésre és AI válaszokhoz
+# ─── AI search / retrieval bots (answer engines) ───
+# These bots fetch on-demand when a user asks about us → allow for citation visibility.
 User-agent: GPTBot
 Allow: /
 
@@ -22,13 +32,28 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
 User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Applebot
 Allow: /
 
 User-agent: Applebot-Extended
 Allow: /
 
 User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
 Allow: /
 
 User-agent: YouBot
@@ -43,9 +68,31 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
+User-agent: Cohere-Web
+Allow: /
+
 User-agent: FacebookBot
 Allow: /
 
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: Mistral-Bot
+Allow: /
+
+# ─── Sitemap + LLM summary files ───
 Sitemap: https://bagolykaland.hu/sitemap.xml
+Sitemap: https://bagolykaland.hu/sitemap-images.xml
+
+# LLM / AI friendly entry points (llmstxt.org spec)
 LLMs: https://bagolykaland.hu/llms.txt
 LLMs-full: https://bagolykaland.hu/llms-full.txt
+
+# Host declaration (helps clarify canonical host to some crawlers)
+Host: https://bagolykaland.hu

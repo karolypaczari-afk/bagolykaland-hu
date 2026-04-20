@@ -1,23 +1,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
   <meta name="facebook-domain-verification" content="zwaaxxuzzmhtr01xl4s007pphrjayi" />
   <title>{{ title }}</title>
   <meta name="description" content="{{ description }}" />
-  <meta name="robots" content="{{ robots if robots else 'index, follow' }}" />
+  <meta name="robots" content="{{ robots if robots else 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}" />
+  <meta name="googlebot" content="{{ robots if robots else 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}" />
+  <meta name="bingbot" content="{{ robots if robots else 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}" />
+  <meta name="author" content="BagolykaLand Oktató- és Fejlesztő Központ" />
+  <meta name="publisher" content="BagolykaLand" />
+  <meta name="geo.region" content="HU-HB" />
+  <meta name="geo.placename" content="Debrecen" />
+  <meta name="geo.position" content="47.5389796;21.6278229" />
+  <meta name="ICBM" content="47.5389796, 21.6278229" />
 
   <!-- Open Graph -->
-  <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="{{ canonical }}" />
-  <meta property="og:title"       content="{{ ogTitle if ogTitle else title }}" />
-  <meta property="og:description" content="{{ ogDescription if ogDescription else description }}" />
-  <meta property="og:image"       content="{{ ogImage if ogImage else site.defaultOgImage }}" />
-  <meta name="twitter:card"       content="summary_large_image" />
-  <meta name="twitter:title"      content="{{ ogTitle if ogTitle else title }}" />
-  <meta name="twitter:description" content="{{ ogDescription if ogDescription else description }}" />
-  <meta name="twitter:image"      content="{{ ogImage if ogImage else site.defaultOgImage }}" />
+  <meta property="og:type"            content="{{ ogType if ogType else 'website' }}" />
+  <meta property="og:url"             content="{{ canonical }}" />
+  <meta property="og:title"           content="{{ ogTitle if ogTitle else title }}" />
+  <meta property="og:description"     content="{{ ogDescription if ogDescription else description }}" />
+  <meta property="og:image"           content="{{ ogImage if ogImage else site.defaultOgImage }}" />
+  <meta property="og:image:width"     content="1200" />
+  <meta property="og:image:height"    content="630" />
+  <meta property="og:image:alt"       content="{{ ogImageAlt if ogImageAlt else (ogTitle if ogTitle else title) }}" />
+  <meta property="og:locale"          content="hu_HU" />
+  <meta property="og:site_name"       content="BagolykaLand" />
+  <meta name="twitter:card"           content="summary_large_image" />
+  <meta name="twitter:title"          content="{{ ogTitle if ogTitle else title }}" />
+  <meta name="twitter:description"    content="{{ ogDescription if ogDescription else description }}" />
+  <meta name="twitter:image"          content="{{ ogImage if ogImage else site.defaultOgImage }}" />
+  <meta name="twitter:image:alt"      content="{{ ogImageAlt if ogImageAlt else (ogTitle if ogTitle else title) }}" />
 
-  <!-- Canonical -->
+  <!-- Canonical + language alternates -->
   <link rel="canonical" href="{{ canonical }}" />
+  <link rel="alternate" hreflang="hu" href="{{ canonical }}" />
+  <link rel="alternate" hreflang="hu-HU" href="{{ canonical }}" />
+  <link rel="alternate" hreflang="x-default" href="{{ canonical }}" />
 
   <!-- App install -->
   <meta name="theme-color" content="#2B746D" />
@@ -69,31 +87,51 @@
   gtag('set','ads_data_redaction',false);
   </script>
 
-  <!-- Structured Data – LocalBusiness -->
+  <!-- Structured Data – Organization + LocalBusiness + EducationalOrganization + MedicalBusiness + ChildCare -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
+    "@type": ["EducationalOrganization","LocalBusiness","ChildCare","MedicalBusiness"],
+    "@id": "https://bagolykaland.hu/#organization",
     "name": "BagolykaLand Oktató- és Fejlesztő Központ",
-    "alternateName": "BagolykaLand",
-    "url": "https://bagolykaland.hu",
-    "logo": "https://bagolykaland.hu/img/logo.webp",
-    "image": "https://bagolykaland.hu/img/bagolykaland-hero-group.webp",
-    "description": "Gyermekfejlesztő központ Debrecenben 4–8 éves gyermekek számára. Logopédia, mozgásfejlesztés, egyéni fejlesztő foglalkozások és iskola-előkészítő képzett szakemberektől.",
+    "alternateName": ["BagolykaLand","Bagoly Kaland","BagolykaLand Debrecen"],
+    "url": "https://bagolykaland.hu/",
+    "logo": {
+      "@type": "ImageObject",
+      "@id": "https://bagolykaland.hu/#logo",
+      "url": "https://bagolykaland.hu/img/logo.webp",
+      "contentUrl": "https://bagolykaland.hu/img/logo.webp",
+      "caption": "BagolykaLand logó",
+      "inLanguage": "hu"
+    },
+    "image": [
+      "https://bagolykaland.hu/img/bagolykaland-hero-group.webp",
+      "https://bagolykaland.hu/img/alexandra-szabovarga.webp",
+      "https://bagolykaland.hu/img/bagolykaland-csapat-csoportfoto.webp"
+    ],
+    "description": "Gyermekfejlesztő központ Debrecenben 4–8 éves gyermekek számára. Logopédia, mozgásfejlesztés, egyéni fejlesztő foglalkozások, iskola-előkészítő és szorongásoldó program képzett szakemberektől – 15+ év tapasztalat, 1000+ fejlesztett gyermek.",
+    "slogan": "Egy szerethető út, ami a tudáshoz vezet!",
+    "foundingDate": "2011",
     "telephone": "{{ site.contact.phone }}",
     "email": "{{ site.contact.email }}",
+    "priceRange": "7990 Ft - 50000 Ft",
+    "currenciesAccepted": "HUF",
+    "paymentAccepted": "Készpénz, Átutalás",
+    "knowsLanguage": ["hu","hu-HU"],
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Csokonai utca 32.",
       "addressLocality": "Debrecen",
       "postalCode": "4024",
+      "addressRegion": "Hajdú-Bihar",
       "addressCountry": "HU"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "47.5389796",
-      "longitude": "21.6278229"
+      "latitude": 47.5389796,
+      "longitude": 21.6278229
     },
+    "hasMap": "{{ site.googleReview.url }}",
     "openingHoursSpecification": [
       {
         "@type": "OpeningHoursSpecification",
@@ -104,35 +142,328 @@
     ],
     "founder": {
       "@type": "Person",
+      "@id": "https://bagolykaland.hu/#founder",
       "name": "Szabó-Varga Alexandra",
-      "jobTitle": "Fejlesztőpedagógus, Alapozó Mozgásterapeuta"
+      "jobTitle": "Fejlesztőpedagógus, Alapozó Mozgásterapeuta",
+      "worksFor": { "@id": "https://bagolykaland.hu/#organization" },
+      "image": "https://bagolykaland.hu/img/alexandra-szabovarga.webp",
+      "knowsAbout": ["fejlesztő pedagógia","logopédia","mozgásfejlesztés","alapozó terápia","iskola-előkészítés","finommotorika"],
+      "alumniOf": { "@type": "CollegeOrUniversity", "name": "Debreceni Egyetem" }
     },
+    "employee": [
+      { "@type": "Person", "name": "Szabó-Varga Alexandra", "jobTitle": "Alapító, fejlesztőpedagógus" }
+    ],
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "{{ site.googleReview.rating }}",
       "bestRating": "5",
       "worstRating": "1",
-      "ratingCount": "{{ site.googleReview.reviewCount }}"
+      "ratingCount": "{{ site.googleReview.reviewCount }}",
+      "reviewCount": "{{ site.googleReview.reviewCount }}"
     },
     "sameAs": [
       "https://zsenibagoly.hu",
+      "https://kepzes.zsenibagoly.hu",
       "{{ site.social.facebook }}",
       "{{ site.googleReview.url }}"
     ],
-    "areaServed": {
-      "@type": "City",
-      "name": "Debrecen"
+    "areaServed": [
+      { "@type": "City", "name": "Debrecen", "@id": "https://www.wikidata.org/wiki/Q43137" },
+      { "@type": "AdministrativeArea", "name": "Hajdú-Bihar vármegye" },
+      { "@type": "Country", "name": "Magyarország" }
+    ],
+    "serviceArea": {
+      "@type": "GeoCircle",
+      "geoMidpoint": { "@type": "GeoCoordinates", "latitude": 47.5389796, "longitude": 21.6278229 },
+      "geoRadius": "50000"
     },
+    "audience": {
+      "@type": "PeopleAudience",
+      "name": "Óvodás és kisiskolás gyermekek és szüleik",
+      "suggestedMinAge": 3,
+      "suggestedMaxAge": 12,
+      "audienceType": "Gyermekek, szülők, óvodapedagógusok"
+    },
+    "medicalSpecialty": ["SpeechPathology","PediatricMedicine"],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Fejlesztő foglalkozások",
+      "name": "Fejlesztő foglalkozások és vizsgálatok",
       "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Logopédia", "url": "https://bagolykaland.hu/foglalkozasaink/logopedia/" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mozgásfejlesztés", "url": "https://bagolykaland.hu/foglalkozasaink/mozgasfejlesztes/" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Egyéni fejlesztő foglalkozások", "url": "https://bagolykaland.hu/foglalkozasaink/egyeni-fejleszto-foglalkozasok/" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Iskola-előkészítő", "url": "https://bagolykaland.hu/foglalkozasaink/iskola-elokeszito-foglalkozas/" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Szorongásoldó program", "url": "https://bagolykaland.hu/foglalkozasaink/szorongasoldo-program/" } }
+        { "@type": "Offer", "priceCurrency": "HUF", "price": "10000", "itemOffered": { "@type": "Service", "name": "Logopédia", "url": "https://bagolykaland.hu/foglalkozasaink/logopedia/" } },
+        { "@type": "Offer", "priceCurrency": "HUF", "price": "10000", "itemOffered": { "@type": "Service", "name": "Mozgásfejlesztés", "url": "https://bagolykaland.hu/foglalkozasaink/mozgasfejlesztes/" } },
+        { "@type": "Offer", "priceCurrency": "HUF", "price": "10000", "itemOffered": { "@type": "Service", "name": "Egyéni fejlesztő foglalkozások", "url": "https://bagolykaland.hu/foglalkozasaink/egyeni-fejleszto-foglalkozasok/" } },
+        { "@type": "Offer", "priceCurrency": "HUF", "itemOffered": { "@type": "Service", "name": "Iskola-előkészítő", "url": "https://bagolykaland.hu/foglalkozasaink/iskola-elokeszito-foglalkozas/" } },
+        { "@type": "Offer", "priceCurrency": "HUF", "itemOffered": { "@type": "Service", "name": "Szorongásoldó program", "url": "https://bagolykaland.hu/foglalkozasaink/szorongasoldo-program/" } },
+        { "@type": "Offer", "priceCurrency": "HUF", "price": "7990", "itemOffered": { "@type": "Service", "name": "Kézen Fogva online finommotorika-fejlesztés", "url": "https://bagolykaland.hu/kezen-fogva-online-finommotorika-fejlesztes/" } },
+        { "@type": "Offer", "priceCurrency": "HUF", "itemOffered": { "@type": "Service", "name": "Logopédiai vizsgálat", "url": "https://bagolykaland.hu/vizsgalatok/logopediai-vizsgalat/" } },
+        { "@type": "Offer", "priceCurrency": "HUF", "itemOffered": { "@type": "Service", "name": "Iskolaérettségi vizsgálat", "url": "https://bagolykaland.hu/vizsgalatok/iskolaerettsegi-vizsgalat/" } },
+        { "@type": "Offer", "priceCurrency": "HUF", "itemOffered": { "@type": "Service", "name": "Komplex részképesség vizsgálat", "url": "https://bagolykaland.hu/vizsgalatok/komplex-reszkepesseg-vizsgalat/" } }
       ]
+    },
+    "makesOffer": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gyermekfejlesztés" } }
+    ],
+    "isAccessibleForFree": false
+  }
+  </script>
+
+  <!-- WebSite – sitelinks search box + global publisher reference -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://bagolykaland.hu/#website",
+    "url": "https://bagolykaland.hu/",
+    "name": "BagolykaLand",
+    "description": "BagolykaLand Oktató- és Fejlesztő Központ weboldala – fejlesztő foglalkozások, vizsgálatok és képzések Debrecenben.",
+    "inLanguage": "hu-HU",
+    "publisher": { "@id": "https://bagolykaland.hu/#organization" },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://bagolykaland.hu/?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
     }
   }
   </script>
+
+  <!-- WebPage – speakable + breadcrumb (auto from front matter) -->
+  {% set _pageName = ogTitle if ogTitle else title %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "{{ canonical }}#webpage",
+    "url": "{{ canonical }}",
+    "name": {{ _pageName | dump | safe }},
+    "description": {{ (ogDescription if ogDescription else description) | dump | safe }},
+    "inLanguage": "hu-HU",
+    "isPartOf": { "@id": "https://bagolykaland.hu/#website" },
+    "about": { "@id": "https://bagolykaland.hu/#organization" },
+    "primaryImageOfPage": {
+      "@type": "ImageObject",
+      "url": "{{ ogImage if ogImage else site.defaultOgImage }}"
+    },
+    {% if breadcrumbs %}
+    "breadcrumb": { "@id": "{{ canonical }}#breadcrumb" },
+    {% endif %}
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": [".page-lead","h1",".lead",".tldr",".roviden"]
+    },
+    "potentialAction": {
+      "@type": "ReadAction",
+      "target": ["{{ canonical }}"]
+    }
+  }
+  </script>
+
+  {% if breadcrumbs %}
+  <!-- BreadcrumbList (per-page from front matter) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": "{{ canonical }}#breadcrumb",
+    "itemListElement": [
+      {% for crumb in breadcrumbs %}
+      {
+        "@type": "ListItem",
+        "position": {{ loop.index }},
+        "name": {{ crumb.name | dump | safe }}{% if crumb.url %},
+        "item": "https://bagolykaland.hu{{ crumb.url }}"{% endif %}
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+  </script>
+  {% endif %}
+
+  {% if serviceSchema %}
+  <!-- Service schema (per-page) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "{{ serviceSchema.type if serviceSchema.type else 'Service' }}",
+    "@id": "{{ canonical }}#service",
+    "name": {{ serviceSchema.name | dump | safe }},
+    "description": {{ serviceSchema.description | dump | safe }},
+    "serviceType": {{ serviceSchema.serviceType | dump | safe }},
+    "category": {{ (serviceSchema.category if serviceSchema.category else "Gyermekfejlesztés") | dump | safe }},
+    "provider": { "@id": "https://bagolykaland.hu/#organization" },
+    "areaServed": [
+      { "@type": "City", "name": "Debrecen" },
+      { "@type": "AdministrativeArea", "name": "Hajdú-Bihar vármegye" }
+    ],
+    "audience": {
+      "@type": "PeopleAudience",
+      "suggestedMinAge": {{ serviceSchema.minAge if serviceSchema.minAge else 3 }},
+      "suggestedMaxAge": {{ serviceSchema.maxAge if serviceSchema.maxAge else 12 }}
+    },
+    "url": "{{ canonical }}",
+    "image": "{{ ogImage if ogImage else site.defaultOgImage }}"
+    {% if serviceSchema.price %},
+    "offers": {
+      "@type": "Offer",
+      "price": "{{ serviceSchema.price }}",
+      "priceCurrency": "HUF",
+      "availability": "https://schema.org/InStock",
+      "url": "{{ canonical }}",
+      "validFrom": "2026-01-01"
+      {% if serviceSchema.duration %},
+      "eligibleDuration": { "@type": "QuantitativeValue", "value": {{ serviceSchema.duration }}, "unitCode": "MIN" }
+      {% endif %}
+    }
+    {% endif %}
+    {% if serviceSchema.hasOfferCatalog %},
+    "hasOfferCatalog": {{ serviceSchema.hasOfferCatalog | dump | safe }}
+    {% endif %}
+  }
+  </script>
+  {% endif %}
+
+  {% if eventSchema %}
+  <!-- Event schema (per-page) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "{{ eventSchema.type if eventSchema.type else 'Event' }}",
+    "@id": "{{ canonical }}#event",
+    "name": {{ eventSchema.name | dump | safe }},
+    "description": {{ eventSchema.description | dump | safe }},
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "{{ eventSchema.attendanceMode if eventSchema.attendanceMode else 'https://schema.org/OfflineEventAttendanceMode' }}",
+    "startDate": "{{ eventSchema.startDate }}",
+    "endDate": "{{ eventSchema.endDate }}",
+    "location": {
+      "@type": "Place",
+      "name": "BagolykaLand Oktató- és Fejlesztő Központ",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Csokonai utca 32.",
+        "addressLocality": "Debrecen",
+        "postalCode": "4024",
+        "addressCountry": "HU"
+      }
+    },
+    "image": ["{{ ogImage if ogImage else site.defaultOgImage }}"],
+    "organizer": { "@id": "https://bagolykaland.hu/#organization" },
+    "performer": { "@id": "https://bagolykaland.hu/#organization" },
+    "audience": {
+      "@type": "PeopleAudience",
+      "suggestedMinAge": {{ eventSchema.minAge if eventSchema.minAge else 5 }},
+      "suggestedMaxAge": {{ eventSchema.maxAge if eventSchema.maxAge else 8 }}
+    }
+    {% if eventSchema.price %},
+    "offers": {
+      "@type": "Offer",
+      "price": "{{ eventSchema.price }}",
+      "priceCurrency": "HUF",
+      "availability": "https://schema.org/InStock",
+      "url": "{{ canonical }}",
+      "validFrom": "2026-01-01"
+    }
+    {% endif %}
+    {% if eventSchema.subEvents %},
+    "subEvent": {{ eventSchema.subEvents | dump | safe }}
+    {% endif %}
+  }
+  </script>
+  {% endif %}
+
+  {% if courseSchema %}
+  <!-- Course schema (per-page) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "@id": "{{ canonical }}#course",
+    "name": {{ courseSchema.name | dump | safe }},
+    "description": {{ courseSchema.description | dump | safe }},
+    "provider": { "@id": "https://bagolykaland.hu/#organization" },
+    "educationalLevel": "{{ courseSchema.level if courseSchema.level else 'óvodás' }}",
+    "educationalCredentialAwarded": "Részvételi igazolás",
+    "inLanguage": "hu",
+    "url": "{{ canonical }}",
+    "image": "{{ ogImage if ogImage else site.defaultOgImage }}",
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": "szülő, gyermek"
+    },
+    "teaches": {{ courseSchema.teaches | dump | safe }},
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "{{ courseSchema.mode if courseSchema.mode else 'online' }}",
+      "courseWorkload": "{{ courseSchema.workload if courseSchema.workload else 'PT4H' }}",
+      "inLanguage": "hu"
+      {% if courseSchema.price %},
+      "offers": {
+        "@type": "Offer",
+        "price": "{{ courseSchema.price }}",
+        "priceCurrency": "HUF",
+        "category": "egyszeri díj",
+        "availability": "https://schema.org/InStock",
+        "url": "{{ courseSchema.offerUrl if courseSchema.offerUrl else canonical }}"
+      }
+      {% endif %}
+    }
+  }
+  </script>
+  {% endif %}
+
+  {% if blogPost %}
+  <!-- BlogPosting / Article schema (per-page) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": "{{ canonical }}#article",
+    "mainEntityOfPage": { "@id": "{{ canonical }}#webpage" },
+    "headline": {{ (blogPost.headline if blogPost.headline else title) | dump | safe }},
+    "description": {{ (blogPost.description if blogPost.description else description) | dump | safe }},
+    "image": ["{{ blogPost.image if blogPost.image else (ogImage if ogImage else site.defaultOgImage) }}"],
+    "datePublished": "{{ blogPost.datePublished }}",
+    "dateModified": "{{ blogPost.dateModified if blogPost.dateModified else blogPost.datePublished }}",
+    "author": {
+      "@type": "Person",
+      "name": "{{ blogPost.author if blogPost.author else 'Szabó-Varga Alexandra' }}",
+      "jobTitle": "Fejlesztőpedagógus",
+      "worksFor": { "@id": "https://bagolykaland.hu/#organization" },
+      "url": "https://bagolykaland.hu/rolunk/"
+    },
+    "publisher": { "@id": "https://bagolykaland.hu/#organization" },
+    "inLanguage": "hu-HU",
+    "isPartOf": { "@id": "https://bagolykaland.hu/#website" },
+    "url": "{{ canonical }}",
+    "wordCount": {{ blogPost.wordCount if blogPost.wordCount else 700 }},
+    "articleSection": "{{ blogPost.section if blogPost.section else 'Szülőknek' }}",
+    "keywords": {{ (blogPost.keywords if blogPost.keywords else ["gyermekfejlesztés","szülőknek","nevelés"]) | dump | safe }}
+  }
+  </script>
+  {% endif %}
+
+  {% if faq %}
+  <!-- FAQPage schema (per-page) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": "{{ canonical }}#faq",
+    "isPartOf": { "@id": "{{ canonical }}#webpage" },
+    "mainEntity": [
+      {% for item in faq %}
+      {
+        "@type": "Question",
+        "name": {{ item.q | dump | safe }},
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": {{ item.a | dump | safe }}
+        }
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+  </script>
+  {% endif %}

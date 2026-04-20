@@ -1,9 +1,65 @@
 ---
 layout: "base.njk"
-title: "Kincskereső Élménytábor 2026 – Nyári tábor 5–8 éveseknek | BagolykaLand Debrecen"
+title: "Kincskereső Élménytábor 2026 – nyári tábor 5–8 éveseknek | Debrecen"
 description: "40+ fejlesztő tevékenység, izgalmas nyomozós kaland, max 18 fő/turnus. 10 éve bevált nyári tábor Debrecenben 5–8 éves gyerekeknek. Július 13–17. és 20–24."
 preloadHero: "/img/bagolykaland-kincskereso-tabor-hero.webp"
 ogImage: "https://bagolykaland.hu/img/bagolykaland-kincskereso-tabor-hero.webp"
+ogImageAlt: "Kincskereső Élménytábor 2026 – BagolykaLand Debrecen"
+ogType: "website"
+breadcrumbs:
+  - { name: "Főoldal", url: "/" }
+  - { name: "Nyári tábor" }
+eventSchema:
+  type: "Event"
+  name: "Kincskereső Élménytábor 2026 – BagolykaLand nyári tábor"
+  description: "40+ fejlesztő tevékenységet és izgalmas nyomozós kalandot kínáló napközis nyári fejlesztő tábor 5–8 éveseknek Debrecenben. Max. 18 fő / turnus. Két turnus 2026 júliusában."
+  attendanceMode: "https://schema.org/OfflineEventAttendanceMode"
+  startDate: "2026-07-13T08:00+02:00"
+  endDate: "2026-07-24T16:00+02:00"
+  minAge: 5
+  maxAge: 8
+  subEvents:
+    - "@type": "Event"
+      name: "Kincskereső Élménytábor – 1. turnus"
+      startDate: "2026-07-13T08:00+02:00"
+      endDate: "2026-07-17T16:00+02:00"
+      eventStatus: "https://schema.org/EventScheduled"
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode"
+      location:
+        "@type": "Place"
+        name: "BagolykaLand"
+        address:
+          "@type": "PostalAddress"
+          streetAddress: "Csokonai utca 32."
+          addressLocality: "Debrecen"
+          postalCode: "4024"
+          addressCountry: "HU"
+    - "@type": "Event"
+      name: "Kincskereső Élménytábor – 2. turnus"
+      startDate: "2026-07-20T08:00+02:00"
+      endDate: "2026-07-24T16:00+02:00"
+      eventStatus: "https://schema.org/EventScheduled"
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode"
+      location:
+        "@type": "Place"
+        name: "BagolykaLand"
+        address:
+          "@type": "PostalAddress"
+          streetAddress: "Csokonai utca 32."
+          addressLocality: "Debrecen"
+          postalCode: "4024"
+          addressCountry: "HU"
+faq:
+  - q: "Mikor lesz a 2026-os nyári tábor?"
+    a: "A Kincskereső Élménytábor 2026-ban két turnusban fut: 1. turnus július 13–17., 2. turnus július 20–24. Mindkét turnus hétfőtől péntekig tart, napközis formában."
+  - q: "Milyen korosztálynak szól a tábor?"
+    a: "5–8 éves gyermekeknek. A program fejlesztő jellegű, ovis és iskolakezdő gyerekeknek is ideális."
+  - q: "Mekkora a csoport létszáma?"
+    a: "Max. 18 fő / turnus. Kis létszám = személyes figyelem minden gyereknek."
+  - q: "Mit csinálunk a táborban?"
+    a: "40+ fejlesztő tevékenység: kézműves, akadálypálya, mese, relaxáció, csapatjáték és egy izgalmas nyomozós Kincskereső kaland."
+  - q: "Hol zajlik a tábor?"
+    a: "A BagolykaLand új debreceni központjában: Csokonai utca 32. (4024 Debrecen)."
 headStyles: |
 
     .camp-urgency {

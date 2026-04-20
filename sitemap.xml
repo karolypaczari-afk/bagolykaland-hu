@@ -3,131 +3,166 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://bagolykaland.hu/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-hero-group.webp</image:loc></image:image>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-hero-group.webp</image:loc>
+      <image:title>BagolykaLand csapat és gyermekek</image:title>
+      <image:caption>Gyermekfejlesztő csapat Debrecenben</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://bagolykaland.hu/rolunk/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/alexandra-szabovarga.webp</image:loc></image:image>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/alexandra-szabovarga.webp</image:loc>
+      <image:title>Szabó-Varga Alexandra, alapító</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://bagolykaland.hu/rolunk/kedves-anya-es-apa/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bagolykaland.hu/rolunk/kedves-gyermek/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bagolykaland.hu/nyari-tabor/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-kincskereso-tabor-hero.webp</image:loc></image:image>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-kincskereso-tabor-hero.webp</image:loc>
+      <image:title>Kincskereső Élménytábor 2026</image:title>
+      <image:caption>Nyári fejlesztő tábor 5–8 éveseknek Debrecenben</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://bagolykaland.hu/foglalkozasaink/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bagolykaland.hu/foglalkozasaink/logopedia/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-logopediai-session.webp</image:loc></image:image>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-logopediai-session.webp</image:loc>
+      <image:title>Logopédiai foglalkozás</image:title>
+      <image:caption>Beszédfejlesztés gyermekeknek Debrecenben</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://bagolykaland.hu/foglalkozasaink/mozgasfejlesztes/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-mozgasfejlesztes-terapeuta.webp</image:loc></image:image>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-mozgasfejlesztes-terapeuta.webp</image:loc>
+      <image:title>Mozgásfejlesztés terapeutával</image:title>
+      <image:caption>Alapozó mozgásterápia Debrecenben</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://bagolykaland.hu/foglalkozasaink/egyeni-fejleszto-foglalkozasok/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-egyeni-fejlesztes-szabi.webp</image:loc></image:image>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-egyeni-fejlesztes-szabi.webp</image:loc>
+      <image:title>Egyéni fejlesztő foglalkozás</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://bagolykaland.hu/foglalkozasaink/iskola-elokeszito-foglalkozas/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-csoportos-iskola-elokeszito.webp</image:loc></image:image>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-csoportos-iskola-elokeszito.webp</image:loc>
+      <image:title>Iskola-előkészítő csoport</image:title>
+      <image:caption>Iskola-előkészítő foglalkozás Debrecenben</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://bagolykaland.hu/foglalkozasaink/szorongasoldo-program/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-galeria-gyermek-19.webp</image:loc></image:image>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-galeria-gyermek-19.webp</image:loc>
+      <image:title>Szorongásoldó program</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://bagolykaland.hu/vizsgalatok/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-gyermekfejlesztes-debrecen.webp</image:loc></image:image>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-gyermekfejlesztes-debrecen.webp</image:loc>
+      <image:title>Fejlesztési vizsgálatok</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://bagolykaland.hu/vizsgalatok/logopediai-vizsgalat/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
   </url>
   <url>
     <loc>https://bagolykaland.hu/vizsgalatok/iskolaerettsegi-vizsgalat/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
   </url>
   <url>
     <loc>https://bagolykaland.hu/vizsgalatok/komplex-reszkepesseg-vizsgalat/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
   </url>
   <url>
     <loc>https://bagolykaland.hu/kezen-fogva-online-finommotorika-fejlesztes/</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/arlista/</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/galeria/</loc>
-    <lastmod>2026-04-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image><image:loc>https://bagolykaland.hu/img/bagolykaland-galeria-gyermek-19.webp</image:loc></image:image>
-  </url>
-  <url>
-    <loc>https://bagolykaland.hu/kapcsolat/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://bagolykaland.hu/arlista/</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/galeria/</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-galeria-gyermek-19.webp</image:loc>
+      <image:title>Galéria</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://bagolykaland.hu/kapcsolat/</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://bagolykaland.hu/blog/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -175,7 +210,7 @@
   </url>
   <url>
     <loc>https://bagolykaland.hu/adatkezelesi-tajekoztato/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
