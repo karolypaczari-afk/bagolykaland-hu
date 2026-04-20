@@ -2,9 +2,11 @@
  * BAGOLYKALAND.HU — Tracking configuration
  *
  * GTM-first setup:
- * - set `gtmId` when your Tag Manager container is ready
- * - the site already emits custom `bk_*` events into `dataLayer`
- * - direct GA4 / Clarity / Meta IDs remain optional fallbacks
+ * - `gtmId` drives the whole stack; configure GA4 + Google Ads INSIDE GTM
+ * - `gaMeasurementId` is a fallback for direct gtag.js load (skipped when gtmId is set
+ *   to prevent duplicate pageviews — GTM already fires the GA4 config tag)
+ * - `gAdsId` / `gAdsLabel` power Google Ads Enhanced Conversions when set
+ * - `clarityId` / `metaPixelId` load their own SDKs (independent of GTM)
  *
  * With blank IDs the tracking layer stays safely inert.
  */
@@ -17,6 +19,8 @@
   var defaultVendors = {
     gtmId: 'GTM-M6H5WKVM',
     gaMeasurementId: 'G-86N523JP3E',
+    gAdsId: '',
+    gAdsLabel: '',
     clarityId: 'rqnf90op5b',
     metaPixelId: '9087042854758379',
   };

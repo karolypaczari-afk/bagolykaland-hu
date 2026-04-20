@@ -14,6 +14,8 @@
     vendors: {
       gtmId: '',
       gaMeasurementId: '',
+      gAdsId: '',
+      gAdsLabel: '',
       clarityId: '',
       metaPixelId: '',
     },
@@ -29,10 +31,12 @@
     loaded: {
       gtm: false,
       ga: false,
+      gads: false,
       clarity: false,
       meta: false,
     },
     metaPageviewTracked: false,
+    clarityConfigured: false,
   };
 
   function ensureDataLayer() {
@@ -208,27 +212,77 @@
     return window.gtag;
   }
 
+  // Read stored SHA-256 hashes written by meta-enhance.src.js after a form
+  // submission — same source of identity used for Meta Advanced Matching.
+  // Feeding these to gtag('set','user_data',...) powers Google Ads
+  // Enhanced Conversions for Web without any extra tagging.
+  function readEnhancedConversionsUserData() {
+    try {
+      var em = localStorage.getItem('bk_meta_em_hash');
+      var ph = localStorage.getItem('bk_meta_ph_hash');
+      if (!em && !ph) return null;
+      var data = {};
+      if (em) data.sha256_email_address = em;
+      if (ph) data.sha256_phone_number = ph;
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Push Enhanced Conversions user_data into dataLayer once — works for both
+  // GTM (which reads the `user_data` dataLayer variable) and direct gtag.js
+  // (which forwards `set` commands to Google Ads / GA4 Enhanced Conversions).
+  function pushEnhancedConversionsData(force) {
+    if (state.loaded.ec && !force) return;
+    var ecData = readEnhancedConversionsUserData();
+    if (!ecData) return;
+    ensureGtag()('set', 'user_data', ecData);
+    state.loaded.ec = true;
+    log('[tracking] Enhanced Conversions user_data set');
+  }
+
   function loadGa() {
+    // GTM already fires the GA4 config tag — running gtag.js directly as well
+    // double-counts every pageview and event. Skip direct load when GTM is on.
+    if (hasValue(vendors.gtmId)) {
+      state.loaded.ga = true;
+      pushEnhancedConversionsData();
+      return false;
+    }
     if (!hasValue(vendors.gaMeasurementId) || state.loaded.ga) return false;
 
     var gtag = ensureGtag();
-    gtag('consent', 'default', {
-      ad_storage: 'granted',
-      ad_user_data: 'granted',
-      ad_personalization: 'granted',
-      analytics_storage: 'granted',
-    });
     gtag('js', new Date());
     gtag('config', vendors.gaMeasurementId, {
       linker: { domains: config.crossDomainDomains || [] },
-      url_passthrough: true,
       send_page_view: true,
     });
+
+    pushEnhancedConversionsData();
 
     ensureScript('bk-ga4', 'https://www.googletagmanager.com/gtag/js?id=' + vendors.gaMeasurementId);
     state.loaded.ga = true;
     applyConsentState();
-    log('[tracking] GA4 loaded');
+    log('[tracking] GA4 loaded (direct — no GTM)');
+    return true;
+  }
+
+  function loadGads() {
+    // Google Ads tag. If GTM is configured, the Google Ads conversion tag
+    // belongs in GTM — skip direct load.
+    if (hasValue(vendors.gtmId)) return false;
+    if (!hasValue(vendors.gAdsId) || state.loaded.gads) return false;
+
+    var gtag = ensureGtag();
+    gtag('js', new Date());
+    gtag('config', vendors.gAdsId);
+
+    pushEnhancedConversionsData();
+
+    ensureScript('bk-gads', 'https://www.googletagmanager.com/gtag/js?id=' + vendors.gAdsId);
+    state.loaded.gads = true;
+    log('[tracking] Google Ads loaded');
     return true;
   }
 
@@ -244,6 +298,44 @@
     state.loaded.gtm = true;
     log('[tracking] GTM loaded');
     return true;
+  }
+
+  function configureClarity() {
+    if (state.clarityConfigured || typeof window.clarity !== 'function') return;
+
+    var pageType = getPageType();
+    var pathname = window.location.pathname.toLowerCase();
+
+    // Custom tags — let us filter Clarity recordings by page_type, and
+    // dashboard-level cross-reference Meta / GA4 funnels.
+    window.clarity('set', 'page_type', pageType);
+    if (pathname.indexOf('/nyari-tabor') !== -1) window.clarity('set', 'program', 'camp_kincskereso');
+    if (pathname.indexOf('/szorongasoldo') !== -1) window.clarity('set', 'program', 'szorongasoldo');
+    if (pathname.indexOf('/iskola-elokeszito') !== -1) window.clarity('set', 'program', 'iskolaelokeszito');
+    if (pathname.indexOf('/kezen-fogva') !== -1) window.clarity('set', 'program', 'kezen_fogva');
+
+    // Identify — same external_id that meta-enhance uses, so Clarity sessions
+    // can be joined with CAPI / GA4 user-id data outside the tool.
+    try {
+      var extMatch = document.cookie.match(/(?:^|; )bk_ext_id=([^;]+)/);
+      if (extMatch) {
+        window.clarity('identify', decodeURIComponent(extMatch[1]));
+      }
+    } catch (e) { /* ignore */ }
+
+    // Upgrade — prioritize recordings on high-intent landing pages so they
+    // survive Clarity's 100k/day sampling cap.
+    var HIGH_INTENT = ['service', 'exam'];
+    if (HIGH_INTENT.indexOf(pageType) !== -1
+      || pathname.indexOf('/nyari-tabor') !== -1
+      || pathname.indexOf('/szorongasoldo') !== -1
+      || pathname.indexOf('/kezen-fogva') !== -1
+      || pathname.indexOf('/kapcsolat') !== -1
+      || pathname.indexOf('/arlista') !== -1) {
+      window.clarity('upgrade', 'high_intent_landing');
+    }
+
+    state.clarityConfigured = true;
   }
 
   function loadClarity() {
@@ -264,6 +356,7 @@
 
     state.loaded.clarity = true;
     updateClarityConsent();
+    configureClarity();
     log('[tracking] Clarity loaded');
     return true;
   }
@@ -341,6 +434,7 @@
 
     loadGtm();
     loadGa();
+    loadGads();
     loadClarity();
     loadMeta();
     applyConsentState();
@@ -406,9 +500,12 @@
       return state.consentGranted;
     },
     loadGa: loadGa,
+    loadGads: loadGads,
     loadGtm: loadGtm,
     loadClarity: loadClarity,
+    configureClarity: configureClarity,
     loadMeta: loadMeta,
+    pushEnhancedConversionsData: pushEnhancedConversionsData,
     loadAll: loadAll,
     pushDataLayerEvent: pushDataLayerEvent,
     setConsent: setConsent,

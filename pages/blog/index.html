@@ -38,10 +38,14 @@
   <link rel="alternate" type="text/plain" title="LLM summary" href="https://bagolykaland.hu/llms.txt" />
   <link rel="alternate" type="text/plain" title="LLM full content" href="https://bagolykaland.hu/llms-full.txt" />
 
-  <!-- DNS prefetch for tracking domains -->
-  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <!-- Tracking domains: preconnect the ones that actually load on first paint -->
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+  <link rel="preconnect" href="https://www.clarity.ms" crossorigin />
+  <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
   <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-  <link rel="dns-prefetch" href="https://www.clarity.ms" />
+  <link rel="dns-prefetch" href="https://stats.g.doubleclick.net" />
+  <link rel="dns-prefetch" href="https://c.bing.com" />
+  <link rel="dns-prefetch" href="https://www.facebook.com" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -51,14 +55,19 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=mo6u9xpq" />
+  <link rel="stylesheet" href="/css/style.css?v=mo6v495m" />
 
   
 
-  <!-- Google Consent Mode v2 — granted by default (opt-out model) -->
+  <!-- Google Consent Mode v2 — granted by default (opt-out model).
+       wait_for_update: lets late consent updates (banner click) arrive before tags fire.
+       url_passthrough: preserves gclid/gbraid/wbraid across nav when cookies get blocked.
+       ads_data_redaction: false since ad_storage is granted — keep full attribution. -->
   <script>
   window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
-  gtag('consent','default',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
+  gtag('consent','default',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted',wait_for_update:500});
+  gtag('set','url_passthrough',true);
+  gtag('set','ads_data_redaction',false);
   </script>
 
   <!-- Structured Data – LocalBusiness -->
@@ -970,16 +979,16 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=mo6u9xpq" defer></script>
-  <script src="/js/install-prompt.js?v=mo6u9xpq" defer></script>
-  <script src="/js/tracking.js?v=mo6u9xpq" defer></script>
-  <script src="/js/tracking-loader.js?v=mo6u9xpq" defer></script>
-  <script src="/js/meta-enhance.js?v=mo6u9xpq" defer></script>
-  <script src="/js/cookie-consent.js?v=mo6u9xpq" defer></script>
-  <script src="/js/main.js?v=mo6u9xpq" defer></script>
-  <script src="/js/lead-capture-loader.js?v=mo6u9xpq"
-          data-popup-css="/css/popup.css?v=mo6u9xpq"
-          data-popup-src="/js/popup.js?v=mo6u9xpq"
+  <script src="/js/components.js?v=mo6v495m" defer></script>
+  <script src="/js/install-prompt.js?v=mo6v495m" defer></script>
+  <script src="/js/tracking.js?v=mo6v495m" defer></script>
+  <script src="/js/tracking-loader.js?v=mo6v495m" defer></script>
+  <script src="/js/meta-enhance.js?v=mo6v495m" defer></script>
+  <script src="/js/cookie-consent.js?v=mo6v495m" defer></script>
+  <script src="/js/main.js?v=mo6v495m" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mo6v495m"
+          data-popup-css="/css/popup.css?v=mo6v495m"
+          data-popup-src="/js/popup.js?v=mo6v495m"
           defer></script>
 
 </body>

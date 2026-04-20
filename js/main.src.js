@@ -570,6 +570,15 @@
               });
             }
 
+            // Refresh Google Ads Enhanced Conversions user_data with freshly
+            // captured identity before the conversion event fires in GTM.
+            // setTimeout gives persistIdentity's async sha256 a moment to land.
+            setTimeout(function () {
+              if (window.BKTracking && typeof window.BKTracking.pushEnhancedConversionsData === 'function') {
+                window.BKTracking.pushEnhancedConversionsData(true);
+              }
+            }, 250);
+
             // Re-init the browser pixel with advanced matching so this session's
             // remaining page views carry em/ph/fn/ln → higher EMQ without any
             // cross-page storage of plaintext (fbq hashes internally).

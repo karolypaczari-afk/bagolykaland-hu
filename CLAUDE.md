@@ -338,13 +338,58 @@ Public URLs are clean: `/rolunk/`, `/arlista/` — no `/pages/` prefix. `.htacce
 
 ## Tracking + Consent Layer
 
-- `js/tracking.src.js` — config file with `window.BK_TRACKING_CONFIG.vendors`
-- Preferred: set `gtmId` only, manage GA4 / Meta / Clarity in GTM
-- Available vendor keys: `gtmId`, `gaMeasurementId`, `clarityId`, `metaPixelId`
-- `js/tracking-loader.src.js` stays inert until at least one vendor ID is configured
-- `js/cookie-consent.src.js` only shows a banner when consent is needed + a vendor is configured
-- `css/cookie-consent.css` is lazily loaded by the banner
-- GTM-friendly custom events pushed to `dataLayer`: `bk_cta_click`, `bk_contact_click`, `bk_form_start`, `bk_form_submit`, `bk_mobile_nav_toggle`, `bk_install_click`, `bk_install_prompt_result`, `bk_app_installed`, `bk_cookie_banner_view`, `bk_cookie_consent_updated`, `bk_popup_*`
+**GTM is the single source of truth.** GA4 + Google Ads are configured inside the GTM container (`GTM-M6H5WKVM`), NOT via parallel `gtag.js` on the page.
+
+### Vendor config (`window.BK_TRACKING_CONFIG.vendors` in `js/tracking.src.js`)
+
+| Key | Current | Purpose |
+|-----|---------|---------|
+| `gtmId` | `GTM-M6H5WKVM` | Master container. Drives GA4 + Google Ads tagging. |
+| `gaMeasurementId` | `G-86N523JP3E` | Fallback only — `tracking-loader` **skips direct `gtag.js` load when `gtmId` is set** (prevents double pageviews). |
+| `gAdsId` | *(empty)* | Google Ads conversion ID (`AW-xxx`). Scaffold ready — plug in, no other changes needed. |
+| `gAdsLabel` | *(empty)* | Optional — primary conversion label. |
+| `clarityId` | `rqnf90op5b` | Microsoft Clarity — loads its own SDK independently of GTM. |
+| `metaPixelId` | `9087042854758379` | Meta Pixel — its own SDK, plus CAPI relay via `meta-enhance.src.js`. |
+
+### Files
+
+- `js/tracking.src.js` — vendor config + defaults
+- `js/tracking-loader.src.js` — consent-gated bootstrap. Exposes `window.BKTracking`
+- `js/meta-enhance.src.js` — Meta Pixel enrichment (CAPI, Advanced Matching, dedup eventIDs). Persists SHA-256 hashes into `localStorage` (`bk_meta_em_hash`, `bk_meta_ph_hash`, `bk_meta_fn_hash`, `bk_meta_ln_hash`) after any form submit — **these hashes are reused by Google Ads Enhanced Conversions, no extra tagging needed**
+- `js/cookie-consent.src.js` — opt-out banner (consent granted by default on first visit, persists on scroll/click/button)
+- `css/cookie-consent.css` — lazy-loaded by the banner
+
+### Consent Mode v2 (set in `_includes/partials/head.njk`)
+
+Opt-out model — all four storage flags `granted` by default. Extras:
+- `wait_for_update: 500` — lets async banner updates reach tags before they fire
+- `url_passthrough: true` — preserves `gclid` / `gbraid` / `wbraid` across nav when cookies blocked
+- `ads_data_redaction: false` — full attribution kept (ad_storage is granted)
+
+### Enhanced Conversions (Google Ads)
+
+`BKTracking.pushEnhancedConversionsData(force)` reads the stored SHA-256 email/phone hashes (same source as Meta Advanced Matching) and pushes them via `gtag('set', 'user_data', {sha256_email_address, sha256_phone_number})`. Works with both GTM-managed tags and direct gtag.js. Auto-refreshed 250ms after form submit in `main.src.js` so the conversion event carries fresh identity.
+
+### Clarity (beyond basic snippet)
+
+After load, `configureClarity()` runs automatically:
+- `clarity('set', 'page_type', ...)` + `clarity('set', 'program', ...)` — filter recordings by page type / program
+- `clarity('identify', bk_ext_id)` — same external user ID as CAPI/Meta → lets you join Clarity recordings with funnel data
+- `clarity('upgrade', 'high_intent_landing')` on high-intent pages (camp, szorongásoldó, kézen-fogva, kapcsolat, árlista, vizsgálatok, foglalkozások) — these survive Clarity's 100k/day sampling cap
+
+### Preconnect vs dns-prefetch
+
+`preconnect` is used in `head.njk` for domains that actually load on first paint (`googletagmanager.com`, `clarity.ms`, `connect.facebook.net`). `dns-prefetch` for secondary tracking beacons (`google-analytics.com`, `stats.g.doubleclick.net`, etc.).
+
+### dataLayer custom events
+
+GTM-friendly `bk_*` events already pushed: `bk_cta_click`, `bk_contact_click`, `bk_form_start`, `bk_form_submit`, `bk_mobile_nav_toggle`, `bk_install_click`, `bk_install_prompt_result`, `bk_app_installed`, `bk_cookie_banner_view`, `bk_cookie_consent_updated`, `bk_popup_*`, `bk_program_signup`.
+
+### "Never break" rules
+
+1. **Never re-add parallel `gtag('config', 'G-xxx')` hardcoded alongside GTM.** The loader already guards — don't undo the guard.
+2. GA4 config stays in the GTM container. Same for Google Ads conversions.
+3. `meta-enhance` hashes in `localStorage` are the authoritative source for Enhanced Conversions user-provided data — don't add a separate hashing path for Google Ads.
 
 ---
 
