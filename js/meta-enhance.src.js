@@ -17,6 +17,9 @@
 
   var CAPI_ENDPOINT = '/api/meta-capi-relay.php';
   var EMAIL_HASH_KEY = 'bk_meta_em_hash';
+  var PHONE_HASH_KEY = 'bk_meta_ph_hash';
+  var FN_HASH_KEY = 'bk_meta_fn_hash';
+  var LN_HASH_KEY = 'bk_meta_ln_hash';
   var EXT_ID_COOKIE = 'bk_ext_id';
   var DOMAIN_COOKIE_ATTR = location.hostname.indexOf('bagolykaland.hu') !== -1
     ? ';domain=.bagolykaland.hu'
@@ -66,19 +69,48 @@
       .catch(function () { cb(''); });
   }
 
-  function readStoredEmailHash() {
-    if (window._bkEmailHash) return window._bkEmailHash;
+  function readStored(key, globalKey) {
+    if (window[globalKey]) return window[globalKey];
     try {
-      var stored = localStorage.getItem(EMAIL_HASH_KEY);
-      if (stored) { window._bkEmailHash = stored; return stored; }
+      var stored = localStorage.getItem(key);
+      if (stored) { window[globalKey] = stored; return stored; }
     } catch (e) { /* storage blocked */ }
     return '';
   }
 
-  function persistEmailHash(hashHex) {
+  function persistStored(key, globalKey, hashHex) {
     if (!hashHex) return;
-    window._bkEmailHash = hashHex;
-    try { localStorage.setItem(EMAIL_HASH_KEY, hashHex); } catch (e) { /* silent */ }
+    window[globalKey] = hashHex;
+    try { localStorage.setItem(key, hashHex); } catch (e) { /* silent */ }
+  }
+
+  function readStoredEmailHash() { return readStored(EMAIL_HASH_KEY, '_bkEmailHash'); }
+  function readStoredPhoneHash() { return readStored(PHONE_HASH_KEY, '_bkPhoneHash'); }
+  function readStoredFnHash()    { return readStored(FN_HASH_KEY,    '_bkFnHash'); }
+  function readStoredLnHash()    { return readStored(LN_HASH_KEY,    '_bkLnHash'); }
+
+  function persistEmailHash(hashHex) { persistStored(EMAIL_HASH_KEY, '_bkEmailHash', hashHex); }
+  function persistPhoneHash(hashHex) { persistStored(PHONE_HASH_KEY, '_bkPhoneHash', hashHex); }
+  function persistFnHash(hashHex)    { persistStored(FN_HASH_KEY,    '_bkFnHash',    hashHex); }
+  function persistLnHash(hashHex)    { persistStored(LN_HASH_KEY,    '_bkLnHash',    hashHex); }
+
+  // Normalize + hash a Hungarian phone number (06xxx → 36xxx, digits only).
+  function hashPhoneE164(raw, cb) {
+    var d = String(raw || '').replace(/\D+/g, '');
+    if (!d) return cb('');
+    if (d.indexOf('36') !== 0 && d.indexOf('06') === 0) d = '36' + d.slice(2);
+    sha256(d, cb);
+  }
+
+  // Persist all identity fields from a single form submission. Caller passes
+  // plaintext; we hash + store. This powers the 1.57% (em) + 0.82% (ph) EMQ
+  // uplift Meta's Events Manager recommends.
+  function persistIdentity(fields) {
+    if (!fields) return;
+    if (fields.email) sha256(String(fields.email).trim().toLowerCase(), persistEmailHash);
+    if (fields.phone) hashPhoneE164(fields.phone, persistPhoneHash);
+    if (fields.firstName) sha256(String(fields.firstName).trim().toLowerCase(), persistFnHash);
+    if (fields.lastName)  sha256(String(fields.lastName).trim().toLowerCase(),  persistLnHash);
   }
 
   // ── External ID (persistent user identifier) ──────────────────────────────
@@ -131,6 +163,12 @@
       if (fbp) userData.fbp = fbp;
       var emHash = readStoredEmailHash();
       if (emHash) userData.em = emHash;
+      var phHash = readStoredPhoneHash();
+      if (phHash) userData.ph = phHash;
+      var fnHash = readStoredFnHash();
+      if (fnHash) userData.fn = fnHash;
+      var lnHash = readStoredLnHash();
+      if (lnHash) userData.ln = lnHash;
       if (extraUserData) {
         for (var k in extraUserData) {
           if (Object.prototype.hasOwnProperty.call(extraUserData, k) && extraUserData[k]) {
@@ -361,6 +399,9 @@
     trackEvent: trackMetaEvent,
     trackCustom: trackMetaCustom,
     persistEmailHash: persistEmailHash,
-    hashEmail: function (raw, cb) { sha256(String(raw).trim().toLowerCase(), cb); }
+    persistPhoneHash: persistPhoneHash,
+    persistIdentity: persistIdentity,
+    hashEmail: function (raw, cb) { sha256(String(raw).trim().toLowerCase(), cb); },
+    hashPhone: hashPhoneE164
   };
 })();

@@ -82,12 +82,17 @@
       var program = params.program || '';
       var dedup = params.event_id ? { eventID: params.event_id } : undefined;
       if (program === CAMP_PROGRAM_NAME) {
-        window.fbq('trackCustom', 'CampApplication', {
+        var campCustom = {
           content_name: program,
           content_category: 'summer_camp',
           value: CAMP_VALUE_HUF,
           currency: 'HUF',
-        }, dedup);
+        };
+        if (params.turnus) {
+          campCustom.content_ids = [params.turnus];
+          campCustom.num_items = 1;
+        }
+        window.fbq('trackCustom', 'CampApplication', campCustom, dedup);
       } else {
         window.fbq('trackCustom', 'ProgramSignup', {
           content_name: program,
@@ -517,6 +522,11 @@
         // Shared event_id: browser pixel + server-side Meta CAPI dedup.
         var eventId = bkUuid();
 
+        // Hungarian convention puts surname first ("Paczári Károly").
+        var nameParts = name.trim().split(/\s+/);
+        var lastName  = nameParts[0] || '';
+        var firstName = nameParts.slice(1).join(' ') || '';
+
         fetch('/api/contact.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -529,7 +539,8 @@
             source: window.location.pathname,
             website: website,
             event_id: eventId,
-            page_url: window.location.href
+            page_url: window.location.href,
+            turnus: turnus || ''
           })
         })
         .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
@@ -546,9 +557,44 @@
               program: program,
               source_page: window.location.pathname
             });
+
+            // Persist hashed identity for CAPI enrichment on future pageviews.
+            // +1.57% (em) / +0.82% (ph) median reported-conversion uplift per
+            // Meta Events Manager benchmarks.
+            if (window.BKMeta && typeof window.BKMeta.persistIdentity === 'function') {
+              window.BKMeta.persistIdentity({
+                email: email.trim(),
+                phone: phone.trim(),
+                firstName: firstName,
+                lastName: lastName
+              });
+            }
+
+            // Re-init the browser pixel with advanced matching so this session's
+            // remaining page views carry em/ph/fn/ln → higher EMQ without any
+            // cross-page storage of plaintext (fbq hashes internally).
+            if (typeof window.fbq === 'function'
+                && window.BK_TRACKING_CONFIG
+                && window.BK_TRACKING_CONFIG.vendors
+                && window.BK_TRACKING_CONFIG.vendors.metaPixelId) {
+              try {
+                window.fbq('init', window.BK_TRACKING_CONFIG.vendors.metaPixelId, {
+                  em: email.trim().toLowerCase(),
+                  ph: (phone || '').replace(/\D+/g, ''),
+                  fn: firstName.toLowerCase(),
+                  ln: lastName.toLowerCase()
+                });
+              } catch (e) { /* SDK not ready — pixel will still fire via dedup */ }
+            }
+
             form.style.display = 'none';
             if (successEl) successEl.style.display = 'block';
-            track('bk_program_signup', { program: program, page: window.location.pathname, event_id: eventId });
+            track('bk_program_signup', {
+              program: program,
+              page: window.location.pathname,
+              event_id: eventId,
+              turnus: turnus || ''
+            });
           } else {
             throw new Error(res.data.error || 'Hiba történt.');
           }

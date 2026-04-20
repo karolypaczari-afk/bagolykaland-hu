@@ -28,6 +28,7 @@ $program = trim(strip_tags($input['program'] ?? ''));
 $source  = trim(strip_tags($input['source'] ?? ''));
 $eventId = trim(strip_tags($input['event_id'] ?? ''));
 $pageUrl = filter_var($input['page_url'] ?? '', FILTER_SANITIZE_URL);
+$turnus  = trim(strip_tags($input['turnus'] ?? ''));
 
 $errors = [];
 if ($name === '') $errors[] = 'Kérjük, add meg a neved.';
@@ -88,16 +89,21 @@ $capiUser = [
 ];
 
 if ($program === 'Kincskereső Élménytábor 2026') {
+    $campCustom = [
+        'content_name'     => $program,
+        'content_category' => 'summer_camp',
+        'value'            => 75000,
+        'currency'         => 'HUF',
+    ];
+    if ($turnus !== '') {
+        $campCustom['content_ids'] = [$turnus];
+        $campCustom['num_items']   = 1;
+    }
     @bk_meta_capi_send(
         'CampApplication',
         $eventId ?: null,
         $capiUser,
-        [
-            'content_name'     => $program,
-            'content_category' => 'summer_camp',
-            'value'            => 75000,
-            'currency'         => 'HUF',
-        ],
+        $campCustom,
         $pageUrl ?: null
     );
 } elseif ($program !== '') {

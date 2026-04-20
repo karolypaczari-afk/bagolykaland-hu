@@ -73,6 +73,22 @@ function bk_meta_capi_send($eventName, $eventId, array $userData, array $customD
     if (!empty($userData['phone']))     $ud['ph'] = [bk_meta_capi_hash_phone($userData['phone'])];
     if (!empty($userData['firstName'])) $ud['fn'] = [bk_meta_capi_hash($userData['firstName'])];
     if (!empty($userData['lastName']))  $ud['ln'] = [bk_meta_capi_hash($userData['lastName'])];
+    if (!empty($userData['city']))      $ud['ct'] = [bk_meta_capi_hash($userData['city'])];
+    if (!empty($userData['state']))     $ud['st'] = [bk_meta_capi_hash($userData['state'])];
+    if (!empty($userData['zip']))       $ud['zp'] = [bk_meta_capi_hash($userData['zip'])];
+
+    // Country: default to "hu" since this is a Hungarian-only site.
+    $country = !empty($userData['country']) ? $userData['country'] : 'hu';
+    $ud['country'] = [bk_meta_capi_hash($country)];
+
+    // external_id: stable per-user identifier. Hashed email works well
+    // when a customer table isn't available — Meta dedups against em already
+    // so this mainly improves match quality on returning visitors.
+    if (!empty($userData['externalId'])) {
+        $ud['external_id'] = [bk_meta_capi_hash($userData['externalId'])];
+    } elseif (!empty($userData['email'])) {
+        $ud['external_id'] = [bk_meta_capi_hash($userData['email'])];
+    }
 
     $ip = bk_meta_capi_client_ip();
     $ua = $_SERVER['HTTP_USER_AGENT'] ?? null;
