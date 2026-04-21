@@ -153,46 +153,86 @@ headStyles: |
       .moz-urgency, .moz-urgency__icon { animation: none; }
     }
 
-    /* ── DATE CHIPS ── */
-    .moz-dates-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: center;
-      margin: 2rem auto 0;
-      max-width: 760px;
-    }
-    .moz-date-chip {
-      background: rgba(255,255,255,0.18);
-      -webkit-backdrop-filter: blur(6px);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: #fff;
-      padding: 0.45rem 0.9rem;
-      border-radius: var(--r-full);
-      font-weight: 700;
-      font-size: 0.85rem;
-    }
-    .moz-date-chip--first {
-      background: var(--clr-yellow);
-      color: var(--clr-navy);
-      border-color: var(--clr-yellow);
-      font-weight: 800;
-      box-shadow: 0 0 0 0 rgba(245,198,64,0.6);
-      animation: mozFirstChipPulse 2.2s ease-in-out infinite;
-    }
-    @keyframes mozFirstChipPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(245,198,64,0.55); }
-      50%      { box-shadow: 0 0 0 10px rgba(245,198,64,0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .moz-date-chip--first { animation: none; }
-    }
+    /* ── HERO TIME NOTE ── */
     .moz-time-note {
-      color: rgba(255,255,255,0.9);
+      color: rgba(255,255,255,0.92);
       font-weight: 600;
       font-size: 0.95rem;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    /* ── COURSE SCHEDULE (10 dates grid — inside method section) ── */
+    .moz-schedule {
+      max-width: 760px;
+      margin: 2.5rem auto 0;
+      background: #fff;
+      border-radius: var(--r-lg);
+      padding: 2rem 2.25rem;
+      box-shadow: var(--sh-sm);
+      border-top: 4px solid var(--clr-yellow);
+    }
+    .moz-schedule__head { text-align: center; margin-bottom: 1.5rem; }
+    .moz-schedule__head h3 {
+      color: var(--clr-navy);
+      margin: 0 0 0.25rem;
+      font-size: 1.15rem;
+    }
+    .moz-schedule__head p {
+      color: var(--clr-text-mid);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+    .moz-schedule__grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+    }
+    @media (max-width: 760px) { .moz-schedule__grid { grid-template-columns: repeat(2, 1fr); } }
+    .moz-schedule__item {
+      text-align: center;
+      background: rgba(245,198,64,0.08);
+      border: 1px solid rgba(245,198,64,0.22);
+      border-radius: var(--r-md);
+      padding: 0.85rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      transition: transform var(--t-fast), box-shadow var(--t-fast);
+    }
+    .moz-schedule__item:hover { transform: translateY(-2px); box-shadow: var(--sh-sm); }
+    .moz-schedule__num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--clr-coral);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .moz-schedule__date {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--clr-navy);
+    }
+    .moz-schedule__day {
+      font-size: 0.72rem;
+      color: var(--clr-text-muted);
+    }
+    .moz-schedule__item--first {
+      background: var(--clr-yellow);
+      border-color: var(--clr-yellow);
+      box-shadow: 0 0 0 0 rgba(245,198,64,0.55);
+      animation: mozScheduleFirst 2.4s ease-in-out infinite;
+    }
+    .moz-schedule__item--first .moz-schedule__num,
+    .moz-schedule__item--first .moz-schedule__date,
+    .moz-schedule__item--first .moz-schedule__day { color: var(--clr-navy); }
+    @keyframes mozScheduleFirst {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245,198,64,0.55); }
+      50%      { box-shadow: 0 0 0 8px rgba(245,198,64,0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .moz-schedule__item--first { animation: none; }
     }
 
     /* ── HERO PROOF PILLS (Hormozi: surface credibility upfront) ── */
@@ -759,7 +799,7 @@ headStyles: |
           </svg>
           Már csak 8 szabad hely — május 6-án indul!
         </div>
-        <h1 class="fade-up stagger-1" style="color:#fff;">10 hét alatt magabiztosabb, nyugodtabb, boldogabb gyermek</h1>
+        <h1 class="fade-up stagger-1" style="color:#fff;">10 hét, ami után a gyermeked magabiztosabb, nyugodtabb és boldogabb lesz</h1>
         <div class="accent-bar" style="background:var(--clr-yellow);"></div>
         <p class="fade-up stagger-2" style="color:rgba(255,255,255,0.92);max-width:720px;margin:0 auto;">Dacos, makacs vagy épp túl csendes a gyermeked? Lehet, hogy <strong style="color:var(--clr-yellow);">a szorongás</strong> áll mögötte. A <strong style="color:var(--clr-yellow);">Mozaik módszer</strong> már <strong style="color:var(--clr-yellow);">70+ gyermeken</strong> bizonyított — 5–9 éveseknek, csoportban, játékosan. Nem beszélgetős terápia.</p>
 
@@ -769,19 +809,7 @@ headStyles: |
           <span class="moz-proof-pill"><span class="moz-proof-pill__icon">💳</span>Fizetés 2 részletben</span>
         </div>
 
-        <div class="moz-dates-bar fade-up stagger-2">
-          <span class="moz-date-chip moz-date-chip--first">1. alkalom: 2026. máj. 6.</span>
-          <span class="moz-date-chip">máj. 11.</span>
-          <span class="moz-date-chip">máj. 13.</span>
-          <span class="moz-date-chip">máj. 20.</span>
-          <span class="moz-date-chip">máj. 27.</span>
-          <span class="moz-date-chip">jún. 3.</span>
-          <span class="moz-date-chip">jún. 8.</span>
-          <span class="moz-date-chip">jún. 10.</span>
-          <span class="moz-date-chip">jún. 15.</span>
-          <span class="moz-date-chip">jún. 17.</span>
-        </div>
-        <p class="moz-time-note fade-up stagger-2">Szerda és hétfői napokon · 16:00–17:15</p>
+        <p class="moz-time-note fade-up stagger-2">2026. május 6. – június 17. · szerdai és hétfői napokon · 16:00–17:15</p>
 
         <div class="section-cta-actions fade-up stagger-2" style="margin-top:2rem;">
           <a href="#jelentkezes" class="btn btn-primary btn-lg">Lefoglalom az egyik helyet</a>
@@ -883,6 +911,65 @@ headStyles: |
             <h4>Összefoglalás és szülői visszajelzés</h4>
             <p>Az elért eredmények összefoglalása a gyermekkel — és részletes visszajelzés a szülőknek a fejlődéséről: mit látunk másképp, mit vigyél tovább otthon.</p>
             <span class="moz-story-card__skill">Fejleszti: beépülés, otthoni fenntartás</span>
+          </div>
+        </div>
+
+        <div class="moz-schedule fade-up">
+          <div class="moz-schedule__head">
+            <h3>Az alkalmak pontos időpontjai</h3>
+            <p>Mind a 10 alkalom szerdai vagy hétfői napon, 16:00–17:15 között.</p>
+          </div>
+          <div class="moz-schedule__grid">
+            <div class="moz-schedule__item moz-schedule__item--first">
+              <span class="moz-schedule__num">1. alkalom</span>
+              <span class="moz-schedule__date">máj. 6.</span>
+              <span class="moz-schedule__day">szerda</span>
+            </div>
+            <div class="moz-schedule__item">
+              <span class="moz-schedule__num">2. alkalom</span>
+              <span class="moz-schedule__date">máj. 11.</span>
+              <span class="moz-schedule__day">hétfő</span>
+            </div>
+            <div class="moz-schedule__item">
+              <span class="moz-schedule__num">3. alkalom</span>
+              <span class="moz-schedule__date">máj. 13.</span>
+              <span class="moz-schedule__day">szerda</span>
+            </div>
+            <div class="moz-schedule__item">
+              <span class="moz-schedule__num">4. alkalom</span>
+              <span class="moz-schedule__date">máj. 20.</span>
+              <span class="moz-schedule__day">szerda</span>
+            </div>
+            <div class="moz-schedule__item">
+              <span class="moz-schedule__num">5. alkalom</span>
+              <span class="moz-schedule__date">máj. 27.</span>
+              <span class="moz-schedule__day">szerda</span>
+            </div>
+            <div class="moz-schedule__item">
+              <span class="moz-schedule__num">6. alkalom</span>
+              <span class="moz-schedule__date">jún. 3.</span>
+              <span class="moz-schedule__day">szerda</span>
+            </div>
+            <div class="moz-schedule__item">
+              <span class="moz-schedule__num">7. alkalom</span>
+              <span class="moz-schedule__date">jún. 8.</span>
+              <span class="moz-schedule__day">hétfő</span>
+            </div>
+            <div class="moz-schedule__item">
+              <span class="moz-schedule__num">8. alkalom</span>
+              <span class="moz-schedule__date">jún. 10.</span>
+              <span class="moz-schedule__day">szerda</span>
+            </div>
+            <div class="moz-schedule__item">
+              <span class="moz-schedule__num">9. alkalom</span>
+              <span class="moz-schedule__date">jún. 15.</span>
+              <span class="moz-schedule__day">hétfő</span>
+            </div>
+            <div class="moz-schedule__item">
+              <span class="moz-schedule__num">10. alkalom</span>
+              <span class="moz-schedule__date">jún. 17.</span>
+              <span class="moz-schedule__day">szerda</span>
+            </div>
           </div>
         </div>
 
