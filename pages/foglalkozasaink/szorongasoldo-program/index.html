@@ -75,7 +75,7 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=mo8rg75w" />
+  <link rel="stylesheet" href="/css/style.css?v=mo8rovu7" />
 
   <style>
 /* ── URGENCY BADGE ── */
@@ -195,6 +195,71 @@
 @media (prefers-reduced-motion: reduce) {
   .moz-schedule__item--first { animation: none; }
 }
+
+/* ── PARENT ALERT BAR (above-the-fold shortcut to online parent course) ── */
+.moz-parent-alert {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, var(--clr-teal-light) 0%, rgba(245,198,64,0.18) 100%);
+  border: 1px solid rgba(43,116,109,0.2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-sm);
+}
+.moz-parent-alert__icon {
+  flex-shrink: 0;
+  font-size: 1.6rem;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: var(--r-full);
+  box-shadow: var(--sh-sm);
+}
+.moz-parent-alert__text {
+  flex: 1 1 300px;
+  min-width: 0;
+}
+.moz-parent-alert__text strong {
+  display: block;
+  color: var(--clr-navy);
+  font-size: 1.02rem;
+  font-weight: 800;
+  margin-bottom: 0.2rem;
+}
+.moz-parent-alert__text span {
+  display: block;
+  color: var(--clr-text-mid);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.moz-parent-alert__cta { flex-shrink: 0; white-space: nowrap; }
+@media (max-width: 640px) {
+  .moz-parent-alert { padding: 1.15rem; gap: 0.85rem; }
+  .moz-parent-alert__cta { width: 100%; justify-content: center; }
+}
+
+/* ── BRIDGE ENHANCEMENTS ── */
+.moz-bridge-tip {
+  max-width: 760px;
+  margin: 1.25rem auto 0;
+  padding: 1rem 1.5rem;
+  background: rgba(245,198,64,0.16);
+  border: 1px solid rgba(245,198,64,0.35);
+  border-radius: var(--r-md);
+  text-align: center;
+  color: var(--clr-navy);
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+.moz-bridge-tip span { color: var(--clr-coral); font-weight: 800; }
 
 /* ── HERO PROOF PILLS (Hormozi: surface credibility upfront) ── */
 .moz-hero-proofs {
@@ -1647,6 +1712,23 @@
 
 
     
+    <section class="section section-cream" style="padding-block:var(--sp-lg);" aria-label="Online szülői kurzus">
+      <div class="container">
+        <aside class="moz-parent-alert fade-up">
+          <div class="moz-parent-alert__icon" aria-hidden="true">📚</div>
+          <div class="moz-parent-alert__text">
+            <strong>Szülő vagy, és távol laksz Debrecentől? Vagy otthon is támogatnád a gyermeked?</strong>
+            <span>Van egy <strong>önálló online kurzusunk kifejezetten szülőknek</strong> a ZseniBagoly.hu-n: megérted a szorongás okait és megtanulod az oldási folyamatokat. Offline program nélkül is értékes — mellette meg 10×-re emeli a hatást.</span>
+          </div>
+          <a href="https://zsenibagoly.hu/szorongasoldas" target="_blank" rel="noopener noreferrer" class="btn btn-teal moz-parent-alert__cta" data-cta="zsenibagoly-parent-course-hero-alert">
+            Megnézem az online kurzust →
+          </a>
+        </aside>
+      </div>
+    </section>
+
+
+    
     <section class="section section-white" aria-labelledby="moz-problem">
       <div class="container" style="max-width:760px;text-align:center;">
         <div class="section-header">
@@ -2310,9 +2392,12 @@
     <section class="section section-cream" aria-labelledby="moz-bridge-heading">
       <div class="container">
         <div class="section-header">
-          <span class="section-eyebrow fade-up">A szülő támogatása</span>
-          <h2 id="moz-bridge-heading" class="fade-up stagger-1">A gyermek munkája + a szülő megértése = 10x erősebb hatás</h2>
-          <p class="moz-bridge-intro fade-up stagger-2">A Mozaik csoportos program a <strong>gyermeket</strong> támogatja. A ZseniBagoly Szorongásoldás online kurzus a <strong>Téged</strong> — hogy értsd, mi történik a gyermekedben, és hogyan támogathatod otthon is. Ha mindkettő megvan, a tapasztalatunk szerint <strong>sokkal gyorsabban és tartósabban</strong> indul a javulás.</p>
+          <span class="section-eyebrow fade-up">Két út — egymást erősítik</span>
+          <h2 id="moz-bridge-heading" class="fade-up stagger-1">A gyermek munkája + a szülő megértése = 10× erősebb hatás</h2>
+          <p class="moz-bridge-intro fade-up stagger-2">A Mozaik csoportos program a <strong>gyermeket</strong> támogatja. A ZseniBagoly Szorongásoldás online kurzus <strong>Téged</strong>, a szülőt — hogy értsd, mi történik a gyermekedben, és hogyan támogathatod otthon is. A legtöbb szülő <strong>mindkettőt</strong> igénybe veszi.</p>
+          <div class="moz-bridge-tip fade-up stagger-2">
+            <span>💡 TIPP:</span> Ha messze laksz Debrecentől vagy most nem fér bele a csoport, az <strong>online kurzus önmagában is teljes értékű</strong> — a szülő felkészítése akár a gyermekkel végzett munkát is kiválthatja egyszerűbb esetekben.
+          </div>
         </div>
 
         <div class="moz-online-bridge fade-up">
@@ -2330,16 +2415,16 @@
           </div>
 
           <div class="moz-bridge-card moz-bridge-card--online">
-            <span class="moz-bridge-card__eyebrow">Kiegészítő · bárhol, bármikor</span>
+            <span class="moz-bridge-card__eyebrow">Bárhol, bármikor · szülőknek</span>
             <h3>📚 ZseniBagoly Szorongásoldás — a szülőnek</h3>
-            <p>Alexandra online kurzusa szülőknek: megérted a szorongás okait, megtanulod az oldási folyamatokat — és tudod támogatni a „dolgozó" gyermekedet otthon is.</p>
+            <p>Alexandra <strong>önálló online kurzusa szülőknek</strong>: megérted a szorongás okait, megtanulod az oldási folyamatokat — és tudod támogatni a gyermekedet otthon is. Offline program nélkül is működik.</p>
             <ul>
-              <li>Online, önálló tempóban</li>
-              <li>Szülőknek szól, nem a gyereknek</li>
-              <li>Remekül kiegészíti a Mozaik programot</li>
-              <li>Akkor is hasznos, ha nem tudsz Debrecenbe jönni</li>
+              <li>Online, otthonod kényelméből</li>
+              <li>Saját tempódban, bármikor elérhető</li>
+              <li>Akkor is választható, ha nem tudsz Debrecenbe jönni</li>
+              <li>Tökéletes kiegészítése a Mozaik programnak</li>
             </ul>
-            <a href="https://zsenibagoly.hu/szorongasoldas" target="_blank" rel="noopener noreferrer" class="btn btn-teal" style="width:100%;justify-content:center;" data-cta="zsenibagoly-parent-course-from-szorongasoldo">Megnézem a kurzust →</a>
+            <a href="https://zsenibagoly.hu/szorongasoldas" target="_blank" rel="noopener noreferrer" class="btn btn-teal" style="width:100%;justify-content:center;" data-cta="zsenibagoly-parent-course-bridge">Megnézem az online kurzust →</a>
           </div>
         </div>
       </div>
@@ -2557,16 +2642,16 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=mo8rg75w" defer></script>
-  <script src="/js/install-prompt.js?v=mo8rg75w" defer></script>
-  <script src="/js/tracking.js?v=mo8rg75w" defer></script>
-  <script src="/js/tracking-loader.js?v=mo8rg75w" defer></script>
-  <script src="/js/meta-enhance.js?v=mo8rg75w" defer></script>
-  <script src="/js/cookie-consent.js?v=mo8rg75w" defer></script>
-  <script src="/js/main.js?v=mo8rg75w" defer></script>
-  <script src="/js/lead-capture-loader.js?v=mo8rg75w"
-          data-popup-css="/css/popup.css?v=mo8rg75w"
-          data-popup-src="/js/popup.js?v=mo8rg75w"
+  <script src="/js/components.js?v=mo8rovu7" defer></script>
+  <script src="/js/install-prompt.js?v=mo8rovu7" defer></script>
+  <script src="/js/tracking.js?v=mo8rovu7" defer></script>
+  <script src="/js/tracking-loader.js?v=mo8rovu7" defer></script>
+  <script src="/js/meta-enhance.js?v=mo8rovu7" defer></script>
+  <script src="/js/cookie-consent.js?v=mo8rovu7" defer></script>
+  <script src="/js/main.js?v=mo8rovu7" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mo8rovu7"
+          data-popup-css="/css/popup.css?v=mo8rovu7"
+          data-popup-src="/js/popup.js?v=mo8rovu7"
           defer></script>
 
 </body>
