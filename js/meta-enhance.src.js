@@ -260,7 +260,7 @@
       content_ids: ['szorongasoldo-program'],
       content_name: 'Szorongásoldó program',
       content_category: 'program',
-      value: 10000,
+      value: 90000,
       currency: 'HUF'
     },
     iskolaelokeszito: {

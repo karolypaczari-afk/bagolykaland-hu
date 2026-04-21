@@ -36,6 +36,11 @@
   var CAMP_PROGRAM_NAME = 'Kincskereső Élménytábor 2026';
   var CAMP_VALUE_HUF = 75000;
 
+  // Szorongásoldó program has its own monetary value so Meta's optimizer
+  // can distinguish high-intent program signups from low-intent inquiries.
+  var SZORONGAS_PROGRAM_NAME = 'Mozaik szorongásoldó program';
+  var SZORONGAS_VALUE_HUF = 90000;
+
   // UUID v4 for deduplicating browser pixel events against
   // the server-side Conversions API event fired from /api/contact.php.
   function bkUuid() {
@@ -93,6 +98,13 @@
           campCustom.num_items = 1;
         }
         window.fbq('trackCustom', 'CampApplication', campCustom, dedup);
+      } else if (program === SZORONGAS_PROGRAM_NAME) {
+        window.fbq('trackCustom', 'ProgramSignup', {
+          content_name: program,
+          content_category: 'program_inquiry',
+          value: SZORONGAS_VALUE_HUF,
+          currency: 'HUF',
+        }, dedup);
       } else {
         window.fbq('trackCustom', 'ProgramSignup', {
           content_name: program,
