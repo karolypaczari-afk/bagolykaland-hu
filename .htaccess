@@ -36,6 +36,36 @@ ErrorDocument 404 /pages/404/index.html
   RewriteRule ^xmlrpc\.php$ / [R=301,L]
 </IfModule>
 
+# --- 410 Gone: legacy WordPress & casino-spam URL deindexing ---
+# Remnants from a compromised WP era (2023-2024). Returning 410 Gone
+# is faster than 404 for Google to drop these from the index.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Legacy WP query-string URLs (?p=, ?cat=, ?author=, ?feed=, ?paged=)
+  RewriteCond %{QUERY_STRING} (^|&)(p|cat|author|feed|paged)=[^&]+ [NC]
+  RewriteRule .* - [G,L]
+
+  # Casino affiliate-brand slugs
+  RewriteRule ^(admiral|gaminator|5gringos|20bet|7bit|buran|malina|betwinner|betfair)-.*$ - [G,L]
+
+  # Gambling topic slugs (encoded + decoded Hungarian variants)
+  RewriteRule ^.*casino.*$ - [G,L,NC]
+  RewriteRule ^.*kaszin.*$ - [G,L,NC]
+  RewriteRule ^.*baccarat.*$ - [G,L,NC]
+  RewriteRule ^.*rulett.*$ - [G,L,NC]
+  RewriteRule ^.*-rtp-.*$ - [G,L,NC]
+  RewriteRule ^.*b%C3%B3nusz.*$ - [G,L,NC]
+  RewriteRule ^.*bonusz.*$ - [G,L,NC]
+  RewriteRule ^.*nyer%C5%91g.*$ - [G,L,NC]
+  RewriteRule ^.*nyer[oő]g.*$ - [G,L,NC]
+  RewriteRule ^.*p%C3%B3ker.*$ - [G,L,NC]
+  RewriteRule ^.*-poker.*$ - [G,L,NC]
+  RewriteRule ^poker-.*$ - [G,L,NC]
+  RewriteRule ^%C3%A9l%C5%91-.*$ - [G,L,NC]
+  RewriteRule ^%C3%BAj-(kaszin|online-baccarat|online-rulett|nyer|casino).*$ - [G,L,NC]
+</IfModule>
+
 # --- Clean URLs: /slug/ serves from /pages/slug/ ---
 <IfModule mod_rewrite.c>
   RewriteEngine On

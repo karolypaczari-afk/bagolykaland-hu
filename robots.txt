@@ -88,7 +88,6 @@ Allow: /
 
 # ─── Sitemap + LLM summary files ───
 Sitemap: https://bagolykaland.hu/sitemap.xml
-Sitemap: https://bagolykaland.hu/sitemap-images.xml
 
 # LLM / AI friendly entry points (llmstxt.org spec)
 LLMs: https://bagolykaland.hu/llms.txt
