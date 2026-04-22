@@ -1,139 +1,62 @@
 # Bagolykaland.hu — Development TODOs
 
 > Track all pending tasks here. Move items to DONE when completed.
+> Site is **LIVE** at https://bagolykaland.hu
 
 ---
 
-## 📍 Google Business Profile — manuális teendők
+## 🔴 Pending
 
-> Részletes copy-paste tartalom: `~/.claude/projects/.../memory/project_gbp_optimization.md`
-
-- [ ] **Cím frissítése** — GBP dashboardon: Csokonai utca 32., Debrecen 4024 (régi cím még él)
-- [ ] **Nyitvatartás** — H–P: 8:00–18:00, Szo–V: Zárva
-- [ ] **Business description** — 620 kar-es leírás bemásolása (a memóriafájlban kész szöveg van)
-- [ ] **Primary category** — "Fejlesztő pedagógiai intézmény" + max 9 secondary
-- [ ] **Services tab** — mind a 11 szolgáltatás árral + leírással (részletek a memóriafájlban)
-- [ ] **Fotók** — cover (új épület), logo, 3–5 belső tér, csapat, eszközök
-- [ ] **Posztok** — Heti 2x: Hétfő (szolgáltatás spotlight) + Csütörtök (tipp/blog)
-- [ ] **QR-kód nyomtatása** — `qr-ertekeles.html` megnyitni és kinyomtatni → váróterembe
-- [ ] **NAP frissítés** külső directorykon:
-  - https://nyitva.hu/debrecen/bagolykaland-313794
-  - https://debrecen.cylex.hu/ceg-info/bagolykaland-1122305.html
-  - https://debrecen.imami.hu/kepessegfejlesztes-felzarkoztatas/bagolykaland
-
-## 🔌 GBP MCP szerver (review automation)
-
-- [ ] **Repo elkészítve:** `C:\Users\charl\mcp-servers\gbp-review-agent`
-- [ ] `npm install && npm run build` futtatása a repo mappájában
-- [ ] Google Cloud projekt létrehozása + GBP API hozzáférés kérelem: https://support.google.com/business/contact/api_default
-- [ ] OAuth 2.0 credentials létrehozása: https://console.cloud.google.com/apis/credentials
-  - Scope: `https://www.googleapis.com/auth/business.manage`
-  - Redirect URI: `http://localhost:3000/auth/callback`
-- [ ] `.env` fájl kitöltése: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`
-- [ ] `npm run auth` futtatása → böngészős OAuth flow → token mentés
-- [ ] `~/.claude/mcp.json`-ba bővítés (config kész a memóriafájlban)
-
-**Dokumentáció:**
-- GBP API: https://developers.google.com/my-business/reference/rest
-- GBP API hozzáférés kérelem: https://support.google.com/business/contact/api_default
-- OAuth 2.0 setup: https://developers.google.com/identity/protocols/oauth2
-- MCP szerver repo: https://github.com/satheeshds/gbp-review-agent
-
----
-
-## 🔴 Must-do before launch
-
-- [ ] **Final audit rerun** — Run `_dev/tests/22-text-overflow.spec.js`, `_dev/tests/09-seo.spec.js`, and `_dev/tests/26-asset-integrity.spec.js`, then fix any remaining regressions they surface.
-- [ ] **Tracking codes** — IDs are stored in the WP database (not in the file backup). To recover them:
-  1. Go to Hostinger cPanel → phpMyAdmin → database `bagolyka_wp1`
-  2. Search `wp_options` table for: `googlesitekit_analytics-4_settings` (GA4 ID), `clarity_project_id` (Microsoft Clarity), `ihaf_insert_header` / `ihaf_insert_footer` (WPCode snippets — may have GTM/FB Pixel), `et_divi` → `divi_integration_head` (Divi custom code)
-  3. Once you have the IDs, paste them into `js/tracking.js` and uncomment the blocks
-  4. Add `<script src="../../js/tracking.js" defer></script>` to every HTML file (or inject via `components.js`)
-- [ ] **MailerLite connection** — In `js/popup.js`, replace `TODO_*_GROUP_ID` values in `ML_GROUPS` with real MailerLite group IDs. Set the API key by adding `window.BK_ML = { API_KEY: 'YOUR_KEY' }` before the popup loads (e.g., in a `js/mailerlite-config.js`).
-- [ ] **Social media URLs** — In `js/components.js`, update `SOCIAL_FB` and `SOCIAL_IG` variables with real Facebook and Instagram profile URLs.
-- [ ] **Favicon** — Add `img/favicon.ico` (and optionally `img/favicon.svg`, `img/apple-touch-icon.png`).
-- [ ] **OG image** — Create `img/og-image.jpg` at 1200×630px for social sharing previews. Currently using the hero photo.
-- [ ] **Contact page form** — In `pages/kapcsolat/index.html`, wire up the contact form to a backend (Formspree / Netlify Forms / EmailJS or similar).
-- [ ] **Google Maps** — Add embedded map to the contact page with the actual Debrecen address.
-- [ ] **About section stats** — Confirm "15+ év tapasztalat" and "500+ fejlesztett gyermek" numbers are accurate in `index.html`.
+- [ ] **Tracking codes** — Ellenőrizni hogy a GTM/GA4/Meta Pixel ID-k be vannak-e állítva `js/tracking.src.js`-ben. Ha nem: Hostinger cPanel → phpMyAdmin → `bagolyka_wp1` → `wp_options` → `googlesitekit_analytics-4_settings`, `clarity_project_id`, `ihaf_insert_header`
+- [ ] **MailerLite connection** — `js/popup.js`: `TODO_*_GROUP_ID` értékek cseréje valódi MailerLite group ID-kre; `window.BK_ML = { API_KEY: 'YOUR_KEY' }` beállítása
+- [ ] **Social media URLs** — `js/components.src.js`: `SOCIAL_FB` és `SOCIAL_IG` változók valódi URL-ekre cserélése
+- [ ] **Audit rerun** — `npm run test:seo`, `npm run test:images`, `npx playwright test _dev/tests/22-text-overflow.spec.js _dev/tests/26-asset-integrity.spec.js` lefuttatása, hibák javítása
 
 ---
 
 ## 🟡 Content / polish
 
-- [ ] **Real blog content** — Add real blog articles to `pages/blog/`. Currently placeholder cards only.
-- [ ] **Gallery photos** — Add more real photos to `pages/galeria/`. Add lightbox functionality.
-- [ ] **Cookie consent banner** — Required for GDPR (tracking is blocked until consent). Recommend Cookiebot or custom.
-- [ ] **404 page** — `404.html` with friendly owl message and navigation links.
-- [ ] **Image optimization** — Run `npm run optimize:images` to convert img/ to WebP. Update HTML to use WebP with JPG fallback.
-- [ ] **SEO per-page review** — Verify all `<title>` and `<meta description>` tags are unique and descriptive.
-- [ ] **WebP logo** — Convert `img/logo.jpg` to `img/logo.webp` for faster loading.
+- [ ] **Galériában lightbox** — `pages/galeria/` képekre lightbox funkció
+- [ ] **OG image** — `img/og-image.jpg` 1200×630px dedikált social sharing kép (jelenleg a hero fotót használja)
 
 ---
 
-## 🟢 Deployment
+## 📍 Google Business Profile
 
-- [x] **GitHub repo** — https://github.com/karolypaczari-afk/bagolykaland-hu (private)
-- [x] **Auto-deploy webhook** — Hostinger webhook configured. Pushing to `main` auto-deploys.
-- [ ] **Point domain** — DNS cutover: point `bagolykaland.hu` to new Hostinger host (coordinate with live WP site)
-- [ ] **Hosting test** — Verify site works correctly on live Hostinger server before DNS cutover
-- [ ] **SSL certificate** — Confirm HTTPS is active on Hostinger
+→ Részletek, copy-paste szövegek, MCP szerver setup: **`_dev/GBP.md`**
 
----
-
-## 🔧 Build pipeline (activate when CSS/JS grows complex)
-
-- [ ] Rename `css/style.css` → `css/style.src.css` and run `npm run build`
-- [ ] Update HTML `<link>` to `css/style.css?v=YYYYMMDDHHII`
-- [ ] Same for JS files (rename to `.src.js`, let build generate minified output)
-- [ ] Set up `npm run watch` in dev workflow
+- [ ] GBP dashboard: cím, nyitvatartás, leírás, kategóriák, services, fotók
+- [ ] NAP frissítés: nyitva.hu, cylex.hu, imami.hu
+- [ ] QR-kód kinyomtatása (`qr-ertekeles.html`) → váróterembe
+- [ ] GBP MCP szerver setup (review automation)
 
 ---
 
 ## ✅ Done
 
-- [x] Project structure created (`css/`, `js/`, `_dev/`, `img/`, `pages/`)
-- [x] `css/style.css` — full global stylesheet (brand colors, all sections, responsive)
-- [x] `css/popup.css` — lead capture popup styles (BagolykaLand branding)
-- [x] `js/components.js` — global header + footer injection, nav, mobile menu, dropdowns
-- [x] `js/main.js` — scroll animations, counters, smooth scroll
-- [x] `js/popup.js` — lead capture popup (exit-intent, timed, scroll; keresztnév + email fields; MailerLite)
-- [x] `js/lead-capture-loader.js` — deferred popup loader
-- [x] `js/tracking.js` — tracking code placeholders (GTM, GA4, FB Pixel)
-- [x] `index.html` — full homepage (hero, features, services, about, programs, testimonials, blog preview, CTA)
-- [x] `pages/rolunk/index.html` — Rólunk főoldal
-- [x] `pages/rolunk/kedves-anya-es-apa/index.html`
-- [x] `pages/rolunk/kedves-gyermek/index.html`
-- [x] `pages/foglalkozasaink/index.html` — Foglalkozásaink lista
-- [x] `pages/foglalkozasaink/logopedia/index.html`
-- [x] `pages/foglalkozasaink/mozgasfejlesztes/index.html`
-- [x] `pages/foglalkozasaink/egyeni-fejleszto-foglalkozasok/index.html`
-- [x] `pages/foglalkozasaink/szorongasoldo-program/index.html`
-- [x] `pages/foglalkozasaink/iskola-elokeszito-foglalkozas/index.html`
-- [x] `pages/vizsgalatok/index.html`
-- [x] `pages/vizsgalatok/logopediai-vizsgalat/index.html`
-- [x] `pages/vizsgalatok/iskolaerettsegi-vizsgalat/index.html`
-- [x] `pages/vizsgalatok/komplex-reszkepesseg-vizsgalat/index.html`
-- [x] `pages/blog/index.html` — Blog főoldal (5 real blog posts)
-- [x] `pages/galeria/index.html` — Galéria
-- [x] `pages/arlista/index.html` — Árlista (full pricing table)
-- [x] `pages/kapcsolat/index.html` — Kapcsolat (contact form placeholder)
-- [x] `pages/ernyo-alatt-program/index.html`
-- [x] `pages/kezen-fogva-online-finommotorika-fejlesztes/index.html`
-- [x] `pages/eves-hetirend/index.html` (with schedule image)
-- [x] `pages/adatkezelesi-tajekoztato/index.html`
-- [x] Images copied from WP backup to `img/` with SEO-friendly filenames
-- [x] All nav URLs updated to `/pages/` prefix
-- [x] Auto-deploy GitHub webhook → Hostinger configured
-- [x] CLAUDE.md updated with current architecture
-- [x] GitHub repo initial push done
-- [x] 26 Playwright test specs adapted from zsenibagoly.hu
-- [x] `_dev/tests/helpers/` — pages.js, fixtures.js, suppress-popup.js
-- [x] `package.json` — test + build + watch scripts
-- [x] `playwright.config.js` — chromium + webkit-ios projects
-- [x] `_dev/build.js` — CSS/JS minifier
-- [x] `_dev/scripts/optimize-images.js` — WebP converter
-- [x] Audit refresh — mobile nav, accessibility, SEO, text-overflow, and asset-integrity specs updated to the current site structure
-- [x] Audit fixes — contrast, mobile overflow, privacy-page styling, and related service/detail page color cleanup completed
-- [x] `robots.txt` created at repo root and linked to the sitemap
-- [x] `sitemap.xml` created at repo root for the current page set
+- [x] Site LIVE — https://bagolykaland.hu, DNS cutover, HTTPS aktív
+- [x] Auto-deploy webhook — GitHub push → Hostinger auto-deploy
+- [x] Build pipeline — `.src.css` / `.src.js` → minified, `buildHash.json` cache-busting
+- [x] Eleventy SSG — `.njk` → `.html`, clean URL routing via `.htaccess`
+- [x] Contact form — `api/contact.php` (PHP mailer, honeypot, rate limit, .htaccess védett)
+- [x] Cookie consent — `js/cookie-consent.src.js`, GDPR-compliant, lazy-loaded
+- [x] 404 oldal — `pages/404/index.njk`
+- [x] Image optimization — WebP képek, `npm run optimize:images` pipeline kész
+- [x] Favicon — 16×16, 32×32, 192×192, 512×512, apple-touch-icon
+- [x] SEO — title/description minden oldalon, Debrecen kulcsszó, canonical, robots
+- [x] LocalBusiness JSON-LD schema — teljes, Csokonai u. 32., árak, nyitvatartás, staff
+- [x] QR-kód oldal — `qr-ertekeles.html` (Google értékelés link)
+- [x] robots.txt + sitemap.xml
+- [x] Security headers — `api/.htaccess`, `_setup.php` eltávolítva
+- [x] Blog — 7 valódi bejegyzés
+- [x] Összes service és vizsgálat aloldal kész
+- [x] Szorongásoldó program oldal — teljes redesign
+- [x] Nyári tábor oldal
+- [x] Kézen Fogva online kurzus oldal
+- [x] Meta CAPI relay — `api/meta-capi-relay.php`, `api/meta-capi.php`
+- [x] Facebook Follow + Messenger FAB partial
+- [x] PWA manifest + service worker (offline shell)
+- [x] Playwright tesztek — 27+ spec fájl, chromium + iOS webkit
+- [x] Project structure: `css/`, `js/`, `_dev/`, `img/`, `pages/`, `api/`
+- [x] CLAUDE.md — teljes architektúra dokumentáció
+- [x] GitHub repo — https://github.com/karolypaczari-afk/bagolykaland-hu
