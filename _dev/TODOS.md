@@ -7,17 +7,7 @@
 
 ## 🔴 Pending
 
-- [ ] **Tracking codes** — Ellenőrizni hogy a GTM/GA4/Meta Pixel ID-k be vannak-e állítva `js/tracking.src.js`-ben. Ha nem: Hostinger cPanel → phpMyAdmin → `bagolyka_wp1` → `wp_options` → `googlesitekit_analytics-4_settings`, `clarity_project_id`, `ihaf_insert_header`
-- [ ] **MailerLite connection** — `js/popup.js`: `TODO_*_GROUP_ID` értékek cseréje valódi MailerLite group ID-kre; `window.BK_ML = { API_KEY: 'YOUR_KEY' }` beállítása
-- [ ] **Social media URLs** — `js/components.src.js`: `SOCIAL_FB` és `SOCIAL_IG` változók valódi URL-ekre cserélése
-- [ ] **Audit rerun** — `npm run test:seo`, `npm run test:images`, `npx playwright test _dev/tests/22-text-overflow.spec.js _dev/tests/26-asset-integrity.spec.js` lefuttatása, hibák javítása
-
----
-
-## 🟡 Content / polish
-
-- [ ] **Galériában lightbox** — `pages/galeria/` képekre lightbox funkció
-- [ ] **OG image** — `img/og-image.jpg` 1200×630px dedikált social sharing kép (jelenleg a hero fotót használja)
+- [ ] **OG image** — `img/og-image.jpg` hiányzik (1200×630px). Jelenleg a hero fotót használja minden oldal. Készíts egy dedikált képet a brand színekkel + logóval.
 
 ---
 
@@ -35,6 +25,10 @@
 ## ✅ Done
 
 - [x] Site LIVE — https://bagolykaland.hu, DNS cutover, HTTPS aktív
+- [x] Tracking codes — GA4 `G-86N523JP3E`, Clarity `rqnf90op5b`, Meta Pixel `9087042854758379` beállítva; GTM szándékosan üres
+- [x] MailerLite — group ID `156829265225057690` + API key beállítva `scripts.njk`-ben
+- [x] Social media URLs — `_data/site.json` → `site.social.facebook` kezeli, nem components.src.js
+- [x] Gallery lightbox — `pages/galeria/index.html`-ben custom CSS+JS lightbox implementálva
 - [x] Auto-deploy webhook — GitHub push → Hostinger auto-deploy
 - [x] Build pipeline — `.src.css` / `.src.js` → minified, `buildHash.json` cache-busting
 - [x] Eleventy SSG — `.njk` → `.html`, clean URL routing via `.htaccess`
