@@ -4,6 +4,43 @@
 
 ---
 
+## 📍 Google Business Profile — manuális teendők
+
+> Részletes copy-paste tartalom: `~/.claude/projects/.../memory/project_gbp_optimization.md`
+
+- [ ] **Cím frissítése** — GBP dashboardon: Csokonai utca 32., Debrecen 4024 (régi cím még él)
+- [ ] **Nyitvatartás** — H–P: 8:00–18:00, Szo–V: Zárva
+- [ ] **Business description** — 620 kar-es leírás bemásolása (a memóriafájlban kész szöveg van)
+- [ ] **Primary category** — "Fejlesztő pedagógiai intézmény" + max 9 secondary
+- [ ] **Services tab** — mind a 11 szolgáltatás árral + leírással (részletek a memóriafájlban)
+- [ ] **Fotók** — cover (új épület), logo, 3–5 belső tér, csapat, eszközök
+- [ ] **Posztok** — Heti 2x: Hétfő (szolgáltatás spotlight) + Csütörtök (tipp/blog)
+- [ ] **QR-kód nyomtatása** — `qr-ertekeles.html` megnyitni és kinyomtatni → váróterembe
+- [ ] **NAP frissítés** külső directorykon:
+  - https://nyitva.hu/debrecen/bagolykaland-313794
+  - https://debrecen.cylex.hu/ceg-info/bagolykaland-1122305.html
+  - https://debrecen.imami.hu/kepessegfejlesztes-felzarkoztatas/bagolykaland
+
+## 🔌 GBP MCP szerver (review automation)
+
+- [ ] **Repo elkészítve:** `C:\Users\charl\mcp-servers\gbp-review-agent`
+- [ ] `npm install && npm run build` futtatása a repo mappájában
+- [ ] Google Cloud projekt létrehozása + GBP API hozzáférés kérelem: https://support.google.com/business/contact/api_default
+- [ ] OAuth 2.0 credentials létrehozása: https://console.cloud.google.com/apis/credentials
+  - Scope: `https://www.googleapis.com/auth/business.manage`
+  - Redirect URI: `http://localhost:3000/auth/callback`
+- [ ] `.env` fájl kitöltése: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`
+- [ ] `npm run auth` futtatása → böngészős OAuth flow → token mentés
+- [ ] `~/.claude/mcp.json`-ba bővítés (config kész a memóriafájlban)
+
+**Dokumentáció:**
+- GBP API: https://developers.google.com/my-business/reference/rest
+- GBP API hozzáférés kérelem: https://support.google.com/business/contact/api_default
+- OAuth 2.0 setup: https://developers.google.com/identity/protocols/oauth2
+- MCP szerver repo: https://github.com/satheeshds/gbp-review-agent
+
+---
+
 ## 🔴 Must-do before launch
 
 - [ ] **Final audit rerun** — Run `_dev/tests/22-text-overflow.spec.js`, `_dev/tests/09-seo.spec.js`, and `_dev/tests/26-asset-integrity.spec.js`, then fix any remaining regressions they surface.
