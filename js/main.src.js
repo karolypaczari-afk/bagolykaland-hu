@@ -38,7 +38,7 @@
 
   // Szorongásoldó program has its own monetary value so Meta's optimizer
   // can distinguish high-intent program signups from low-intent inquiries.
-  var SZORONGAS_PROGRAM_NAME = 'Mozaik szorongásoldó program';
+  var SZORONGAS_PROGRAM_NAME = 'Szorongásoldó program';
   var SZORONGAS_VALUE_HUF = 90000;
 
   // UUID v4 for deduplicating browser pixel events against

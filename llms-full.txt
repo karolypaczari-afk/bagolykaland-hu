@@ -136,7 +136,7 @@ A BagolykaLand egy debreceni gyermekfejlesztő központ, amely 3–12 éves gyer
 
 ---
 
-### 5. Szorongásoldó program — Mozaik
+### 5. Szorongásoldó program
 
 **URL:** https://bagolykaland.hu/foglalkozasaink/szorongasoldo-program/
 **Típus:** csoportos, 10 alkalmas program

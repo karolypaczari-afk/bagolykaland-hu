@@ -18,7 +18,7 @@
 - [Mozgásfejlesztés](https://bagolykaland.hu/foglalkozasaink/mozgasfejlesztes/): Alapozó mozgásterápia — az idegrendszer fejlesztésének alapja. Testtartás, egyensúly, koordináció fejlesztése. Összefügg a figyelemmel, memóriával és olvasástanulással.
 - [Egyéni fejlesztő foglalkozások](https://bagolykaland.hu/foglalkozasaink/egyeni-fejleszto-foglalkozasok/): Személyre szabott fejlesztési terv. Kognitív, mozgásos és szociális-érzelmi területek fejlesztése heti rendszerességgel.
 - [Iskola-előkészítő](https://bagolykaland.hu/foglalkozasaink/iskola-elokeszito-foglalkozas/): 9 hónapos csoportos program (szeptember–május), heti 60 perc, max. 5–7 fő. Figyelem, ceruzafogás, számfogalom, betűismeret.
-- [Szorongásoldó program (Mozaik)](https://bagolykaland.hu/foglalkozasaink/szorongasoldo-program/): 10 alkalmas csoportos program félénk, szorongó, visszahúzódó gyermekeknek. Önbizalom és kommunikáció fejlesztése.
+- [Szorongásoldó program](https://bagolykaland.hu/foglalkozasaink/szorongasoldo-program/): 10 alkalmas csoportos program félénk, szorongó, visszahúzódó gyermekeknek. Önbizalom és kommunikáció fejlesztése.
 - [Kézenfogva – online finommotorika-fejlesztés](https://bagolykaland.hu/kezen-fogva-online-finommotorika-fejlesztes/): 4 hetes online tanfolyam (27 lecke) 4–8 éveseknek. Napi pár perces játékos feladatok, letölthető segédanyagok. 7.990 Ft egyszeri díj.
 
 ## Vizsgálatok
