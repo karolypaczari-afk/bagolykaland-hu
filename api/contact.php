@@ -129,6 +129,24 @@ if ($program === 'Kincskereső Élménytábor 2026') {
         $campCustom,
         $pageUrl ?: null
     );
+} elseif ($program === 'Szorongásoldó program') {
+    // Szorongásoldó csoportos program → Meta ProgramSignup (custom event).
+    // Must match the browser pixel event name exactly — the ad set's custom
+    // conversion rule filters on event_name == "ProgramSignup" AND url
+    // contains "szorongasoldo-program". Sending "Lead" here would break
+    // dedup and lose attribution when the browser pixel is blocked.
+    @bk_meta_capi_send(
+        'ProgramSignup',
+        $eventId ?: null,
+        $capiUser,
+        [
+            'content_name'     => $program,
+            'content_category' => 'program_inquiry',
+            'value'            => 90000,
+            'currency'         => 'HUF',
+        ],
+        $pageUrl ?: null
+    );
 } elseif ($program !== '') {
     // Any other program/exam signup → Meta Lead (ad-optimization friendly)
     @bk_meta_capi_send(
