@@ -3833,86 +3833,16 @@ body:has(.bk-cookie-consent.is-visible) .messenger-fab {
 @media (max-width: 900px) { .bk-map__iframe { height: 460px; } }
 @media (max-width: 640px) { .bk-map__iframe { height: 380px; } }
 
-/* Decorative overlay layer — events fall through to map */
+/* Decorative overlay layer — events fall through to map.
+   Note: we deliberately do NOT add a custom center marker.
+   The Maps Embed `q=` URL parameter draws a native pin at the
+   queried address, which (unlike an HTML overlay) stays anchored
+   to the correct location when the user pans/zooms the map. */
 .bk-map__overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 2;
-}
-
-/* ── Center brand pin ────────────────────────────── */
-.bk-map__pin {
-  position: absolute;
-  top: 49%;
-  left: 50%;
-  transform: translate(-50%, -100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  filter: drop-shadow(0 10px 18px rgba(29, 53, 87, 0.35));
-}
-
-.bk-map__pin-label {
-  display: inline-block;
-  background: var(--clr-navy);
-  color: #fff;
-  font-family: var(--font-heading, "Nunito", system-ui, sans-serif);
-  font-weight: 800;
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
-  padding: 0.3rem 0.65rem;
-  border-radius: 999px;
-  margin-bottom: 0.4rem;
-  white-space: nowrap;
-  box-shadow: 0 3px 10px rgba(29, 53, 87, 0.25);
-}
-
-.bk-map__pin-bubble {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--clr-coral);
-  display: grid;
-  place-items: center;
-  border: 3px solid #fff;
-  position: relative;
-  z-index: 2;
-}
-
-.bk-map__pin-bubble img {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
-}
-
-.bk-map__pin-stem {
-  width: 0;
-  height: 0;
-  margin-top: -6px;
-  border-left: 11px solid transparent;
-  border-right: 11px solid transparent;
-  border-top: 18px solid var(--clr-coral);
-  position: relative;
-  z-index: 2;
-}
-
-.bk-map__pin-pulse {
-  position: absolute;
-  top: 28px;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--clr-coral);
-  opacity: 0.4;
-  z-index: 1;
-  animation: bkMapPinPulse 2.4s ease-out infinite;
-}
-
-@keyframes bkMapPinPulse {
-  0%   { transform: scale(0.55); opacity: 0.55; }
-  100% { transform: scale(2.4);  opacity: 0;    }
 }
 
 /* ── Parkoló jelölések (dekoratív info pillek) ─── */
@@ -4064,38 +3994,6 @@ body:has(.bk-cookie-consent.is-visible) .messenger-fab {
   outline-offset: 2px;
 }
 
-/* ── Jelmagyarázat (bottom-right) ─── */
-.bk-map__legend {
-  position: absolute;
-  bottom: 0.85rem;
-  right: 0.85rem;
-  z-index: 3;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(6px);
-  border-radius: 999px;
-  padding: 0.4rem 0.85rem;
-  font-size: 0.74rem;
-  font-weight: 600;
-  color: var(--clr-text);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  box-shadow: 0 4px 14px rgba(29, 53, 87, 0.15);
-  pointer-events: none;
-}
-
-.bk-map__legend-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.bk-map__legend-dot--brand { background: var(--clr-coral); }
-.bk-map__legend-dot--park  { background: #1A56DB; }
-
-.bk-map__legend-sep { color: var(--clr-text-muted); margin: 0 0.05rem; }
-
 .bk-map__note {
   margin: 0.85rem 0 0;
   text-align: center;
@@ -4114,13 +4012,8 @@ body:has(.bk-cookie-consent.is-visible) .messenger-fab {
   .bk-map__parking--nw { top: 8%;    left: 4%;  }
   .bk-map__parking--se { bottom: 12%; right: 4%; }
   .bk-map__parking-text { display: none; }
-  .bk-map__pin-label { font-size: 0.72rem; padding: 0.25rem 0.55rem; }
-  .bk-map__pin-bubble { width: 56px; height: 56px; }
-  .bk-map__pin-bubble img { width: 30px; height: 30px; }
-  .bk-map__pin-pulse { top: 24px; width: 56px; height: 56px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bk-map__pin-pulse { animation: none; opacity: 0.3; }
   .bk-map__card-cta { transition: none; }
 }
