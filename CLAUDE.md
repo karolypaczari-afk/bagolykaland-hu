@@ -396,7 +396,9 @@ GTM-friendly `bk_*` events already pushed: `bk_cta_click`, `bk_contact_click`, `
 | `Lead` | other program/exam signups | `main.src.js` | `api/contact.php` |
 | `Contact` | generic contact form | `main.src.js` | `api/contact.php` |
 
-The current nyári tábor ad set optimizes on `CampApplication` via a custom conversion embedded in `promoted_object.pixel_rule`. Diagnose campaign-missing-conversions questions by splitting them: (a) did the event reach Meta? — check `api/logs/capi.log` for `http=200`; (b) did the campaign get credit? — check campaign performance actions. These are different questions; a lead from organic traffic is invisible to campaign insights but still appears in Events Manager.
+The current nyári tábor ad set optimizes on `CampApplication` via a custom conversion embedded in `promoted_object.pixel_rule`. Diagnose campaign-missing-conversions questions by splitting them: (a) did the event reach Meta? — check `api/logs/capi.log` for `http=200`; (b) did the campaign get credit? — check campaign performance `actions.lead`. These are different questions; a lead from organic traffic is invisible to campaign insights but still appears in Events Manager.
+
+**On-demand reference:** `_docs/meta-ads-tracking.md` covers the ad set `promoted_object` pattern, the Custom-Conversion-vs-`pixel_rule` distinction, the `fbc`-from-`fbclid` synthesis fallback, the standard diagnostic flow, and live campaign/ad-set IDs. **Only read it when actually investigating Meta tracking** — do not auto-load it for unrelated work.
 
 ### "Never break" rules
 
