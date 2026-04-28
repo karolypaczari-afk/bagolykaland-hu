@@ -73,7 +73,7 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=moi8774l" />
+  <link rel="stylesheet" href="/css/style.css?v=moil164y" />
 
   
 
@@ -988,6 +988,86 @@
       </div>
     </section>
 
+    <!-- =============================================
+         BRANDED MAP — Csokonai utca 32.
+         Real Google Maps embed + BagolykaLand overlay
+         (info card, location pin, parking badges, legend).
+         ============================================= -->
+    <section class="section section-cream" aria-labelledby="terkep-heading">
+      <div class="container">
+        <div class="section-header fade-up">
+          <p class="section-eyebrow">Hol találsz minket</p>
+          <h2 id="terkep-heading">Új helyszínünk: Csokonai utca 32.</h2>
+          <p>Debrecen belvárosában, csendes utcában — könnyen megközelíthetően autóval és tömegközlekedéssel egyaránt.</p>
+        </div>
+
+        <div class="bk-map fade-up">
+          <div class="bk-map__viewport">
+            <iframe
+              class="bk-map__iframe"
+              src="https://maps.google.com/maps?q=Csokonai+utca+32,+Debrecen+4024,+Hungary&t=&z=17&ie=UTF8&iwloc=&output=embed"
+              title="BagolykaLand a Google Maps-en — Debrecen, Csokonai utca 32."
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen></iframe>
+
+            <div class="bk-map__overlay" aria-hidden="true">
+              <!-- Központi márkás pin a BagolykaLand telephelyén -->
+              <div class="bk-map__pin">
+                <span class="bk-map__pin-label">BagolykaLand</span>
+                <span class="bk-map__pin-bubble">
+                  <img src="/img/logo-transparent.webp" alt="" width="36" height="36" loading="lazy" />
+                </span>
+                <span class="bk-map__pin-stem"></span>
+                <span class="bk-map__pin-pulse"></span>
+              </div>
+
+              <!-- Dekoratív parkoló jelölések -->
+              <div class="bk-map__parking bk-map__parking--nw">
+                <span class="bk-map__parking-letter">P</span>
+                <span class="bk-map__parking-text">Ingyenes<br><b>parkolás</b></span>
+              </div>
+              <div class="bk-map__parking bk-map__parking--se">
+                <span class="bk-map__parking-letter">P</span>
+                <span class="bk-map__parking-text">Belvárosi<br><b>parkoló</b></span>
+              </div>
+            </div>
+
+            <!-- Brand info kártya (interaktív) -->
+            <article class="bk-map__card">
+              <header class="bk-map__card-header">
+                <img src="/img/logo-transparent.webp" alt="BagolykaLand logó" width="44" height="44" loading="lazy" />
+                <div>
+                  <strong>BagolykaLand</strong>
+                  <span>Fejlesztő Központ</span>
+                </div>
+              </header>
+              <ul class="bk-map__card-list">
+                <li><span aria-hidden="true">📍</span> 4024 Debrecen, Csokonai u. 32.</li>
+                <li><span aria-hidden="true">🕘</span> H–P · 8:00–18:00</li>
+                <li><span aria-hidden="true">📞</span> <a href="tel:+36303649396">+36&nbsp;30&nbsp;364&nbsp;9396</a></li>
+              </ul>
+              <a class="bk-map__card-cta"
+                 href="https://www.google.com/maps/dir/?api=1&destination=Csokonai+utca+32%2C+Debrecen+4024%2C+Hungary"
+                 target="_blank" rel="noopener noreferrer"
+                 aria-label="Útvonaltervezés a BagolykaLand címére a Google Maps-szel">
+                Útvonaltervezés <span aria-hidden="true">→</span>
+              </a>
+            </article>
+
+            <!-- Jelmagyarázat -->
+            <div class="bk-map__legend" role="note">
+              <span class="bk-map__legend-dot bk-map__legend-dot--brand" aria-hidden="true"></span> BagolykaLand
+              <span class="bk-map__legend-sep" aria-hidden="true">·</span>
+              <span class="bk-map__legend-dot bk-map__legend-dot--park" aria-hidden="true"></span> Parkoló
+            </div>
+          </div>
+        </div>
+
+        <p class="bk-map__note">A térkép interaktív — görgetéssel nagyíthatod, kattintással részletes útvonalat tervezhetsz.</p>
+      </div>
+    </section>
+
     
 <section class="section section-white" aria-label="Feliratkozás">
   <div class="container">
@@ -1192,16 +1272,16 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=moi8774l" defer></script>
-  <script src="/js/install-prompt.js?v=moi8774l" defer></script>
-  <script src="/js/tracking.js?v=moi8774l" defer></script>
-  <script src="/js/tracking-loader.js?v=moi8774l" defer></script>
-  <script src="/js/meta-enhance.js?v=moi8774l" defer></script>
-  <script src="/js/cookie-consent.js?v=moi8774l" defer></script>
-  <script src="/js/main.js?v=moi8774l" defer></script>
-  <script src="/js/lead-capture-loader.js?v=moi8774l"
-          data-popup-css="/css/popup.css?v=moi8774l"
-          data-popup-src="/js/popup.js?v=moi8774l"
+  <script src="/js/components.js?v=moil164y" defer></script>
+  <script src="/js/install-prompt.js?v=moil164y" defer></script>
+  <script src="/js/tracking.js?v=moil164y" defer></script>
+  <script src="/js/tracking-loader.js?v=moil164y" defer></script>
+  <script src="/js/meta-enhance.js?v=moil164y" defer></script>
+  <script src="/js/cookie-consent.js?v=moil164y" defer></script>
+  <script src="/js/main.js?v=moil164y" defer></script>
+  <script src="/js/lead-capture-loader.js?v=moil164y"
+          data-popup-css="/css/popup.css?v=moil164y"
+          data-popup-src="/js/popup.js?v=moil164y"
           defer></script>
 
 </body>
