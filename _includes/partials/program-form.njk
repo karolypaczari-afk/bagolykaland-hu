@@ -20,7 +20,8 @@
       <form data-program-form="{{ formProgram }}" class="program-signup-fields">
         <input type="text" name="name" placeholder="Szülő neve" required autocomplete="name" />
         <input type="email" name="email" placeholder="E-mail cím" required autocomplete="email" />
-        <input type="tel" name="phone" placeholder="Telefonszám (opcionális)" autocomplete="tel" />
+        <input type="tel" name="phone" placeholder="Telefonszám" autocomplete="tel" />
+        <small class="program-form-hint">Telefonszámmal gyorsabban tudunk visszajelezni.</small>
         {%- if formShowChild %}
         <input type="text" name="child_name" placeholder="Gyermek neve" />
         <input type="text" name="child_age" placeholder="Gyermek kora (pl. 6 éves)" />

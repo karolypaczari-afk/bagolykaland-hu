@@ -3464,6 +3464,7 @@ body {
 }
 .program-signup-fields button:hover { background: #9a4528; transform: translateY(-1px); }
 .program-form-error { color: var(--clr-coral); font-size: 0.85rem; margin-top: 0.5rem; display: none; }
+.program-form-hint { display: block; font-size: 0.78rem; color: var(--clr-text-muted); margin-top: -0.45rem; padding-left: 0.25rem; }
 .program-signup-gdpr { font-size: 0.8rem; color: var(--clr-text-muted); margin-top: 0.75rem; }
 .program-signup-gdpr a { color: var(--clr-navy); font-weight: 600; }
 .program-signup-success { display: none; text-align: center; padding: 2rem 0; }
