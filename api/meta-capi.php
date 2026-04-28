@@ -99,9 +99,25 @@ function bk_meta_capi_send($eventName, $eventId, array $userData, array $customD
     if (!empty($_COOKIE['_fbc'])) $ud['fbc'] = $_COOKIE['_fbc'];
     if (!empty($_COOKIE['_fbp'])) $ud['fbp'] = $_COOKIE['_fbp'];
 
+    $eventTime = time();
+
+    // Fallback: synthesize fbc from fbclid in the landing URL when the cookie
+    // is missing (pixel blocked, ITP, or first-party cookie write failed).
+    // Per Meta: fb.<subdomainIndex>.<creationTime>.<fbclid>  (subdomainIndex=1)
+    // https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/fbp-and-fbc
+    if (empty($ud['fbc']) && $eventSourceUrl) {
+        $parsed = parse_url($eventSourceUrl);
+        if (!empty($parsed['query'])) {
+            parse_str($parsed['query'], $qs);
+            if (!empty($qs['fbclid'])) {
+                $ud['fbc'] = 'fb.1.' . $eventTime . '.' . $qs['fbclid'];
+            }
+        }
+    }
+
     $event = [
         'event_name'    => $eventName,
-        'event_time'    => time(),
+        'event_time'    => $eventTime,
         'action_source' => 'website',
         'user_data'     => $ud,
     ];
