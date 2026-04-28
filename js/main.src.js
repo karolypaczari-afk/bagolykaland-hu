@@ -41,6 +41,11 @@
   var SZORONGAS_PROGRAM_NAME = 'Szorongásoldó program';
   var SZORONGAS_VALUE_HUF = 90000;
 
+  // Nyári intenzív iskola-előkészítő — high-intent seasonal LP, dedicated
+  // monetary value reflects the full ~20-hour summer program LTV.
+  var SCHOOL_PREP_INTENSIVE_PROGRAM_NAME = 'Nyári intenzív iskola-előkészítő 2026';
+  var SCHOOL_PREP_INTENSIVE_VALUE_HUF = 140000;
+
   // UUID v4 for deduplicating browser pixel events against
   // the server-side Conversions API event fired from /api/contact.php.
   function bkUuid() {
@@ -103,6 +108,13 @@
           content_name: program,
           content_category: 'program_inquiry',
           value: SZORONGAS_VALUE_HUF,
+          currency: 'HUF',
+        }, dedup);
+      } else if (program === SCHOOL_PREP_INTENSIVE_PROGRAM_NAME) {
+        window.fbq('trackCustom', 'ProgramSignup', {
+          content_name: program,
+          content_category: 'school_prep_intensive',
+          value: SCHOOL_PREP_INTENSIVE_VALUE_HUF,
           currency: 'HUF',
         }, dedup);
       } else {

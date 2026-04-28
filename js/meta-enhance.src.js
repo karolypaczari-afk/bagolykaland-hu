@@ -232,6 +232,7 @@
     if (path === '/' || path.indexOf('/index') === 0) return 'home';
     if (path.indexOf('/nyari-tabor') !== -1) return 'camp_kincskereso';
     if (path.indexOf('/szorongasoldo') !== -1) return 'szorongasoldo';
+    if (path.indexOf('/nyari-iskola-elokeszito') !== -1) return 'nyari_iskola_elokeszito';
     if (path.indexOf('/iskola-elokeszito') !== -1) return 'iskolaelokeszito';
     if (path.indexOf('/foglalkozasaink') !== -1) return 'service';
     if (path.indexOf('/vizsgalatok') !== -1) return 'assessment';
@@ -268,6 +269,13 @@
       content_name: 'Iskola-előkészítő',
       content_category: 'program',
       value: 10000,
+      currency: 'HUF'
+    },
+    nyari_iskola_elokeszito: {
+      content_ids: ['nyari-iskola-elokeszito-2026'],
+      content_name: 'Nyári intenzív iskola-előkészítő 2026',
+      content_category: 'school_prep_intensive',
+      value: 140000,
       currency: 'HUF'
     },
     service: {

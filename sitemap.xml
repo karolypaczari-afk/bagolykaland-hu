@@ -46,6 +46,17 @@
     </image:image>
   </url>
   <url>
+    <loc>https://bagolykaland.hu/nyari-iskola-elokeszito/</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-csoportos-iskola-elokeszito.webp</image:loc>
+      <image:title>Nyári intenzív iskola-előkészítő 2026</image:title>
+      <image:caption>Iskola-előkészítő intenzív program 5–7 éveseknek Debrecenben</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://bagolykaland.hu/foglalkozasaink/</loc>
     <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
