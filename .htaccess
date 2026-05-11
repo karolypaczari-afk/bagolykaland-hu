@@ -92,6 +92,9 @@ ErrorDocument 404 /pages/404/index.html
   RewriteRule ^.*-no-deposit.*$ - [G,L,NC]
   RewriteRule ^.*-free-spins?.*$ - [G,L,NC]
   RewriteRule ^.*-cashback.*$ - [G,L,NC]
+  RewriteRule ^.*-real-money.*$ - [G,L,NC]
+  RewriteRule ^.*-incentives?($|[-_/]).*$ - [G,L,NC]
+  RewriteRule ^.*-very-first-deposit.*$ - [G,L,NC]
 
   # /hu/* catch-all — bagolykaland.hu is monolingual (Hungarian only); no
   # content lives under /hu/. All observed /hu/* traffic is spam injection
