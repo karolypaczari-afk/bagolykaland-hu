@@ -46,6 +46,12 @@
   var SCHOOL_PREP_INTENSIVE_PROGRAM_NAME = 'Nyári intenzív iskola-előkészítő 2026';
   var SCHOOL_PREP_INTENSIVE_VALUE_HUF = 140000;
 
+  // Tanévi 9 hónapos iskola-előkészítő — highest-LTV program signup,
+  // 28.000 Ft/hó × 9 hó = 252.000 Ft total; gets its own Meta content_category
+  // so Events Manager can split ad performance from the intenzív variant.
+  var SCHOOL_PREP_ACADEMIC_PROGRAM_NAME = 'Iskola-előkészítő tanévi 2026/27';
+  var SCHOOL_PREP_ACADEMIC_VALUE_HUF = 252000;
+
   // UUID v4 for deduplicating browser pixel events against
   // the server-side Conversions API event fired from /api/contact.php.
   function bkUuid() {
@@ -127,6 +133,13 @@
           value: SCHOOL_PREP_INTENSIVE_VALUE_HUF,
           currency: 'HUF',
         }, dedup);
+      } else if (program === SCHOOL_PREP_ACADEMIC_PROGRAM_NAME) {
+        window.fbq('trackCustom', 'ProgramSignup', {
+          content_name: program,
+          content_category: 'school_prep_academic',
+          value: SCHOOL_PREP_ACADEMIC_VALUE_HUF,
+          currency: 'HUF',
+        }, dedup);
       } else {
         window.fbq('trackCustom', 'ProgramSignup', {
           content_name: program,
@@ -141,12 +154,14 @@
           program === CAMP_PROGRAM_NAME                  ? CAMP_VALUE_HUF :
           program === SZORONGAS_PROGRAM_NAME             ? SZORONGAS_VALUE_HUF :
           program === SCHOOL_PREP_INTENSIVE_PROGRAM_NAME ? SCHOOL_PREP_INTENSIVE_VALUE_HUF :
+          program === SCHOOL_PREP_ACADEMIC_PROGRAM_NAME  ? SCHOOL_PREP_ACADEMIC_VALUE_HUF :
           5000;
         window.BKAnalytics.fireLead({
           lead_source: 'program_signup',
           lead_type:
             program === CAMP_PROGRAM_NAME ? 'summer_camp' :
             program === SCHOOL_PREP_INTENSIVE_PROGRAM_NAME ? 'school_prep_intensive' :
+            program === SCHOOL_PREP_ACADEMIC_PROGRAM_NAME ? 'school_prep_academic' :
             'program_inquiry',
           program: program,
           turnus: params.turnus || '',
