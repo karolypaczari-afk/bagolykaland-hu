@@ -167,8 +167,8 @@
                   <div class="mega-panel__inner">
                     <div class="mega-nav">
                       {% for child in item.children %}
-                        <a href="{{ child.url }}" class="mega-nav__link">
-                          <span class="mega-nav__link-title">{{ child.label }}</span>
+                        <a href="{{ child.url }}" class="mega-nav__link"{% if child.external %} target="_blank" rel="noopener noreferrer"{% endif %}>
+                          <span class="mega-nav__link-title">{{ child.label }}{% if child.external %}<svg class="icon-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" aria-hidden="true" style="margin-left:4px;vertical-align:-1px;opacity:.55"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>{% endif %}</span>
                           {% if child.desc %}<span class="mega-nav__link-desc">{{ child.desc }}</span>{% endif %}
                         </a>
                       {% endfor %}
@@ -261,9 +261,9 @@
             {% else %}
               {% if item.url %}<a href="{{ item.url }}" class="mobile-dropdown-parent-link">Összes {{ item.label }}</a>{% endif %}
               {% for child in item.children %}
-                <a href="{{ child.url }}" class="mobile-dropdown__link">
+                <a href="{{ child.url }}" class="mobile-dropdown__link"{% if child.external %} target="_blank" rel="noopener noreferrer"{% endif %}>
                   {% if child.icon %}<img src="{{ child.icon }}" alt="" class="mobile-dropdown__icon" width="24" height="24" loading="lazy">{% endif %}
-                  <span>{{ child.label }}</span>
+                  <span>{{ child.label }}{% if child.external %} <svg class="icon-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" aria-hidden="true" style="margin-left:2px;vertical-align:-1px;opacity:.55"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>{% endif %}</span>
                   {% if child.badge %}<span class="mobile-dropdown__badge">{{ child.badge }}</span>{% endif %}
                 </a>
               {% endfor %}

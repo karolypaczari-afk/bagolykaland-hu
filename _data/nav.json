@@ -73,7 +73,8 @@
         "children": [
             { "label": "Árlista",        "url": "/arlista/",       "desc": "Árak és csomagok áttekintése" },
             { "label": "Blog",           "url": "/blog/",          "desc": "Szakértői cikkek szülőknek" },
-            { "label": "Galéria",        "url": "/galeria/",       "desc": "Képek a mindennapokról" }
+            { "label": "Galéria",        "url": "/galeria/",       "desc": "Képek a mindennapokról" },
+            { "label": "Online képzések", "url": "https://zsenibagoly.hu/", "external": true, "desc": "ZseniBagoly.hu — kurzusok szülőknek" }
         ],
         "megaExtra": {
             "featuredPosts": [
@@ -83,7 +84,5 @@
             ]
         }
     },
-    { "label": "Iskola-előkészítő", "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/", "highlight": true, "badge": "Jelentkezés nyitva!" },
-    { "label": "Nyári tábor", "url": "/nyari-tabor/" },
-    { "label": "Online képzéseink", "url": "https://zsenibagoly.hu/", "external": true }
+    { "label": "Iskola-előkészítő", "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/", "highlight": true, "badge": "Jelentkezés nyitva!" }
 ]
