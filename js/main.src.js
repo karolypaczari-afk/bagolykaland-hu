@@ -384,18 +384,35 @@
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(link => {
       link.addEventListener('click', (e) => {
-        const id = link.getAttribute('href').slice(1);
+        const href = link.getAttribute('href');
+        const id = href.slice(1);
         const target = id ? document.getElementById(id) : null;
-        if (target) {
-          e.preventDefault();
-          // scrollIntoView with behavior:'smooth' requires iOS 15.4+ / Chrome 61+
-          // On older browsers it gracefully falls back to instant scroll
-          try {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          } catch (err) {
-            target.scrollIntoView(true);
-          }
+        if (!target) return;
+
+        // For CSS-only :target modals (lightboxes, popovers) — skip the
+        // smooth-scroll override and let the browser do native URL fragment
+        // update so :target activates. position:fixed targets have no scroll
+        // target anyway.
+        if (target.classList.contains('iek-lightbox') ||
+            target.hasAttribute('data-no-smooth-scroll')) {
+          return;
         }
+
+        e.preventDefault();
+        // scrollIntoView with behavior:'smooth' requires iOS 15.4+ / Chrome 61+
+        // On older browsers it gracefully falls back to instant scroll
+        try {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } catch (err) {
+          target.scrollIntoView(true);
+        }
+        // Update URL hash so any open CSS :target modal (lightbox, etc.)
+        // deactivates and so forward/back history works as expected.
+        try {
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', href);
+          }
+        } catch (err) { /* ignore */ }
       });
     });
   }

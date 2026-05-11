@@ -8,6 +8,7 @@ Allow: /
 Disallow: /_dev/
 Disallow: /node_modules/
 Disallow: /api/
+Disallow: /preview/
 Disallow: /*?*utm_
 Disallow: /*?*fbclid
 Disallow: /*?*gclid
