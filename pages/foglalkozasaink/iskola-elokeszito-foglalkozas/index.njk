@@ -320,7 +320,8 @@ headStyles: |
     }
     .iek-gallery__item:hover::after, .iek-gallery__item:focus-visible::after { opacity: 1; transform: scale(1); }
 
-    /* Lightbox — :target activated, no JS needed */
+    /* Lightbox — JS-controlled (.is-open class), megbízható zárás + ESC support */
+    body.iek-lb-active { overflow: hidden; }
     .iek-lightbox {
       position: fixed;
       inset: 0;
@@ -332,7 +333,7 @@ headStyles: |
       padding: clamp(1rem, 4vw, 3rem);
       transition: opacity 0.28s ease, background 0.28s ease;
     }
-    .iek-lightbox:target {
+    .iek-lightbox.is-open {
       opacity: 1;
       z-index: 9999;
       pointer-events: auto;
@@ -350,7 +351,7 @@ headStyles: |
       transform: scale(0.96);
       transition: transform 0.32s cubic-bezier(0, 0, 0.2, 1);
     }
-    .iek-lightbox:target .iek-lightbox__inner { transform: scale(1); }
+    .iek-lightbox.is-open .iek-lightbox__inner { transform: scale(1); }
     .iek-lightbox__inner img {
       max-width: 100%; max-height: calc(90vh - 5rem);
       width: auto; height: auto;
@@ -1178,18 +1179,79 @@ headStyles: |
     {# ── SCROLL-TO-TOP FAB ── #}
     <a href="#top" class="iek-fab" aria-label="Vissza a tetejére" title="Vissza a tetejére">↑</a>
 
-    {# Tiny scroll-detect script for FAB visibility — no external deps #}
+    {# UX scripts: scroll-FAB + lightbox controller (JS-alapú, hogy a bezárás megbízhatóan működjön) #}
     <script>
       (function() {
-        var threshold = 480;
+        /* ───── FAB visibility on scroll ───── */
+        var fabThreshold = 480;
         var ticking = false;
-        function check() {
+        function checkScroll() {
           ticking = false;
-          document.body.classList.toggle('iek-scrolled', window.scrollY > threshold);
+          document.body.classList.toggle('iek-scrolled', window.scrollY > fabThreshold);
         }
         window.addEventListener('scroll', function() {
-          if (!ticking) { requestAnimationFrame(check); ticking = true; }
+          if (!ticking) { requestAnimationFrame(checkScroll); ticking = true; }
         }, { passive: true });
-        check();
+        checkScroll();
+
+        /* ───── Lightbox controller ─────
+           Cél: bezárás-kattintásra is megbízhatóan zárjon (a :target-et a
+           globális smooth-scroll handler hosszan túllépte; ez egyszerűbb). */
+        var lightboxes = document.querySelectorAll('.iek-lightbox');
+        if (!lightboxes.length) return;
+
+        function closeAll() {
+          lightboxes.forEach(function(lb) { lb.classList.remove('is-open'); });
+          document.body.classList.remove('iek-lb-active');
+        }
+        function openById(id) {
+          closeAll();
+          var lb = document.getElementById(id);
+          if (lb) {
+            lb.classList.add('is-open');
+            document.body.classList.add('iek-lb-active');
+          }
+        }
+
+        /* Capture-phase document click handler so we run BEFORE the global
+           smooth-scroll handler (which intercepts a[href^="#"]).
+           - Thumbnail click → open matching lightbox
+           - Close button / backdrop click → close
+           - Prev/Next click → switch lightbox */
+        document.addEventListener('click', function(e) {
+          var thumb = e.target.closest('.iek-gallery__item[href^="#iek-lb-"]');
+          if (thumb) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            openById(thumb.getAttribute('href').slice(1));
+            return;
+          }
+          var closeEl = e.target.closest('.iek-lightbox__close, .iek-lightbox__backdrop');
+          if (closeEl) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            closeAll();
+            return;
+          }
+          var navEl = e.target.closest('.iek-lightbox__nav a[href^="#iek-lb-"]');
+          if (navEl) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            openById(navEl.getAttribute('href').slice(1));
+            return;
+          }
+        }, true);
+
+        /* ESC bezárja */
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && document.body.classList.contains('iek-lb-active')) {
+            closeAll();
+          }
+        });
+
+        /* Mély-link támogatás: ha az URL #iek-lb-N-vel érkezik, nyisd meg */
+        if (location.hash && location.hash.indexOf('#iek-lb-') === 0) {
+          openById(location.hash.slice(1));
+        }
       })();
     </script>
