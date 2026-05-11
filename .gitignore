@@ -1,31 +1,58 @@
-# Secrets
+# =============================================================================
+# .gitignore — bagolykaland.hu
+# A master branch auto-deploy: push → Hostinger webhook → public_html
+# MINDEN, ami tracked, közvetlenül publikussá válik a bagolykaland.hu alatt.
+# Bármi PII / secret / dev-only fájl ide tartozik.
+# =============================================================================
+
+# --- Secrets (lokálisan a szerveren is léteznek, webhook nem nyúl hozzájuk) ---
 .env
+.env.local
+.env.*.local
 api/smtp-config.php
 api/admin-config.php
 api/capi-config.php
 api/logs/
 
-# OS
+# --- OS / editor zaj ---
 .DS_Store
 Thumbs.db
-
-# Editor
 .vscode/
 .idea/
 
-# Claude Code local settings
+# --- Claude Code lokális beállítások (NEM publikus) ---
 .claude/
 
-# Node (if any tooling is added later)
+# --- Node tooling ---
 node_modules/
 
-# Dev folder — local only, not tracked by repo
+# --- Dev workspace (teljes mappa lokális — soha nem deploy-olódik) ---
 _dev/
+
+# --- Test artifacts ---
 playwright-report/
 test-results/
 
-# Lead/subscriber exports — PII (emails/names). NEVER commit:
-# master auto-deploys to Hostinger public_html, would be world-readable.
+# --- Lead / hírlevél / feliratkozó exportok (PII: nevek, emailek, telefon) ---
+# Ezek a master branch alatt deploy-olódnának, és a publikus URL-en
+# (pl. https://bagolykaland.hu/bagolykaland-hirlevel-feliratkozok.csv)
+# bárki letölthetné. NEVER commit.
 bagolykaland-hirlevel-*.csv
 bagolykaland-leads-*.csv
 bagolykaland-subscribers-*.csv
+*-pii.csv
+*-leads.csv
+
+# --- Lokális TODO / notes fájlok a gyökérben ---
+# Ha gyökér-szintű jegyzet kell, _dev/notes/ alá tedd. Ha mégis itt marad,
+# itt akkor sem deploy-olódik.
+Karesz_todos.md
+TODO.local.md
+NOTES.local.md
+*.local.md
+
+# --- Egyéb védelem ---
+*.bak
+*.tmp
+*.swp
+*~

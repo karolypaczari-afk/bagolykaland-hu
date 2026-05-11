@@ -38,7 +38,7 @@ npm run test:images    # Image optimization tests
 npm run test:visual    # Visual regression tests
 npm run visual:update  # Update visual regression snapshots
 npm run report         # Open Playwright HTML report
-npm run optimize:images      # Convert _dev/input/ → img/ as WebP
+npm run optimize:images      # Convert _dev/inputs/photos/ → img/ as WebP
 npm run optimize:images:dry  # Dry-run (preview only)
 ```
 
@@ -54,6 +54,66 @@ npm run biome:check        # JSON config files
 npm run htmlvalidate:check # HTML validation
 npm run lint:css           # CSS linting
 ```
+
+---
+
+## Project Layout
+
+**A `master` branch tartalma 1:1 deploy-olódik a Hostinger `public_html` alá** — minden tracked fájl elérhető lesz `https://bagolykaland.hu/<path>` alatt.
+
+### Gyökér (tracked, deploy-kritikus)
+
+```
+.
+├── index.html / index.njk          # homepage (njk → html)
+├── .htaccess                       # URL rewrite (/pages/ stripping, security headers)
+├── robots.txt                      # SEO
+├── sitemap.xml                     # SEO
+├── manifest.webmanifest            # PWA
+├── service-worker.js               # PWA offline shell
+├── llms.txt / llms-full.txt        # AI-agent metadata
+├── qr-ertekeles.html               # Google review QR landing
+│
+├── _data/                          # Eleventy global data (nav, site, buildHash, reviews)
+├── _includes/                      # Eleventy layouts + partials
+├── pages/                          # Minden aloldal (.njk + generated .html)
+├── api/                            # PHP endpoints (contact, meta-capi, popup-lead, belepes)
+├── css/                            # Stílusok (.src.css forrás + .css minified)
+├── js/                             # JS modulok (.src.js forrás + .js minified)
+├── img/                            # Site képek (WebP elsődlegesen)
+│
+├── _docs/                          # Tracked dokumentáció (analytics, meta-ads playbooks)
+├── CLAUDE.md                       # ← ezt olvasod most
+│
+└── *.json / .eleventy.js / ...     # Konfigfájlok (lásd lent)
+```
+
+### Konfigfájlok a gyökérben (kell ott legyenek a tooling miatt)
+
+`package.json`, `package-lock.json`, `.eleventy.js`, `.eleventyignore`, `.htmlvalidate.json`, `.stylelintrc.json`, `biome.json`, `playwright.config.js`, `.gitignore`
+
+### Lokális workspace (`_dev/`) — fully gitignored
+
+A teljes mappa lokális, soha nem deploy-olódik. Részletes index: **`_dev/README.md`**.
+
+```
+_dev/
+├── README.md                       # ← _dev struktúra teljes leírása
+├── build.js                        # ⚠️ package.json refs
+├── test-fast.js / test-quick.js    # ⚠️ package.json refs
+├── hostinger-ssh.env               # SSH password fallback
+├── tests/                          # ⚠️ playwright.config.js refs
+├── scripts/                        # build/optimize/migration helpers
+│   └── optimize-images.js          # ⚠️ package.json refs
+├── ga4-admin/ meta-ads/            # platform-specifikus admin scriptek
+├── notes/                          # md jegyzetek, TODO-k, content export
+├── inputs/photos/                  # nyers fotók (új: konszolidált útvonal)
+├── backups/                        # régi WP site + zsenifeszek backup
+├── archive/                        # régi screenshots, originals, tmp
+└── exports/                        # generált CSV / output fájlok
+```
+
+**⚠️ NE MOZGASS** `_dev/build.js`, `_dev/test-fast.js`, `_dev/test-quick.js`, `_dev/tests/`, `_dev/scripts/optimize-images.js` — ezeket a `package.json` / `playwright.config.js` konkrét pathon hivatkozza.
 
 ---
 
@@ -447,7 +507,7 @@ Rules:
 - Hero/LCP images: `fetchpriority="high"`, **no** `loading="lazy"`
 - All other images: `loading="lazy"`, include `width` + `height`
 - **Never use WordPress URLs** (`/wp-content/uploads/...`)
-- Run `npm run optimize:images` to convert `_dev/input/` → `img/` as WebP
+- Run `npm run optimize:images` to convert `_dev/inputs/photos/` → `img/` as WebP
 
 ---
 
