@@ -23,3 +23,9 @@ node_modules/
 _dev/
 playwright-report/
 test-results/
+
+# Lead/subscriber exports — PII (emails/names). NEVER commit:
+# master auto-deploys to Hostinger public_html, would be world-readable.
+bagolykaland-hirlevel-*.csv
+bagolykaland-leads-*.csv
+bagolykaland-subscribers-*.csv
