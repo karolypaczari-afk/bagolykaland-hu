@@ -1,6 +1,6 @@
 # BagolykaLand – robots.txt
 # Maximum classic + AI search visibility
-# Updated: 2026-04-20
+# Updated: 2026-05-11
 
 # ─── Classic search engines ───
 User-agent: *
@@ -11,6 +11,41 @@ Disallow: /api/
 Disallow: /*?*utm_
 Disallow: /*?*fbclid
 Disallow: /*?*gclid
+
+# WP-era spam URL paths (compromised legacy 2023-2024). All these return
+# 410 Gone at the server (.htaccess is authoritative). Disallowing crawl
+# saves Google's crawl budget and accelerates de-indexing of stale spam
+# entries still appearing in Search Console.
+Disallow: /hu/
+Disallow: /*casino*
+Disallow: /*kaszin*
+Disallow: /*baccarat*
+Disallow: /*rulett*
+Disallow: /*roulette*
+Disallow: /*bonusz*
+Disallow: /*-bonus
+Disallow: /*-slots
+Disallow: /*-jackpot*
+Disallow: /*-lottery*
+Disallow: /*-lotto*
+Disallow: /*-gambling*
+Disallow: /*-payout*
+Disallow: /*-betting*
+Disallow: /*-bookmaker*
+Disallow: /*-deposit*
+Disallow: /*-incentive*
+Disallow: /*-real-money*
+Disallow: /*-free-spin*
+Disallow: /*-cashback*
+Disallow: /*mostbet*
+Disallow: /*1xbet*
+Disallow: /*22bet*
+Disallow: /*melbet*
+Disallow: /*bet365*
+Disallow: /*betano*
+Disallow: /*tipico*
+Disallow: /*bwin*
+Disallow: /*pinup*
 
 # ─── AI search / retrieval bots (answer engines) ───
 # These bots fetch on-demand when a user asks about us → allow for citation visibility.
