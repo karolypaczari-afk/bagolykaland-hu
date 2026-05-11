@@ -1,7 +1,7 @@
 ---
 layout: "base.njk"
 title: "Iskola-előkészítő Debrecen – tanévi + nyári | BagolykaLand"
-description: "Iskola-előkészítő Debrecenben két útvonalon: 9 hónapos tanévi program (szept 2026 – jún 2027, 28.000 Ft/hó) vagy 11 hetes nyári intenzív (jún–aug 2026, 7.000 Ft/óra). Limitált helyek, max 5–7 fős csoport, bevonó felmérés visszafizetési garanciával."
+description: "Iskola-előkészítő Debrecenben 2 útvonalon: tanévi 9 hónapos (28.000 Ft/hó) vagy nyári intenzív (7.000 Ft/óra). Max 5–7 fős, visszafizetési garanciával."
 preloadHero: "/img/bagolykaland-csoportos-iskola-elokeszito.webp"
 ogImage: "https://bagolykaland.hu/img/bagolykaland-csoportos-iskola-elokeszito.webp"
 ogImageAlt: "Iskola-előkészítő csoport Debrecenben – BagolykaLand"
@@ -52,7 +52,7 @@ eventSchema:
       location: *locIek
 faq:
   - q: "Mikor kezdődik a tanévi és mikor a nyári intenzív program?"
-    a: "A tanévi 9 hónapos program 2026. szeptember elején indul és 2027. júniusig tart, heti egy 60 perces alkalommal. A nyári intenzív 2026. július 1-jén indul és augusztus 20-ig tart, heti 2 × 60 perces ritmusban. Mindkét turnusban limitált helyek érhetők el — a jelentkezési sorrend dönt."
+    a: "A tanévi 9 hónapos program 2026. szeptember elején indul és 2027. júniusig tart, heti egy 60 perces alkalommal. A nyári intenzív 2026. július 1-jén indul és augusztus 20-ig tart, heti 2 × 60 perces ritmusban. Mindkét turnusban korlátozott helyek érhetők el — a jelentkezési sorrend dönt."
   - q: "Mi a különbség a tanévi és a nyári intenzív program között?"
     a: "Ugyanazokat a 8 célzott területet fejlesztjük (figyelem, finommotorika, számolás, betűismeret, téri orientáció, emlékezet, szociális, kommunikáció), de eltérő tempóban. A tanévi 9 hónap alatt 36 órát ad fokozatos felépítésben, több játékos elemmel — 28.000 Ft/hó × 9 hó. A nyári intenzív ~20 órát ad 11 hét alatt, sűrítve, tantárgyi előkészülettel — 7.000 Ft/óra (~140.000 Ft összesen)."
   - q: "Mekkora a csoport létszáma?"
@@ -835,7 +835,8 @@ headStyles: |
       background: var(--iek-form-accent, var(--clr-teal));
       color: #fff;
       border: none;
-      padding: 0.85rem 1.5rem;
+      padding: 1rem 1.5rem;  /* touch target ≥ 48px (responsive-design skill: WCAG min 44px) */
+      min-height: 48px;
       border-radius: var(--r-md);
       font-size: 1rem;
       font-weight: 800;
@@ -1014,7 +1015,7 @@ headStyles: |
           <svg class="moz-urgency__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
             <path d="M12 2a1 1 0 0 0-1 1v.6A7 7 0 0 0 5 10.5V14l-1.7 2.55A1 1 0 0 0 4.13 18h15.74a1 1 0 0 0 .83-1.45L19 14v-3.5A7 7 0 0 0 13 3.6V3a1 1 0 0 0-1-1Zm-2 18a2 2 0 0 0 4 0h-4Z"/>
           </svg>
-          Limitált helyek mindkét turnusban &mdash; július és szeptember
+          Korlátozott helyek mindkét turnusban &mdash; július és szeptember
         </div>
 
         <h1 class="fade-up stagger-1" style="color:#fff;">Az iskolakezdés sosem véletlen &mdash; felkészítés.<br/>Válassz a 2 útvonalból, és gyermeked magabiztos elsős lesz.</h1>
@@ -1057,7 +1058,7 @@ headStyles: |
           </article>
         </div>
 
-        <p class="fade-up stagger-3" style="margin-top:1.75rem;color:rgba(255,255,255,0.78);font-size:0.92rem;">Még nem tudod, melyik passzol? <a href="tel:+36303649396" style="color:var(--clr-yellow);font-weight:700;">Hívj fel: +36&nbsp;30&nbsp;364&nbsp;9396</a> &mdash; segítünk eldönteni.</p>
+        <p class="fade-up stagger-3" style="margin-top:1.75rem;color:rgba(255,255,255,0.78);font-size:0.92rem;">Még nem tudod, melyik illik nektek? <a href="tel:+36303649396" style="color:var(--clr-yellow);font-weight:700;">Hívj fel: +36&nbsp;30&nbsp;364&nbsp;9396</a> &mdash; segítünk eldönteni.</p>
       </div>
     </section>
 
@@ -1195,7 +1196,7 @@ headStyles: |
     <section class="section section-white" aria-labelledby="iek-compare">
       <div class="container">
         <div class="section-header">
-          <span class="section-eyebrow fade-up">Melyik passzol nektek?</span>
+          <span class="section-eyebrow fade-up">Melyik illik nektek?</span>
           <h2 id="iek-compare" class="fade-up stagger-1">Tanévi vagy nyári intenzív &mdash; melyik a Te útvonalad?</h2>
           <p class="fade-up stagger-2" style="max-width:680px;margin:0 auto;">Mindkettő ugyanahhoz a célhoz vezet: <strong>magabiztos elsős</strong>. A különbség csak a tempóban és a kezdés időpontjában van.</p>
         </div>
@@ -1219,7 +1220,7 @@ headStyles: |
             <span class="nyi-compare-card__pin">Sűrített út</span>
             <h3>Nyári intenzív</h3>
             <div class="nyi-compare-card__price">~140.000&nbsp;Ft</div>
-            <div class="nyi-compare-card__meta">~20 óra &middot; heti 2× &middot; jún. &ndash; aug. 2026 &middot; 7.000 Ft/óra</div>
+            <div class="nyi-compare-card__meta">~20 óra &middot; heti 2× &middot; júl. &ndash; aug. 2026 &middot; 7.000 Ft/óra</div>
             <ul>
               <li>Fókuszált, intenzív tempó</li>
               <li>Tantárgyi előkészület beépítve</li>
@@ -1505,7 +1506,7 @@ headStyles: |
             <h3>Szabó-Varga Alexandra</h3>
             <p class="moz-founder__role">Fejlesztőpedagógus &middot; Alapozó mozgásterapeuta &middot; 3 gyermek édesanyja</p>
             <blockquote class="moz-founder__quote">
-              &bdquo;Egy gyermek iskolai sikere már az első hetekben eldől &mdash; és a megfelelő felkészítéssel ez a 11 hét, vagy a 9 hónap pont elég idő, hogy magabiztosan kezdje. Fókuszált munka, jó módszertannal, kis csoportban &mdash; ez a kulcs.&rdquo;
+              &bdquo;Egy gyermek iskolai sikere már az első hetekben eldől &mdash; és a megfelelő felkészítéssel ez a 11 hét, vagy a 9 hónap pont elég idő, hogy magabiztosan kezdje. Fókuszált munka, jó módszertannal, kiscsoportban &mdash; ez a kulcs.&rdquo;
             </blockquote>
             <ul class="moz-founder__facts">
               <li><strong>15+ év</strong> tapasztalat gyermekfejlesztésben</li>
@@ -1544,7 +1545,7 @@ headStyles: |
               <span>Mikor kezdődik a tanévi és mikor a nyári intenzív?</span>
               <span class="faq-toggle">+</span>
             </summary>
-            <div class="faq-answer">A <strong>tanévi 9 hónapos program</strong> 2026. szeptember elején indul és 2027. júniusig tart, heti egy 60 perces alkalommal. A <strong>nyári intenzív</strong> 2026. július 1-jén indul és augusztus 20-ig tart, heti 2 × 60 perces ritmusban. Mindkét turnusban limitált helyek érhetők el &mdash; a jelentkezési sorrend dönt.</div>
+            <div class="faq-answer">A <strong>tanévi 9 hónapos program</strong> 2026. szeptember elején indul és 2027. júniusig tart, heti egy 60 perces alkalommal. A <strong>nyári intenzív</strong> 2026. július 1-jén indul és augusztus 20-ig tart, heti 2 × 60 perces ritmusban. Mindkét turnusban korlátozott helyek érhetők el &mdash; a jelentkezési sorrend dönt.</div>
           </details>
 
           <details class="faq-card" data-cat="general" open>
@@ -1742,7 +1743,7 @@ headStyles: |
       <div class="container" style="text-align:center;">
         <span class="section-eyebrow fade-up">Ne várd meg, amíg szeptember 1. derül ki</span>
         <h2 class="fade-up stagger-1">Kezdjetek egy fókuszált, magabiztos felkészülést!</h2>
-        <p class="fade-up stagger-2" style="max-width:620px;margin:0 auto 1.5rem;">2026. július 1-jén indul a nyári intenzív, 2026. szeptemberben a tanévi 9 hónapos program. <strong>Limitált helyek</strong> &mdash; a max 5&ndash;7 fős kiscsoportokba a jelentkezők sorrendje dönt.</p>
+        <p class="fade-up stagger-2" style="max-width:620px;margin:0 auto 1.5rem;">2026. július 1-jén indul a nyári intenzív, 2026. szeptemberben a tanévi 9 hónapos program. <strong>Korlátozott helyek</strong> &mdash; a max 5&ndash;7 fős kiscsoportokba a jelentkezők sorrendje dönt.</p>
         <ul class="fade-up stagger-2" style="list-style:none;padding:0;max-width:520px;margin:0 auto 2rem;text-align:left;display:flex;flex-direction:column;gap:0.75rem;">
           <li style="padding-left:1.75rem;position:relative;font-size:0.95rem;line-height:1.6;"><span style="position:absolute;left:0;color:var(--clr-teal);font-weight:700;">&#10003;</span> <strong>200+ gyermek</strong> készült fel ezzel a módszerrel iskolára</li>
           <li style="padding-left:1.75rem;position:relative;font-size:0.95rem;line-height:1.6;"><span style="position:absolute;left:0;color:var(--clr-teal);font-weight:700;">&#10003;</span> <strong>Szabó-Varga Alexandra</strong> személyesen vezeti &mdash; 15+ év szakmai tapasztalat</li>
