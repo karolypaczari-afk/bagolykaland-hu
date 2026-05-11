@@ -1261,6 +1261,175 @@ headStyles: |
       font-weight: 600;
       line-height: 1.4;
     }
+
+    /* ── USP — "Miben más?" 7 differenciátor ── */
+    .iek-usp-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      max-width: 1080px;
+      margin: 2.5rem auto 0;
+    }
+    @media (max-width: 820px) { .iek-usp-grid { grid-template-columns: 1fr; gap: 1.1rem; } }
+
+    .iek-usp-item {
+      position: relative;
+      background: #fff;
+      border: 1px solid rgba(43,116,109,0.16);
+      border-radius: var(--r-lg);
+      padding: 1.5rem 1.6rem 1.5rem 4.5rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+      transition: transform var(--t-mid), box-shadow var(--t-mid), border-color var(--t-mid);
+    }
+    .iek-usp-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.08);
+      border-color: var(--clr-teal);
+    }
+    .iek-usp-item__num {
+      position: absolute;
+      top: 1.4rem;
+      left: 1.4rem;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--clr-teal) 0%, var(--clr-teal-dark) 100%);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-weight: 900;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 14px rgba(43,116,109,0.35);
+    }
+    .iek-usp-item__claim {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--clr-navy);
+      line-height: 1.3;
+      margin: 0 0 0.55rem;
+    }
+    .iek-usp-item__body {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--clr-text);
+      margin: 0;
+    }
+    .iek-usp-item__body strong { color: var(--clr-teal-dark); }
+    @media (max-width: 480px) {
+      .iek-usp-item { padding: 1.25rem 1.2rem 1.25rem 1.2rem; }
+      .iek-usp-item__num { position: static; margin-bottom: 0.85rem; }
+    }
+
+    .iek-usp-closer {
+      max-width: 720px;
+      margin: 2.5rem auto 0;
+      text-align: center;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--clr-text);
+      padding: 1.4rem 1.6rem;
+      background: linear-gradient(135deg, rgba(245,198,64,0.1) 0%, rgba(43,116,109,0.06) 100%);
+      border-radius: var(--r-lg);
+      border-left: 4px solid var(--clr-yellow);
+    }
+    .iek-usp-closer strong { color: var(--clr-navy); }
+
+    /* ── PERSONA — "Felismered magad?" 6 szülő-típus ── */
+    .iek-persona-intro {
+      max-width: 700px;
+      margin: 0 auto 0.5rem;
+    }
+    .iek-persona-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      max-width: 1180px;
+      margin: 2.5rem auto 0;
+    }
+    @media (max-width: 980px) { .iek-persona-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .iek-persona-grid { grid-template-columns: 1fr; gap: 1rem; } }
+
+    .iek-persona-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--r-lg);
+      padding: 1.5rem 1.5rem 1.4rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      transition: transform var(--t-mid), box-shadow var(--t-mid);
+      position: relative;
+      overflow: hidden;
+    }
+    .iek-persona-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--persona-accent, var(--clr-teal));
+    }
+    .iek-persona-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.1);
+    }
+    .iek-persona-card__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--persona-accent-light, rgba(43,116,109,0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      margin-bottom: 0.85rem;
+    }
+    .iek-persona-card__label {
+      display: block;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      color: var(--clr-navy);
+      font-size: 1.05rem;
+      line-height: 1.3;
+      margin-bottom: 0.7rem;
+    }
+    .iek-persona-card__body {
+      font-size: 0.93rem;
+      line-height: 1.6;
+      color: var(--clr-text);
+      margin: 0;
+    }
+    .iek-persona-card__body em {
+      display: block;
+      margin-top: 0.6rem;
+      color: var(--persona-accent-text, var(--clr-teal-dark));
+      font-style: normal;
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .iek-persona-closer {
+      max-width: 760px;
+      margin: 2.5rem auto 0;
+      text-align: center;
+      padding: 1.5rem 1.75rem;
+      background: var(--clr-navy);
+      color: #fff;
+      border-radius: var(--r-lg);
+    }
+    .iek-persona-closer p {
+      margin: 0 0 1.1rem;
+      font-size: 1rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.94);
+    }
+    .iek-persona-closer p strong { color: var(--clr-yellow); }
+    .iek-persona-closer-cta {
+      display: inline-flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 ---
 
 
@@ -1372,6 +1541,65 @@ headStyles: |
             <li><strong>Téves figyelemzavar / dyslexia diagnózis.</strong> Sok gyermek nem &bdquo;sajátos nevelési igényű&rdquo; &mdash; csak felkészületlen volt. A pecsét viszont megmarad.</li>
             <li><strong>Pótlékköltségek később:</strong> egy év egyéni fejlesztő foglalkozás ~360.000&nbsp;Ft, plusz korrepetálás &mdash; sokszorosa annak, amit most befektetnél.</li>
           </ul>
+        </div>
+      </div>
+    </section>
+
+
+    {# ── PERSONA — "Felismered magad?" 6 tipikus szülő-helyzet ── #}
+    <section class="section section-white" aria-labelledby="iek-persona">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">Talán Te is ismerős vagy</span>
+          <h2 id="iek-persona" class="fade-up stagger-1">Felismered magad valamelyikben? Akkor pontosan tudjuk, hogyan segítsünk.</h2>
+          <p class="iek-persona-intro fade-up stagger-2">Ezek a leggyakoribb történetek, amiket az érkező szülőktől hallunk. Olvasd át &mdash; és ha bármelyik ismerősen hangzik, már tudunk dolgozni vele.</p>
+        </div>
+
+        <div class="iek-persona-grid fade-up">
+          <article class="iek-persona-card" style="--persona-accent: var(--clr-coral); --persona-accent-light: rgba(179,84,49,0.12); --persona-accent-text: var(--clr-coral-dark);">
+            <div class="iek-persona-card__icon" aria-hidden="true">👨‍👧‍👦</div>
+            <span class="iek-persona-card__label">A nagytestvér megszenvedte &mdash; most a kicsit szeretnéd megkímélni</span>
+            <p class="iek-persona-card__body">A nagyobbik nehezen kezdte az iskolát: kudarcélmények, fejlesztő szakember, frusztráció. Most a második (vagy harmadik) gyermekednél már <strong>proaktív vagy</strong> &mdash; és nem akarod még egyszer végigélni az egészet. <em>Időben jössz. Pontosan ezt kell tenni.</em></p>
+          </article>
+
+          <article class="iek-persona-card" style="--persona-accent: var(--clr-teal); --persona-accent-light: rgba(43,116,109,0.12); --persona-accent-text: var(--clr-teal-dark);">
+            <div class="iek-persona-card__icon" aria-hidden="true">🛡️</div>
+            <span class="iek-persona-card__label">Konkrét baj még nincs &mdash; de Te szeretnél biztos lenni</span>
+            <p class="iek-persona-card__body">Aggódsz az iskolakezdés miatt: nem tudod, mit kellene, mit nem. Inkább <strong>most</strong> teszel meg mindent, mint ősszel kapkodva pótolni. &bdquo;Jobb félni, mint megijedni&rdquo; &mdash; és pont ezért időben vagy. <em>A megelőzés mindig olcsóbb a javításnál.</em></p>
+          </article>
+
+          <article class="iek-persona-card" style="--persona-accent: var(--clr-yellow); --persona-accent-light: rgba(245,198,64,0.18); --persona-accent-text: #8a6b13;">
+            <div class="iek-persona-card__icon" aria-hidden="true">💔</div>
+            <span class="iek-persona-card__label">Kudarc-érzékeny a gyermeked &mdash; félsz, az első hibánál kiszáll</span>
+            <p class="iek-persona-card__body">Otthon látod: ha valami nem sikerül elsőre, becsapja az ajtót, sírásban végződik, vagy egyszerűen kiszáll a feladatból. Félsz, hogy az iskolában ez <strong>magatartásproblémává</strong> nő. <em>Pontosan ezért építünk be sok &bdquo;biztonságos hibázást&rdquo; a foglalkozásokba.</em></p>
+          </article>
+
+          <article class="iek-persona-card" style="--persona-accent: var(--clr-purple); --persona-accent-light: rgba(155,123,195,0.15); --persona-accent-text: #5e3e8a;">
+            <div class="iek-persona-card__icon" aria-hidden="true">🎯</div>
+            <span class="iek-persona-card__label">Okos a gyermeked &mdash; csak nem tudja megmutatni</span>
+            <p class="iek-persona-card__body">Tudod, hogy okos. De nem tud sokáig megülni egy helyben, az unalmas helyzetekben elkalandozik vagy zavarja a társakat. Félsz, hogy a tanító néni a viselkedést látja, és <strong>nem a benne rejlő tudást</strong>. <em>Itt nálunk pont ezt fejlesztjük: a feladatban maradás képességét és az önkontrollt.</em></p>
+          </article>
+
+          <article class="iek-persona-card" style="--persona-accent: var(--clr-sky); --persona-accent-light: rgba(107,169,212,0.18); --persona-accent-text: #2d6597;">
+            <div class="iek-persona-card__icon" aria-hidden="true">🤐</div>
+            <span class="iek-persona-card__label">A gyermeked szorongó &mdash; szeretnéd, ha mert volna jelentkezni</span>
+            <p class="iek-persona-card__body">Nem mer megszólalni idegen helyzetben, elnémul, ha kérdezik. Szeretnéd, ha <strong>ki tudna állni magáért</strong>, bátran megmutatná, mit tud. A 8&ndash;10 fős kiscsoport pont erre való &mdash; biztonságos közeg, ahol <em>meg meri próbálni.</em></p>
+          </article>
+
+          <article class="iek-persona-card" style="--persona-accent: var(--clr-green); --persona-accent-light: rgba(122,191,101,0.16); --persona-accent-text: #3d7a2c;">
+            <div class="iek-persona-card__icon" aria-hidden="true">🧠</div>
+            <span class="iek-persona-card__label">Konkrét gyengébb területeket akarsz fejleszteni</span>
+            <p class="iek-persona-card__body">Tudod, hogy egyes részképességek &mdash; figyelem, koncentráció, emlékezet, finommotorika &mdash; gyengébbek a kívánatosnál. <strong>Célzott fejlesztést akarsz</strong>, nem általános &bdquo;majd jól lesz&rdquo;-t. <em>A bevonó mérésnél pontosan kijelöljük, mire kell fókuszálni nálatok.</em></p>
+          </article>
+        </div>
+
+        <div class="iek-persona-closer fade-up">
+          <p>Bárhol is állsz ezen a listán &mdash; <strong>nem vagy egyedül</strong>. Ezeknek a helyzeteknek mind van válasza, és mi pontosan tudjuk, hogyan szabjuk a programot a Te gyermekedhez. A <strong>bevonó felmérés</strong> is része ennek &mdash; nem egy &bdquo;tesztelés&rdquo;, hanem gondos kutatás arra, hogy mire van szüksége PONTOSAN a Te gyermekednek.</p>
+          <div class="iek-persona-closer-cta">
+            <a href="#jelentkezes-nyari" class="btn btn-primary">Bebiztosítom a nyári helyet</a>
+            <a href="#jelentkezes-tanevi" class="btn btn-teal">Bebiztosítom a tanévi helyet</a>
+            <a href="tel:+36303649396" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.4);">Inkább előbb beszéljünk</a>
+          </div>
         </div>
       </div>
     </section>
@@ -1496,6 +1724,66 @@ headStyles: |
             <h4>Kommunikáció</h4>
             <p>Szókincs, mondatszerkesztés, kérdezés, véleménynyilvánítás — az osztálytermi részvétel kulcsa.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+
+    {# ── USP — "Miben más?" 7 differenciátor ── #}
+    <section class="section section-white" aria-labelledby="iek-usp">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">Nem mind iskola-előkészítő, ami iskola-előkészítő</span>
+          <h2 id="iek-usp" class="fade-up stagger-1">7 dolog, amitől minket választanak &mdash; és nem a következő sarki foglalkozást</h2>
+          <p class="fade-up stagger-2" style="max-width:720px;margin:0 auto;">Tudjuk: 5&ndash;6 éves szülőként sok &bdquo;iskolaelőkészítő&rdquo; programba botlasz. Nem győzködünk. Megmutatjuk, miben dolgozunk MÁSKÉPP &mdash; döntsd el Te.</p>
+        </div>
+
+        <div class="iek-usp-grid">
+          <article class="iek-usp-item fade-up">
+            <span class="iek-usp-item__num" aria-hidden="true">1</span>
+            <h3 class="iek-usp-item__claim">Először a szőnyegen ülünk. Az asztal csak később jön.</h3>
+            <p class="iek-usp-item__body">A legtöbb iskola-előkészítő rögtön <strong>az asztalhoz</strong> ülteti a gyermeket: most figyelj, most gyakorolj, most írj. Mi nem. Játékkal kezdünk a szőnyegen &mdash; és csak amikor a gyermek <strong>része lett</strong> a folyamatnak, akkor jön a papír-ceruza. Mert egy ötéves agya nem így van bedrótozva, hogy &bdquo;most ülj le és tanulj&rdquo;. Be kell vezetni, kézen fogva.</p>
+          </article>
+
+          <article class="iek-usp-item fade-up stagger-1">
+            <span class="iek-usp-item__num" aria-hidden="true">2</span>
+            <h3 class="iek-usp-item__claim">Részképesség-fejlesztés a programban &mdash; nem csak betűk és számok.</h3>
+            <p class="iek-usp-item__body">Mielőtt egyetlen betűt vagy számot vázolnánk, építjük az alapot: <strong>figyelem, finommotorika, szerialitás, vizuális differenciálás</strong> &mdash; mozgásfejlesztő játékokkal is. Mert ha ezek nincsenek a helyükön, a betűtanulás csak felszíni marad &mdash; az első kudarcoknál ősszel összedől. Mi nem ezt akarjuk.</p>
+          </article>
+
+          <article class="iek-usp-item fade-up stagger-2">
+            <span class="iek-usp-item__num" aria-hidden="true">3</span>
+            <h3 class="iek-usp-item__claim">A gyermeknek <em>szeretnie kell</em> &mdash; különben az egésznek vége.</h3>
+            <p class="iek-usp-item__body">Hogyha unalmas, ijesztő vagy stresszes egy &bdquo;iskola-előkészítő&rdquo;, a gyermek mentálisan kiszáll. <strong>Nincs motiváció, nincs fenntartható tanulás, nincs eredmény.</strong> A mi foglalkozásainkra vidáman jönnek a gyerekek &mdash; ez nem véletlen, hanem a módszertan szerves része.</p>
+          </article>
+
+          <article class="iek-usp-item fade-up stagger-3">
+            <span class="iek-usp-item__num" aria-hidden="true">4</span>
+            <h3 class="iek-usp-item__claim">Alexandra saját módszertana &mdash; 15 éve minden évben frissítve.</h3>
+            <p class="iek-usp-item__body">A programot <strong>Szabó-Varga Alexandra</strong> fejlesztőpedagógus, alapító építette fel. Nem évek óta változatlan füzet, nem letöltött tananyag &mdash; minden évben hozzáteszi az <strong>új tapasztalatokat</strong>. Vagyis a gyermeked bizonyítottan hatékony és napra kész programmal találkozik. Nem egy 2010-es évek elején lefagyottal.</p>
+          </article>
+
+          <article class="iek-usp-item fade-up">
+            <span class="iek-usp-item__num" aria-hidden="true">5</span>
+            <h3 class="iek-usp-item__claim">Bemeneti + kimeneti mérés &mdash; fekete-fehér, mennyit fejlődött.</h3>
+            <p class="iek-usp-item__body">Az indulásnál <strong>bevonó méréssel</strong> kezdünk: konkrét képet kapsz a gyermek aktuális tudásáról. A program végén <strong>kimeneti mérés + írásos szülői elemzés</strong>: pontosan látod, mennyit fejlődött, hol az erőssége, hol vannak még tartalékok. Nem &bdquo;remélem, fejlődött&rdquo;. Dokumentált.</p>
+          </article>
+
+          <article class="iek-usp-item fade-up stagger-1">
+            <span class="iek-usp-item__num" aria-hidden="true">6</span>
+            <h3 class="iek-usp-item__claim">Egy egész szakmai csapat áll mögöttünk &mdash; ha másra is szükség van, már látjuk.</h3>
+            <p class="iek-usp-item__body">A BagolykaLandben sokféle más fejlesztő foglalkozás is fut: mozgásfejlesztés, logopédia, szorongásoldó program, egyéni terápia. Hogyha az iskola-előkészítőn <strong>kívül</strong> másra is szüksége van a gyermekednek, azonnal látjuk és segítünk irányt mutatni. Amíg hozzánk jár &mdash; <strong>teljes körű szakmai monitorozás</strong> alatt áll.</p>
+          </article>
+
+          <article class="iek-usp-item fade-up stagger-2" style="grid-column: 1 / -1; max-width:720px; margin: 0 auto;">
+            <span class="iek-usp-item__num" aria-hidden="true">7</span>
+            <h3 class="iek-usp-item__claim">Minden óra után tájékoztatunk &mdash; és kapsz konkrét otthoni tippeket.</h3>
+            <p class="iek-usp-item__body">A 8&ndash;10 fős kiscsoport miatt minden gyermekre jut egyéni figyelem. <strong>Minden alkalom után elmondjuk Neked, hogyan dolgozott aznap a gyermeked</strong>: hol szárnyalt, hol akadt el. Átbeszéljük a hiányosságokat &mdash; és kapsz konkrét tippeket arra, hogyan segíthetsz otthon. Nem &bdquo;majd a félévi tájékoztatón&rdquo;. <strong>Hetente.</strong></p>
+          </article>
+        </div>
+
+        <div class="iek-usp-closer fade-up">
+          Ezeket egy random iskola-előkészítőnél nem fogod megtalálni. Mi pontosan ezért dolgozunk így <strong>&mdash; mert láttuk, mi működik az elmúlt 15 év 1000+ gyermekén.</strong>
         </div>
       </div>
     </section>
