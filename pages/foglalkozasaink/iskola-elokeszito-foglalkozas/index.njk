@@ -996,6 +996,271 @@ headStyles: |
       .moz-value-item { font-size: 0.85rem; }
       .moz-value-actual { font-size: 1.1rem; padding: 1.1rem; }
     }
+
+    /* ── PROOF BANNER (oklevélosztó csoportkép + idézet) ── */
+    .iek-proof-banner {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 2.25rem;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, rgba(245,198,64,0.08) 0%, rgba(43,116,109,0.06) 100%);
+      border: 1px solid rgba(43,116,109,0.18);
+      border-radius: var(--r-xl);
+      padding: 1.75rem;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.05);
+    }
+    @media (max-width: 860px) {
+      .iek-proof-banner { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.25rem; }
+    }
+    .iek-proof-banner__media {
+      position: relative;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: 0 14px 36px rgba(29,53,87,0.18);
+      aspect-ratio: 4 / 3;
+    }
+    .iek-proof-banner__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform var(--t-slow);
+    }
+    .iek-proof-banner:hover .iek-proof-banner__media img { transform: scale(1.03); }
+    .iek-proof-banner__media::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 35%;
+      background: linear-gradient(to top, rgba(0,0,0,0.45), transparent);
+      pointer-events: none;
+    }
+    .iek-proof-banner__caption {
+      position: absolute;
+      bottom: 0.8rem;
+      left: 1rem;
+      right: 1rem;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      z-index: 2;
+    }
+    .iek-proof-banner__body { padding: 0.25rem 0.5rem; }
+    .iek-proof-banner__eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clr-teal-dark);
+      background: rgba(43,116,109,0.1);
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--r-full);
+      margin-bottom: 0.85rem;
+    }
+    .iek-proof-banner__body h3 {
+      font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+      margin: 0 0 0.85rem;
+      color: var(--clr-navy);
+      line-height: 1.25;
+    }
+    .iek-proof-banner__body p {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--clr-text);
+      margin: 0 0 1rem;
+    }
+    .iek-proof-banner__stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1rem;
+    }
+    .iek-proof-banner__stat {
+      flex: 1;
+      min-width: 110px;
+      background: #fff;
+      border-radius: var(--r-md);
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .iek-proof-banner__stat-num {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--clr-teal-dark);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .iek-proof-banner__stat-label {
+      font-size: 0.78rem;
+      color: var(--clr-text-mid);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    /* ── GALÉRIA (7 valós foglalkozás kép) ── */
+    .iek-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.85rem;
+      max-width: 1180px;
+      margin: 2rem auto 0;
+    }
+    @media (max-width: 900px) { .iek-gallery { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { .iek-gallery { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; } }
+
+    .iek-gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--r-md);
+      aspect-ratio: 4 / 3;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: transform var(--t-mid), box-shadow var(--t-mid);
+      padding: 0;
+      border: none;
+      background: transparent;
+      font: inherit;
+      color: inherit;
+      width: 100%;
+      display: block;
+    }
+    .iek-gallery-item:focus-visible {
+      outline: 3px solid var(--clr-yellow);
+      outline-offset: 3px;
+    }
+    .iek-gallery-item:nth-child(1) {
+      grid-column: span 2;
+      grid-row: span 2;
+      aspect-ratio: 1 / 1;
+    }
+    @media (max-width: 900px) {
+      .iek-gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    }
+    @media (max-width: 640px) {
+      .iek-gallery-item:nth-child(1) { grid-column: span 2; grid-row: auto; aspect-ratio: 4 / 3; }
+    }
+    .iek-gallery-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+    }
+    .iek-gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform var(--t-slow);
+    }
+    .iek-gallery-item:hover img { transform: scale(1.05); }
+    .iek-gallery-item__caption {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 0.75rem 0.9rem 0.7rem;
+      background: linear-gradient(to top, rgba(29,53,87,0.92) 0%, rgba(29,53,87,0.45) 70%, transparent 100%);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: 0.01em;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity var(--t-mid), transform var(--t-mid);
+    }
+    .iek-gallery-item:hover .iek-gallery-item__caption,
+    .iek-gallery-item:focus-visible .iek-gallery-item__caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .iek-gallery-item:nth-child(1) .iek-gallery-item__caption {
+      opacity: 1;
+      transform: translateY(0);
+      font-size: 0.88rem;
+      padding: 1rem 1.2rem 0.95rem;
+    }
+    @media (hover: none) {
+      .iek-gallery-item__caption { opacity: 1; transform: translateY(0); font-size: 0.72rem; padding: 0.55rem 0.7rem 0.5rem; }
+    }
+
+    /* Lightbox dialog */
+    .iek-lightbox {
+      padding: 0;
+      border: none;
+      background: transparent;
+      max-width: min(95vw, 1200px);
+      max-height: 95vh;
+    }
+    .iek-lightbox::backdrop { background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); }
+    .iek-lightbox img {
+      max-width: 100%;
+      max-height: 88vh;
+      width: auto;
+      height: auto;
+      border-radius: var(--r-md);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      display: block;
+      margin: 0 auto;
+    }
+    .iek-lightbox__caption {
+      color: #fff;
+      text-align: center;
+      margin-top: 0.85rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+    .iek-lightbox__close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      font-size: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--t-fast);
+    }
+    .iek-lightbox__close:hover { background: rgba(255,255,255,0.3); }
+
+    /* ── INLINE IMAGE BLOCK (Skill / Method sections) ── */
+    .iek-inline-photo {
+      max-width: 760px;
+      margin: 2.25rem auto 0;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.1);
+      position: relative;
+      aspect-ratio: 16 / 9;
+    }
+    .iek-inline-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .iek-inline-photo__caption {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(to top, rgba(29,53,87,0.88), transparent);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
 ---
 
 
@@ -1146,6 +1411,41 @@ headStyles: |
     </section>
 
 
+    {# ── PROOF BANNER — záró ünnepség oklevelekkel ── #}
+    <section class="section section-cream" aria-labelledby="iek-proof" style="padding-top:var(--sp-2xl);">
+      <div class="container">
+        <div class="iek-proof-banner fade-up">
+          <div class="iek-proof-banner__media">
+            <img
+              src="/img/bagolykaland-iskola-elokeszito-zaro-unnepseg-oklevelek.webp"
+              alt="Záró ünnepség oklevelekkel — BagolykaLand iskola-előkészítő csoport gyermekek Szabó-Varga Alexandra fejlesztőpedagógussal Debrecen"
+              width="1400" height="1050" loading="lazy" decoding="async" />
+            <span class="iek-proof-banner__caption">2024. záró ünnepség &middot; az egyik iskola-előkészítő csoportunk</span>
+          </div>
+          <div class="iek-proof-banner__body">
+            <span class="iek-proof-banner__eyebrow">Bizonyított eredmény</span>
+            <h3 id="iek-proof">Így zárul nálunk a felkészítés &mdash; oklevéllel, magabiztosan</h3>
+            <p>Minden évben így zárjuk a programot: a gyermekek <strong>kézzel fogható elismerést</strong> kapnak az elvégzett munkáról, a szülők pedig írásos szülői elemzést a kimeneti mérésről. Nem szlogen &mdash; <strong>15+ év, 1000+ felkészített gyermek</strong> mögötti rutin.</p>
+            <div class="iek-proof-banner__stats">
+              <div class="iek-proof-banner__stat">
+                <span class="iek-proof-banner__stat-num">1000+</span>
+                <span class="iek-proof-banner__stat-label">Felkészített gyermek 15 év alatt</span>
+              </div>
+              <div class="iek-proof-banner__stat">
+                <span class="iek-proof-banner__stat-num">8&ndash;10 fő</span>
+                <span class="iek-proof-banner__stat-label">Maximum csoportlétszám &mdash; teljes körű figyelem</span>
+              </div>
+              <div class="iek-proof-banner__stat">
+                <span class="iek-proof-banner__stat-num">100%</span>
+                <span class="iek-proof-banner__stat-label">Kimeneti mérés + írásos elemzés</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
     {# ── 8 SKILLS ── #}
     <section class="section section-cream" aria-labelledby="iek-skills">
       <div class="container">
@@ -1270,6 +1570,92 @@ headStyles: |
 
         <p class="fade-up" style="max-width:700px;margin:2rem auto 0;text-align:center;color:var(--clr-text-mid);font-size:0.95rem;line-height:1.7;">A BagolykaLandben hisszük: <strong>igazán akkor lehet eredményes a tanulás, ha a gyermek szereti, amit csinál.</strong> Felkészült pedagógiai munka, biztatás és szeretetteljes koordináció &mdash; ez nálunk nem szólam, hanem napi gyakorlat.</p>
       </div>
+    </section>
+
+
+    {# ── VALÓS FOGLALKOZÁSOK — GALÉRIA ── #}
+    <section class="section section-white" aria-labelledby="iek-gallery">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow fade-up">Így néz ki egy foglalkozás belülről</span>
+          <h2 id="iek-gallery" class="fade-up stagger-1">Valós csoportképek &mdash; nem stock fotók</h2>
+          <p class="fade-up stagger-2" style="max-width:680px;margin:0 auto;">A BagolykaLand iskola-előkészítő csoportjainak valós pillanatai &mdash; finommotorika, szerialitás, mozgásfejlesztés, csoport-dinamika. Kattints a képre a teljes méretért.</p>
+        </div>
+
+        <div class="iek-gallery fade-up" role="list">
+          <button type="button" class="iek-gallery-item" role="listitem"
+                  data-lightbox="/img/bagolykaland-iskola-elokeszito-csoportos-lego-finommotorika.webp"
+                  data-caption="Csoportos LEGO-építés körben &mdash; finommotorika és kreativitás kiscsoportban">
+            <img src="/img/bagolykaland-iskola-elokeszito-csoportos-lego-finommotorika.webp"
+                 alt="Csoportos LEGO-építés a BagolykaLand iskola-előkészítő foglalkozáson Debrecenben — finommotorika fejlesztés"
+                 width="1200" height="900" loading="lazy" decoding="async" />
+            <span class="iek-gallery-item__caption">Csoportos LEGO-építés &mdash; finommotorika és figyelem körben</span>
+          </button>
+
+          <button type="button" class="iek-gallery-item" role="listitem"
+                  data-lightbox="/img/bagolykaland-iskola-elokeszito-szerialitas-kavicsok.webp"
+                  data-caption="Szerialitás-fejlesztés kavicsokkal &mdash; sorrendiség és figyelem a kiscsoportban">
+            <img src="/img/bagolykaland-iskola-elokeszito-szerialitas-kavicsok.webp"
+                 alt="Kavicsok sorba rendezése — szerialitás-fejlesztés a BagolykaLand iskola-előkészítő foglalkozáson"
+                 width="1200" height="1600" loading="lazy" decoding="async" />
+            <span class="iek-gallery-item__caption">Szerialitás &middot; kavicsok és sorrendiség</span>
+          </button>
+
+          <button type="button" class="iek-gallery-item" role="listitem"
+                  data-lightbox="/img/bagolykaland-iskola-elokeszito-finommotorika-kez-rajzolas.webp"
+                  data-caption="Finommotorika: kéz körberajzolása papíron &mdash; ceruzafogás és vonalvezetés előkészítés">
+            <img src="/img/bagolykaland-iskola-elokeszito-finommotorika-kez-rajzolas.webp"
+                 alt="Kéz körberajzolása papíron — finommotorika gyakorlat iskola-előkészítő foglalkozáson"
+                 width="1200" height="1066" loading="lazy" decoding="async" />
+            <span class="iek-gallery-item__caption">Finommotorika &middot; ceruzafogás és vonalvezetés</span>
+          </button>
+
+          <button type="button" class="iek-gallery-item" role="listitem"
+                  data-lightbox="/img/bagolykaland-iskola-elokeszito-csoport-kor-2025.webp"
+                  data-caption="Csoportos kör-foglalkozás 2025 &mdash; szociális kompetencia és együttműködés">
+            <img src="/img/bagolykaland-iskola-elokeszito-csoport-kor-2025.webp"
+                 alt="Iskola-előkészítő csoport körben — szociális kompetencia foglalkozás BagolykaLand Debrecen 2025"
+                 width="1200" height="900" loading="lazy" decoding="async" />
+            <span class="iek-gallery-item__caption">Csoport-dinamika &middot; kooperáció kiscsoportban (2025)</span>
+          </button>
+
+          <button type="button" class="iek-gallery-item" role="listitem"
+                  data-lightbox="/img/bagolykaland-iskola-elokeszito-tantargyi-alapok.webp"
+                  data-caption="Tantárgyi alapok &mdash; szabályalapú feladatok színes lapokon, kiscsoportos foglalkozáson">
+            <img src="/img/bagolykaland-iskola-elokeszito-tantargyi-alapok.webp"
+                 alt="Tantárgyi előkészület feladatlapokon — iskola-előkészítő foglalkozás kiscsoportban Debrecen"
+                 width="1200" height="1600" loading="lazy" decoding="async" />
+            <span class="iek-gallery-item__caption">Tantárgyi alapok &middot; figyelem-feladatok</span>
+          </button>
+
+          <button type="button" class="iek-gallery-item" role="listitem"
+                  data-lightbox="/img/bagolykaland-iskola-elokeszito-mozgasfejlesztes-labdak.webp"
+                  data-caption="Mozgásfejlesztés színes labdákkal és balanszírozó eszközökkel &mdash; téri orientáció és koordináció">
+            <img src="/img/bagolykaland-iskola-elokeszito-mozgasfejlesztes-labdak.webp"
+                 alt="Mozgásfejlesztés labdákkal — téri orientáció és koordináció iskola-előkészítő foglalkozáson"
+                 width="1200" height="900" loading="lazy" decoding="async" />
+            <span class="iek-gallery-item__caption">Mozgásfejlesztés &middot; koordináció és téri orientáció</span>
+          </button>
+
+          <button type="button" class="iek-gallery-item" role="listitem"
+                  data-lightbox="/img/bagolykaland-iskola-elokeszito-jatekos-csoport.webp"
+                  data-caption="Játékos csoport-foglalkozás &mdash; iskolaérettségre felkészítő tevékenységek terápiás eszközökkel">
+            <img src="/img/bagolykaland-iskola-elokeszito-jatekos-csoport.webp"
+                 alt="Játékos csoportfoglalkozás — iskolaérettségre felkészítés terápiás eszközökkel Debrecen BagolykaLand"
+                 width="1200" height="900" loading="lazy" decoding="async" />
+            <span class="iek-gallery-item__caption">Játékos csoport &middot; iskolára felkészítő eszközpark</span>
+          </button>
+        </div>
+
+        <p class="fade-up" style="text-align:center;margin:2rem auto 0;max-width:600px;color:var(--clr-text-mid);font-size:0.92rem;">A képek a BagolykaLand csoportos foglalkozásairól készültek &mdash; szülői engedéllyel közölve. <a href="/galeria/" style="color:var(--clr-teal);font-weight:700;">Még több kép a galériában →</a></p>
+      </div>
+
+      {# ── LIGHTBOX dialog (egy db, megosztva minden képpel) ── #}
+      <dialog class="iek-lightbox" id="iek-lightbox" aria-label="Kép nagyítva">
+        <button type="button" class="iek-lightbox__close" aria-label="Bezárás">&times;</button>
+        <img src="" alt="" />
+        <p class="iek-lightbox__caption"></p>
+      </dialog>
     </section>
 
 
@@ -1996,5 +2382,38 @@ headStyles: |
           io.observe(el);
         });
       }
+    })();
+
+    // ── Galéria lightbox ──
+    (function() {
+      var dialog = document.getElementById('iek-lightbox');
+      if (!dialog || typeof dialog.showModal !== 'function') return;
+      var items = document.querySelectorAll('.iek-gallery-item[data-lightbox]');
+      var img = dialog.querySelector('img');
+      var cap = dialog.querySelector('.iek-lightbox__caption');
+      var closeBtn = dialog.querySelector('.iek-lightbox__close');
+
+      items.forEach(function(item) {
+        item.addEventListener('click', function() {
+          var src = item.getAttribute('data-lightbox');
+          var caption = item.getAttribute('data-caption') || '';
+          var innerImg = item.querySelector('img');
+          img.src = src;
+          img.alt = innerImg ? innerImg.getAttribute('alt') : caption;
+          cap.innerHTML = caption;
+          dialog.showModal();
+          if (window.dataLayer) {
+            window.dataLayer.push({ event: 'bk_gallery_open', gallery_src: src });
+          }
+        });
+      });
+
+      closeBtn.addEventListener('click', function() { dialog.close(); });
+      dialog.addEventListener('click', function(e) {
+        var rect = img.getBoundingClientRect();
+        var inside = e.clientX >= rect.left && e.clientX <= rect.right
+                  && e.clientY >= rect.top  && e.clientY <= rect.bottom;
+        if (!inside && e.target === dialog) dialog.close();
+      });
     })();
     </script>
