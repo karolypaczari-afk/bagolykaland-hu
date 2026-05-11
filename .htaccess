@@ -49,6 +49,10 @@ ErrorDocument 404 /pages/404/index.html
   # Casino affiliate-brand slugs
   RewriteRule ^(admiral|gaminator|5gringos|20bet|7bit|buran|malina|betwinner|betfair)-.*$ - [G,L]
 
+  # Additional casino/bookmaker brand names (added 2026-05-11)
+  RewriteRule ^(mostbet|1xbet|22bet|melbet|1win|pinup|pin-up|stake|fortuna|tipico|williamhill|bwin|bet365|betano|betclic|paripesa|leon|gg-bet)-.*$ - [G,L,NC]
+  RewriteRule ^.*-(mostbet|1xbet|22bet|melbet|1win|pinup|pin-up|stake|tipico|williamhill|bwin|bet365|betano|betclic|paripesa|leon|gg-bet).*$ - [G,L,NC]
+
   # Gambling topic slugs (encoded + decoded Hungarian variants)
   RewriteRule ^.*casino.*$ - [G,L,NC]
   RewriteRule ^.*kaszin.*$ - [G,L,NC]
@@ -64,6 +68,35 @@ ErrorDocument 404 /pages/404/index.html
   RewriteRule ^poker-.*$ - [G,L,NC]
   RewriteRule ^%C3%A9l%C5%91-.*$ - [G,L,NC]
   RewriteRule ^%C3%BAj-(kaszin|online-baccarat|online-rulett|nyer|casino).*$ - [G,L,NC]
+
+  # English gambling/betting vocabulary (hyphen-bounded so legitimate
+  # Hungarian words aren't hit; no current sitemap URL contains any of
+  # these tokens, verified 2026-05-11).
+  RewriteRule ^.*-bonus($|[-_/]).*$ - [G,L,NC]
+  RewriteRule ^bonus[-_/].*$ - [G,L,NC]
+  RewriteRule ^.*-slots?($|[-_/]).*$ - [G,L,NC]
+  RewriteRule ^slots?[-_/].*$ - [G,L,NC]
+  RewriteRule ^.*-roulette.*$ - [G,L,NC]
+  RewriteRule ^roulette[-_/].*$ - [G,L,NC]
+  RewriteRule ^.*-jackpot.*$ - [G,L,NC]
+  RewriteRule ^jackpot[-_/].*$ - [G,L,NC]
+  RewriteRule ^.*-lottery.*$ - [G,L,NC]
+  RewriteRule ^.*-lotto($|[-_/]).*$ - [G,L,NC]
+  RewriteRule ^.*-gambling.*$ - [G,L,NC]
+  RewriteRule ^gambling[-_/].*$ - [G,L,NC]
+  RewriteRule ^.*-payout.*$ - [G,L,NC]
+  RewriteRule ^.*-deposit[-_/].*$ - [G,L,NC]
+  RewriteRule ^.*-betting.*$ - [G,L,NC]
+  RewriteRule ^betting[-_/].*$ - [G,L,NC]
+  RewriteRule ^.*-bookmaker.*$ - [G,L,NC]
+  RewriteRule ^.*-no-deposit.*$ - [G,L,NC]
+  RewriteRule ^.*-free-spins?.*$ - [G,L,NC]
+  RewriteRule ^.*-cashback.*$ - [G,L,NC]
+
+  # /hu/* catch-all — bagolykaland.hu is monolingual (Hungarian only); no
+  # content lives under /hu/. All observed /hu/* traffic is spam injection
+  # (Search Console 2026-05-11). 410 the whole prefix.
+  RewriteRule ^hu/.*$ - [G,L]
 </IfModule>
 
 # --- Clean URLs: /slug/ serves from /pages/slug/ ---
