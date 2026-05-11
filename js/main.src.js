@@ -87,6 +87,16 @@
           content_category: 'lead_magnet',
         });
       }
+      // GA4 standard lead conversion — picked up automatically by Google Ads
+      // via the GA4 → Ads link once that's configured. Value is the lead
+      // magnet's intrinsic worth (downstream conversion-rate × LTV estimate).
+      if (window.BKAnalytics) {
+        window.BKAnalytics.fireLead({
+          lead_source: params.lc_source || 'bagolykaland',
+          lead_type: 'lead_magnet',
+          value: 3000
+        });
+      }
 
     } else if (eventName === 'bk_program_signup') {
       var program = params.program || '';
@@ -124,11 +134,42 @@
         }, dedup);
       }
 
+      // GA4 standard generate_lead — value mirrors the program's economic
+      // weight so Google Ads optimization (once enabled) bids accordingly.
+      if (window.BKAnalytics) {
+        var programValue =
+          program === CAMP_PROGRAM_NAME                  ? CAMP_VALUE_HUF :
+          program === SZORONGAS_PROGRAM_NAME             ? SZORONGAS_VALUE_HUF :
+          program === SCHOOL_PREP_INTENSIVE_PROGRAM_NAME ? SCHOOL_PREP_INTENSIVE_VALUE_HUF :
+          5000;
+        window.BKAnalytics.fireLead({
+          lead_source: 'program_signup',
+          lead_type:
+            program === CAMP_PROGRAM_NAME ? 'summer_camp' :
+            program === SCHOOL_PREP_INTENSIVE_PROGRAM_NAME ? 'school_prep_intensive' :
+            'program_inquiry',
+          program: program,
+          turnus: params.turnus || '',
+          value: programValue
+        });
+      }
+
     } else if (eventName === 'bk_contact_form_success') {
       var contactDedup = params.event_id ? { eventID: params.event_id } : undefined;
       window.fbq('track', 'Contact', {
         content_name: params.form_name || 'contact-form',
       }, contactDedup);
+
+      // Generic contact form → still counts as a lead for Google Ads
+      // optimization, but at lower value than program-specific inquiries.
+      if (window.BKAnalytics) {
+        window.BKAnalytics.fireLead({
+          lead_source: 'contact_form',
+          lead_type: 'contact',
+          form_name: params.form_name || 'contact-form',
+          value: 1500
+        });
+      }
 
     } else if (eventName === 'bk_cta_click') {
       window.fbq('track', 'ViewContent', { content_name: params.cta_label || '' });

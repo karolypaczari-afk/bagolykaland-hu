@@ -354,6 +354,7 @@ Public URLs are clean: `/rolunk/`, `/arlista/` — no `/pages/` prefix. `.htacce
 ### Files
 
 - `js/tracking.src.js` — vendor config + defaults
+- `js/analytics.src.js` — **attribution capture (`gclid`/`gbraid`/`wbraid`/`fbclid`/`msclkid`/`utm_*` → 90-day cookie + localStorage) + GA4 custom events** (`view_service`, `view_program`, `view_camp`, `view_assessment`, `phone_click`, `email_click`, `cta_click`, `scroll_depth_50/75`, `form_start`, `generate_lead`). Exposes `window.BKAttribution` and `window.BKAnalytics`. Auto-merges attribution + content_group/page_category/service_slug into every GA4 event. **Loaded BEFORE tracking-loader.js** so the page_view carries default params. Full reference: `_docs/analytics-tracking.md`.
 - `js/tracking-loader.src.js` — consent-gated bootstrap. Exposes `window.BKTracking`
 - `js/meta-enhance.src.js` — Meta Pixel enrichment (CAPI, Advanced Matching, dedup eventIDs). Persists SHA-256 hashes into `localStorage` (`bk_meta_em_hash`, `bk_meta_ph_hash`, `bk_meta_fn_hash`, `bk_meta_ln_hash`) after any form submit — **these hashes are reused by Google Ads Enhanced Conversions, no extra tagging needed**
 - `js/cookie-consent.src.js` — opt-out banner (consent granted by default on first visit, persists on scroll/click/button)
@@ -399,6 +400,14 @@ GTM-friendly `bk_*` events already pushed: `bk_cta_click`, `bk_contact_click`, `
 The current nyári tábor ad set optimizes on `CampApplication` via a custom conversion embedded in `promoted_object.pixel_rule`. Diagnose campaign-missing-conversions questions by splitting them: (a) did the event reach Meta? — check `api/logs/capi.log` for `http=200`; (b) did the campaign get credit? — check campaign performance `actions.lead`. These are different questions; a lead from organic traffic is invisible to campaign insights but still appears in Events Manager.
 
 **On-demand reference:** `_docs/meta-ads-tracking.md` covers the ad set `promoted_object` pattern, the Custom-Conversion-vs-`pixel_rule` distinction, the `fbc`-from-`fbclid` synthesis fallback, the standard diagnostic flow, and live campaign/ad-set IDs. **Only read it when actually investigating Meta tracking** — do not auto-load it for unrelated work.
+
+### GA4 + attribution (`analytics.src.js`)
+
+Captures `gclid`/`gbraid`/`wbraid`/`fbclid`/`msclkid`/`utm_*` into a 90-day first-party cookie (`bk_attrib`) + localStorage. New click-ID = last-click overwrite; bare UTM fills missing only. Every GA4 event auto-receives the stored attribution + `content_group` + `page_category` + `service_slug` + `lang` via a `gtag('set', {...})` call that runs BEFORE `tracking-loader` fires `gtag('config', G-86N523JP3E)`.
+
+GA4 custom events: `view_camp` / `view_program` / `view_course` / `view_service` / `view_assessment` (session-gated), `phone_click`, `email_click`, `cta_click` (cta_type=program/service/contact/form_anchor/engagement), `scroll_depth_50`, `scroll_depth_75`, `form_start`, `generate_lead`. The `generate_lead` event fires from `main.src.js` `track()` on `bk_lead_catcher_submit` / `bk_program_signup` / `bk_contact_form_success` — value mirrors the program economic weight (camp 75k, szorongásoldó 90k, intenzív iskola-előkészítő 140k, generic program 5k, lead magnet 3k, contact form 1.5k).
+
+**On-demand reference:** `_docs/analytics-tracking.md` covers the full event list, the manual GA4 custom-dimension setup (19 dimensions to register), the key-event toggle, and the Google Ads activation steps for when that account is set up. Read it when wiring new tracking or auditing GA4 dimensions.
 
 ### "Never break" rules
 
