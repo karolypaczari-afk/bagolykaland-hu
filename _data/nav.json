@@ -10,8 +10,8 @@
             { "label": "Logopédiai vizsgálat",           "url": "/vizsgalatok/logopediai-vizsgalat/",              "icon": "/img/service_logopedia_ai.webp",   "desc": "Beszédállapot felmérése", "group": "Vizsgálatok" },
             { "label": "Iskolaérettségi vizsgálat",      "url": "/vizsgalatok/iskolaerettsegi-vizsgalat/",         "icon": "/img/service_iskola_ai.webp",      "desc": "Iskolaérettség megállapítása", "group": "Vizsgálatok" },
             { "label": "Komplex részképesség vizsgálat", "url": "/vizsgalatok/komplex-reszkepesseg-vizsgalat/",    "icon": "/img/service_vizsgalatok_ai.webp", "desc": "Átfogó képességfelmérés", "group": "Vizsgálatok" },
+            { "label": "Iskola-előkészítő foglalkozás",  "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/", "icon": "/img/service_iskola_ai.webp", "desc": "Tanévi + nyári intenzív 5–7 éveseknek", "badge": "Jelentkezés nyitva!", "group": "Programok" },
             { "label": "Kincskereső Élménytábor",        "url": "/nyari-tabor/",                                   "icon": "/img/service_iskola_ai.webp", "desc": "Nyári fejlesztő tábor 5–8 éveseknek", "badge": "Nyári!", "group": "Programok" },
-            { "label": "Iskola-előkészítő foglalkozás",  "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/", "icon": "/img/service_iskola_ai.webp", "desc": "Felkészítés az iskolakezdésre", "badge": "Népszerű", "group": "Programok" },
             { "label": "Kézen fogva – online finommotorika", "url": "/kezen-fogva-online-finommotorika-fejlesztes/", "desc": "Online fejlesztő program", "badge": "Online", "group": "Programok" }
         ],
         "megaExtra": {
@@ -40,8 +40,8 @@
                 {
                     "title": "Programok",
                     "items": [
+                        { "label": "Iskola-előkészítő foglalkozás",     "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/", "desc": "Tanévi + nyári intenzív 5–7 éveseknek", "badge": "Jelentkezés nyitva!" },
                         { "label": "Kincskereső Élménytábor",           "url": "/nyari-tabor/",                                    "desc": "Nyári fejlesztő tábor júliusban", "badge": "Nyári!" },
-                        { "label": "Iskola-előkészítő foglalkozás",     "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/", "desc": "Felkészítés az iskolakezdésre", "badge": "Népszerű" },
                         { "label": "Kézen fogva – online finommotorika", "url": "/kezen-fogva-online-finommotorika-fejlesztes/",   "desc": "Online fejlesztő program", "badge": "Online" }
                     ]
                 }
@@ -83,6 +83,7 @@
             ]
         }
     },
+    { "label": "Iskola-előkészítő", "url": "/foglalkozasaink/iskola-elokeszito-foglalkozas/", "highlight": true, "badge": "Jelentkezés nyitva!" },
     { "label": "Nyári tábor", "url": "/nyari-tabor/" },
     { "label": "Online képzéseink", "url": "https://zsenibagoly.hu/", "external": true }
 ]

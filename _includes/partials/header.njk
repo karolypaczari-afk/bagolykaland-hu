@@ -207,7 +207,11 @@
             {% elif item.external %}
               <li class="nav-item"><a class="nav-link" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.label }}<svg class="icon-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" style="margin-left:4px;vertical-align:-1px;opacity:.6"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
             {% else %}
-              <li class="nav-item"><a class="nav-link" href="{{ item.url }}">{{ item.label }}</a></li>
+              <li class="nav-item">
+                <a class="nav-link{% if item.highlight %} nav-link--highlight{% endif %}" href="{{ item.url }}">
+                  {{ item.label }}{% if item.highlight and item.badge %}<span class="nav-link__badge">{{ item.badge }}</span>{% endif %}
+                </a>
+              </li>
             {% endif %}
           {% endfor %}
         </ul>
@@ -272,7 +276,11 @@
       {% elif item.external %}
         <li><a class="mobile-nav-link" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.label }}<svg class="icon-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" style="margin-left:4px;vertical-align:-1px;opacity:.6"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
       {% else %}
-        <li><a class="mobile-nav-link" href="{{ item.url }}">{{ item.label }}</a></li>
+        <li>
+          <a class="mobile-nav-link{% if item.highlight %} mobile-nav-link--highlight{% endif %}" href="{{ item.url }}">
+            {{ item.label }}{% if item.highlight and item.badge %}<span class="mobile-nav-link__badge">{{ item.badge }}</span>{% endif %}
+          </a>
+        </li>
       {% endif %}
     {% endfor %}
   </ul>
