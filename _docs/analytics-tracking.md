@@ -180,20 +180,101 @@ https://bagolykaland.hu/?gclid=TEST_FROM_DEVTOOLS&utm_source=manual_test
 
 ---
 
-## Google Ads — még NEM aktív
+## Google Ads — aktiválás folyamatban (2026-05-11)
 
-Amikor a Google Ads fiók készen áll:
+**Állapot:**
+- ✅ Google Ads fiók létrehozva, Customer ID: `8433857843`
+- ✅ GA4 ↔ Google Ads link létezik (`properties/490802166/googleAdsLinks/14857371868`, létrehozva 2026-05-11 13:18)
+- ✅ `tracking.src.js` `gAdsId = 'AW-8433857843'` → AW config tag betöltődik (cross-domain linker, conversion enhanced data)
+- ✅ `main.src.js` `fireGoogleAdsConversion()` scaffold mind a 3 lead-path után meghívva (lead magnet 3.000 Ft, program signup variábilis 5k-252k Ft, contact form 1.500 Ft) — **label nélkül no-op**, production-safe
+- ⏳ `gAdsLabel` üres → direkt gtag conversion még nem tüzel; a GA4 import is hiányzik
+- ⏳ Enhanced Conversions toggle ki
+- ⏳ Customer data terms el nem fogadva
+- ⏳ GA4 stream "Include user-provided data for advertising" ki
+- ⚠️ GA4↔Ads link `ads_personalization_enabled: false` → remarketing audience-export nem működik
 
-1. Hozd létre a Google Ads konverziós action-t (típus: "Lead", értékkel).
-2. Linkeld a GA4 property-t a Google Ads-hez (GA4 Admin → Product links → Google Ads).
-3. Importáld a `generate_lead` GA4 event-et conversion-ként.
-4. **VAGY** közvetlen gtag konverzió-tag-et tegyél fel: tölts be `AW-...` ID-t a `js/tracking.src.js`-be (`gAdsId`, `gAdsLabel`) — a `BKTracking.pushEnhancedConversionsData()` már mind ki van építve, automatikusan küldi a hashed email/phone-t Enhanced Conversions-höz.
-5. 3 manuális UI toggle (mint Suryaayurveda-nál):
-   - Google Ads → Tools → Conversions → Settings → Customer data terms acceptance
-   - Adott conversion action → Enhanced conversions ON
-   - GA4 → Admin → Data Streams → web stream → "Include user-provided data for advertising" ON
+### Kétféle conversion-firing út, ne kombinálj
 
-Részleteket kérdezz a `claude` chat-ben, amikor a Google Ads-re kerül a sor.
+| | GA4 import (egyszerűbb) | Direkt gtag (precízebb) |
+|---|---|---|
+| Setup | Google Ads → Konverziók → Új → Importálás → GA4 → `generate_lead` | Konverziós action → Tag setup → label másolása → `js/tracking.src.js` `gAdsLabel` → `npm run build` |
+| Latency | 24-48 órás GA4 → Ads feldolgozás | Real-time (másodpercek) |
+| Enhanced Conv | A GA4 user_data ágon | A meta-enhance hash-eken (már mind ki van építve) |
+| Risk | Smart Bidding lassabb tanulás | Akkor sem tüzel ha JS hiba van az oldalon |
+| Dedup | — | Egyező `transaction_id`-vel a GA4 generate_lead-del |
+
+**Ajánlott a direkt gtag-ra menni** mert a `fireGoogleAdsConversion()` már bele van drótozva minden lead-pathba, és Enhanced Conv automatikusan jön. **NE** importáld a `generate_lead`-et Ads conversion-ként ha a direkt gtag is fut — Smart Bidding duplán számolja.
+
+### Pontos UI lépéssor (Google Ads + GA4)
+
+#### 1. GA4: Personalized Advertising ON a link-en (~30s)
+GA4 → bal lent fogaskerék (**Admin**) → property oszlop → **Product Links** → **Google Ads links** → kattints a most létrehozott linkre (`Customer ID 843-385-7843`) → szerkesztés (ceruza ikon) → **Enable Personalized Advertising** toggle ✓ → Mentés.
+
+#### 2. GA4: Data Stream — user-provided data ON (~30s)
+GA4 → Admin → property oszlop → **Data Streams** → web stream (`bagolykaland.hu`) → görgess le **Enhanced measurement** alá → **Include user-provided data for advertising** → ON.
+
+#### 3. Google Ads: Customer data terms (~1 perc)
+Google Ads (https://ads.google.com) → felül **Eszközök** (Tools, kulcs ikon) → **Konverziók** (Conversions) → bal oldalt **Beállítások** (Settings) → **Customer data terms** szekcióban olvasd át és fogadd el. Egyszer kell, az egész fiókra érvényes.
+
+#### 4. Google Ads: a konverziós action már LÉTEZIK — MCP létrehozta (~0 perc)
+
+Adspirer MCP-vel létrejött 2026-05-11-én. Ne hozz létre újabbat manuálisan.
+
+**Konverziós action:** `BagolyKaland Lead (webhely gtag)`, ID `7607034859`
+- Kategória: SUBMIT_LEAD_FORM (Lead → Send lead form)
+- Számolás: ONE_PER_CLICK
+- Click-through ablak: 30d, View-through: 1d
+- Default érték: 5000 HUF (a JS dinamikusan felülírja submit-enként)
+- Attribúció: GOOGLE_ADS_LAST_CLICK (új fióknak ez kezdetnek; ~3000 click + 300 conv után váltható DATA_DRIVEN-re)
+
+#### 5. Google Ads: a meglévő "Javasolt cél" downgrade primary→secondary (~30s)
+
+Eszközök → Konverziók → kattints a **Javasolt cél** soron (Status `ENABLED`, Category `Lead`) → **Szerkeszt** → **Cél típusa** alatt válaszd **Másodlagos cél** (Secondary goal) → Mentés.
+
+**Miért:** A GA4 → Ads link auto-importálta ezt a `generate_lead` event-ből (`GOOGLE_ANALYTICS_4_CUSTOM` típus). Ha primary marad MELLETTE a direkt gtag konverzió, Smart Bidding **kétszer számolja** ugyanazt a leadet → bid túl agresszív. Ezért a direkt gtag (webhely) marad primary, a GA4 import átkerül secondary-be (még riportban látszik, de Smart Bidding nem optimalizál rá).
+
+A "Leadűrlap – Küldés" (LEAD_FORM_SUBMIT) primary marad — csak Google Ads-en belüli lead extension form-okra tüzel, a weboldal-form-okra nem ütközik a webhely gtag konverzióval.
+
+#### 6. Google Ads: Enhanced Conversions ON az új konverzión (~1 perc)
+
+Eszközök → Konverziók → **BagolyKaland Lead (webhely gtag)** sor → **Enhanced Conversions** szekció → **Bekapcsolás** → forrás: **Google Tag** (NEM "Google Analytics", mert direkt gtag-ot használunk!) → User-provided data: jóváhagyod → Mentés.
+
+A `meta-enhance.src.js` által írt SHA-256 email/phone hash-eket a `tracking-loader.js` `pushEnhancedConversionsData()` automatikusan átadja `gtag('set','user_data',...)` hívással. Ez teszi 5-15%-kal pontosabbá a konverziós megfeleltetést cookie-blocked browser-ek esetén.
+
+#### 7. Google Ads: tag setup → label kinyerés (~1 perc)
+
+Konverziós action oldala → **Tag setup** szekció → **Install the tag yourself** (NE Google Tag Manager). Megjelenik:
+```
+gtag('event', 'conversion', {
+  'send_to': 'AW-8433857843/aBcD-EfGhIjKlM',  ← a / utáni rész kell
+  'value': 1.0,
+  'currency': 'HUF'
+});
+```
+**Másold ki a `/` utáni stringet** (pl. `aBcD-EfGhIjKlM`) — ez a `gAdsLabel`.
+
+#### 8. Mondd meg a labelt — bekódolom (~30 másodperc)
+
+Add meg az előző lépésben kimásolt labelt és:
+- bekódolom `js/tracking.src.js` `gAdsLabel`-jébe
+- `npm run build` → live deploy
+- a `fireGoogleAdsConversion()` azonnal tüzel a következő lead-en
+
+#### 6. Smoke test (~5 perc)
+
+Friss inkognitó ablak → bagolykaland.hu → bármelyik form kitöltése (pl. `/nyari-tabor/` form vagy `/szorongasoldo/` form).
+
+Ellenőrzés:
+- **Google Ads → Konverziók → adott konverzió:** a "All conversions" oszlopnak 1-2 órán belül 1-re kell ugrania (real-time-ban 24-48h-ig még "1 day to update" lehet, de a recent activity látszik)
+- **DevTools Console:** `dataLayer.filter(x => x[1] === 'conversion')` → 1 hit a transaction_id-vel
+- **GA4 DebugView:** látnod kell a `generate_lead` event-et, és a `_user_data` paramétert benne
+
+### "Never break" Google Ads kontextusban
+
+1. **gAdsId nélkül a gAdsLabel hiábavaló** — a loadGads() csak akkor tölti be a AW tag-et ha gAdsId van. Most már van (`AW-8433857843`).
+2. **GA4 import + direkt gtag = duplikálás kockázata** — ha mindkettő be van állítva, MINDIG legyen ugyanaz a `transaction_id`. A scaffold a form `event_id`-jét használja, ami szerver-oldali CAPI dedup-pal is egyezik.
+3. **Personalized Advertising OFF a linken = nincs remarketing audience-export.** Ezt sokan elfelejtik bekapcsolni, mert a link létrejön a checkbox bekattintása nélkül is.
+4. **Enhanced Conversions forrás kiválasztása:** Google Tag (=direkt gtag) vagy Google Analytics — pontosan AZT válaszd amelyik útat használod, ne mindkettőt. Most: Google Tag.
 
 ---
 

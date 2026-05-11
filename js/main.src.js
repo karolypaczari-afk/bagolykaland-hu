@@ -65,6 +65,33 @@
     });
   }
 
+  // Direct Google Ads conversion fire. Only fires when both gAdsId AND
+  // gAdsLabel are configured in tracking.src.js. Until the conversion label
+  // is plugged in, this is a no-op so production stays safe.
+  //
+  // We pair this with `transaction_id` so Google Ads dedupes against the
+  // GA4-imported `generate_lead` event if both paths happen to be active —
+  // prevents Smart Bidding double-counting. The transaction_id should be the
+  // same value as the GA4 event's transaction_id when present (event_id from
+  // form submit), otherwise a fresh uuid.
+  function fireGoogleAdsConversion(value, transactionId) {
+    if (typeof window.gtag !== 'function') return;
+    var v = (window.BK_TRACKING_CONFIG && window.BK_TRACKING_CONFIG.vendors) || {};
+    if (!v.gAdsId || !v.gAdsLabel) return;
+    // Refresh Enhanced Conversions user_data right before the conversion
+    // fires — picks up any hashed identity written by the form submit a few
+    // ms earlier (meta-enhance writes em/ph hashes synchronously).
+    if (window.BKTracking && typeof window.BKTracking.pushEnhancedConversionsData === 'function') {
+      window.BKTracking.pushEnhancedConversionsData(true);
+    }
+    window.gtag('event', 'conversion', {
+      send_to: v.gAdsId + '/' + v.gAdsLabel,
+      value: value || 0,
+      currency: 'HUF',
+      transaction_id: transactionId || bkUuid(),
+    });
+  }
+
   function track(eventName, params = {}) {
     if (window.BKTracking && typeof window.BKTracking.trackEvent === 'function') {
       window.BKTracking.trackEvent(eventName, params);
@@ -103,6 +130,9 @@
           value: 3000
         });
       }
+      // Direct AW conversion (no-op until gAdsLabel set). Lower value than
+      // program signups so Smart Bidding doesn't over-weight lead magnets.
+      fireGoogleAdsConversion(3000);
 
     } else if (eventName === 'bk_program_signup') {
       var program = params.program || '';
@@ -149,13 +179,13 @@
 
       // GA4 standard generate_lead — value mirrors the program's economic
       // weight so Google Ads optimization (once enabled) bids accordingly.
+      var programValue =
+        program === CAMP_PROGRAM_NAME                  ? CAMP_VALUE_HUF :
+        program === SZORONGAS_PROGRAM_NAME             ? SZORONGAS_VALUE_HUF :
+        program === SCHOOL_PREP_INTENSIVE_PROGRAM_NAME ? SCHOOL_PREP_INTENSIVE_VALUE_HUF :
+        program === SCHOOL_PREP_ACADEMIC_PROGRAM_NAME  ? SCHOOL_PREP_ACADEMIC_VALUE_HUF :
+        5000;
       if (window.BKAnalytics) {
-        var programValue =
-          program === CAMP_PROGRAM_NAME                  ? CAMP_VALUE_HUF :
-          program === SZORONGAS_PROGRAM_NAME             ? SZORONGAS_VALUE_HUF :
-          program === SCHOOL_PREP_INTENSIVE_PROGRAM_NAME ? SCHOOL_PREP_INTENSIVE_VALUE_HUF :
-          program === SCHOOL_PREP_ACADEMIC_PROGRAM_NAME  ? SCHOOL_PREP_ACADEMIC_VALUE_HUF :
-          5000;
         window.BKAnalytics.fireLead({
           lead_source: 'program_signup',
           lead_type:
@@ -168,6 +198,10 @@
           value: programValue
         });
       }
+      // Direct AW conversion (no-op until gAdsLabel set). Shares the
+      // form-submit event_id as transaction_id so Google Ads dedupes
+      // against the GA4-imported generate_lead if both are mapped.
+      fireGoogleAdsConversion(programValue, params.event_id);
 
     } else if (eventName === 'bk_contact_form_success') {
       var contactDedup = params.event_id ? { eventID: params.event_id } : undefined;
@@ -185,6 +219,8 @@
           value: 1500
         });
       }
+      // Direct AW conversion (no-op until gAdsLabel set).
+      fireGoogleAdsConversion(1500, params.event_id);
 
     } else if (eventName === 'bk_cta_click') {
       window.fbq('track', 'ViewContent', { content_name: params.cta_label || '' });
