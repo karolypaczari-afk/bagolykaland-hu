@@ -42,9 +42,9 @@
   var SZORONGAS_VALUE_HUF = 90000;
 
   // Nyári intenzív iskola-előkészítő — high-intent seasonal LP, dedicated
-  // monetary value reflects the full ~20-hour summer program LTV.
+  // monetary value reflects the full 18-alkalom summer program LTV (128.000 Ft).
   var SCHOOL_PREP_INTENSIVE_PROGRAM_NAME = 'Nyári intenzív iskola-előkészítő 2026';
-  var SCHOOL_PREP_INTENSIVE_VALUE_HUF = 140000;
+  var SCHOOL_PREP_INTENSIVE_VALUE_HUF = 128000;
 
   // Tanévi 9 hónapos iskola-előkészítő — highest-LTV program signup,
   // 28.000 Ft/hó × 9 hó = 252.000 Ft total; gets its own Meta content_category
