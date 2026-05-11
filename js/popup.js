@@ -209,8 +209,17 @@
                     popup_group: lm.group
                 });
 
-                // Save to Supabase (fire-and-forget)
+                // Persist the lead. Primary store: Supabase. Fallback: server
+                // log via /api/popup-lead.php — picks up network errors, CORS
+                // hiccups, RLS rejections so leads aren't silently dropped.
                 var sbKey = 'sb_publishable_WbKSuHWa6yRLGShUnR6bcw_341Kp-Xz';
+                var leadPayload = {
+                    name: name.trim() || null,
+                    email: email.trim(),
+                    source_page: window.location.pathname,
+                    group_name: lm.group,
+                    form_type: 'popup'
+                };
                 fetch('https://esiittanpkwxvmghqbsy.supabase.co/rest/v1/leads', {
                     method: 'POST',
                     headers: {
@@ -219,14 +228,17 @@
                         'Authorization': 'Bearer ' + sbKey,
                         'Prefer': 'return=minimal'
                     },
-                    body: JSON.stringify({
-                        name: name.trim() || null,
-                        email: email.trim(),
-                        source_page: window.location.pathname,
-                        group_name: lm.group,
-                        form_type: 'popup'
-                    })
-                }).catch(function () {});
+                    body: JSON.stringify(leadPayload)
+                }).then(function (res) {
+                    if (!res.ok) throw new Error('supabase_' + res.status);
+                    return res;
+                }).catch(function () {
+                    return fetch('/api/popup-lead.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(leadPayload)
+                    }).catch(function () {});
+                });
 
                 submitToMailerLite(email, name)
                     .then(function () {
