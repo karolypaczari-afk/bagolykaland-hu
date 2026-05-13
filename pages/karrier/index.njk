@@ -49,11 +49,14 @@ headStyles: |
        Prefix: .kar-*  — mobile-first, GPU transform+opacity animációk.
        ════════════════════════════════════════════════════════════════════ */
 
-    /* ── HERO ── */
+    /* ── HERO ──
+       padding-top a fix header (var(--header-h)) + announcement bar
+       (var(--top-offset)) magasságát beszámítja, hogy a hero teteje ne
+       takarja ki a header. Pattern a .page-hero-tól, lásd style.src.css. */
     .kar-hero {
       position: relative;
       overflow: hidden;
-      padding: clamp(4rem, 8vw, 6.5rem) 0 clamp(3rem, 6vw, 5rem);
+      padding: calc(var(--header-h) + var(--top-offset) + clamp(2rem, 5vw, 4.5rem)) 0 clamp(3rem, 6vw, 5rem);
       background: linear-gradient(160deg, var(--clr-navy-deep) 0%, var(--clr-navy) 55%, #2A4D78 100%);
       color: #fff;
       text-align: center;
@@ -565,7 +568,7 @@ headStyles: |
           ahol mindenkinek megvan a saját erőssége. Itt mutatjuk be, kikkel fogsz dolgozni.
         </p>
 
-        <!-- Founder card -->
+        <!-- Founder welcome — short message Alexandrától -->
         <div class="kar-team-founder fade-up stagger-2">
           <div class="kar-team-founder__img">
             <img src="/img/alexandra-szabovarga.webp" alt="Szabó-Varga Alexandra, a BagolykaLand alapítója" width="180" height="180" loading="lazy" />
@@ -581,57 +584,169 @@ headStyles: |
           </div>
         </div>
 
-        <!-- Team cards -->
-        <div class="kar-team-grid">
-          <div class="kar-team-card fade-up stagger-3">
-            <div class="kar-team-card__img">
-              <img src="/img/bagolykaland-csapat-bolglarka-portret.webp" alt="Boglárka, BagolykaLand csapattag" width="140" height="140" loading="lazy" />
+        <!-- Full team grid — átvéve a /rolunk/-ról (4 csapattag minden info-val) -->
+        <div class="team-grid">
+
+          <!-- Alexandra -->
+          <article class="team-card fade-up stagger-3">
+            <div class="team-photo">
+              <img src="/img/alexandra-szabovarga.webp" alt="Szabó-Varga Alexandra portréfotója, a BagolykaLand alapítója" width="280" height="280" loading="lazy" />
             </div>
-            <div class="kar-team-card__name">Boglárka</div>
-            <div class="kar-team-card__role">Fejlesztőpedagógus</div>
-          </div>
+            <div class="team-card-body">
+              <h3>Szabó-Varga Alexandra</h3>
+              <p class="team-role">Alapító, vezető fejlesztőpedagógus, alapozó mozgásterapeuta</p>
+              <blockquote>
+                <p>&bdquo;Hiszek abban, hogy minden gyermek jó valamiben. Hiszek abban, hogy a megbecsülés és a dicséret szárnyakat ad. Hiszek a gondolkodni tudó gyerekek erejében. Hiszek abban, hogy a hibáknak örülnünk kell, mert a fejlődésünket szolgálja. Tudom, hogy minden szülő a tőle telhető legtöbbet adja a gyermekének és tudom, hogy a gyermeknevelés csupán a tökéletlenségekkel együtt lehet tökéletes.&rdquo;</p>
+              </blockquote>
+              <p class="team-bio">Fejlesztőpedagógus, Alapozó Mozgásterapeuta, háromgyermekes anyuka, és a BagolykaLand megálmodója és életre keltője. Büszkén állítja &mdash; és számtalan elégedett család tapasztalata is megerősíti &mdash;, hogy a BagolykaLand nem csupán egy fejlesztő központ. A BagolykaLand egy szerethető út, ami a tudáshoz vezet!</p>
+            </div>
+          </article>
+
+          <!-- Szandra -->
+          <article class="team-card fade-up stagger-4">
+            <div class="team-photo">
+              <img src="/img/szandra-daniel-portret.webp" alt="Dániel Szandra portréfotója, fejlesztőpedagógus" width="280" height="280" loading="lazy" />
+            </div>
+            <div class="team-card-body">
+              <h3>Dániel Szandra</h3>
+              <p class="team-role">Fejlesztőpedagógus, mozgásfejlesztő</p>
+              <blockquote>
+                <p>&bdquo;Gyakorló fejlesztőpedagógusként rendkívül fontosnak tartom a gyerekek képességfejlesztését, a tanulási nehézségek megelőzését és nem utolsó sorban a problémamentes iskolakezdést. Hiszem, hogy ha valami nehezen megy, azt más formában kell megközelíteni &mdash; emészthetővé kell tenni a gyermek számára. Óriási ereje van annak, ha a feladatokat játékos köntösbe bújtatjuk.&rdquo;</p>
+              </blockquote>
+              <p class="team-bio">Célom, hogy a tanítványaim megtalálják helyüket a világban. Olyan foglalkozásokon szeretném őket végig vezetni, melyek biztosítják számukra a szellemi, testi és lelki kiteljesedést.</p>
+            </div>
+          </article>
+
+          <!-- Tünde -->
+          <article class="team-card fade-up stagger-5">
+            <div class="team-photo">
+              <img src="/img/szabo-tunde-portret.webp" alt="Szabó Tünde portréfotója, irodavezető" width="280" height="280" loading="lazy" />
+            </div>
+            <div class="team-card-body">
+              <h3>Szabó Tünde</h3>
+              <p class="team-role">Irodavezető, koordinátor</p>
+              <p class="team-bio">Tündi, aki két kézzel fogja össze a fejlesztő központ rendszereit. Otthon van a táblázatok és a számok világában. Segít az időpontok egyeztetésében és intézi a pénzügyi elszámolásokat. Ő az, aki mindig tudja, hogy hol van, ami éppen elveszett. Emellett Ő a BagolykaLand Tyúkanyója, aki bátorítja és mindenben segíti a hozzánk érkező gyerekeket.</p>
+            </div>
+          </article>
+
+          <!-- István -->
+          <article class="team-card fade-up stagger-6">
+            <div class="team-photo">
+              <img src="/img/szabo-istvan-portret.webp" alt="Szabó István portréfotója, pénzügyi és műszaki vezető" width="280" height="280" loading="lazy" />
+            </div>
+            <div class="team-card-body">
+              <h3>Szabó István</h3>
+              <p class="team-role">Pénzügyi és műszaki vezető</p>
+              <p class="team-bio">A legtöbb sikeres pedagógus mögött áll egy mérnök férj. István pontosan ilyen: türelmes, nyugodt, jól ért a szerkesztő programokhoz, ismeri a nyomtatók lelkivilágát és nem felejti el az áramelosztón bekapcsolni a piros gombot. Ő adja a biztos hátterét a szervezet infrastrukturális és pénzügyi működéséhez.</p>
+            </div>
+          </article>
+
         </div>
 
-        <!-- Photo gallery — trust-building képek a csapatról + helyszínről + foglalkozásokról -->
+        <!-- Photo gallery — bizalom-építő képek: csapat, foglalkozások, eszközök, eredmények -->
         <p class="kar-gallery-tagline fade-up stagger-5">
-          Pillanatképek a mindennapokból &mdash; a csapatról, az új központról és arról, amit Te is csinálni fogsz.
+          Pillanatképek arról, ami nálunk a mindennapok része &mdash; csoportos és egyéni foglalkozások,
+          fejlesztő eszközök, és pillanatok a gyerekek fejlődéséből.
         </p>
         <div class="kar-gallery fade-up stagger-6">
           <figure class="kar-gallery-item">
-            <img src="/img/bagolykaland-koltozes-csapat-segit.webp" alt="A BagolykaLand csapata együtt dolgozik az új központ kialakításán" width="1200" height="676" loading="lazy" />
-            <figcaption class="kar-gallery-caption">A csapatunk együtt &mdash; ahogy az új központot indítottuk</figcaption>
+            <img src="/img/bagolykaland-team-galeria.webp" alt="A BagolykaLand csapata" width="1197" height="1400" loading="lazy" />
+            <figcaption class="kar-gallery-caption">A csapatunk &mdash; ide érkezel, ha velünk dolgozol</figcaption>
           </figure>
           <figure class="kar-gallery-item">
-            <img src="/img/bagolykaland-koltozes-mozgasfejleszto-fal-epitese.webp" alt="Mozgásfejlesztő fal építése az új BagolykaLand központban" width="1200" height="676" loading="lazy" />
-            <figcaption class="kar-gallery-caption">Saját kezűleg építettük a mozgásfejlesztő falat</figcaption>
+            <img src="/img/bagolykaland-iskola-elokeszito-jatekos-csoport.webp" alt="Játékos csoportos foglalkozás gyermekekkel a BagolykaLandben" width="1200" height="900" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Játékos kiscsoportos foglalkozás &mdash; itt élmény a tanulás</figcaption>
           </figure>
           <figure class="kar-gallery-item">
-            <img src="/img/bagolykaland-koltozes-eszkozok-rendezese.webp" alt="Fejlesztő eszközök rendezése a BagolykaLand központban" width="800" height="1421" loading="lazy" />
-            <figcaption class="kar-gallery-caption">Több százféle fejlesztő eszköz a kezed ügyében</figcaption>
+            <img src="/img/bagolykaland-iskola-elokeszito-mozgasfejlesztes-labdak.webp" alt="Mozgásfejlesztés szivacslabdákkal a BagolykaLandben" width="1200" height="900" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Profi fejlesztő eszközpark &mdash; minden a kezed ügyében</figcaption>
           </figure>
           <figure class="kar-gallery-item">
-            <img src="/img/bagolykaland-csoportos-foglalkozas.webp" alt="Csoportos foglalkozás a BagolykaLand központban" width="1200" height="675" loading="lazy" />
-            <figcaption class="kar-gallery-caption">Csoportos foglalkozás &mdash; 4&ndash;8 fős kiscsoportokban dolgozunk</figcaption>
+            <img src="/img/bagolykaland-iskola-elokeszito-csoport-kor-2025.webp" alt="Csoportos foglalkozás körben a BagolykaLandben" width="1200" height="900" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Kis csoport, közös tér &mdash; 4&ndash;8 fős kiscsoportokban dolgozunk</figcaption>
           </figure>
           <figure class="kar-gallery-item">
-            <img src="/img/bagolykaland-koltozes-jatekok-konyvek-csomagolva.webp" alt="Játékok és könyvek a BagolykaLand fejlesztő-központban" width="800" height="1421" loading="lazy" />
-            <figcaption class="kar-gallery-caption">Felszerelés, amire Te is támaszkodhatsz</figcaption>
+            <img src="/img/bagolykaland-iskola-elokeszito-csoportos-lego-finommotorika.webp" alt="Lego és finommotorika-foglalkozás csoportosan" width="1200" height="900" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Finommotorika &mdash; játékos, kézzelfogható feladatokkal</figcaption>
           </figure>
           <figure class="kar-gallery-item">
-            <img src="/img/bagolykaland-koltozes-csapat-kosz-koltoztetes.webp" alt="A BagolykaLand csapata az új központ költöztetése közben" width="1200" height="676" loading="lazy" />
-            <figcaption class="kar-gallery-caption">Egy igazi csapat &mdash; minden helyzetben összeáll</figcaption>
+            <img src="/img/bagolykaland-iskola-elokeszito-finommotorika-kez-rajzolas.webp" alt="Finommotorika-fejlesztés rajzolással" width="1200" height="1066" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Egy gyermek figyelme &mdash; ezért dolgozunk</figcaption>
           </figure>
           <figure class="kar-gallery-item">
-            <img src="/img/bagolykaland-csoportos-kartyajatek.webp" alt="Játékos foglalkozás kártyajátékkal a BagolykaLand központban" width="845" height="784" loading="lazy" />
-            <figcaption class="kar-gallery-caption">Játékos szakma &mdash; a gyerekek élményként élik meg</figcaption>
+            <img src="/img/bagolykaland-iskola-elokeszito-zaro-unnepseg-oklevelek.webp" alt="Záró ünnepség és oklevélátadás a BagolykaLandben" width="1400" height="1050" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Záró ünnepség &mdash; amikor látod, hogy mennyit fejlődtek</figcaption>
           </figure>
           <figure class="kar-gallery-item">
-            <img src="/img/bagolykaland-egyeni-fejlesztes-szabi.webp" alt="Egyéni fejlesztő foglalkozás a BagolykaLand központban" width="646" height="600" loading="lazy" />
-            <figcaption class="kar-gallery-caption">Egyéni foglalkozás &mdash; személyre szabott figyelemmel</figcaption>
+            <img src="/img/bagolykaland-iskola-elokeszito-tantargyi-alapok.webp" alt="Tantárgyi alapok-foglalkozás eszközökkel a BagolykaLandben" width="1200" height="1600" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Strukturált módszertan, profi eszközök &mdash; ezzel dolgozol majd Te is</figcaption>
           </figure>
         </div>
       </div>
     </section>
+
+    <!-- ══════════════ HELYSZÍN — Google Map (átvéve /rolunk/-ról) ══════════════ -->
+    <section class="section section-cream" aria-labelledby="kar-terkep-heading">
+      <div class="container">
+        <div class="section-header fade-up">
+          <p class="section-eyebrow">Hol találsz minket</p>
+          <h2 id="kar-terkep-heading">Új helyszínünk: Csokonai utca 32.</h2>
+          <p>Debrecen belvárosában, csendes utcában &mdash; könnyen megközelíthető autóval és tömegközlekedéssel egyaránt. Ide érkezel majd minden munkanap.</p>
+        </div>
+
+        <div class="bk-map fade-up">
+          <div class="bk-map__viewport">
+            <iframe
+              class="bk-map__iframe"
+              src="https://maps.google.com/maps?q=Csokonai+utca+32,+Debrecen+4024,+Hungary&t=&z=17&ie=UTF8&iwloc=&output=embed"
+              title="BagolykaLand a Google Maps-en — Debrecen, Csokonai utca 32."
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen></iframe>
+
+            <div class="bk-map__overlay" aria-hidden="true">
+              <div class="bk-map__parking bk-map__parking--nw">
+                <span class="bk-map__parking-letter">P</span>
+                <span class="bk-map__parking-text">Ingyenes<br><b>parkolás</b></span>
+              </div>
+              <div class="bk-map__parking bk-map__parking--se">
+                <span class="bk-map__parking-letter">P</span>
+                <span class="bk-map__parking-text">Belvárosi<br><b>parkoló</b></span>
+              </div>
+            </div>
+
+            <article class="bk-map__card">
+              <header class="bk-map__card-header">
+                <img src="/img/logo-transparent.webp" alt="BagolykaLand logó" width="44" height="44" loading="lazy" />
+                <div>
+                  <strong>BagolykaLand</strong>
+                  <span>Fejlesztő Központ</span>
+                </div>
+              </header>
+              <ul class="bk-map__card-list">
+                <li><span aria-hidden="true">📍</span> 4024 Debrecen, Csokonai u. 32.</li>
+                <li><span aria-hidden="true">🕘</span> H&ndash;P &middot; 8:00&ndash;18:00</li>
+                <li><span aria-hidden="true">📞</span> <a href="tel:+36303649396">+36&nbsp;30&nbsp;364&nbsp;9396</a></li>
+              </ul>
+              <a class="bk-map__card-cta"
+                 href="https://www.google.com/maps/dir/?api=1&destination=Csokonai+utca+32%2C+Debrecen+4024%2C+Hungary"
+                 target="_blank" rel="noopener noreferrer"
+                 aria-label="Útvonaltervezés a BagolykaLand címére a Google Maps-szel">
+                Útvonaltervezés <span aria-hidden="true">→</span>
+              </a>
+            </article>
+          </div>
+        </div>
+
+        <p class="bk-map__note">A piros Google pin a pontos címet mutatja &mdash; kattints rá útvonaltervezéshez, vagy görgetéssel nagyíthatod a térképet.</p>
+      </div>
+    </section>
+
+    <!-- ══════════════ FACEBOOK FOLLOW (átvéve /rolunk/-ról) ══════════════ -->
+    {% set fbFollowEyebrow = "Közösség" %}
+    {% set fbFollowTitle = "Kövess minket a Facebookon!" %}
+    {% set fbFollowLead = "Pillants be a Bagolykaland mindennapjaiba — fotók, videók a foglalkozásokról, csapat-pillanatok és szakmai tippek. Mielőtt jelentkezel, megnézheted, milyen nálunk a hangulat." %}
+    {% include "partials/facebook-follow.njk" %}
 
     <!-- ══════════════ "MIT VÁRUNK EL" ══════════════ -->
     <section class="kar-section section-white" aria-labelledby="kar-expect-heading">
