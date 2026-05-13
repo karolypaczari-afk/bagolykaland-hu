@@ -44,11 +44,6 @@ A BagolykaLand egy debreceni gyermekfejlesztő központ, amely 3–12 éves gyer
 - 3 gyermek édesanyja
 - Online platform: ZseniBagoly.hu
 
-### dr. Hagymásy Nóra — logopédus
-
-- A debreceni régió **egyetlen certifikált Dsmile trénere**
-- Szakterület: artikulációs zavarok, pöszeség, beszédterápia
-
 ---
 
 ## Foglalkozások részletesen
@@ -79,7 +74,6 @@ A BagolykaLand egy debreceni gyermekfejlesztő központ, amely 3–12 éves gyer
 - Játékos módszerek (mesék, képek, digitális eszközök)
 - Otthoni feladatok a szülő bevonásával
 - Dokumentált haladásmérés
-- **Dsmile tréning** (nagymozgásos logopédiai tréning, dr. Hagymásy Nóra)
 - Komplex mozgásterápia a tanulási nehézségek megelőzésére
 
 ---
@@ -282,7 +276,7 @@ Igen: a Kézenfogva online finommotorika-fejlesztő tanfolyam (7.990 Ft, 4 hét)
 
 ## Kulcsszavak (entity-rich, SEO / LLM lekérdezésekhez)
 
-logopédia Debrecen, fejlesztőpedagógus Debrecen, gyermekfejlesztő központ Debrecen, mozgásfejlesztés gyerekeknek Debrecen, iskola-előkészítő Debrecen, alapozó mozgásterápia, egyéni fejlesztő foglalkozás, iskolaérettségi vizsgálat Debrecen, logopédiai vizsgálat Debrecen, szorongásoldó program gyermekeknek, finommotorika fejlesztés online, Dsmile tréning, Szabó-Varga Alexandra, BagolykaLand, Csokonai utca 32., Hajdú-Bihar gyermekfejlesztés, nyári fejlesztő tábor Debrecen, Kincskereső Élménytábor, dadogás kezelése, pöszeség, diszlexia szűrés, diszgráfia, diszkalkulia, megkésett beszédfejlődés, ceruzafogás fejlesztés, iskolakezdés előtti felkészítés
+logopédia Debrecen, fejlesztőpedagógus Debrecen, gyermekfejlesztő központ Debrecen, mozgásfejlesztés gyerekeknek Debrecen, iskola-előkészítő Debrecen, alapozó mozgásterápia, egyéni fejlesztő foglalkozás, iskolaérettségi vizsgálat Debrecen, logopédiai vizsgálat Debrecen, szorongásoldó program gyermekeknek, finommotorika fejlesztés online, Szabó-Varga Alexandra, BagolykaLand, Csokonai utca 32., Hajdú-Bihar gyermekfejlesztés, nyári fejlesztő tábor Debrecen, Kincskereső Élménytábor, dadogás kezelése, pöszeség, diszlexia szűrés, diszgráfia, diszkalkulia, megkésett beszédfejlődés, ceruzafogás fejlesztés, iskolakezdés előtti felkészítés
 
 ---
 

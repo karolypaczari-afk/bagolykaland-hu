@@ -73,7 +73,7 @@
   
 
   <!-- Global Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=mp4087gx" />
+  <link rel="stylesheet" href="/css/style.css?v=mp40opc8" />
 
   <style>
 /* ════════════════════════════════════════════════════════════════════
@@ -231,15 +231,70 @@
 .kar-team-card__name { font-weight: 700; color: var(--clr-navy); font-size: 1.02rem; margin: 0 0 0.25rem; }
 .kar-team-card__role { color: var(--clr-teal); font-size: 0.88rem; font-weight: 600; }
 
-.kar-team-group {
-  max-width: 980px; margin: 0 auto;
-  border-radius: var(--r-lg); overflow: hidden;
-  box-shadow: var(--sh-md);
+/* Gallery — 3-col masonry, vegyes landscape + portrait képekkel */
+.kar-gallery {
+  max-width: 1080px;
+  margin: 0 auto;
+  columns: 3;
+  column-gap: 1rem;
 }
-.kar-team-group img { width: 100%; height: auto; display: block; }
-.kar-team-group__caption {
-  background: var(--clr-navy); color: rgba(255,255,255,0.92);
-  padding: 1rem 1.5rem; font-size: 0.95rem; text-align: center;
+.kar-gallery-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--sh-sm);
+  transition: box-shadow var(--t-mid), transform var(--t-mid);
+}
+.kar-gallery-item:hover {
+  box-shadow: var(--sh-lg);
+  transform: translateY(-2px);
+}
+.kar-gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+}
+@media (hover: hover) {
+  .kar-gallery-item:hover img { transform: scale(1.05); }
+}
+.kar-gallery-item::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(29,53,87,0.45) 0%, transparent 55%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.kar-gallery-item:hover::after { opacity: 1; }
+.kar-gallery-caption {
+  position: absolute; left: 0.85rem; right: 0.85rem; bottom: 0.85rem;
+  color: #fff; font-size: 0.82rem; font-weight: 600;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  pointer-events: none;
+  z-index: 2;
+}
+.kar-gallery-item:hover .kar-gallery-caption {
+  opacity: 1; transform: translateY(0);
+}
+.kar-gallery-tagline {
+  max-width: 720px; margin: 0 auto 2rem; text-align: center;
+  color: var(--clr-text-mid); font-size: 0.97rem; line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .kar-gallery { columns: 2; column-gap: 0.65rem; }
+  .kar-gallery-item { margin-bottom: 0.65rem; }
+  .kar-gallery-caption { font-size: 0.75rem; left: 0.6rem; right: 0.6rem; bottom: 0.6rem; opacity: 1; transform: none; }
+}
+@media (max-width: 480px) {
+  .kar-gallery { columns: 1; }
 }
 
 /* ── EXPECTATIONS LIST ── */
@@ -541,7 +596,7 @@
       "@type": "OfferCatalog",
       "name": "Fejlesztő foglalkozások és vizsgálatok",
       "itemListElement": [
-        { "@type": "Offer", "priceCurrency": "HUF", "price": "10000", "itemOffered": { "@type": "Service", "name": "Logopédia", "description": "Artikulációs zavarok, megkésett beszédfejlődés, diszlexia-megelőzés. Egyedüli Dsmile-tréner Debrecenben.", "url": "https://bagolykaland.hu/foglalkozasaink/logopedia/" } },
+        { "@type": "Offer", "priceCurrency": "HUF", "price": "10000", "itemOffered": { "@type": "Service", "name": "Logopédia", "description": "Artikulációs zavarok, megkésett beszédfejlődés, diszlexia-megelőzés gyermekkorban és felnőtteknél.", "url": "https://bagolykaland.hu/foglalkozasaink/logopedia/" } },
         { "@type": "Offer", "priceCurrency": "HUF", "price": "10000", "itemOffered": { "@type": "Service", "name": "Mozgásfejlesztés (egyéni)", "description": "Idegrendszer-érettségen alapuló mozgásterápia. Javítja a figyelmet, memóriát, olvasást.", "url": "https://bagolykaland.hu/foglalkozasaink/mozgasfejlesztes/" } },
         { "@type": "Offer", "priceCurrency": "HUF", "price": "28000", "itemOffered": { "@type": "Service", "name": "Mozgásfejlesztés (kiscsoportos)", "description": "Kiscsoportos mozgásfejlesztés, max. 5–7 fő.", "url": "https://bagolykaland.hu/foglalkozasaink/mozgasfejlesztes/" } },
         { "@type": "Offer", "priceCurrency": "HUF", "price": "10000", "itemOffered": { "@type": "Service", "name": "Egyéni fejlesztő foglalkozások", "description": "Személyre szabott kognitív, motoros, szociális fejlesztés bemérés alapján.", "url": "https://bagolykaland.hu/foglalkozasaink/egyeni-fejleszto-foglalkozasok/" } },
@@ -1466,19 +1521,45 @@
             <div class="kar-team-card__name">Boglárka</div>
             <div class="kar-team-card__role">Fejlesztőpedagógus</div>
           </div>
-          <div class="kar-team-card fade-up stagger-4">
-            <div class="kar-team-card__img">
-              <img src="/img/bagolykaland-csapat-nora-logopedus.webp" alt="Nóra, BagolykaLand logopédus" width="140" height="140" loading="lazy" />
-            </div>
-            <div class="kar-team-card__name">Nóra</div>
-            <div class="kar-team-card__role">Logopédus</div>
-          </div>
         </div>
 
-        <!-- Group photo -->
-        <div class="kar-team-group fade-up stagger-5">
-          <img src="/img/bagolykaland-csapat-csoportfoto.webp" alt="A BagolykaLand teljes csapata Debrecenben" width="980" height="600" loading="lazy" />
-          <div class="kar-team-group__caption">A csapatunk &mdash; ide érkezel, ha velünk dolgozol</div>
+        <!-- Photo gallery — trust-building képek a csapatról + helyszínről + foglalkozásokról -->
+        <p class="kar-gallery-tagline fade-up stagger-5">
+          Pillanatképek a mindennapokból &mdash; a csapatról, az új központról és arról, amit Te is csinálni fogsz.
+        </p>
+        <div class="kar-gallery fade-up stagger-6">
+          <figure class="kar-gallery-item">
+            <img src="/img/bagolykaland-koltozes-csapat-segit.webp" alt="A BagolykaLand csapata együtt dolgozik az új központ kialakításán" width="1200" height="676" loading="lazy" />
+            <figcaption class="kar-gallery-caption">A csapatunk együtt &mdash; ahogy az új központot indítottuk</figcaption>
+          </figure>
+          <figure class="kar-gallery-item">
+            <img src="/img/bagolykaland-koltozes-mozgasfejleszto-fal-epitese.webp" alt="Mozgásfejlesztő fal építése az új BagolykaLand központban" width="1200" height="676" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Saját kezűleg építettük a mozgásfejlesztő falat</figcaption>
+          </figure>
+          <figure class="kar-gallery-item">
+            <img src="/img/bagolykaland-koltozes-eszkozok-rendezese.webp" alt="Fejlesztő eszközök rendezése a BagolykaLand központban" width="800" height="1421" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Több százféle fejlesztő eszköz a kezed ügyében</figcaption>
+          </figure>
+          <figure class="kar-gallery-item">
+            <img src="/img/bagolykaland-csoportos-foglalkozas.webp" alt="Csoportos foglalkozás a BagolykaLand központban" width="1200" height="675" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Csoportos foglalkozás &mdash; 4&ndash;8 fős kiscsoportokban dolgozunk</figcaption>
+          </figure>
+          <figure class="kar-gallery-item">
+            <img src="/img/bagolykaland-koltozes-jatekok-konyvek-csomagolva.webp" alt="Játékok és könyvek a BagolykaLand fejlesztő-központban" width="800" height="1421" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Felszerelés, amire Te is támaszkodhatsz</figcaption>
+          </figure>
+          <figure class="kar-gallery-item">
+            <img src="/img/bagolykaland-koltozes-csapat-kosz-koltoztetes.webp" alt="A BagolykaLand csapata az új központ költöztetése közben" width="1200" height="676" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Egy igazi csapat &mdash; minden helyzetben összeáll</figcaption>
+          </figure>
+          <figure class="kar-gallery-item">
+            <img src="/img/bagolykaland-csoportos-kartyajatek.webp" alt="Játékos foglalkozás kártyajátékkal a BagolykaLand központban" width="845" height="784" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Játékos szakma &mdash; a gyerekek élményként élik meg</figcaption>
+          </figure>
+          <figure class="kar-gallery-item">
+            <img src="/img/bagolykaland-egyeni-fejlesztes-szabi.webp" alt="Egyéni fejlesztő foglalkozás a BagolykaLand központban" width="646" height="600" loading="lazy" />
+            <figcaption class="kar-gallery-caption">Egyéni foglalkozás &mdash; személyre szabott figyelemmel</figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -1768,7 +1849,7 @@
     </section>
 
     <!-- Page-scoped script: form submit + tracking -->
-    <script src="/js/karrier-form.js?v=mp4087gx" defer></script>
+    <script src="/js/karrier-form.js?v=mp40opc8" defer></script>
 
   </main>
 <footer class="site-footer" id="site-footer" role="contentinfo">
@@ -1883,17 +1964,17 @@
 
   <!-- Scripts -->
   
-  <script src="/js/components.js?v=mp4087gx" defer></script>
-  <script src="/js/install-prompt.js?v=mp4087gx" defer></script>
-  <script src="/js/tracking.js?v=mp4087gx" defer></script>
-  <script src="/js/analytics.js?v=mp4087gx" defer></script>
-  <script src="/js/tracking-loader.js?v=mp4087gx" defer></script>
-  <script src="/js/meta-enhance.js?v=mp4087gx" defer></script>
-  <script src="/js/cookie-consent.js?v=mp4087gx" defer></script>
-  <script src="/js/main.js?v=mp4087gx" defer></script>
-  <script src="/js/lead-capture-loader.js?v=mp4087gx"
-          data-popup-css="/css/popup.css?v=mp4087gx"
-          data-popup-src="/js/popup.js?v=mp4087gx"
+  <script src="/js/components.js?v=mp40opc8" defer></script>
+  <script src="/js/install-prompt.js?v=mp40opc8" defer></script>
+  <script src="/js/tracking.js?v=mp40opc8" defer></script>
+  <script src="/js/analytics.js?v=mp40opc8" defer></script>
+  <script src="/js/tracking-loader.js?v=mp40opc8" defer></script>
+  <script src="/js/meta-enhance.js?v=mp40opc8" defer></script>
+  <script src="/js/cookie-consent.js?v=mp40opc8" defer></script>
+  <script src="/js/main.js?v=mp40opc8" defer></script>
+  <script src="/js/lead-capture-loader.js?v=mp40opc8"
+          data-popup-css="/css/popup.css?v=mp40opc8"
+          data-popup-src="/js/popup.js?v=mp40opc8"
           defer></script>
 
 </body>
