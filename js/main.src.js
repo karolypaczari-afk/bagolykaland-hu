@@ -656,9 +656,17 @@
         var childName = (form.querySelector('input[name="child_name"]') || {}).value || '';
         var childAge = (form.querySelector('input[name="child_age"]') || {}).value || '';
         var turnus = (form.querySelector('select[name="turnus"]') || {}).value || '';
+        var programChoiceRadio = form.querySelector('input[name="program_choice"]:checked');
+        var programChoice = programChoiceRadio ? programChoiceRadio.value : '';
+        var programChoiceLabel =
+          programChoice === 'nyari' ? 'Nyári intenzív (2026 nyár)' :
+          programChoice === 'tanevi' ? 'Tanévi 9 hónapos (2026/27)' :
+          programChoice === 'undecided' ? 'Még nem tudom — telefonon beszéljük meg' :
+          '';
         if (childName) message += '\nGyermek neve: ' + childName;
         if (childAge) message += '\nGyermek kora: ' + childAge;
         if (turnus) message += '\nVálasztott turnus: ' + turnus;
+        if (programChoiceLabel) message += '\nVálasztott program: ' + programChoiceLabel;
 
         // Shared event_id: browser pixel + server-side Meta CAPI dedup.
         var eventId = bkUuid();
@@ -743,7 +751,8 @@
               program: program,
               page: window.location.pathname,
               event_id: eventId,
-              turnus: turnus || ''
+              turnus: turnus || '',
+              program_choice: programChoice || ''
             });
           } else {
             throw new Error(res.data.error || 'Hiba történt.');
