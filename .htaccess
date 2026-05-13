@@ -102,12 +102,19 @@ ErrorDocument 404 /pages/404/index.html
   RewriteRule ^hu/.*$ - [G,L]
 </IfModule>
 
+# --- Block direct access to _uploads/ (karrier CV submissions) ---
+# A jelentkezők önéletrajzai PII — csak a PHP olvashatja, public URL-ről 403.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^_uploads/ - [F,L]
+</IfModule>
+
 # --- Clean URLs: /slug/ serves from /pages/slug/ ---
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
   # Skip rewriting for real root-level resources
-  RewriteCond %{REQUEST_URI} ^/(api|css|js|img|_data|_includes|manifest\.webmanifest|service-worker\.js|robots\.txt|sitemap\.xml|llms\.txt|llms-full\.txt|index\.html|favicon) [OR]
+  RewriteCond %{REQUEST_URI} ^/(api|css|js|img|_data|_includes|_uploads|manifest\.webmanifest|service-worker\.js|robots\.txt|sitemap\.xml|llms\.txt|llms-full\.txt|index\.html|favicon) [OR]
   RewriteCond %{REQUEST_URI} ^/pages/
   RewriteRule ^ - [L]
 

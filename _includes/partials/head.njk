@@ -469,3 +469,52 @@
   }
   </script>
   {% endif %}
+
+  {% if jobPostingSchema %}
+  {# JobPosting schema — Google for Jobs visibility (https://search.google.com/test/rich-results)
+     datePosted: front matterből vagy build-időből (page.date az Eleventy file mtime-jából jön)
+     validThrough: front matterből, default rolling annual end-of-year #}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "@id": "{{ canonical }}#jobposting",
+    "title": {{ jobPostingSchema.title | dump | safe }},
+    "description": {{ jobPostingSchema.description | dump | safe }},
+    "datePosted": "{{ jobPostingSchema.datePosted if jobPostingSchema.datePosted else '2026-05-13' }}",
+    "validThrough": "{{ jobPostingSchema.validThrough if jobPostingSchema.validThrough else '2026-12-31T23:59:59+01:00' }}",
+    "employmentType": {{ jobPostingSchema.employmentType | dump | safe }},
+    "hiringOrganization": {
+      "@type": "Organization",
+      "@id": "https://bagolykaland.hu/#organization",
+      "name": "BagolykaLand",
+      "sameAs": "https://bagolykaland.hu/",
+      "logo": "https://bagolykaland.hu/img/logo.webp"
+    },
+    "jobLocation": {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Csokonai utca 32.",
+        "addressLocality": "Debrecen",
+        "postalCode": "4024",
+        "addressRegion": "Hajdú-Bihar",
+        "addressCountry": "HU"
+      }
+    },
+    "industry": {{ jobPostingSchema.industry | dump | safe }},
+    "experienceRequirements": {
+      "@type": "OccupationalExperienceRequirements",
+      "monthsOfExperience": 12
+    },
+    "educationRequirements": {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": {{ jobPostingSchema.educationRequirements | dump | safe }}
+    },
+    "url": "{{ canonical }}"
+    {% if jobPostingSchema.directApply %},
+    "directApply": true
+    {% endif %}
+  }
+  </script>
+  {% endif %}

@@ -173,6 +173,17 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://bagolykaland.hu/karrier/</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://bagolykaland.hu/img/bagolykaland-csapat-csoportfoto.webp</image:loc>
+      <image:title>Bagolykaland csapat &mdash; karrier</image:title>
+      <image:caption>Pedagógus kollégát keresünk a Bagolykaland fejlesztő-központba</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://bagolykaland.hu/blog/</loc>
     <lastmod>2026-04-20</lastmod>
     <changefreq>weekly</changefreq>

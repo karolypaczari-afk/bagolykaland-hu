@@ -55,9 +55,10 @@
         "url": "/rolunk/",
         "megaType": "about",
         "children": [
-            { "label": "Kedves Anya és Apa", "url": "/rolunk/kedves-anya-es-apa/", "desc": "Szülőknek szóló bemutatkozás" },
-            { "label": "Kedves Gyermek",     "url": "/rolunk/kedves-gyermek/",     "desc": "Gyermekeknek szóló oldal" },
-            { "label": "Galéria",            "url": "/galeria/",                   "desc": "Képek a mindennapokról" }
+            { "label": "Kedves Anya és Apa",         "url": "/rolunk/kedves-anya-es-apa/", "desc": "Szülőknek szóló bemutatkozás" },
+            { "label": "Kedves Gyermek",             "url": "/rolunk/kedves-gyermek/",     "desc": "Gyermekeknek szóló oldal" },
+            { "label": "Galéria",                    "url": "/galeria/",                   "desc": "Képek a mindennapokról" },
+            { "label": "Csatlakozz a csapatunkhoz",  "url": "/karrier/",                   "desc": "Pedagógus kollégát keresünk", "badge": "Toborzás" }
         ],
         "megaExtra": {
             "founderName": "Szabó-Varga Alexandra",

@@ -39,6 +39,7 @@ const PAGE_LABELS = {
     'foglalkozasaink/mozgasfejlesztes/index.html': 'Mozgasfejlesztes',
     'foglalkozasaink/szorongasoldo-program/index.html': 'Szorongasoldo Program',
     'galeria/index.html': 'Galeria',
+    'karrier/index.html': 'Karrier',
     'nyari-iskola-elokeszito/index.html': 'Nyari Iskola-elokeszito',
     'nyari-tabor/index.html': 'Nyari Tabor',
     'kapcsolat/index.html': 'Kapcsolat',
