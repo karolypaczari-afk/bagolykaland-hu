@@ -201,6 +201,44 @@ Ez tudatos brand-stílus, ne változtass rajta.
 - ❌ „nem kell bonyolult kalkulációkat csinálnod"
 - ✅ „nem kell sokat töprengened rajta"
 
+### Tegezés mélyebb szintjei: birtokos ragok + személyragok
+A tegezés a magyarban nem csak névmás-szint („te / téged"), hanem ragozás-szint is. A jó copy a birtokos és személyragokban is „téged" mond, nem általánosít. Ez különösen az utolsó-pillanat reassurance microcopy-knál fontos (form-sub, GDPR, garancia).
+
+- ❌ „Csak akkor véglegesítjük a **helyet**, ha minden tiszta"
+- ✅ „Csak akkor véglegesítjük a **helyed**, ha minden tiszta"
+  - *A birtokos rag (-d) konkrétabbá teszi: nem általában „a hely", hanem a TE helyed.*
+
+- ❌ „**Nem kötelezettség** — az érdeklődés még semmiről nem köt el"
+- ✅ „**Nincs kötelezettséged**, telefonon véglegesítjük a részleteket"
+  - *„Nincs kötelezettséged" személyrag + birtokos = közvetlen TE-üzenet. „Nem kötelezettség" semleges állítás senkiről.*
+
+- ❌ „A kitöltés még semmihez nem kötelez — ez egy **érdeklődés**"
+- ✅ „A kitöltés még semmire nem kötelez — csak az **érdeklődésed fejezed ki**"
+  - *„Ez egy érdeklődés" elliptikus, kép nélküli. A teljes mondat („érdeklődésed fejezed ki") egyértelmű: TE jársz el, TE fejezed ki, a TIÉD az érdeklődés.*
+  - *Plus: „semmihez" → „semmire" — pontosabb vonzat („kötelez vmire", nem „vmihez").*
+
+### Garancia / risk reversal feltételes szerkezettel
+A garancia-vállalások hitelesebbek, ha feltételes szerkezetbe ágyazod (a felhasználó perspektívájából: „ha rosszul döntenék..."), mert konkrét helyzetet képzeltet el, ami később megnyugtató.
+
+- ❌ „Visszafizetési garancia — **az első alkalom díja visszajár**" (rideg állítás)
+- ✅ „Visszafizetési garancia — **ha nem lennél elégedett** az első alkalom után, **visszajár az ára**"
+  - *Konkrét feltételes („ha nem lennél elégedett") + következmény („visszajár az ára"). A user belegondol, és látja: ez a saját döntése.*
+
+### Felesleges plusz-info az imperative CTA-k körül
+A CTA-kártya és a `phone-alt` blokk célja egyetlen cselekvés. Ne kontextualizálj túl. A felesleges „hagyj üzenetet — visszahívunk" típusú mellékmondat tompítja a fő üzenetet (a telefonszámot).
+
+- ❌ „Hétfő–péntek 9:00–18:00 · Ha nem érünk rá azonnal, hagyj üzenetet — visszahívunk."
+- ✅ „Hétfő–péntek 9:00–18:00"
+  - *Az óraidő önmagában elegendő. A „visszahívunk" típusú megnyugtatás vagy önálló sor, vagy elhagyandó.*
+
+### Igekötő imperative-ekben
+A magyar imperative mondatokban az igekötő gyakran kötelező a befejezettség / célzottság jelzésére. „Foglald" tovább értelmezve „foglalj (most kezdj el foglalni)" — folyamat. „Foglald le" = befejezett / célzott akció.
+
+- ❌ „Foglald a helyed" (folyamat, mintha még keresnél)
+- ✅ „Foglald le a helyed" (lezárt, befejezett akció)
+
+A főnévi formák hasonlóan: „Lefoglalom" > „Foglalom".
+
 ---
 
 ## 11. Mielőtt push-olnál — copy-checklist
