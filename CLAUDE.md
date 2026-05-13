@@ -544,6 +544,24 @@ Hungarian: thousand separator is **period** (`.`), decimal is **comma** (`,`).
 
 ---
 
+## Hungarian Copy & Tone
+
+**Mielőtt új landoló / blog / form-copy / email szöveget írsz — olvasd el `_docs/hungarian-copy-guidelines.md`-t.** Ez a doksi a 2026-os iskola-előkészítő landoló-redesign közben kicsiszolt elveket rögzíti.
+
+A fő szabályok dióhéjban:
+- **Tegeződés** (Te / gyermeked / felhívunk), empatikus szülőkre szabott hang
+- **Kerülendő anglicizmusok**: „specifikus" → „konkrét", „kalkuláció csinálni" → „töprengeni / mérlegelni", „nővértestvér program" → „társprogram", „neked illeszkedik" → „neked alkalmas", „opció" → „választás / lehetőség"
+- **Aspektus**: jövőbeli javulásra feltételes JELEN, nem feltételes múlt — „szeretnéd, ha **merne**", nem „mert volna"
+- **„Mi" vs „Én" perspektíva**: T/1 a brand-üzenetben (FAQ, reassure), E/1 csak Alexandra közvetlen kontextusban (videó, founder quote, „Hívj fel — segítek")
+- **„Hogy" kötőszó** kötelező az alárendelő mellékmondatok elején
+- **Em-dash** `—` (`&mdash;`) szóközökkel, brand-konzisztencia okán (a magyar standard en-dash helyett — tudatos választás)
+- **CTA-k konkrét akcióval**: „Lefoglalom a helyem", nem „Foglalom"; „Egyeztessünk telefonon?", nem „Inkább telefonon kezdesz?"
+- **Hormozi-mechanika lefokozva**: scarcity igen, de „Csak 8–10 férőhely turnusonként" hangon, nem „HURRY UP!"
+
+A `hungarian-localization` skill (általános AkH. 12-szintű helyesírás) és ez a doc (BagolykaLand-specifikus stílus) együtt használandó.
+
+---
+
 ## Testing
 
 Playwright config (`playwright.config.js`):
