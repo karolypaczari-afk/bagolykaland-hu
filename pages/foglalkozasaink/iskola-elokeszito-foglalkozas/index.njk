@@ -210,9 +210,7 @@ headStyles: |
     .iek-hero-card__list { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
     .iek-hero-card__list li { color: rgba(255,255,255,0.88); font-size: 0.88rem; line-height: 1.5; padding-left: 1.35rem; position: relative; }
     .iek-hero-card__list li::before { content: '✓'; position: absolute; left: 0; color: var(--iek-accent, var(--clr-coral)); font-weight: 800; }
-    .iek-hero-card__price { color: #fff; font-size: 0.92rem; margin: 0 0 1rem; }
-    .iek-hero-card__price strong { font-size: 1.2rem; font-weight: 900; color: var(--clr-yellow); }
-    .iek-hero-card .btn { width: 100%; justify-content: center; min-height: 48px; }
+    .iek-hero-card .btn { width: 100%; justify-content: center; min-height: 48px; margin-top: auto; }
 
     /* HERO decision helper badge */
     .iek-decision-helper {
@@ -267,6 +265,50 @@ headStyles: |
     @media (max-width: 480px) {
       .iek-video-embed { max-width: 100%; border-width: 2px; }
     }
+
+    /* Facade-pattern: poszter-kép + animált play gomb, iframe csak click után tölt */
+    .iek-video-embed--facade { cursor: pointer; outline-offset: 4px; }
+    .iek-video-embed--facade:focus-visible { outline: 3px solid var(--clr-yellow); }
+    .iek-video-cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity var(--t-mid) ease, transform var(--t-slow) ease; }
+    .iek-video-embed--facade:hover .iek-video-cover { opacity: 0.88; transform: scale(1.02); }
+    .iek-video-play {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: clamp(80px, 22%, 130px); aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--clr-coral);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+      box-shadow: 0 14px 44px rgba(179,84,49,0.55), 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform var(--t-spring), background var(--t-mid);
+      pointer-events: none;
+    }
+    .iek-video-embed--facade:hover .iek-video-play,
+    .iek-video-embed--facade:focus-visible .iek-video-play {
+      transform: translate(-50%, -50%) scale(1.08);
+      background: var(--clr-coral-dark, #8e3d1d);
+    }
+    .iek-video-play__triangle { width: 38%; height: 38%; margin-left: 8%; position: relative; z-index: 3; }
+    .iek-video-play__pulse {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 3px solid var(--clr-coral);
+      animation: iek-video-pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    .iek-video-play__pulse--delay { animation-delay: 1.2s; }
+    @keyframes iek-video-pulse {
+      0%   { transform: scale(0.95); opacity: 0.85; }
+      70%  { transform: scale(1.7);  opacity: 0; }
+      100% { transform: scale(1.7);  opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .iek-video-play__pulse { animation: none; opacity: 0.4; }
+      .iek-video-cover, .iek-video-play { transition: none; }
+    }
+    .iek-video-embed--facade.is-loaded .iek-video-cover,
+    .iek-video-embed--facade.is-loaded .iek-video-play {
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .iek-video-embed--facade.is-loaded { cursor: default; }
     .iek-video-cta {
       display: flex;
       flex-wrap: wrap;
@@ -582,6 +624,86 @@ headStyles: |
       border-radius: var(--r-md);
     }
     .iek-usp-closer strong { color: var(--clr-navy); }
+
+    /* ── PROOF BANNER (Bizonyított eredmény — Section 8.5, átemelve a régiből) ── */
+    .iek-proof-banner {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 2.25rem;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, rgba(245,198,64,0.08) 0%, rgba(43,116,109,0.06) 100%);
+      border: 1px solid rgba(43,116,109,0.18);
+      border-radius: var(--r-xl);
+      padding: 1.75rem;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.05);
+    }
+    @media (max-width: 860px) {
+      .iek-proof-banner { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.25rem; }
+    }
+    .iek-proof-banner__media {
+      position: relative;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: 0 14px 36px rgba(29,53,87,0.18);
+      aspect-ratio: 4 / 3;
+    }
+    .iek-proof-banner__media img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform var(--t-slow);
+    }
+    .iek-proof-banner:hover .iek-proof-banner__media img { transform: scale(1.03); }
+    .iek-proof-banner__media::after {
+      content: '';
+      position: absolute; inset: auto 0 0 0; height: 35%;
+      background: linear-gradient(to top, rgba(0,0,0,0.45), transparent);
+      pointer-events: none;
+    }
+    .iek-proof-banner__caption {
+      position: absolute; bottom: 0.8rem; left: 1rem; right: 1rem;
+      color: #fff; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.02em;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5); z-index: 2;
+    }
+    .iek-proof-banner__body { padding: 0.25rem 0.5rem; }
+    .iek-proof-banner__eyebrow {
+      display: inline-block;
+      font-size: 0.78rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clr-teal-dark);
+      background: rgba(43,116,109,0.1);
+      padding: 0.35rem 0.85rem; border-radius: var(--r-full);
+      margin-bottom: 0.85rem;
+    }
+    .iek-proof-banner__body h3 {
+      font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+      margin: 0 0 0.85rem;
+      color: var(--clr-navy);
+      line-height: 1.25;
+    }
+    .iek-proof-banner__body p {
+      font-size: 1rem; line-height: 1.65; color: var(--clr-text); margin: 0 0 1rem;
+    }
+    .iek-proof-banner__stats {
+      display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 1rem;
+    }
+    .iek-proof-banner__stat {
+      flex: 1; min-width: 110px;
+      background: #fff; border-radius: var(--r-md);
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .iek-proof-banner__stat-num {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.4rem; font-weight: 900;
+      color: var(--clr-teal-dark);
+      line-height: 1; margin-bottom: 0.25rem;
+    }
+    .iek-proof-banner__stat-label {
+      font-size: 0.78rem; color: var(--clr-text-mid); font-weight: 600; line-height: 1.35;
+    }
 
     /* ── COMPARE 3 ROUTES (Section 9) ── */
     .iek-routes-grid {
@@ -1413,7 +1535,7 @@ headStyles: |
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
             <path d="M12 2a1 1 0 0 0-1 1v.6A7 7 0 0 0 5 10.5V14l-1.7 2.55A1 1 0 0 0 4.13 18h15.74a1 1 0 0 0 .83-1.45L19 14v-3.5A7 7 0 0 0 13 3.6V3a1 1 0 0 0-1-1Zm-2 18a2 2 0 0 0 4 0h-4Z"/>
           </svg>
-          Csak 8–10 férőhely turnusonként &middot; július és szeptember indulással
+          Csak 8–10 férőhely turnusonként &middot; júliusi és szeptemberi indulással
         </div>
 
         <h1 id="iek-hero-h" class="fade-up stagger-1">Magabiztosabb, nyugodtabb iskolakezdés &mdash; <strong>kudarcélmények nélkül</strong></h1>
@@ -1440,7 +1562,6 @@ headStyles: |
               <li>Tankönyv és minden anyag az árban</li>
               <li>Szeptemberre magabiztos elsős</li>
             </ul>
-            <p class="iek-hero-card__price"><strong>128.000 Ft</strong> &middot; 2 részletben fizethető</p>
             <a href="#jelentkezes" class="btn btn-primary" data-preselect="nyari">Bebiztosítom a nyári helyet →</a>
           </article>
 
@@ -1454,7 +1575,6 @@ headStyles: |
               <li>Bevonó + félévi + záró felmérés</li>
               <li>Sikerélménnyel teli felkészülés</li>
             </ul>
-            <p class="iek-hero-card__price"><strong>28.000 Ft / hó</strong> &middot; ~252.000 Ft a teljes évre</p>
             <a href="#jelentkezes" class="btn btn-teal" data-preselect="tanevi">Bebiztosítom a tanévi helyet →</a>
           </article>
         </div>
@@ -1480,21 +1600,49 @@ headStyles: |
       <div class="container">
         <div class="section-header">
           <span class="section-eyebrow fade-up">Elmondom</span>
-          <h2 id="iek-video-h" class="fade-up stagger-1">Hogyan készítjük fel gyermeked?</h2>
+          <h2 id="iek-video-h" class="fade-up stagger-1">Hogyan készítjük fel a gyermekedet?</h2>
         </div>
-        <div class="iek-video-embed fade-up">
-          <iframe
-            src="https://player.vimeo.com/video/1191808534?title=0&amp;byline=0&amp;portrait=0"
-            title="Szabó-Varga Alexandra &mdash; BagolykaLand iskola-előkészítő"
-            allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
-            loading="lazy"
-            allowfullscreen></iframe>
+        <div class="iek-video-embed iek-video-embed--facade fade-up" data-vimeo-id="1191808534" role="button" tabindex="0" aria-label="Videó indítása — Szabó-Varga Alexandra a BagolykaLand iskola-előkészítő programjáról">
+          <img class="iek-video-cover"
+               src="/img/alexandra-szabovarga.webp"
+               alt="Szabó-Varga Alexandra &mdash; a BagolykaLand alapítója és iskola-előkészítő fejlesztőpedagógusa"
+               width="717" height="1024" loading="lazy" />
+          <span class="iek-video-play" aria-hidden="true">
+            <span class="iek-video-play__pulse"></span>
+            <span class="iek-video-play__pulse iek-video-play__pulse--delay"></span>
+            <svg class="iek-video-play__triangle" viewBox="0 0 24 24" focusable="false"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+          </span>
         </div>
         <div class="iek-video-cta fade-up">
           <a href="#jelentkezes" class="btn btn-teal">Lefoglalom a helyem →</a>
           <a href="tel:+36303649396" class="btn btn-outline">Inkább hívlak</a>
         </div>
       </div>
+      <script>
+        (function () {
+          const facades = document.querySelectorAll('.iek-video-embed--facade');
+          facades.forEach(function (facade) {
+            const activate = function () {
+              if (facade.dataset.activated) return;
+              facade.dataset.activated = '1';
+              const id = facade.dataset.vimeoId;
+              const iframe = document.createElement('iframe');
+              iframe.src = 'https://player.vimeo.com/video/' + id + '?title=0&byline=0&portrait=0&autoplay=1';
+              iframe.title = 'Szabó-Varga Alexandra — BagolykaLand iskola-előkészítő';
+              iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write';
+              iframe.allowFullscreen = true;
+              facade.appendChild(iframe);
+              facade.classList.add('is-loaded');
+              facade.setAttribute('aria-label', 'Videó lejátszás alatt');
+              if (window.dataLayer) window.dataLayer.push({ event: 'bk_video_play', video_id: id, video_title: 'iskola-elokeszito-alexandra' });
+            };
+            facade.addEventListener('click', activate);
+            facade.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+            });
+          });
+        })();
+      </script>
     </section>
 
 
@@ -1815,6 +1963,43 @@ headStyles: |
 
 
     {# ════════════════════════════════════════════════════════════════════
+       8.5 BIZONYÍTOTT EREDMÉNY — proof banner (átemelve a régi landolóból)
+       ════════════════════════════════════════════════════════════════════ #}
+    <section class="section section-cream" aria-labelledby="iek-proof" style="padding-top:var(--sp-2xl);">
+      <div class="container">
+        <div class="iek-proof-banner fade-up">
+          <div class="iek-proof-banner__media">
+            <img
+              src="/img/bagolykaland-iskola-elokeszito-jatekos-csoport.webp"
+              alt="BagolykaLand iskola-előkészítő csoport &mdash; játékos közös foglalkozás Debrecenben, Szabó-Varga Alexandra fejlesztőpedagógussal"
+              width="1200" height="900" loading="lazy" decoding="async" />
+            <span class="iek-proof-banner__caption">Egy iskola-előkészítő csoport pillanata &middot; szülői engedéllyel közölve</span>
+          </div>
+          <div class="iek-proof-banner__body">
+            <span class="iek-proof-banner__eyebrow">Bizonyított eredmény</span>
+            <h3 id="iek-proof">Így zárul nálunk a felkészítés &mdash; magabiztosan, dokumentált fejlődéssel</h3>
+            <p>Minden évben így zárjuk a programot: a gyermekek <strong>kézzel fogható elismerést</strong> kapnak az elvégzett munkáról, a szülők pedig <strong>írásos szülői elemzést</strong> a kimeneti mérésről. Nem szlogen &mdash; <strong>15+ év, 1000+ felkészített gyermek</strong> mögötti rutin.</p>
+            <div class="iek-proof-banner__stats">
+              <div class="iek-proof-banner__stat">
+                <span class="iek-proof-banner__stat-num">1000+</span>
+                <span class="iek-proof-banner__stat-label">Felkészített gyermek 15 év alatt</span>
+              </div>
+              <div class="iek-proof-banner__stat">
+                <span class="iek-proof-banner__stat-num">8&ndash;10 fő</span>
+                <span class="iek-proof-banner__stat-label">Maximum csoportlétszám &mdash; teljes körű figyelem</span>
+              </div>
+              <div class="iek-proof-banner__stat">
+                <span class="iek-proof-banner__stat-num">100%</span>
+                <span class="iek-proof-banner__stat-label">Kimeneti mérés + írásos elemzés</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    {# ════════════════════════════════════════════════════════════════════
        9. KÉT ÚTVONAL — Mikor kezdi az első osztályt?
        ════════════════════════════════════════════════════════════════════ #}
     <section class="section section-white" aria-labelledby="iek-routes">
@@ -1899,20 +2084,16 @@ headStyles: |
               <span class="iek-value-price">370.000 Ft</span>
             </div>
             <div class="iek-value-item">
-              <span class="iek-value-label">Egyéni bemeneti mérés &mdash; személyre szabott fejlesztési terv</span>
-              <span class="iek-value-price">15.000 Ft</span>
+              <span class="iek-value-label">Egyéni bemeneti mérés &mdash; <strong>írásos jellemzéssel</strong> <em>(nincs személyre szabott fejlesztési terv)</em></span>
+              <span class="iek-value-price">45.000 Ft</span>
             </div>
             <div class="iek-value-item">
               <span class="iek-value-label">8 részképesség-terület rendszerezett fejlesztése (figyelem, finommotorika, szerialitás, vizuális differenciálás, emlékezet, téri orientáció, szociális, kommunikáció)</span>
               <span class="iek-value-price">60.000 Ft</span>
             </div>
             <div class="iek-value-item">
-              <span class="iek-value-label">Tantárgyi alapok &mdash; betűelemek + hangbontás + szótagolás + számfogalom + számjegyírás</span>
-              <span class="iek-value-price">40.000 Ft</span>
-            </div>
-            <div class="iek-value-item">
-              <span class="iek-value-label">Félévi + záró mérés &mdash; <strong>írásos szülői elemzéssel</strong> (2×)</span>
-              <span class="iek-value-price">30.000 Ft</span>
+              <span class="iek-value-label">Kimeneti mérés &mdash; <strong>írásos szülői elemzéssel</strong></span>
+              <span class="iek-value-price">45.000 Ft</span>
             </div>
             <div class="iek-value-item">
               <span class="iek-value-label">Otthoni gyakorlófüzet és szülői segédlet</span>
@@ -1928,7 +2109,7 @@ headStyles: |
             </div>
             <div class="iek-value-total">
               <span class="iek-value-total-label">Teljes érték:</span>
-              <span class="iek-value-total-price">550.000 Ft</span>
+              <span class="iek-value-total-price">555.000 Ft</span>
             </div>
             <div class="iek-value-actual">
               A Te befektetésed: 28.000 Ft / hó
@@ -1950,28 +2131,16 @@ headStyles: |
               <span class="iek-value-price">180.000 Ft</span>
             </div>
             <div class="iek-value-item">
-              <span class="iek-value-label">Egyéni bemeneti mérés &mdash; személyre szabott fejlesztési terv</span>
-              <span class="iek-value-price">15.000 Ft</span>
-            </div>
-            <div class="iek-value-item">
-              <span class="iek-value-label">Részképesség-fejlesztés (figyelem, finommotorika, szerialitás, vizuális differenciálás, emlékezet)</span>
-              <span class="iek-value-price">40.000 Ft</span>
-            </div>
-            <div class="iek-value-item">
-              <span class="iek-value-label">Tantárgyi előkészület &mdash; betűelemek + szótagolás + hangbontás + számfogalom + számjegyírás</span>
-              <span class="iek-value-price">40.000 Ft</span>
-            </div>
-            <div class="iek-value-item">
-              <span class="iek-value-label">Szociális kompetencia-fejlesztés &mdash; mini iskolai helyzetgyakorlat</span>
-              <span class="iek-value-price">25.000 Ft</span>
+              <span class="iek-value-label">Egyéni bemeneti mérés &mdash; <strong>írásos visszajelzéssel</strong> <em>(nincs személyre szabott fejlesztési terv)</em></span>
+              <span class="iek-value-price">45.000 Ft</span>
             </div>
             <div class="iek-value-item">
               <span class="iek-value-label"><strong>Tankönyv + minden szükséges anyag és eszköz</strong> az árban</span>
               <span class="iek-value-price">12.000 Ft</span>
             </div>
             <div class="iek-value-item">
-              <span class="iek-value-label">Kimeneti mérés + <strong>írásos szülői elemzés</strong> a felkészültségről</span>
-              <span class="iek-value-price">18.000 Ft</span>
+              <span class="iek-value-label">Kimeneti mérés &mdash; <strong>írásos szülői elemzéssel</strong> a felkészültségről</span>
+              <span class="iek-value-price">45.000 Ft</span>
             </div>
             <div class="iek-value-item">
               <span class="iek-value-label">Havi 1× pótlási lehetőség az árban</span>
@@ -1983,11 +2152,11 @@ headStyles: |
             </div>
             <div class="iek-value-total">
               <span class="iek-value-total-label">Teljes érték:</span>
-              <span class="iek-value-total-price">340.000 Ft</span>
+              <span class="iek-value-total-price">292.000 Ft</span>
             </div>
             <div class="iek-value-actual">
               A Te befektetésed: 128.000 Ft
-              <small>a teljes nyárra (18 × 60 perc) &mdash; a teljes érték <strong>38%-áért</strong>, mindennel együtt</small>
+              <small>a teljes nyárra (18 × 60 perc) &mdash; <strong>kevesebb mint a teljes érték feléért</strong>, mindennel együtt</small>
             </div>
             <div class="iek-split-pay">
               <strong>2 egyenlő részletben fizethető.</strong> 64.000 Ft (program kezdete) + 64.000 Ft (1 hónap múlva). Tankönyv és anyagok benne &mdash; nincs külön költség.
@@ -2109,9 +2278,6 @@ headStyles: |
           <a href="#iek-lb-6" class="iek-gallery__item" aria-label="Megnyitás: Tantárgyi alapok asztali helyzetben">
             <img src="/img/bagolykaland-iskola-elokeszito-tantargyi-alapok.webp" alt="Tantárgyi alapok asztali helyzetben" width="400" height="300" loading="lazy" />
           </a>
-          <a href="#iek-lb-7" class="iek-gallery__item" aria-label="Megnyitás: Záró ünnepség oklevélátadás">
-            <img src="/img/bagolykaland-iskola-elokeszito-zaro-unnepseg-oklevelek.webp" alt="Záró ünnepség — oklevélátadás" width="400" height="300" loading="lazy" />
-          </a>
         </div>
 
         <p class="fade-up" style="text-align:center;margin:1.5rem auto 0;max-width:600px;color:var(--clr-text-mid);font-size:0.92rem;">A képek a BagolykaLand csoportos foglalkozásairól készültek &mdash; szülői engedéllyel közölve. <a href="/galeria/" style="color:var(--clr-teal);font-weight:700;">Még több kép a galériában →</a></p>
@@ -2123,8 +2289,7 @@ headStyles: |
           { id: 3, src: "/img/bagolykaland-iskola-elokeszito-finommotorika-kez-rajzolas.webp", alt: "Finommotorika fejlesztés — rajzolás", cap: "Finommotorika a rajzolásban — az írás kemény előfeltétele." },
           { id: 4, src: "/img/bagolykaland-iskola-elokeszito-jatekos-csoport.webp", alt: "Játékos csoportos foglalkozás", cap: "Játékos csoport — biztonságban, sikerélménnyel, motivációval." },
           { id: 5, src: "/img/bagolykaland-iskola-elokeszito-mozgasfejlesztes-labdak.webp", alt: "Mozgásfejlesztés labdákkal", cap: "Mozgásfejlesztés — a figyelem és tanulás idegrendszeri alapja." },
-          { id: 6, src: "/img/bagolykaland-iskola-elokeszito-tantargyi-alapok.webp", alt: "Tantárgyi alapok asztali helyzetben", cap: "Tantárgyi alapok asztalnál — fokozatos átmenet a szőnyegtől a füzetig." },
-          { id: 7, src: "/img/bagolykaland-iskola-elokeszito-zaro-unnepseg-oklevelek.webp", alt: "Záró ünnepség — oklevélátadás", cap: "Záró ünnepség — büszke kis elsősök, oklevéllel kezükben." }
+          { id: 6, src: "/img/bagolykaland-iskola-elokeszito-tantargyi-alapok.webp", alt: "Tantárgyi alapok asztali helyzetben", cap: "Tantárgyi alapok asztalnál — fokozatos átmenet a szőnyegtől a füzetig." }
         ] %}
         {% for img in gallery %}
         <div class="iek-lightbox" id="iek-lb-{{ img.id }}" role="dialog" aria-label="{{ img.alt }}" aria-modal="true">
@@ -2135,8 +2300,8 @@ headStyles: |
               <span class="iek-lightbox__caption">{{ img.cap }}</span>
               <div class="iek-lightbox__nav">
                 {% if img.id > 1 %}<a href="#iek-lb-{{ img.id - 1 }}" aria-label="Előző kép">← Előző</a>{% endif %}
-                <span style="opacity:0.6;font-size:0.85rem;align-self:center;">{{ img.id }} / 7</span>
-                {% if img.id < 7 %}<a href="#iek-lb-{{ img.id + 1 }}" aria-label="Következő kép">Következő →</a>{% endif %}
+                <span style="opacity:0.6;font-size:0.85rem;align-self:center;">{{ img.id }} / 6</span>
+                {% if img.id < 6 %}<a href="#iek-lb-{{ img.id + 1 }}" aria-label="Következő kép">Következő →</a>{% endif %}
                 <a href="#galeria" class="iek-lightbox__close" aria-label="Bezárás">✕ Bezárás</a>
               </div>
             </div>
