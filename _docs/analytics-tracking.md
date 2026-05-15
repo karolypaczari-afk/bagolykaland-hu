@@ -180,95 +180,67 @@ https://bagolykaland.hu/?gclid=TEST_FROM_DEVTOOLS&utm_source=manual_test
 
 ---
 
-## Google Ads — aktiválás (2026-05-12 — élesítve)
+## Google Ads — aktiválás (2026-05-15 — GA4-import flow)
 
 **Állapot:**
-- ✅ Google Ads Customer ID: `18155599249` (`AW-18155599249`)
-- ✅ `tracking.src.js` `gAdsId = 'AW-18155599249'` → AW config tag betöltődik (cross-domain linker, conversion enhanced data)
-- ✅ `tracking.src.js` `gAdsLabel = 'T-UlCOvHqKscEJHrodFD'` → direkt gtag konverzió **éles** (`AW-18155599249/T-UlCOvHqKscEJHrodFD`, 5000 HUF default value, JS dinamikusan felülírja)
-- ✅ `main.src.js` `fireGoogleAdsConversion()` mind a 3 lead-path után meghívva (lead magnet 3.000 Ft, program signup variábilis 5k-252k Ft, contact form 1.500 Ft)
-- ✅ A konverziós action neve: `BagolyKaland Lead (webhely gtag)` (a Google Ads által küldött tag e-mail alapján)
-- ⏳ Enhanced Conversions toggle a Google Ads UI-ban (forrás: Google Tag) — manuális, lásd lent 6. lépés
-- ⏳ Customer data terms el nem fogadva — manuális, lásd lent 3. lépés
-- ⏳ GA4 ↔ Google Ads link az új customer ID-vel (`18155599249`) — manuális, GA4 Admin → Product Links
-- ⏳ GA4 stream "Include user-provided data for advertising" — manuális, lásd lent 2. lépés
+- ✅ **Google Ads Customer ID: `8433857843`** (`AW-8433857843`) — a 2 aktív Search kampányt tartalmazó fiók
+- ✅ `tracking.src.js` `gAdsId = 'AW-8433857843'` → AW config tag betöltődik (cross-domain linker, Enhanced Conversions user_data hash-eket továbbít)
+- ✅ `tracking.src.js` `gAdsLabel = ''` (üres) → `fireGoogleAdsConversion()` no-op — **manual `pagead/conversion` page-event NEM tüzel a kódból**
+- ✅ **Konverzió-szolgáltatás: GA4 Key Event import** — `bagolykaland.hu (web) generate_lead` action (ID `7607011896`, type `GOOGLE_ANALYTICS_4_GENERATE_LEAD`, primary_for_goal, 5000 HUF default value, ONE_PER_CLICK)
+- ✅ Enhanced Conversions for Leads + Customer data terms **fiók-szinten ON** (2026 júni unified EC óta öröklődik action-re)
+- ✅ GA4 ↔ Ads link él: `properties/490802166/googleAdsLinks/14857371868`, Personalized Advertising ON, customer `8433857843`
+- ✅ GA4 `generate_lead` event Key Event-re jelölve (8 esemény az utolsó 14 napban, `isConversionEvent=true`)
 
-**Korábbi customer ID (`8433857843`, létrehozva 2026-05-11) NEM aktív** — az új tag email (2026-05-12) a `18155599249`-re érkezett, a `tracking.src.js` mostantól erre tüzel.
+**Történeti megjegyzés (2026-05-12–14):** rövid ideig az `AW-18155599249` customer ID-be tüzelt egy direkt gtag konverzió a kódból (`BagolyKaland Lead (webhely gtag)` action, label `T-UlCOvHqKscEJHrodFD`). Misalignment derült ki: a kampányok a `8433857843`-on futottak, így 0 konverziót látott a Bidder. 2026-05-15-én a fiók 2026-os GA4-alapú wizardra migrált, és a tisztább megoldás a `generate_lead` event GA4-importja lett. Ez a doksi azt az állapotot tükrözi.
 
-### Kétféle conversion-firing út, ne kombinálj
+### Conversion-firing út — GA4 import (egyetlen aktív path)
 
-| | GA4 import (egyszerűbb) | Direkt gtag (precízebb) |
+| | GA4 import (aktuális) | Direkt gtag (deprecated) |
 |---|---|---|
-| Setup | Google Ads → Konverziók → Új → Importálás → GA4 → `generate_lead` | Konverziós action → Tag setup → label másolása → `js/tracking.src.js` `gAdsLabel` → `npm run build` |
+| Setup | Google Ads → Cél → Konverziók → + Új → Importálás → GA4 → Web → `generate_lead` pipa → Import & continue | Konverziós action → Tag setup → label → `tracking.src.js` `gAdsLabel` → `npm run build` |
 | Latency | 24-48 órás GA4 → Ads feldolgozás | Real-time (másodpercek) |
-| Enhanced Conv | A GA4 user_data ágon | A meta-enhance hash-eken (már mind ki van építve) |
-| Risk | Smart Bidding lassabb tanulás | Akkor sem tüzel ha JS hiba van az oldalon |
-| Dedup | — | Egyező `transaction_id`-vel a GA4 generate_lead-del |
+| Enhanced Conv | Automatikus — a GA4 link user_data-ágán | A `meta-enhance` hash-eken keresztül (`gtag('set','user_data',...)`) |
+| `tracking.src.js` config | `gAdsLabel: ''` (üres) | `gAdsLabel: '<címke-string>'` |
+| `fireGoogleAdsConversion()` | No-op (üres label miatt) | Aktív |
 
-**Ajánlott a direkt gtag-ra menni** mert a `fireGoogleAdsConversion()` már bele van drótozva minden lead-pathba, és Enhanced Conv automatikusan jön. **NE** importáld a `generate_lead`-et Ads conversion-ként ha a direkt gtag is fut — Smart Bidding duplán számolja.
+> **Most a GA4 import az élő path.** A `fireGoogleAdsConversion()` `main.src.js` `bk_lead_catcher_submit` / `bk_program_signup` / `bk_contact_form_success` hookok után csendben no-op — minden konverzió a GA4 generate_lead event-en keresztül kerül a Google Ads-be.
 
-### Pontos UI lépéssor (Google Ads + GA4)
+### Aktuális action konfiguráció (validálva GAQL-lel 2026-05-15)
 
-#### 1. GA4: új Google Ads link az aktív customer ID-vel + Personalized Advertising ON (~2 perc)
-GA4 → bal lent fogaskerék (**Admin**) → property oszlop → **Product Links** → **Google Ads links** → **Link** gomb → válaszd a `Customer ID 181-555-99249` fiókot → **Enable Personalized Advertising** toggle ✓ → Submit / Mentés.
-
-Ha még megvan a régi `843-385-7843` link, töröld vagy hagyd inaktívan — az új link kell, hogy GA4 importálja az audience-eket és a `generate_lead` event-et (ha másodlagos célként importálni akarod a Smart Bidding mellett).
-
-#### 2. GA4: Data Stream — user-provided data ON (~30s)
-GA4 → Admin → property oszlop → **Data Streams** → web stream (`bagolykaland.hu`) → görgess le **Enhanced measurement** alá → **Include user-provided data for advertising** → ON.
-
-#### 3. Google Ads: Customer data terms (~1 perc)
-Google Ads (https://ads.google.com) → felül **Eszközök** (Tools, kulcs ikon) → **Konverziók** (Conversions) → bal oldalt **Beállítások** (Settings) → **Customer data terms** szekcióban olvasd át és fogadd el. Egyszer kell, az egész fiókra érvényes.
-
-#### 4. Google Ads: konverziós action — `BagolyKaland Lead (webhely gtag)`
-
-A 2026-05-12 e-mail alapján a konverziós action a `18155599249` customer ID alatt:
-- Név: `BagolyKaland Lead (webhely gtag)`
-- Tag: `AW-18155599249/T-UlCOvHqKscEJHrodFD`
-- Default érték: 5000 HUF (a JS dinamikusan felülírja submit-enként — 1.5k / 3k / 5k / 75k / 90k / 128k / 252k)
-- Currency: HUF
-
-Ha hiányoznak még a szokásos beállítások (kategória, számolás, attribúció), állítsd: SUBMIT_LEAD_FORM, ONE_PER_CLICK, click-through 30d / view-through 1d, attribúció GOOGLE_ADS_LAST_CLICK (új fióknak; ~3000 click + 300 conv után váltható DATA_DRIVEN-re).
-
-#### 5. Google Ads: a meglévő "Javasolt cél" downgrade primary→secondary (~30s)
-
-Eszközök → Konverziók → kattints a **Javasolt cél** soron (Status `ENABLED`, Category `Lead`) → **Szerkeszt** → **Cél típusa** alatt válaszd **Másodlagos cél** (Secondary goal) → Mentés.
-
-**Miért:** A GA4 → Ads link auto-importálta ezt a `generate_lead` event-ből (`GOOGLE_ANALYTICS_4_CUSTOM` típus). Ha primary marad MELLETTE a direkt gtag konverzió, Smart Bidding **kétszer számolja** ugyanazt a leadet → bid túl agresszív. Ezért a direkt gtag (webhely) marad primary, a GA4 import átkerül secondary-be (még riportban látszik, de Smart Bidding nem optimalizál rá).
-
-A "Leadűrlap – Küldés" (LEAD_FORM_SUBMIT) primary marad — csak Google Ads-en belüli lead extension form-okra tüzel, a weboldal-form-okra nem ütközik a webhely gtag konverzióval.
-
-#### 6. Google Ads: Enhanced Conversions ON az új konverzión (~1 perc)
-
-Eszközök → Konverziók → **BagolyKaland Lead (webhely gtag)** sor → **Enhanced Conversions** szekció → **Bekapcsolás** → forrás: **Google Tag** (NEM "Google Analytics", mert direkt gtag-ot használunk!) → User-provided data: jóváhagyod → Mentés.
-
-A `meta-enhance.src.js` által írt SHA-256 email/phone hash-eket a `tracking-loader.js` `pushEnhancedConversionsData()` automatikusan átadja `gtag('set','user_data',...)` hívással. Ez teszi 5-15%-kal pontosabbá a konverziós megfeleltetést cookie-blocked browser-ek esetén.
-
-#### 7. Tag setup — ✅ kész (2026-05-12)
-
-A `js/tracking.src.js`-ben élesítve:
-```js
-gAdsId:    'AW-18155599249'
-gAdsLabel: 'T-UlCOvHqKscEJHrodFD'
+```
+bagolykaland.hu (web) generate_lead (ID 7607011896)
+  status:                     ENABLED
+  type:                       GOOGLE_ANALYTICS_4_GENERATE_LEAD
+  category:                   SUBMIT_LEAD_FORM
+  primary_for_goal:           true   (Elsődleges)
+  value_settings:
+    default_value:            5000 HUF
+    always_use_default_value: true
+  counting_type:              ONE_PER_CLICK   (Egy)
+  click_through_lookback_days: 90
+  view_through_lookback_days:  1
+  attribution_model:          GOOGLE_SEARCH_ATTRIBUTION_DATA_DRIVEN
 ```
 
-A `fireGoogleAdsConversion()` a következő submitnál `gtag('event', 'conversion', { send_to: 'AW-18155599249/T-UlCOvHqKscEJHrodFD', value: <programérték>, currency: 'HUF', transaction_id: <event_id> })`-t tüzel.
+A 5000 HUF egy középérték — a GA4 event-ekben jelenleg dinamikus `value` paraméter van (1.5k–252k HUF programérték szerint), de a Google Ads-import a `always_use_default_value=true` miatt fix 5000 HUF-ot számol konverziónként. Ha bid-stratégia érzékenyebb értékegyengetést igényel, a `always_use_default_value=false` átkapcsolásával az `event_value`-t használja GA4-ből.
 
-#### 8. Smoke test (~5 perc)
+### Smoke test
 
-Friss inkognitó ablak → bagolykaland.hu → bármelyik form kitöltése (pl. `/nyari-tabor/` form vagy `/szorongasoldo/` form).
+Friss inkognitó ablak → bagolykaland.hu → bármelyik form kitöltése (pl. `/kapcsolat/`).
 
 Ellenőrzés:
-- **Google Ads → Konverziók → adott konverzió:** a "All conversions" oszlopnak 1-2 órán belül 1-re kell ugrania (real-time-ban 24-48h-ig még "1 day to update" lehet, de a recent activity látszik)
-- **DevTools Console:** `dataLayer.filter(x => x[1] === 'conversion')` → 1 hit a transaction_id-vel
-- **GA4 DebugView:** látnod kell a `generate_lead` event-et, és a `_user_data` paramétert benne
+- **DevTools Network:** a request capture-ban **NEM** szabad `googleadservices.com/pagead/conversion/...` GET-et látni (a direkt gtag-fire kikapcsolva). Helyette **`region1.google-analytics.com/g/collect?...en=generate_lead&...`** GA4 hit kell.
+- **GA4 DebugView:** `generate_lead` event a SUBMIT_LEAD_FORM kategóriában, hozzátapasztott attribútum-paraméterekkel (`gclid`, `utm_*` stb.)
+- **Google Ads → Cél → Konverziók → bagolykaland.hu (web) generate_lead:** 24-48 órán belül a "Konverziók" oszlop felugrik 1-re (real-time-ban 1-3 órás Ads-on belüli feldolgozás után).
+
+`node _dev/scripts/verify-conversion-fire.js` — Playwright headless smoke test, ami a `/kapcsolat/` formot kitölti és captureli a network hit-eket. A várt output: GA4 `g/collect` hit `en=generate_lead`-del, NEM `pagead/conversion/...` GET.
 
 ### "Never break" Google Ads kontextusban
 
-1. **gAdsId nélkül a gAdsLabel hiábavaló** — a loadGads() csak akkor tölti be a AW tag-et ha gAdsId van. Most már van (`AW-18155599249`).
-2. **GA4 import + direkt gtag = duplikálás kockázata** — ha mindkettő be van állítva, MINDIG legyen ugyanaz a `transaction_id`. A scaffold a form `event_id`-jét használja, ami szerver-oldali CAPI dedup-pal is egyezik.
-3. **Personalized Advertising OFF a linken = nincs remarketing audience-export.** Ezt sokan elfelejtik bekapcsolni, mert a link létrejön a checkbox bekattintása nélkül is.
-4. **Enhanced Conversions forrás kiválasztása:** Google Tag (=direkt gtag) vagy Google Analytics — pontosan AZT válaszd amelyik útat használod, ne mindkettőt. Most: Google Tag.
+1. **GA4 import + direkt gtag = duplikálás kockázata.** A `gAdsLabel: ''` direkt gtag-ot kikapcsolja → csak a GA4 import számol. Ha valaha visszakapcsolnád a direkt gtag-ot, a 7607011896 GA4-import action-t MÁSODLAGOSRA kell állítani, hogy a Smart Bidding ne számolja kétszer.
+2. **GA4 ↔ Ads link Personalized Advertising OFF = nincs audience-export és nincs Enhanced Conversions data flow.** Mindkettő kell — GA4 Admin → Termékhivatkozások → Google Ads-link → "Personalized Advertising" ON.
+3. **A `generate_lead` GA4 event MUST stay marked as Key Event.** Ha valaki tiltja GA4 Admin → Adatfolyamok → Eseménybeállítások-ban, a Google Ads import **azonnal megáll** (4-8 óra propagáció után).
+4. **Fiók-szintű Enhanced Conversions for Leads ON** (`customer.conversion_tracking_setting.enhanced_conversions_for_leads_enabled=true`). A 2026 júni unified EC óta öröklődik action-re — külön action-szintű toggle nem kell.
 
 ---
 
