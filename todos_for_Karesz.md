@@ -337,36 +337,76 @@ Lásd a régebbi **🔴 1. Conversion actions cleanup — Primary/Secondary szé
 
 ---
 
-## 🟡 T6. (Opcionális) MailerLite popup-integráció befejezése (30 perc)
+## ~~🟡 T6. (Opcionális) MailerLite popup-integráció befejezése~~ ✅ NEM SZÜKSÉGES
 
-**Probléma:** A `js/popup.js`-ben a `ML_GROUP_ID = '156829265225057690'` már beállítva, **de `window.BK_ML.API_KEY` nincs feltöltve**, ezért a popup-leadek **NEM kerülnek be a MailerLite-ba**. A frontend csak Supabase-be ment + `/api/popup-lead.php`-ba a fallback logot. A felhasználó **nem kapja meg az 5 ingyenes segédanyagot e-mailben** — ez konverzió- és reputáció-károsodás.
+**Update 2026-05-19:** A `window.BK_ML.API_KEY` MÁR be van állítva a `_includes/partials/scripts.njk:2`-ben (inline JS), és a MailerLite API működik. Az eredeti T6 hipotézis hibás volt.
 
-**Mi kell:**
+---
 
-### 6.1 MailerLite API key generálás
+## 🔴 T7. MailerLite "Szekv. után" automation tartalmi verify (10 perc)
 
-[mailerlite.com](https://app.mailerlite.com/) → Integrations → API → Generate new token → másold le
+**Kontextus:** 2026-05-19 kódváltozás — a popup + inline lead-catcher feliratkozói az új master post-funnel group-ra mennek (`183475595689068359` = "Szekv. után - Összes feliratkozó kiv. vevok"), nem a régi Hiszti Welcome szekvenciára. **Triggerelt automation:** `183463194457540535` = "Szekv. után - Összes feliratkozónak".
 
-### 6.2 BWS-be tárolás (preferált) VAGY szerveroldali config
+**Probléma, amit ellenőrizni kell:** A landoló UI-n explicit ígéret van a feliratkozónak:
 
-**Opció A (BWS-be):** Karesz CLAUDE-rendelkezésre fogja bocsátani, hogy a `js/lead-capture-loader.src.js`-be inline-olja:
+> *„Iratkozz fel és küldünk **5 gyakorlati anyagot**, amit még ma kipróbálhatsz a gyerekeddel"*
+>
+> + felsorolva: 🔥 Top 5 tűzoltási technika, 🎬 Hisztikezelés (3 videó), 😰 Szorongásoldás, 📝 Figyelemfejlesztés (Jolly Joker), 🎓 Iskolaérettség
 
-```js
-window.BK_ML = { API_KEY: '<token>' };
-```
+Success-message: *„Hamarosan megérkeznek az e-mailben a segédanyagok!"*
 
-**Opció B (külön JS fájl, gitignored):** Lokálban `js/_secrets.js`-be (gitignored), SSH-n a szerverre felmásolni, és `_includes/partials/scripts.njk`-ban `<script src="/js/_secrets.js?v={{ buildHash }}"></script>` előbb mint a popup.
+**Kérdés:** A `183463194457540535` automation tényleg kiküldi-e az 5 anyagot, vagy csak a master newsletter szekvenciát?
 
-> **TILOS:** Ne commit-old a token-t a publikus repóba — a `mailerlite.com` API direct send-eket csinál, anyone-with-token tud spam-elni a listára.
+### Lépések:
 
-### 6.3 Smoke test
+**1.** Lépj be: [app.mailerlite.com](https://app.mailerlite.com) → bal menü **Automation**
 
-Browser DevTools Console:
-```js
-window.BK_ML  // { API_KEY: "..." } legyen
-```
+**2.** Keresd meg: **„Szekv. után - Összes feliratkozónak"** (ID `183463194457540535`) → kattints rá
 
-Aztán incognito → popup ki-trigger-eltetés → form kitöltés egy random email-lel → MailerLite UI → Subscribers → keresd meg a friss subscriber-t az `Zsenifeszek (Hiszti funnel)` group-ban.
+**3.** Nézd meg a flow-t — első 5-7 email-step-et:
+
+| Lépés | Mit várj | Mit ellenőrizz |
+|---|---|---|
+| 1. email (azonnal) | „Üdvözöllek + 1. anyag" | Tartalmazza-e a **tűzoltási technikákat** vagy linket hozzá? |
+| 2. email (1-2 nap múlva) | 2. anyag | **Hisztikezelés** 3 videóra mutató link? |
+| 3. email (3-4 nap) | 3. anyag | **Szorongásoldás** példa-videó? |
+| 4. email (5-7 nap) | 4. anyag | **Figyelemfejlesztés** Jolly Joker letöltési link? |
+| 5. email (7-10 nap) | 5. anyag | **Iskolaérettség** elvárás-leírás? |
+
+**4.** Ha NEM teljesíti az 5 anyagot:
+
+**Opció A** — építsd be: az automation **elejére adj hozzá 5 új email-step-et**, amik az 5 ígért anyagot küldik ki. Sorrend: az ígéret-volumenhez igazítva.
+
+**Opció B** — írasd át a UI-promise-t: `_includes/partials/lead-catcher.njk` és `js/popup.js` szövegéből vedd ki az „5 anyag" konkrét felsorolást, és csak általánosan ígérj „hasznos parenting-tartalmat".
+
+> **Javaslat:** Opció A jobb (a feliratkozó már látta a konkrét ígéreteket — a value-stack tartja a CR-t fel). De ha most nincs idő, Opció B konzervatívabb és pillanatok alatt megcsinálható.
+
+### Verify:
+
+Teszteld magad: `incognito Chrome` → bagolykaland.hu → kitölts a popup-ot egy `+karesz_test_2026_05_19@<gmail>.com` típusú email-aliasszal → várj 1 órát → ellenőrizd, hogy érkezett-e email és milyen tartalmú.
+
+---
+
+## 🟡 T8. (Opcionális) Meglévő Bagolykaland-tagged subscriber-ek áthelyezése
+
+**Kontextus:** A 2026-05-19-i kódváltozás **csak a jövőbeli feliratkozókra hat**. A régi Hiszti group-ban (`156829265225057690`) jelenleg ott vannak a Bagolykaland-tagged korábbi feliratkozók is (`signup_source = "bagolykaland"` custom field szűrhetővé teszi őket).
+
+**Kérdés:** Áthelyezzük őket is az új master group-ra?
+
+**Pro:** Konzisztencia — minden Bagolykaland-feliratkozó ugyanazt a master szekvenciát kapja a jövőben.
+**Con:** Ha a régi Hiszti Welcome szekvenciát éppen járják (1-2 hetes onboarding), elveszítik a maradék emaileket.
+
+**Ha igen, mit csinálj:**
+
+[app.mailerlite.com](https://app.mailerlite.com) → **Subscribers** → bal panel **Groups** → "Hirlevel feliratkozok - Hiszti" csoport → filter / advanced filter:
+
+- `signup_source` is `bagolykaland`
+
+Eredmény: lista a Bagolykaland-feliratkozókról. **Select all** → felül **Actions** → **Add to group** → "Szekv. után - Összes feliratkozó kiv. vevok" (NEM Move — Add, hogy a régi group-ban is maradjanak history-szempontból).
+
+Optionálisan: ugyanezeknél **Remove from group** → "Hirlevel feliratkozok - Hiszti" (csak ha el akarod őket teljesen vágni a Hiszti listáról).
+
+> **Javaslat:** Csak akkor csináld, ha T7-ben Opció A megvan (5 anyag az új flow-ban). Egyébként a meglévő feliratkozók kétszer kapnák meg az 5 anyagot, vagy ami rosszabb: az új master szekvenciába kerülve hirtelen abbahagyják a Hiszti welcome-emaileket — confusing élmény.
 
 ---
 
@@ -377,10 +417,11 @@ Aztán incognito → popup ki-trigger-eltetés → form kitöltés egy random em
 | **MA** | T1 (GA4 custom dimensions × 2) | 5 perc |
 | **MA** | T3 (Enhanced Measurement verify) | 2 perc |
 | **MA** | T4 (CAPI health endpoint SSH-aktiválás) | 5 perc |
+| **MA** | T7 (MailerLite "Szekv. után" automation tartalmi verify) | 10 perc |
 | **HOLNAP** | T2 (`generate_lead_paid` szűrt event létrehozás) | 8 perc |
 | **+24h** | T2 folytatás (Key Event toggle + Google Ads import átváltás) | 5 perc |
 | **+48h** | T5 (Google Ads conversion-action cleanup) | 10 perc |
-| **Bármikor** | T6 (MailerLite API key — sürgős, de nem blocker) | 30 perc |
+| **T7 után** | T8 (Meglévő bagolykaland-feliratkozók áthelyezése, opcionális) | 5 perc |
 
 **Smart Bidding tanulási fázis:** a T2 után 7-14 nap, mire az új `generate_lead_paid` signal teljesen átveszi.
 
@@ -393,7 +434,9 @@ Aztán incognito → popup ki-trigger-eltetés → form kitöltés egy random em
 - [ ] GA4 → Admin → Events → `generate_lead_paid` Key Event ON, `generate_lead` Key Event OFF
 - [ ] Google Ads → Conversions → `bagolykaland.hu (web) generate_lead_paid` mint Primary action
 - [ ] `curl 'https://bagolykaland.hu/api/meta-capi-health.php?key=YOUR&hours=24'` → `"health": "ok"`
-- [ ] Popup form submit → MailerLite UI-n megjelenik a friss subscriber
+- [ ] Popup form submit → MailerLite UI-n megjelenik a friss subscriber a **"Szekv. után - Összes feliratkozó kiv. vevok"** group-ban (NEM Hiszti)
+- [ ] A friss subscriber `signup_source = bagolykaland` custom field-del rendelkezik
+- [ ] T7: "Szekv. után - Összes feliratkozónak" automation tartalmi ellenőrzés — kiküldi-e az 5 ígért anyagot
 
 ---
 
@@ -406,3 +449,4 @@ Aztán incognito → popup ki-trigger-eltetés → form kitöltés egy random em
 - `api/meta-capi-health.php` — új endpoint, capi.log + capi-relay.log status-eloszlás-riport.
 - `api/capi-config.example.php` — `$metaHealthKey` dokumentálva.
 - `_docs/analytics-tracking.md` — új event-ek (directions_click, qualified_engagement) + lead_quality_tier dimension dokumentálva, 19 → 20 custom dimension.
+- `_includes/partials/lead-catcher.njk` + `js/popup.js` — MailerLite group ID lecserélve `156829265225057690` (Hiszti) → `183475595689068359` (Szekv. után - Összes feliratkozó kiv. vevok). Új feliratkozók a master post-funnel automation-be kerülnek.
