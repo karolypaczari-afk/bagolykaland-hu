@@ -47,11 +47,32 @@ Ezek mind `gtag('event', ...)` hívások, automatikus dataLayer push-csal:
 | `view_assessment` | `/vizsgalatok/...` (sessionben 1×) | service_slug, service_category=assessment |
 | `phone_click` | `tel:` link click | link_url, link_text |
 | `email_click` | `mailto:` link click | link_url, link_text |
+| `directions_click` | Google Maps / útvonalterv link click (google.com/maps, goo.gl/maps, maps.app.goo.gl, /dir/, /directions) | link_url, link_text |
 | `cta_click` | `.btn-coral` / `.btn-teal` / `.btn-primary` / `.v2-sticky-cta a` / `.announcement-bar a` click VAGY href tartalmaz `nyari-tabor`/`szorongasoldo`/`iskola-elokeszito`/`kezen-fogva`/`kapcsolat`/`foglalkozasaink`/`vizsgalatok` | cta_type (program/service/contact/form_anchor/engagement), cta_text, cta_destination |
 | `scroll_depth_50` | Az oldal 50%-ának elérése | scroll_depth=50 |
 | `scroll_depth_75` | Az oldal 75%-ának elérése | scroll_depth=75 |
-| `form_start` | Első focus bármelyik form input/select/textarea-ban | form_id, source |
-| `generate_lead` | Sikeres form submit (program/lead-magnet/contact) — main.src.js hívja | lead_source, lead_type, value (HUF), currency=HUF, program/turnus/form_name (típustól függően) |
+| `qualified_engagement` | High-intent LP (program/service/assessment/camp/online_course/school_prep_intensive) + scroll ≥50% + ≥30s dwell (per-session, slug-onként 1×) | service_slug, service_category, engagement_signals |
+| `bk_form_start` | Első focus bármelyik form input/select/textarea-ban (per-form, main.src.js) | form_name, form_id, field_count |
+| `generate_lead` | Sikeres form submit (program/lead-magnet/contact/career) — `BKAnalytics.fireLead` hívja | `lead_quality_tier` (magnet/contact/career/program_inquiry/summer_camp/program_szorongas/school_prep_intensive/school_prep_academic), value (HUF, tier-default), currency=HUF, lead_source, program/turnus (típustól függően) |
+
+> **`form_start` SZÁNDÉKOSAN nincs a saját kódunkban** — a GA4 Enhanced Measurement Form interactions feature automatikusan tüzeli, és a duplikálás zajt vinne a Smart Bidding signalba. A `bk_form_start` egyedi név, ami nem kolliziál, és per-form sugárzik (`trackedForms` WeakSet).
+
+### Lead-quality tier értékek (`lead_quality_tier`)
+
+A `BKAnalytics.fireLead({ lead_quality_tier: '…' })` minden caller-nél explicit, és a `value` automatikusan a tier-default lesz, hacsak nincs külön megadva:
+
+| Tier | Default value | Mikor |
+|---|---:|---|
+| `magnet` | 1 000 Ft | 5 ingyenes segédanyag popup + inline lead-catcher |
+| `contact` | 1 500 Ft | generikus `/kapcsolat/` form |
+| `career` | 8 000 Ft | `/karrier/` állásjelentkezés |
+| `program_inquiry` | 5 000 Ft | egyéb program-érdeklődés (fallback) |
+| `summer_camp` | 75 000 Ft | Kincskereső Élménytábor |
+| `program_szorongas` | 90 000 Ft | Szorongásoldó program |
+| `school_prep_intensive` | 128 000 Ft | Nyári intenzív iskola-előkészítő |
+| `school_prep_academic` | 252 000 Ft | Tanévi iskola-előkészítő |
+
+**Smart Bidding implikáció:** a `magnet` tier (~havi sok lead, alacsony LTV) ne legyen Key Event a Google Ads-importba — különben a Smart Bidding túl-bid-eli a lead-magnet keresőszavakat. Megoldás: GA4 admin → Events → készíts egy szűrt másolat-eventet `generate_lead_paid` névvel, ami csak `lead_quality_tier != 'magnet'` esetén tüzel, és **azt** import-old Ads-be.
 
 **Minden** event-re automatikusan ráragad a default param-csomag:
 - `content_group`, `page_category`, `service_slug`, `lang`
@@ -79,29 +100,32 @@ Mindegyiknél a scope **Event**, a többi mező ahogy alább. A `Description` op
 |---|---|---|---|
 | 1  | Page Category      | `page_category`    | Oldal taxonómia (home / summer_camp / program / service / assessment / blog / contact …) |
 | 2  | Service Slug       | `service_slug`     | URL slug a megnyitott szolgáltatáshoz |
-| 3  | Service Category   | `service_category` | `view_*` event-ek service kategória paramétere |
+| 3  | Service Category   | `service_category` | `view_*` + `qualified_engagement` event-ek service kategória paramétere |
 | 4  | CTA Type           | `cta_type`         | program / service / contact / form_anchor / engagement |
 | 5  | CTA Text           | `cta_text`         | Megnyomott CTA látható szövege |
 | 6  | Form ID            | `form_id`          | Form HTML id / name |
-| 7  | Lead Source        | `lead_source`      | `generate_lead` event source: program_signup / contact_form / bagolykaland (lead magnet) |
-| 8  | Lead Type          | `lead_type`        | summer_camp / school_prep_intensive / program_inquiry / lead_magnet / contact |
+| 7  | Lead Source        | `lead_source`      | `generate_lead` event source: program_signup / contact_form / popup_lead_magnet / career_application |
+| 8  | Lead Quality Tier  | `lead_quality_tier` | magnet / contact / career / program_inquiry / summer_camp / program_szorongas / school_prep_intensive / school_prep_academic |
 | 9  | Program            | `program`          | Konkrét program neve (camp / szorongásoldó / iskola-előkészítő …) |
 | 10 | Turnus             | `turnus`           | Tábor turnus azonosító |
-| 11 | FBCLID             | `fbclid`           | Meta click ID (Surya parity, magic dim-name) |
-| 12 | GBRAID             | `gbraid`           | Google Ads iOS click ID |
-| 13 | WBRAID             | `wbraid`           | Google Ads web cross-context click ID |
-| 14 | MSCLKID            | `msclkid`          | Microsoft Ads click ID |
-| 15 | UTM Source         | `utm_source`       | Marketing forrás (manual UTM) |
-| 16 | UTM Medium         | `utm_medium`       | cpc / email / social / referral |
-| 17 | UTM Campaign       | `utm_campaign`     | Kampánynév (manual UTM) |
-| 18 | UTM Content        | `utm_content`      | Ad/creative variant |
-| 19 | UTM Term           | `utm_term`         | Kulcsszó vagy targeting term |
+| 11 | Engagement Signals | `engagement_signals` | `qualified_engagement` event komponensei (pl. `view+scroll50+dwell30`) |
+| 12 | FBCLID             | `fbclid`           | Meta click ID (Surya parity, magic dim-name) |
+| 13 | GBRAID             | `gbraid`           | Google Ads iOS click ID |
+| 14 | WBRAID             | `wbraid`           | Google Ads web cross-context click ID |
+| 15 | MSCLKID            | `msclkid`          | Microsoft Ads click ID |
+| 16 | UTM Source         | `utm_source`       | Marketing forrás (manual UTM) |
+| 17 | UTM Medium         | `utm_medium`       | cpc / email / social / referral |
+| 18 | UTM Campaign       | `utm_campaign`     | Kampánynév (manual UTM) |
+| 19 | UTM Content        | `utm_content`      | Ad/creative variant |
+| 20 | UTM Term           | `utm_term`         | Kulcsszó vagy targeting term |
+
+> **Megjegyzés (2026-05-19 update):** A `lead_type` korábbi dimension lecserélve a `lead_quality_tier`-re — tisztábban szegmentál Smart Bidding-szempontból, és az értékkulcs egy az egybe a kódbeli `LEAD_QUALITY_VALUES` map-pal. Az `engagement_signals` az új `qualified_engagement` composite event-hez kell.
 
 **Tipp**: tartsd nyitva ezt a doksit + a GA4 tab-ot egymás mellett, és gyorsbillentyűzd: Tab-ok között CTRL+Tab, mezők között Tab, mentés Enter.
 
 > **Content Group**, **Language (lang)** és **gclid** automatikusan kollektálódik GA4-ben (built-in dimension-ök), külön regisztrálni nem kell.
 
-**Property limit:** 50 custom dimension. Itt 19, bőven belefér.
+**Property limit:** 50 custom dimension. Itt 20, bőven belefér.
 
 **Feldolgozási késleltetés:** 24-48 óra, mire az új dimension-re lehet szűrni — addig csak az event-listing mutatja az event paramétereket.
 

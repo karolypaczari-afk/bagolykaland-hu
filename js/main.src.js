@@ -120,19 +120,20 @@
           content_category: 'lead_magnet',
         });
       }
-      // GA4 standard lead conversion — picked up automatically by Google Ads
-      // via the GA4 → Ads link once that's configured. Value is the lead
-      // magnet's intrinsic worth (downstream conversion-rate × LTV estimate).
+      // GA4 generate_lead — `lead_quality_tier: 'magnet'` Smart Bidding
+      // súlyozást tisztítja (alacsony tier-default value: 1000 Ft) hogy a
+      // lead-magnet keresőszavak ne kapjanak túl-bid-et a program-signup-
+      // szóhoz képest.
       if (window.BKAnalytics) {
         window.BKAnalytics.fireLead({
           lead_source: params.lc_source || 'bagolykaland',
           lead_type: 'lead_magnet',
-          value: 3000
+          lead_quality_tier: 'magnet'
         });
       }
       // Direct AW conversion (no-op until gAdsLabel set). Lower value than
       // program signups so Smart Bidding doesn't over-weight lead magnets.
-      fireGoogleAdsConversion(3000);
+      fireGoogleAdsConversion(1000);
 
     } else if (eventName === 'bk_program_signup') {
       var program = params.program || '';
@@ -177,8 +178,15 @@
         }, dedup);
       }
 
-      // GA4 standard generate_lead — value mirrors the program's economic
-      // weight so Google Ads optimization (once enabled) bids accordingly.
+      // GA4 generate_lead — `lead_quality_tier` per-program szétválasztja a
+      // Smart Bidding signal-t, és a tier-default value visszaadja a program
+      // gazdasági súlyát (Maximize Conv Value / tROAS bidding-hez).
+      var leadTier =
+        program === CAMP_PROGRAM_NAME                  ? 'summer_camp' :
+        program === SZORONGAS_PROGRAM_NAME             ? 'program_szorongas' :
+        program === SCHOOL_PREP_INTENSIVE_PROGRAM_NAME ? 'school_prep_intensive' :
+        program === SCHOOL_PREP_ACADEMIC_PROGRAM_NAME  ? 'school_prep_academic' :
+        'program_inquiry';
       var programValue =
         program === CAMP_PROGRAM_NAME                  ? CAMP_VALUE_HUF :
         program === SZORONGAS_PROGRAM_NAME             ? SZORONGAS_VALUE_HUF :
@@ -188,14 +196,10 @@
       if (window.BKAnalytics) {
         window.BKAnalytics.fireLead({
           lead_source: 'program_signup',
-          lead_type:
-            program === CAMP_PROGRAM_NAME ? 'summer_camp' :
-            program === SCHOOL_PREP_INTENSIVE_PROGRAM_NAME ? 'school_prep_intensive' :
-            program === SCHOOL_PREP_ACADEMIC_PROGRAM_NAME ? 'school_prep_academic' :
-            'program_inquiry',
+          lead_quality_tier: leadTier,
           program: program,
-          turnus: params.turnus || '',
-          value: programValue
+          turnus: params.turnus || ''
+          // value-t a BKAnalytics.fireLead a tier-defaultból adja
         });
       }
       // Direct AW conversion (no-op until gAdsLabel set). Shares the
@@ -209,14 +213,14 @@
         content_name: params.form_name || 'contact-form',
       }, contactDedup);
 
-      // Generic contact form → still counts as a lead for Google Ads
-      // optimization, but at lower value than program-specific inquiries.
+      // Generic contact form → `lead_quality_tier: 'contact'` (tier-default
+      // 1500 Ft). Külön a Smart Bidding-ben szegmentálható az áttételes
+      // kapcsolat-érdeklődés a program-jelentkezésektől.
       if (window.BKAnalytics) {
         window.BKAnalytics.fireLead({
           lead_source: 'contact_form',
-          lead_type: 'contact',
-          form_name: params.form_name || 'contact-form',
-          value: 1500
+          lead_quality_tier: 'contact',
+          form_name: params.form_name || 'contact-form'
         });
       }
       // Direct AW conversion (no-op until gAdsLabel set).

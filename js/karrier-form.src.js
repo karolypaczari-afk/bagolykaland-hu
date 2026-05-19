@@ -77,7 +77,10 @@
         if (startTracked) return;
         startTracked = true;
         track('bk_career_form_start', { form_name: 'career' });
-        gaEvent('form_start', { form_name: 'career', content_category: 'career_application' });
+        // NOTE: nem `form_start` — az ütközne a GA4 Enhanced Measurement
+        // auto-trackelt `form_start` event-jével. Prefixált custom event,
+        // ami a content_category-vel megőrzi a career-specifikus signal-t.
+        gaEvent('bk_form_start', { form_name: 'career', content_category: 'career_application' });
     }, { once: false });
 
     // ── File-input UX (kiválasztás visszajelzése + kliens validáció) ─────
@@ -193,12 +196,24 @@
                     if (successEl) successEl.style.display = 'block';
 
                     track('bk_career_form_success', { form_name: 'career', event_id: eventId });
-                    gaEvent('generate_lead', {
-                        currency: 'HUF',
-                        value: 8000,
-                        content_category: 'career_application',
-                        event_id: eventId
-                    });
+                    // GA4 generate_lead — `lead_quality_tier: 'career'` (tier-default
+                    // 8000 Ft). Karrier-jelentkezés a Smart Bidding signal-térképben
+                    // saját tier-ként ülve nem keveredik a vendég-lead-ekkel.
+                    if (window.BKAnalytics && typeof window.BKAnalytics.fireLead === 'function') {
+                        window.BKAnalytics.fireLead({
+                            lead_source: 'career_application',
+                            lead_quality_tier: 'career',
+                            event_id: eventId
+                        });
+                    } else {
+                        gaEvent('generate_lead', {
+                            currency: 'HUF',
+                            value: 8000,
+                            content_category: 'career_application',
+                            lead_quality_tier: 'career',
+                            event_id: eventId
+                        });
+                    }
                     metaEvent('Lead', {
                         content_name: 'career_application',
                         content_category: 'career_application',

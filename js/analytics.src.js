@@ -12,9 +12,15 @@
  *    - view_service / view_assessment / view_program / view_camp / view_course
  *      (session-gated, fires once per slug per session)
  *    - phone_click / email_click
+ *    - directions_click (Google Maps / útvonalterv link → local-intent signal)
  *    - cta_click  (program / service / contact / engagement)
  *    - scroll_depth_50 / scroll_depth_75 (GA4 only — Meta has its own path)
- *    - form_start (first focus inside any form)
+ *    - qualified_engagement (composite: view_service + scroll_50 + 30s dwell)
+ *
+ *  NOTE: This module does NOT fire a custom `form_start` event — GA4 Enhanced
+ *  Measurement auto-tracks `form_start` natively. main.src.js fires its own
+ *  prefixed `bk_form_start` for per-form telemetry without colliding with the
+ *  auto-tracked event.
  *
  *  Exposes `window.BKAttribution` (read + clear) and `window.BKAnalytics`
  *  (`ga4Event`, `fireLead` — used by main.js form-submit success paths).
@@ -209,7 +215,14 @@
     });
   }
 
-  // ─── phone_click / email_click ──────────────────────────────────────────
+  // ─── phone_click / email_click / directions_click ───────────────────────
+  // directions_click: Google Maps / route-planner link → local-intent signal.
+  // Debrecen-i fizikai helyszín → a térkép/útvonalterv kattintás
+  // sales-fokus jelzés, amit a Smart Bidding (különösen a Performance Max +
+  // local extensions) jól tud súlyozni. Pattern minden Maps-URL-re: google
+  // maps subdomain, goo.gl/maps shortener, maps.app.goo.gl deep-link,
+  // /dir/ vagy /directions útvonal-path.
+  var MAPS_RE = /(google\.[a-z.]+\/maps|goo\.gl\/maps|maps\.app\.goo\.gl|maps\.google\.|\/dir\/|\/directions)/i;
   document.addEventListener('click', function (e) {
     var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if (!a) return;
@@ -219,6 +232,11 @@
       ga4Event('phone_click', { link_url: href, link_text: text });
     } else if (href.indexOf('mailto:') === 0) {
       ga4Event('email_click', { link_url: href, link_text: text });
+    } else if (MAPS_RE.test(href)) {
+      ga4Event('directions_click', {
+        link_url: href.slice(0, 200),
+        link_text: text
+      });
     }
   }, true);
 
@@ -293,35 +311,126 @@
     else window.addEventListener('load', check);
   })();
 
-  // ─── form_start — first focus on any form ──────────────────────────────
-  var formStartFired = false;
-  document.addEventListener('focusin', function (e) {
-    if (formStartFired) return;
-    if (!e.target.matches) return;
-    if (!e.target.matches('form input, form select, form textarea')) return;
-    var form = e.target.closest('form');
-    if (!form) return;
-    var formId = (form.id || form.getAttribute('name') || form.getAttribute('aria-label') || 'unknown')
-      .toString().slice(0, 60);
-    formStartFired = true;
-    ga4Event('form_start', { form_id: formId, source: pageCtx.slug });
-  }, true);
+  // ─── form_start — DELIBERATELY NOT FIRED ───────────────────────────────
+  // GA4 Enhanced Measurement auto-tracks `form_start` natively. Firing our
+  // own `form_start` here would collide with the auto-tracked event in GA4
+  // (same event name, different params) → noisy Smart Bidding signals.
+  // Per-form telemetry lives in main.src.js as `bk_form_start` (prefixed).
+
+  // ─── qualified_engagement — composite high-intent signal ────────────────
+  // Tüzelési feltétel: high-intent page-kategória (camp, program, service,
+  // assessment, online_course, school_prep_intensive) ÉS scroll ≥50% ÉS ≥30s
+  // dwell. Smart Bidding-nek thin-data ablakban (havi pár tucat form-submit
+  // mellett) ez stabil mintát ad, mielőtt elég macro-konverzió érkezne.
+  // Per-session firing (sessionStorage) — egy session-ben egy LP-n max 1×.
+  // GA4-only — Meta-pixelt nem terheljük, mert ott a ViewContent +
+  // InitiateCheckout standard event-ek a high-intent signal-ek.
+  (function () {
+    var HIGH_INTENT_CATEGORIES = [
+      'summer_camp',
+      'program',
+      'school_prep_intensive',
+      'online_course',
+      'service',
+      'assessment'
+    ];
+    if (HIGH_INTENT_CATEGORIES.indexOf(pageCtx.category) === -1) return;
+
+    var qualified = { view_intent: true, scroll_50: false, dwell_30s: false };
+    var fired = false;
+
+    function tryFire() {
+      if (fired) return;
+      if (!(qualified.view_intent && qualified.scroll_50 && qualified.dwell_30s)) return;
+      var qeKey = 'bk_qualified_engagement_' + pageCtx.slug;
+      try {
+        if (sessionStorage.getItem(qeKey) === '1') { fired = true; return; }
+        sessionStorage.setItem(qeKey, '1');
+      } catch (e) { /* storage blocked → still fire */ }
+      fired = true;
+      ga4Event('qualified_engagement', {
+        service_slug: pageCtx.slug,
+        service_category: pageCtx.category,
+        engagement_signals: 'view+scroll50+dwell30'
+      });
+    }
+
+    // scroll_50 trigger — könnyű listener, csak az 50%-ot várja
+    var scrollDone = false;
+    function onScrollQE() {
+      if (scrollDone) return;
+      var doc = document.documentElement, body = document.body;
+      var winH = window.innerHeight || doc.clientHeight;
+      var docH = Math.max(body.scrollHeight, doc.scrollHeight, body.offsetHeight, doc.offsetHeight, doc.clientHeight);
+      if (docH <= winH) {
+        scrollDone = true;
+        qualified.scroll_50 = true;
+        tryFire();
+        return;
+      }
+      var scrolled = (window.pageYOffset || doc.scrollTop || 0) + winH;
+      var pct = Math.min(100, Math.round((scrolled / docH) * 100));
+      if (pct >= 50) {
+        scrollDone = true;
+        qualified.scroll_50 = true;
+        tryFire();
+      }
+    }
+    window.addEventListener('scroll', onScrollQE, { passive: true });
+
+    // dwell_30s trigger
+    setTimeout(function () {
+      qualified.dwell_30s = true;
+      tryFire();
+    }, 30000);
+
+    // Ha rövid az oldal és már page-load-kor a viewport alja a doc alja
+    setTimeout(onScrollQE, 0);
+  })();
 
   // ─── Public GA4 helper for main.js form success handlers ───────────────
+  // Lead-quality tiers a Smart Bidding signal-tisztaság érdekében. A
+  // `lead_quality_tier` paraméter mindig egy custom dimensionbe kerül (lásd
+  // _docs/analytics-tracking.md regisztrációs lista), így GA4-ben szűrhető és
+  // a Google Ads-import konverziókat tier-enként lehet kezelni.
+  //
+  // Lead-magnet (popup/inline 5 ingyenes segédanyag) — alacsony LTV, magas
+  // top-of-funnel volumen → 1000 Ft (conv-rate × LTV becslés: 2-3% × 30-50k Ft).
+  // Korábban 3000 Ft volt, de a Smart Bidding ezzel túl értékesnek súlyozta a
+  // lead-magnet-keresőszavakat. A magnet event GA4-ben NE legyen Key Event
+  // (Karesz UI-task: GA4 → Admin → Events → generate_lead csak akkor Key
+  // Event, ha lead_quality_tier != 'magnet').
+  var LEAD_QUALITY_VALUES = {
+    magnet:                1000,    // 5 ingyenes segédanyag (popup + inline)
+    contact:               1500,    // generikus kapcsolatfelvétel
+    career:                8000,    // állásjelentkezés
+    program_inquiry:       5000,    // egyéb program érdeklődés
+    summer_camp:          75000,    // Kincskereső tábor
+    program_szorongas:    90000,    // Szorongásoldó program
+    school_prep_intensive: 128000,  // Nyári intenzív iskola-előkészítő
+    school_prep_academic: 252000    // Tanévi iskola-előkészítő
+  };
+
   window.BKAnalytics = {
     ga4Event: ga4Event,
     pageCtx: pageCtx,
     /**
-     * Fires GA4's recommended generate_lead event. Use after a successful
-     * lead-capture/program/contact form submit. Google Ads can import this
-     * as a conversion automatically via the GA4 → Ads link once the audience
-     * is set up.
+     * Fires GA4's recommended `generate_lead` event with a `lead_quality_tier`
+     * custom param so GA4/Ads can segment by lead intent. Caller passes
+     * `lead_quality_tier` (one of the LEAD_QUALITY_VALUES keys); if a value is
+     * not provided, the tier-default value is used. This keeps the Smart
+     * Bidding signal clean — lead-magnet (low-value, high-volume) doesn't
+     * dilute program-signup (high-value, low-volume) optimization.
      */
     fireLead: function (params) {
+      var p = params || {};
+      var tier = p.lead_quality_tier || 'program_inquiry';
+      var defaultValue = LEAD_QUALITY_VALUES[tier];
       ga4Event('generate_lead', Object.assign({
         currency: 'HUF',
-        value: 3000
-      }, params || {}));
+        value: (typeof defaultValue === 'number') ? defaultValue : 3000,
+        lead_quality_tier: tier
+      }, p));
     }
   };
 })();

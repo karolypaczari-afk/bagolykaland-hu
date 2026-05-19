@@ -25,6 +25,19 @@
             } else if (typeof window.fbq === 'function') {
                 window.fbq('track', 'Lead', { content_name: 'popup_lead_magnet' });
             }
+            // GA4 generate_lead — `lead_quality_tier: 'magnet'`. Korábban a
+            // popup-lead csak Meta Lead-et tüzelt, GA4-be nem érkezett meg →
+            // Google Ads import a 5-ingyenes-segédanyag konverziókat NEM
+            // látta. Most pótolva, tier-default value: 1000 Ft (lead-magnet
+            // alacsony LTV súly Smart Bidding-szempontból).
+            if (window.BKAnalytics && typeof window.BKAnalytics.fireLead === 'function') {
+                window.BKAnalytics.fireLead({
+                    lead_source: 'popup_lead_magnet',
+                    lead_quality_tier: 'magnet',
+                    popup_context: params.popup_context || '',
+                    popup_group: params.popup_group || ''
+                });
+            }
         }
     }
 
