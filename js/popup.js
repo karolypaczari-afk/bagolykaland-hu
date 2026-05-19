@@ -47,8 +47,11 @@
     var SUBMIT_DAYS = 30;
     var SCROLL_THRESHOLD = /Mobi|Android/i.test(navigator.userAgent) ? 0.30 : 0.50;
 
-    // MailerLite group — same list as Zsenibagoly (Hiszti funnel), tagged with source
-    var ML_GROUP_ID = '156829265225057690';
+    // MailerLite group: "Szekv. után - Összes feliratkozó kiv. vevok" (183475595689068359)
+    // → triggereli a "Szekv. után - Összes feliratkozónak" master automation-t.
+    // 2026-05-19: lecserélve a "Hirlevel feliratkozok - Hiszti" csoportról (156829265225057690).
+    // signup_source="bagolykaland" custom field-del szegmentálható.
+    var ML_GROUP_ID = '183475595689068359';
     var SOURCE = 'bagolykaland';
 
     // Unified lead magnet — "5 ingyenes segédanyag"
